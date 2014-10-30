@@ -1,0 +1,1 @@
+Here is some example Event Sourcing/CQRS-based code along with an embeddable/JDBC-based test eventstore.
