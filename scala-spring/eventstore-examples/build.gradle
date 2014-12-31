@@ -1,0 +1,18 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile "org.scala-lang:scala-library:2.10.2"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+
+    compile "net.chrisrichardson.eventstore.common:eventstore-common:$eventStoreCommonVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-client-event-handling:$eventStoreClientVersion"
+
+    testCompile scalaTestDependency
+
+    testCompile group: 'junit', name: 'junit', version:'4.11'
+    // testCompile project(":testutil")
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+    //testCompile project(path: ':eventstore-dynamodb', configuration: 'tests')
+}
+
+
