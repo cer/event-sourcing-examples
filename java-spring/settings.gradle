@@ -1,5 +1,3 @@
-include 'eventstore-examples'
-include 'eventstore-examples-main'
 include 'eventstore-examples-java'
 include 'eventstore-examples-java-web'
 include 'eventstore-examples-java-testutil'
