@@ -1,0 +1,2 @@
+@net.chrisrichardson.eventstore.EventEntity(entity="net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.Account")
+package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;

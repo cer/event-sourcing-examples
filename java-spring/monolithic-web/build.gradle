@@ -1,0 +1,17 @@
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(":queryside-web")
+    compile project(":commandside-web")
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+
+    compile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+
+}
+
+
+

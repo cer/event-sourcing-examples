@@ -1,3 +1,19 @@
-include 'eventstore-examples-java'
-include 'eventstore-examples-java-web'
-include 'eventstore-examples-java-testutil'
+include 'testutil'
+include 'web-common'
+
+include 'common-backend'
+
+include 'commandside-backend'
+include 'commandside-web'
+
+
+include 'queryside-backend'
+include 'queryside-web'
+
+include 'backend-integration-tests'
+
+include 'monolithic-web'
+
+rootProject.name = 'java-spring-event-sourcing-example'
+
+
