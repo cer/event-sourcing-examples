@@ -2,7 +2,8 @@ apply plugin: 'spring-boot'
 
 dependencies {
     compile project(":queryside-web")
-    compile project(":commandside-web")
+    compile project(":commandside-web-accounts")
+    compile project(":commandside-web-transactions")
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"

@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.CommandSideWebConfiguration;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CommandSideWebAccountsConfiguration;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CommandSideWebTransactionsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.QuerySideWebConfiguration;
 import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,7 +14,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
-@Import({CommandSideWebConfiguration.class, JdbcEventStoreConfiguration.class, QuerySideWebConfiguration.class})
+@Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, JdbcEventStoreConfiguration.class, QuerySideWebConfiguration.class})
 @EnableAutoConfiguration
 @ComponentScan
 public class BankingWebConfiguration {

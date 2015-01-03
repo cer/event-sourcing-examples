@@ -1,6 +1,7 @@
 dependencies {
 
-    testCompile project(":commandside-backend")
+    testCompile project(":commandside-backend-accounts")
+    testCompile project(":commandside-backend-transactions")
     testCompile project(":queryside-backend")
     testCompile project(":testutil")
     testCompile "junit:junit:4.11"

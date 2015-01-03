@@ -3,8 +3,10 @@ include 'web-common'
 
 include 'common-backend'
 
-include 'commandside-backend'
-include 'commandside-web'
+include 'commandside-backend-accounts'
+include 'commandside-backend-transactions'
+include 'commandside-web-accounts'
+include 'commandside-web-transactions'
 
 
 include 'queryside-backend'
