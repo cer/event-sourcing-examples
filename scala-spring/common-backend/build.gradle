@@ -1,0 +1,12 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile "org.scala-lang:scala-library:2.10.2"
+    compile "net.chrisrichardson.eventstore.common:eventstore-common:$eventStoreCommonVersion"
+
+    testCompile scalaTestDependency
+
+    testCompile "junit:junit:4.11"
+}
+
+

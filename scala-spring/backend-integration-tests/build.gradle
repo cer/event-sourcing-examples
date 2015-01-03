@@ -1,0 +1,17 @@
+apply plugin: 'scala'
+
+dependencies {
+
+    compile "org.scala-lang:scala-library:2.10.2"
+
+    compile project(":commandside-backend-transactions")
+    compile project(":commandside-backend-accounts")
+    compile project(":queryside-backend")
+
+    testCompile scalaTestDependency
+
+    testCompile "junit:junit:4.11"
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+}
+
+

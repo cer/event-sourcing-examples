@@ -1,2 +1,18 @@
-include 'eventstore-examples'
-include 'eventstore-examples-main'
+include 'web-common'
+
+include 'common-backend'
+
+include 'commandside-backend-accounts'
+include 'commandside-backend-transactions'
+include 'commandside-web-accounts'
+include 'commandside-web-transactions'
+
+
+include 'queryside-backend'
+include 'queryside-web'
+
+include 'backend-integration-tests'
+
+include 'monolithic-web'
+
+rootProject.name = 'scala-spring-event-sourcing-example'

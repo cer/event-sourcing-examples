@@ -1,0 +1,10 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile "org.scala-lang:scala-library:2.10.2"
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+
+}
+
+
+

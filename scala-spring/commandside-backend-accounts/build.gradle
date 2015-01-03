@@ -1,0 +1,5 @@
+dependencies {
+    compile "org.scala-lang:scala-library:2.10.2"
+    compile project(":common-backend")
+    compile "net.chrisrichardson.eventstore.client:eventstore-client-event-handling:$eventStoreClientVersion"
+}
