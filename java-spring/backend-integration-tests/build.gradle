@@ -1,3 +1,5 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+
 dependencies {
 
     testCompile project(":commandside-backend-accounts")

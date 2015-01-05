@@ -1,5 +1,6 @@
 apply plugin: 'scala'
 apply plugin: 'spring-boot'
+apply plugin: VerifyMongoDBConfigurationPlugin
 
 dependencies {
     compile "org.scala-lang:scala-library:2.10.2"

@@ -1,3 +1,5 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+
 apply plugin: 'spring-boot'
 
 dependencies {
