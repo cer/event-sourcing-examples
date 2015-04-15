@@ -24,5 +24,6 @@ subprojects {
     repositories {
         mavenCentral()
         maven { url "https://06c59145-4e83-4f22-93ef-6a7eee7aebaa.repos.chrisrichardson.net.s3.amazonaws.com" }
+
     }
 }

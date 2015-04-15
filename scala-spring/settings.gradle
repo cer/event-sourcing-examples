@@ -1,18 +1,23 @@
-include 'web-common'
+include 'common-web'
 
 include 'common-backend'
 
-include 'commandside-backend-accounts'
-include 'commandside-backend-transactions'
-include 'commandside-web-accounts'
-include 'commandside-web-transactions'
+include 'accounts-command-side-backend'
+include 'transactions-command-side-backend'
+include 'accounts-command-side-web'
+include 'transactions-command-side-web'
 
 
-include 'queryside-backend'
-include 'queryside-web'
+include 'accounts-query-side-backend'
+include 'accounts-query-side-web'
 
 include 'backend-integration-tests'
 
-include 'monolithic-web'
+include 'monolithic-service'
+include 'accounts-command-side-service'
+include 'accounts-query-side-service'
+include 'transactions-command-side-service'
+
+include 'e2e-test'
 
 rootProject.name = 'scala-spring-event-sourcing-example'

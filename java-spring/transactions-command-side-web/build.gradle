@@ -1,0 +1,10 @@
+
+dependencies {
+    compile project(":transactions-command-side-backend")
+    compile project(":common-web")
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+}
+
+
+

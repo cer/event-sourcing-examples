@@ -5,9 +5,9 @@ dependencies {
 
     compile "org.scala-lang:scala-library:2.10.2"
 
-    compile project(":commandside-backend-transactions")
-    compile project(":commandside-backend-accounts")
-    compile project(":queryside-backend")
+    compile project(":transactions-command-side-backend")
+    compile project(":accounts-command-side-backend")
+    compile project(":accounts-query-side-backend")
 
     testCompile scalaTestDependency
 

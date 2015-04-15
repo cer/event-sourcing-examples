@@ -1,0 +1,16 @@
+apply plugin: 'scala'
+
+dependencies {
+    compile "org.scala-lang:scala-library:2.10.2"
+    compile project(":accounts-query-side-backend")
+    compile project(":common-web")
+
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile scalaTestDependency
+
+}
+
+
+

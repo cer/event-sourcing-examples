@@ -27,3 +27,5 @@ local_developer_config
 
 
 /web/web.log
+*.log
+*.pid

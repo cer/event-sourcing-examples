@@ -1,5 +1,7 @@
 This is the Java/Spring version of the Event Sourcing/CQRS money transfer example application.
 
+# About the application
+
 This application consists of three microservices:
 
   * Account Service - the command side business logic for Accounts
@@ -8,25 +10,28 @@ This application consists of three microservices:
    
 The Account Service consists of the following modules:
 
-  * commandside-backend-accounts - the Account aggregate
-  * commandside-web-accounts - a REST API for creating and retrieving Accounts
+  * accounts-command-side-backend - the Account aggregate
+  * accounts-command-side-web - a REST API for creating and retrieving Accounts
+  * accounts-command-side-service - a standalone microservice
  
 The Money Transfer Service consists of the following modules:
 
-  * commandside-backend-transactions - the MoneyTransfer aggregate  
-  * commandside-web-transactions - a REST API for creating and retrieving Money Transfers
+  * transactions-command-side-backend - the MoneyTransfer aggregate  
+  * transactions-command-side-web - a REST API for creating and retrieving Money Transfers
+  * transactions-command-side-service - a standalone microservice
  
 The Query Service consists the following modules:
 
-  * queryside-backend - MongoDB-based, denormalized view of Accounts and MoneyTransfers
-  * queryside-web - a REST API for querying the denormalized view
+  * accounts-query-side-backend - MongoDB-based, denormalized view of Accounts and MoneyTransfers
+  * accounts-query-side-web - a REST API for querying the denormalized view
+  * accounts-query-side-service - a standalone microservice
 
-In order to be used with the embedded Event Store, the three services are currently packaged as a single monolithic web application:
+# Deploying the application
 
-  * monolithic-web - all-in-one, monolithic packaging of the application
+These services can be deployed either as either separate standalone services using the Event Store server, or they can be deployed as a monolithic application for simpified integration testing.
 
-As well as the above modules there are also:
+The three services can also be packaged as a single monolithic web application in order to be used with the embedded Event Store:
 
-  * common-backend - code that is shared between the command side and the query side, primarily events and value objects
-  * backend-integration-tests - integrations tests for the backend
+  * monolithic-service - all-in-one, monolithic packaging of the application
+
   

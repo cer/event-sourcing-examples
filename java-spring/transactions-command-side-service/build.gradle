@@ -1,0 +1,20 @@
+apply plugin: 'spring-boot'
+
+apply plugin: VerifyEventStoreEnvironmentPlugin
+
+dependencies {
+    compile project(":transactions-command-side-web")
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+
+    compile "net.chrisrichardson.eventstore.client:eventstore-http-stomp-client:$eventStoreClientVersion"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+
+}
+
+test {
+    ignoreFailures true
+}
+
