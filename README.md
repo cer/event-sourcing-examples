@@ -19,10 +19,10 @@ For more information, please see the [wiki](../../wiki)
 
 # About the event store
 
-The application use one of two event stores:
+The application uses one of two event stores:
 
-* embedded SQL-based event store, which is great for integration tests
-* event store server
+* Embedded SQL-based event store, which is great for integration tests
+* Event store server
 
 # Running the tests
 
