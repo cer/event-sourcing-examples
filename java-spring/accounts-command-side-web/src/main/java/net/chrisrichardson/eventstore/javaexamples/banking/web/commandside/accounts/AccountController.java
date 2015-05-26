@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import rx.Observable;
 import rx.functions.Func1;
 
 @RestController
@@ -24,14 +26,14 @@ public class AccountController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public DeferredResult<CreateAccountResponse> createAccount(@RequestBody CreateAccountRequest request) {
-    return DeferredUtils.toDeferredResult(accountService.openAccount(request.getInitialBalance()).map(new Func1<EntityWithIdAndVersion<Account>, CreateAccountResponse>() {
+  public Observable<CreateAccountResponse> createAccount(@RequestBody CreateAccountRequest request) {
+    return accountService.openAccount(request.getInitialBalance()).map(new Func1<EntityWithIdAndVersion<Account>, CreateAccountResponse>() {
 
       @Override
       public CreateAccountResponse call(EntityWithIdAndVersion<Account> entityAndEventInfo) {
         return new CreateAccountResponse(entityAndEventInfo.getEntityIdentifier().getId());
       }
 
-    }));
+    });
   }
 }

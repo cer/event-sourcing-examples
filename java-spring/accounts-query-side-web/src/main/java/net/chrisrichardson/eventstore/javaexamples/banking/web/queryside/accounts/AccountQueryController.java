@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import rx.Observable;
 import rx.functions.Func1;
 
 import java.math.BigDecimal;
@@ -24,13 +26,13 @@ public class AccountQueryController {
   }
 
   @RequestMapping(value="/accounts/{accountId}", method = RequestMethod.GET)
-  public DeferredResult<GetAccountResponse> get(@PathVariable String accountId) {
-    return DeferredUtils.toDeferredResult(accountInfoQueryService.findByAccountId(new EntityIdentifier(accountId)).map(new Func1<AccountInfo, GetAccountResponse>() {
+  public Observable<GetAccountResponse> get(@PathVariable String accountId) {
+    return accountInfoQueryService.findByAccountId(new EntityIdentifier(accountId)).map(new Func1<AccountInfo, GetAccountResponse>() {
       @Override
       public GetAccountResponse call(AccountInfo accountInfo) {
         return new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()));
       }
-    }));
+    });
   }
 
   @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="account not found")

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+
+import rx.Observable;
 import rx.functions.Func1;
 
 @RestController
@@ -26,16 +28,16 @@ public class MoneyTransferController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public DeferredResult<CreateMoneyTransferResponse> createMoneyTransfer(@RequestBody CreateMoneyTransferRequest request) {
+  public Observable<CreateMoneyTransferResponse> createMoneyTransfer(@RequestBody CreateMoneyTransferRequest request) {
     TransferDetails transferDetails = new TransferDetails(new EntityIdentifier(request.getFromAccountId()), new EntityIdentifier(request.getToAccountId()), request.getAmount());
-    return DeferredUtils.toDeferredResult(moneyTransferService.transferMoney(transferDetails).map(new Func1<EntityWithIdAndVersion<MoneyTransfer>, CreateMoneyTransferResponse>() {
+    return moneyTransferService.transferMoney(transferDetails).map(new Func1<EntityWithIdAndVersion<MoneyTransfer>, CreateMoneyTransferResponse>() {
 
       @Override
       public CreateMoneyTransferResponse call(EntityWithIdAndVersion<MoneyTransfer> entityAndEventInfo) {
         return new CreateMoneyTransferResponse(entityAndEventInfo.getEntityIdentifier().getId());
       }
 
-    }));
+    });
   }
 
 }
