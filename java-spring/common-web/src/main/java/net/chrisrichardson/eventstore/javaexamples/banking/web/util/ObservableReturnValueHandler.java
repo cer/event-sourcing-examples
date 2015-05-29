@@ -25,7 +25,7 @@ public class ObservableReturnValueHandler implements HandlerMethodReturnValueHan
 			return;
 		}
 		DeferredResult<?> d = DeferredUtils.toDeferredResult((Observable<?>) returnValue);
-		WebAsyncUtils.getAsyncManager(webRequest).startDeferredResultProcessing(d);
+		WebAsyncUtils.getAsyncManager(webRequest).startDeferredResultProcessing(d, mavContainer);
 	}
 
 }
