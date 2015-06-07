@@ -4,7 +4,6 @@ dependencies {
 
     compile project(":common-backend")
     compile "net.chrisrichardson.eventstore.client:eventstore-java-client:$eventStoreClientVersion"
-    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
 
     compile 'com.fasterxml.jackson.core:jackson-core:2.4.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
