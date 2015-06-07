@@ -22,14 +22,23 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil
 
 public class EndToEndTest {
 
+  private String getenv(String name, String defaultValue) {
+    String x = System.getenv(name);
+    return x == null ? defaultValue : x;
+  }
+
+  private String makeBaseUrl(int port, String path) {
+    return "http://" + getenv("SERVICE_HOST", "localhost") + ":" + port + "/" + path;
+  }
+
   private String accountsCommandSideBaseUrl(String path) {
-    return "http://localhost:8080/" + path;
+    return makeBaseUrl(8080, path);
   }
   private String accountsQuerySideBaseUrl(String path) {
-    return "http://localhost:8081/" + path;
+    return makeBaseUrl(8081, path);
   }
   private String transactionsCommandSideBaseUrl(String path) {
-    return "http://localhost:8082/" + path;
+    return makeBaseUrl(8082, path);
   }
 
   RestTemplate restTemplate = new RestTemplate();
