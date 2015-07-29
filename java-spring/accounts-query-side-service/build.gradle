@@ -11,6 +11,7 @@ dependencies {
 
     compile "net.chrisrichardson.eventstore.client:eventstore-http-stomp-client:$eventStoreClientVersion"
 
+    testCompile project(":testutil")
     testCompile "org.springframework.boot:spring-boot-starter-test"
 
 }
