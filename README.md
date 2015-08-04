@@ -2,9 +2,32 @@
 
 This example application is the money transfer application described in my talk [Building and deploying microservices with event sourcing, CQRS and Docker](http://plainoldobjects.com/presentations/building-and-deploying-microservices-with-event-sourcing-cqrs-and-docker/).
 This talk describe a way of architecting highly scalable and available applications that is based on microservices, polyglot persistence,
-event sourcing (ES) and command query responsibility separation (CQRS).
+event sourcing (ES) and command query responsibility segregation (CQRS).
 Applications consist of loosely coupled components that communicate using events.
 These components can be deployed either as separate services or packaged as a monolithic application for simplified development and testing.
+
+# About the example application
+
+This example application provides a REST API for creating and viewing bank accounts and transferring money between them.
+
+The following diagram shows the architecture:
+
+![Money transfer architecture](https://github.com/cer/event-sourcing-examples/wiki/i/applicationarchitecture.png)
+
+There are four logical services:
+
+* Accounts (command-side) - REST API for creating accounts
+* Money transfers (command-side) - REST API for transferring money
+* Account view updater (query-side) - subscribes to events and updates a MongoDB View
+* Account view reader (query-side) - REST API for retrieving accounts
+
+One of the neat things about the modular architecture is that there are two ways to deploy these four services:
+
+* monolithic-service - all services are packaged as a single Spring Boot executable JAR
+* Microservices - three separate Spring Boot executable JARs
+ * accounts-command-side-service - command-side accounts
+ * transactions-command-side-service - command-side money transfers
+ * accounts-query-side-service - Account View Updater and Account View Reader
 
 # About the examples
 
