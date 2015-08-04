@@ -3,7 +3,7 @@ accountscommandside:
   working_dir: /app
   volumes:
     - ./accounts-command-side-service/build/libs:/app
-  command: java -jar /app/accounts-command-side-service.jar 
+  command: java -jar /app/accounts-command-side-service.jar
   ports:
     - "8080:8080"
   environment:
@@ -18,7 +18,7 @@ transactionscommandside:
   working_dir: /app
   volumes:
     - ./transactions-command-side-service/build/libs:/app
-  command: java -jar /app/transactions-command-side-service.jar 
+  command: java -jar /app/transactions-command-side-service.jar
   ports:
     - "8082:8080"
   environment:
@@ -48,9 +48,8 @@ accountsqueryside:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
 
 mongodb:
-  image: mongo:latest
+  image: mongo:3.0.4
   hostname: mongodb
   command: mongod --smallfiles
   ports:
     - "27017:27017"
-
