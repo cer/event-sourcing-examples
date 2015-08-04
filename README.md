@@ -36,8 +36,9 @@ To build simply execute this command:
 ```
 
 This will build a Spring Boot jar in each of the `*-service` directories.
-If you want you can run the tests using `gradle build```.
-However, to run the tests you need to set some environment variables.
+
+You can also run the tests using `gradle build`.
+However, you must set some environment variables.
 
 First, you need to tell the query side code how to connect to MongoDB:
 
@@ -61,11 +62,11 @@ To run the application you first need to set the SPRING_DATA_MONGODB_URI environ
 One option is to run the self-contained monolithic application.
 It uses the embedded event store.
 
-Simply use the this command:
+Simply use this command:
 
-````
+```
 java -jar monolithic-service/build/libs/monolithic-service.jar
-````
+```
 
 ## Running the microservices
 
