@@ -29,7 +29,7 @@ See this [wiki page](../../wiki/AboutTheEventStoreServer) for more details.
 # Building the application (and running the tests)
 
 Both projects use Gradle.
-To build simply execute this command:
+To build a project, execute this command:
 
 ```
 ./gradlew assemble
@@ -55,7 +55,9 @@ The build is configured to ignore failures for those projects.
 
 # Running the application
 
-To run the application you first need to set the SPRING_DATA_MONGODB_URI environment variable, which tells the view services how to connect to MongoDB.
+To run the application, you must to set the SPRING_DATA_MONGODB_URI environment variable, which tells the query services how to connect to MongoDB.
+
+There are a couple of different ways of running the application.
 
 ## Running the monolithic application
 
@@ -78,7 +80,5 @@ One way to run the services is to use the scripts `run-all-services.sh`, which r
 A much better way, however, is to use Docker Compose.
 Simply run the command `docker-compose up` to launch the services.
 This will create containers for MongoDB and each of the services.
-
-
 
 You can now, for example, use the curl commands in `handy-curl-commands.sh` to interact with the server.
