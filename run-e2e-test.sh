@@ -4,13 +4,12 @@
 
 echo starting services
 
-../run-all-services.sh 
+../run-all-services.sh
 
 echo running test
 
-./gradlew :e2e-test:cleanTest :e2e-test:test
+./gradlew $* -P ignoreE2EFailures=false :e2e-test:cleanTest :e2e-test:test
 
 echo killing services
 
-../kill-all-services.sh 
-
+../kill-all-services.sh

@@ -15,6 +15,5 @@ dependencies {
 }
 
 test {
-    ignoreFailures true
+    ignoreFailures (!project.hasProperty("ignoreE2EFailures") || ignoreE2EFailures.toBoolean())
 }
-
