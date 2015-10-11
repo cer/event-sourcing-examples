@@ -6,6 +6,21 @@ event sourcing (ES) and command query responsibility segregation (CQRS).
 Applications consist of loosely coupled components that communicate using events.
 These components can be deployed either as separate services or packaged as a monolithic application for simplified development and testing.
 
+# Big ideas
+
+This example illustrates several important concepts:
+
+* How to decompose an application into microservices - as described below the application consists of several services.
+For example, bank accounts are managed by one service, money transfers by another service.
+
+* Using an event-driven architecture to achieve data consistency - rather than using traditional distributed transaction to maintain database consistency this application uses an eventually consistent, event-driven approach.
+
+* Using event sourcing to implement the event-driven architecture - the domain logic consists of Domain-Driven Design (DDD) aggregates that using event sourcing.
+
+* Using Command Query Responsibility Segregation (CQRS) - update requests (HTTP POSTs and PUTs) and view requests (HTTP GETs) are handled by separate services.
+
+* How event sourcing enables deployment flexibility - the application can either be deployed as a monolith or as microservices.
+
 # About the example application
 
 This example application provides a REST API for creating and viewing bank accounts and transferring money between them.
