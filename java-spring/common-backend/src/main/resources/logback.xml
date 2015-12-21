@@ -8,10 +8,15 @@
       <Pattern>%d{HH:mm:ss.SSS}  %-5level %logger{36} - %msg%n</Pattern>
     </layout>
   </appender>
-  
+
   <root level="error">
     <appender-ref ref="STDOUT" />
   </root>
-    <logger name="org.springframework" level='debug'>
-    </logger>
+
+  <logger name="org.springframework" level='info'>
+  </logger>
+
+  <logger name="net.chrisrichardson.eventstore.client" level='info'>
+  </logger>
+
 </configuration>

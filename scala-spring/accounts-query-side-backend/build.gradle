@@ -7,13 +7,10 @@ dependencies {
     compile "org.scala-lang:scala-library:2.10.2"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
 
-    compile "net.chrisrichardson.eventstore.common:eventstore-common:$eventStoreCommonVersion"
-    compile "net.chrisrichardson.eventstore.client:eventstore-client-event-handling:$eventStoreClientVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-java-client_2.10:$eventStoreClientVersion"
 
     testCompile scalaTestDependency
 
     testCompile "junit:junit:4.11"
-    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
 }
-
-

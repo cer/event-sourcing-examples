@@ -1,5 +1,0 @@
-mongodb:
-  image: dockerfile/mongodb
-  ports:
-    - "27017:27017"
-

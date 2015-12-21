@@ -66,12 +66,15 @@ See this [wiki page](../../wiki/AboutTheEventStoreServer) for more details.
 
 # Building the application (and running the tests)
 
-Both projects use Gradle.
-To build a project, execute this command:
+Both versions of the application use Gradle.
+To build an application, execute this command  in the application's top-level directory:
 
 ```
 ./gradlew assemble
 ```
+
+Note: you do not need to install Gradle.
+It will be automatically downloaded by `./gradlew`.
 
 This will build a Spring Boot jar in each of the `*-service` directories.
 

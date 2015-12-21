@@ -11,7 +11,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
 
-    compile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+    compile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
 
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile scalaTestDependency

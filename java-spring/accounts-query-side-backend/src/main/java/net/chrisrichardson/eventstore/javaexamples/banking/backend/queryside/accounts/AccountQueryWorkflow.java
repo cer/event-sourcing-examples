@@ -12,6 +12,8 @@ import net.chrisrichardson.eventstore.subscriptions.DispatchedEvent;
 import net.chrisrichardson.eventstore.subscriptions.EventHandlerMethod;
 import net.chrisrichardson.eventstore.subscriptions.EventSubscriber;
 import rx.Observable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 
@@ -19,6 +21,8 @@ import static net.chrisrichardson.eventstore.javaexamples.banking.backend.querys
 
 @EventSubscriber(id="querySideEventHandlers")
 public class AccountQueryWorkflow implements CompoundEventHandler {
+
+  private Logger logger = LoggerFactory.getLogger(getClass());
 
   private AccountInfoUpdateService accountInfoUpdateService;
 
@@ -31,7 +35,7 @@ public class AccountQueryWorkflow implements CompoundEventHandler {
     AccountOpenedEvent event = de.event();
     String id = de.getEntityIdentifier().getId();
     String eventId = de.eventId().asString();
-    System.out.println("**************** account version=" + id + ", " + eventId);
+    logger.info("**************** account version=" + id + ", " + eventId);
     BigDecimal initialBalance = event.getInitialBalance();
     accountInfoUpdateService.create(id, initialBalance, eventId);
     return Observable.just(null);
@@ -43,8 +47,8 @@ public class AccountQueryWorkflow implements CompoundEventHandler {
     String moneyTransferId = de.getEntityIdentifier().getId();
     String fromAccountId = de.event().getDetails().getFromAccountId().getId();
     String toAccountId = de.event().getDetails().getToAccountId().getId();
-    System.out.println("**************** account version=" + fromAccountId + ", " + de.eventId().asString());
-    System.out.println("**************** account version=" + toAccountId + ", " + de.eventId().asString());
+    logger.info("**************** account version=" + fromAccountId + ", " + de.eventId().asString());
+    logger.info("**************** account version=" + toAccountId + ", " + de.eventId().asString());
 
     AccountTransactionInfo ti = new AccountTransactionInfo(moneyTransferId, fromAccountId, toAccountId, toIntegerRepr(de.event().getDetails().getAmount()));
 
@@ -74,7 +78,7 @@ public class AccountQueryWorkflow implements CompoundEventHandler {
     long balanceDelta = amount * delta;
     AccountChangeInfo ci = new AccountChangeInfo(changeId, transactionId, de.event().getClass().getSimpleName(), amount, balanceDelta);
     String accountId = de.getEntityIdentifier().getId();
-    System.out.println("**************** account version=" + accountId + ", " + de.eventId().asString());
+    logger.info("**************** account version=" + accountId + ", " + de.eventId().asString());
 
     accountInfoUpdateService.updateBalance(accountId, changeId, balanceDelta, ci);
 

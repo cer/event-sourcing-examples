@@ -3,6 +3,8 @@
 # Execute this script in the java-spring or scala-spring directory
 # Runs all of the services
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 if [[ -f account-cs.pid ]]; then
 	echo pid file exists
 	exit 1
@@ -19,13 +21,4 @@ echo $! > transfers-cs.pid
 
 echo -n waiting for services....
 
-while [[ true ]]; do
-	nc -z -w 4 localhost 8080 && nc -z -w 4 localhost 8081 && nc -z -w 4 localhost 8082
-	if [[ "$?" -eq "0" ]]; then
-		echo connected
-		break
-	fi
-	echo -n . 
-	sleep 1
-done
-
+$DIR/wait-for-services.sh localhost

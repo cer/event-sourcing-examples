@@ -12,7 +12,7 @@ dependencies {
     testCompile scalaTestDependency
 
     testCompile "junit:junit:4.11"
-    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc:$eventStoreClientVersion"
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
 }
 
 

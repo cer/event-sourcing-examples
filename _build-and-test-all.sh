@@ -1,0 +1,41 @@
+#! /bin/bash
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+DOCKER_COMPOSE="docker-compose -p event-sourcing-examples"
+
+if [ "$1" = "--use-existing" ] ; then
+  shift;
+else
+  ${DOCKER_COMPOSE?} stop
+  ${DOCKER_COMPOSE?} rm -v --force
+fi
+
+${DOCKER_COMPOSE?} up -d mongodb
+
+if [ -z "$DOCKER_HOST_IP" ] ; then
+  export DOCKER_HOST_IP=$(docker-machine ip default)
+  echo set DOCKER_HOST_IP $DOCKER_HOST_IP
+fi
+
+if [ -z "$SPRING_DATA_MONGODB_URI" ] ; then
+  export SPRING_DATA_MONGODB_URI=mongodb://${DOCKER_HOST_IP}/mydb
+  echo Set SPRING_DATA_MONGODB_URI $SPRING_DATA_MONGODB_URI
+fi
+
+export SERVICE_HOST=$DOCKER_HOST_IP
+
+./gradlew $* build
+
+${DOCKER_COMPOSE?} up -d
+
+$DIR/wait-for-services.sh $DOCKER_HOST_IP
+
+set -e
+
+./gradlew $* :e2e-test:cleanTest :e2e-test:test 
+
+${DOCKER_COMPOSE?} stop
+${DOCKER_COMPOSE?} rm -v --force

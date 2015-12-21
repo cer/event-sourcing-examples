@@ -18,9 +18,10 @@ import scala.collection.JavaConversions._
 @RunWith(classOf[JUnitRunner])
 class EndToEndTest extends FlatSpec {
 
-  val accountsCommandSideBaseUrl = s"http://localhost:8080/"
-  val accountsQuerySideBaseUrl = s"http://localhost:8081/"
-  val transactionsCommandSideBaseUrl = s"http://localhost:8082/"
+  val serviceHost = Option(System.getenv("SERVICE_HOST")) getOrElse "localhost"
+  val accountsCommandSideBaseUrl = s"http://$serviceHost:8080/"
+  val accountsQuerySideBaseUrl = s"http://$serviceHost:8081/"
+  val transactionsCommandSideBaseUrl = s"http://$serviceHost:8082/"
 
   val restTemplate = new RestTemplate()
   restTemplate.getMessageConverters foreach {
