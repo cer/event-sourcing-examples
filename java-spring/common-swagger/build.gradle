@@ -1,0 +1,7 @@
+dependencies {
+    compile "net.chrisrichardson.eventstore.client:eventstore-java-client_2.10:$eventStoreClientVersion"
+
+    compile "io.springfox:springfox-swagger2:2.2.2"
+    compile 'io.springfox:springfox-swagger-ui:2.2.2'
+
+}

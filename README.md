@@ -123,3 +123,5 @@ Simply run the command `docker-compose up` to launch the services.
 This will create containers for MongoDB and each of the services.
 
 You can now, for example, use the curl commands in `handy-curl-commands.sh` to interact with the server.
+
+You can also use the Swagger UI exposed by each service `http://host:port/swagger-ui.html`.

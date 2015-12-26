@@ -4,6 +4,7 @@ apply plugin: VerifyEventStoreEnvironmentPlugin
 
 dependencies {
     compile project(":transactions-command-side-web")
+    compile project(":common-swagger")
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
