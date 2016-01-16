@@ -21,7 +21,7 @@ if [ -z "$DOCKER_HOST_IP" ] ; then
 fi
 
 if [ -z "$SPRING_DATA_MONGODB_URI" ] ; then
-  export SPRING_DATA_MONGODB_URI=mongodb://${DOCKER_HOST_IP}/mydb
+  export SPRING_DATA_MONGODB_URI=mongodb://${DOCKER_HOST_IP?}/mydb
   echo Set SPRING_DATA_MONGODB_URI $SPRING_DATA_MONGODB_URI
 fi
 
@@ -29,13 +29,19 @@ export SERVICE_HOST=$DOCKER_HOST_IP
 
 ./gradlew $* build
 
+if [ -z "$EVENTUATE_API_KEY_ID" -o -z "$EVENTUATE_API_KEY_SECRET" ] ; then
+  echo You must set EVENTUATE_API_KEY_ID and  EVENTUATE_API_KEY_SECRET
+  exit -1
+fi
+
+
 ${DOCKER_COMPOSE?} up -d
 
 $DIR/wait-for-services.sh $DOCKER_HOST_IP
 
 set -e
 
-./gradlew $* :e2e-test:cleanTest :e2e-test:test 
+./gradlew $* :e2e-test:cleanTest :e2e-test:test
 
 ${DOCKER_COMPOSE?} stop
 ${DOCKER_COMPOSE?} rm -v --force

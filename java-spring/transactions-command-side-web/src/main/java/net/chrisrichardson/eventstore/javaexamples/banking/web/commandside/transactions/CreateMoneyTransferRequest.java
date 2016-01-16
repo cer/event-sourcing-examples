@@ -1,11 +1,18 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions;
 
 import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.DecimalMin;
 
 public class CreateMoneyTransferRequest {
 
+  @NotNull
   private String fromAccountId;
+
+  @NotNull
   private String toAccountId;
+
+  @DecimalMin("0.01")
   private BigDecimal amount;
 
   public CreateMoneyTransferRequest() {
