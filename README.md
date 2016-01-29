@@ -6,6 +6,12 @@ event sourcing (ES) and command query responsibility segregation (CQRS).
 Applications consist of loosely coupled components that communicate using events.
 These components can be deployed either as separate services or packaged as a monolithic application for simplified development and testing.
 
+# Built using the Eventuate platform
+
+<a href="http://eventuate.io"><img src="http://eventuate.io/i/logo.gif"> </a>
+
+Read the <a href="http://eventuate.io">overview</a> or look at the other <a href="http://eventuate.io/exampleapps.html">example applications</a>.
+
 # Big ideas
 
 This example illustrates several important concepts:
