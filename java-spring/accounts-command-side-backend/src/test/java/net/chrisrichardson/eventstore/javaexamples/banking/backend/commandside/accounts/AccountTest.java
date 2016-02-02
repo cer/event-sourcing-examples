@@ -14,14 +14,16 @@ public class AccountTest {
   @Test
   public void testSomething() {
     Account account = new Account();
+    String customerId = "00000000-00000000";
     BigDecimal initialBalance = new BigDecimal(512);
-    List<Event> events = CommandProcessingAggregates.processToList(account, (AccountCommand)new OpenAccountCommand(initialBalance));
+    List<Event> events = CommandProcessingAggregates.processToList(account, (AccountCommand)new OpenAccountCommand(customerId, initialBalance));
 
     Assert.assertEquals(1, events.size());
     Assert.assertEquals(AccountOpenedEvent.class, events.get(0).getClass());
 
     account.applyEvent(events.get(0));
 
+    Assert.assertEquals(customerId, account.getCustomerId());
     Assert.assertEquals(initialBalance, account.getBalance());
   }
 }

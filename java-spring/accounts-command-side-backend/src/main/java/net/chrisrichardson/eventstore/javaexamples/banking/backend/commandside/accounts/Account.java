@@ -13,10 +13,11 @@ import java.util.List;
 
 public class Account extends ReflectiveMutableCommandProcessingAggregate<Account, AccountCommand> {
 
+  private String customerId;
   private BigDecimal balance;
 
   public List<Event> process(OpenAccountCommand cmd) {
-    return EventUtil.events(new AccountOpenedEvent(cmd.getInitialBalance()));
+    return EventUtil.events(new AccountOpenedEvent(cmd.getCustomerId(), cmd.getInitialBalance()));
   }
 
   public List<Event> process(DebitAccountCommand cmd) {
@@ -31,6 +32,7 @@ public class Account extends ReflectiveMutableCommandProcessingAggregate<Account
   }
 
   public void apply(AccountOpenedEvent event) {
+    customerId = event.getCustomerId();
     balance = event.getInitialBalance();
   }
 
@@ -47,6 +49,10 @@ public class Account extends ReflectiveMutableCommandProcessingAggregate<Account
 
   public BigDecimal getBalance() {
     return balance;
+  }
+
+  public String getCustomerId() {
+    return customerId;
   }
 }
 
