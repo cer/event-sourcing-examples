@@ -26,4 +26,5 @@ include 'e2e-test'
 
 rootProject.name = 'java-spring-event-sourcing-example'
 include 'common-auth'
+include 'customer-command-side-web'
 

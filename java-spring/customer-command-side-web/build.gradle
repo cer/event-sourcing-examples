@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(":customer-command-side-backend")
+    compile project(":common-web")
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
+}

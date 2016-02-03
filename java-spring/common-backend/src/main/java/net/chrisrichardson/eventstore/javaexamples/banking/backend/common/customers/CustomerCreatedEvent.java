@@ -7,40 +7,20 @@ import net.chrisrichardson.eventstore.Event;
  */
 public class CustomerCreatedEvent implements Event {
 
-    private String ssn;
-    private String phoneNumber;
-    private Address address;
+    private CustomerInfo customerInfo;
 
     public CustomerCreatedEvent() {
     }
 
-    public CustomerCreatedEvent(String ssn, String phoneNumber, Address address) {
-        this.ssn = ssn;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
+    public CustomerCreatedEvent(CustomerInfo customerInfo) {
+        this.customerInfo = customerInfo;
     }
 
-    public String getSsn() {
-        return ssn;
+    public CustomerInfo getCustomerInfo() {
+        return customerInfo;
     }
 
-    public void setSsn(String ssn) {
-        this.ssn = ssn;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setCustomerInfo(CustomerInfo customerInfo) {
+        this.customerInfo = customerInfo;
     }
 }

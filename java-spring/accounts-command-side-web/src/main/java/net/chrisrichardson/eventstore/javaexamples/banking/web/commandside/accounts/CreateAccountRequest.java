@@ -8,15 +8,26 @@ import java.math.BigDecimal;
 public class CreateAccountRequest {
 
   @NotNull
+  private String customerId;
+
+  @NotNull
   @DecimalMin("0")
   private BigDecimal initialBalance;
 
   public CreateAccountRequest() {
   }
 
-  public CreateAccountRequest(BigDecimal initialBalance) {
+  public CreateAccountRequest(String customerId, BigDecimal initialBalance) {
 
     this.initialBalance = initialBalance;
+  }
+
+  public String getCustomerId() {
+    return customerId;
+  }
+
+  public void setCustomerId(String customerId) {
+    this.customerId = customerId;
   }
 
   public BigDecimal getInitialBalance() {
