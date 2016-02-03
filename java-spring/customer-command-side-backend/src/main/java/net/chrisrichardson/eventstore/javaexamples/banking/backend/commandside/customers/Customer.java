@@ -12,18 +12,18 @@ import java.util.List;
  * Created by popikyardo on 02.02.16.
  */
 public class Customer extends ReflectiveMutableCommandProcessingAggregate<Customer, CustomerCommand> {
-    private String socialSecurityNum;
-    private String phoneNum;
+    private String ssn;
+    private String phoneNumber;
     private Address address;
 
     public List<Event> process(CreateCustomerCommand cmd) {
-        return EventUtil.events(new CustomerCreatedEvent(cmd.getSocialSecurityNum(), cmd.getPhoneNum(), cmd.getAddress()));
+        return EventUtil.events(new CustomerCreatedEvent(cmd.getSsn(), cmd.getPhoneNumber(), cmd.getAddress()));
     }
 
 
     public void apply(CustomerCreatedEvent event) {
-        socialSecurityNum = event.getSocialSecurityNum();
-        phoneNum = event.getPhoneNum();
+        ssn = event.getSsn();
+        phoneNumber = event.getPhoneNumber();
         address = event.getAddress();
     }
 }

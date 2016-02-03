@@ -7,22 +7,22 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.custom
  */
 public class CreateCustomerCommand implements CustomerCommand {
 
-    private String socialSecurityNum;
-    private String phoneNum;
+    private String ssn;
+    private String phoneNumber;
     private Address address;
 
-    public CreateCustomerCommand(String socialSecurityNum, String phoneNum, Address address) {
-        this.socialSecurityNum = socialSecurityNum;
-        this.phoneNum = phoneNum;
+    public CreateCustomerCommand(String socialSecurityNum, String phoneNumber, Address address) {
+        this.ssn = ssn;
+        this.phoneNumber = phoneNumber;
         this.address = address;
     }
 
-    public String getSocialSecurityNum() {
-        return socialSecurityNum;
+    public String getSsn() {
+        return ssn;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public Address getAddress() {
