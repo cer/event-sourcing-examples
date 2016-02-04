@@ -1,0 +1,20 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+apply plugin: VerifyEventStoreEnvironmentPlugin
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(":customers-query-side-web")
+    compile project(":common-swagger")
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+
+    compile "net.chrisrichardson.eventstore.client:eventstore-http-stomp-client_2.10:$eventStoreClientVersion"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+}
+
+test {
+    ignoreFailures true
+}

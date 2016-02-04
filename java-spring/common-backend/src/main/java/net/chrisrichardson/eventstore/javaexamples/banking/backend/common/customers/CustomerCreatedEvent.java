@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers;
 
 import net.chrisrichardson.eventstore.Event;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 
 /**
  * Created by popikyardo on 02.02.16.

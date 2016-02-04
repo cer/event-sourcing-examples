@@ -6,7 +6,6 @@ include 'common-backend'
 
 include 'accounts-command-side-backend'
 include 'transactions-command-side-backend'
-include 'customer-command-side-backend'
 include 'accounts-command-side-web'
 include 'transactions-command-side-web'
 
@@ -26,5 +25,11 @@ include 'e2e-test'
 
 rootProject.name = 'java-spring-event-sourcing-example'
 include 'common-auth'
-include 'customer-command-side-web'
+include 'customers-command-side-backend'
+include 'customers-command-side-web'
+include 'customers-query-side-backend'
+include 'customers-query-side-web'
+include 'common-customers'
+include 'customers-command-side-service'
+include 'customers-query-side-service'
 
