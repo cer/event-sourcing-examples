@@ -20,8 +20,11 @@ public class Customer extends ReflectiveMutableCommandProcessingAggregate<Custom
         return EventUtil.events(new CustomerCreatedEvent(cmd.getCustomerInfo()));
     }
 
-
     public void apply(CustomerCreatedEvent event) {
         customerInfo = event.getCustomerInfo();
+    }
+
+    public CustomerInfo getCustomerInfo() {
+        return customerInfo;
     }
 }

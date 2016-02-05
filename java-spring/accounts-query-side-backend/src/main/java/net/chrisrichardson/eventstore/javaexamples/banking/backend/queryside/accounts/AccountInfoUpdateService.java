@@ -26,10 +26,11 @@ public class AccountInfoUpdateService  {
 
 
 
-  public void create(String accountId, BigDecimal initialBalance, String version) {
+  public void create(String accountId, String customerId, BigDecimal initialBalance, String version) {
     try {
       accountInfoRepository.save(new AccountInfo(
               accountId,
+              customerId,
               toIntegerRepr(initialBalance),
               Collections.<AccountChangeInfo>emptyList(),
               Collections.<AccountTransactionInfo>emptyList(),

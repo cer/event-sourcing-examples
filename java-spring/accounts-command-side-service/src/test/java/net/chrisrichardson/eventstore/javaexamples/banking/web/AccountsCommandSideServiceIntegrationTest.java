@@ -37,11 +37,12 @@ public class AccountsCommandSideServiceIntegrationTest {
     BigDecimal initialFromAccountBalance = new BigDecimal(500);
     BigDecimal initialToAccountBalance = new BigDecimal(100);
     BigDecimal amountToTransfer = new BigDecimal(150);
+    String customerId = "00000000-00000000";
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(customerId, initialFromAccountBalance), CreateAccountResponse.class).getBody();
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(customerId, initialToAccountBalance), CreateAccountResponse.class).getBody();
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);

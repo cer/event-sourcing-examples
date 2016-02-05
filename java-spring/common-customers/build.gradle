@@ -1,5 +1,7 @@
 apply plugin: 'java'
 
 dependencies {
+    compile "net.chrisrichardson.eventstore.client:eventstore-java-client_2.10:$eventStoreClientVersion"
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

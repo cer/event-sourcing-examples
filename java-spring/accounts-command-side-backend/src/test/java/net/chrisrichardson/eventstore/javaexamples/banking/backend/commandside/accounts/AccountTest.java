@@ -22,8 +22,6 @@ public class AccountTest {
     Assert.assertEquals(AccountOpenedEvent.class, events.get(0).getClass());
 
     account.applyEvent(events.get(0));
-
-    Assert.assertEquals(customerId, account.getCustomerId());
     Assert.assertEquals(initialBalance, account.getBalance());
   }
 }

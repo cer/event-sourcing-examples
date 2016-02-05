@@ -37,7 +37,8 @@ public class AccountQueryWorkflow implements CompoundEventHandler {
     String eventId = de.eventId().asString();
     logger.info("**************** account version=" + id + ", " + eventId);
     BigDecimal initialBalance = event.getInitialBalance();
-    accountInfoUpdateService.create(id, initialBalance, eventId);
+    String customerId =  event.getCustomerId();
+    accountInfoUpdateService.create(id, customerId, initialBalance, eventId);
     return Observable.just(null);
   }
 

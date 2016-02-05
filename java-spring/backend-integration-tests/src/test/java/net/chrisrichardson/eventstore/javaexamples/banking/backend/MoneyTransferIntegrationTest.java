@@ -43,9 +43,9 @@ public class MoneyTransferIntegrationTest {
 
   @Test
   public void shouldTransferMoney() {
-    final EntityWithIdAndVersion<Account> fromAccount= await(accountService.openAccount(new BigDecimal(150)));
+    final EntityWithIdAndVersion<Account> fromAccount= await(accountService.openAccount("00000000-00000000", new BigDecimal(150)));
 
-    final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount(new BigDecimal(300)));
+    final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount("00000000-00000000", new BigDecimal(300)));
 
     final EntityWithIdAndVersion<MoneyTransfer> transaction = await(
             moneyTransferService.transferMoney(new TransferDetails(fromAccount.getEntityIdentifier(),
@@ -98,9 +98,9 @@ public class MoneyTransferIntegrationTest {
 
   @Test
   public void shouldFailDueToInsufficientFunds() {
-    final EntityWithIdAndVersion<Account> fromAccount= await(accountService.openAccount(new BigDecimal(150)));
+    final EntityWithIdAndVersion<Account> fromAccount= await(accountService.openAccount("00000000-00000000", new BigDecimal(150)));
 
-    final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount(new BigDecimal(300)));
+    final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount("00000000-00000000", new BigDecimal(300)));
 
     final EntityWithIdAndVersion<MoneyTransfer> transaction = await(
             moneyTransferService.transferMoney(new TransferDetails(fromAccount.getEntityIdentifier(),
