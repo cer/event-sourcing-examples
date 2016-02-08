@@ -1,0 +1,46 @@
+/*
+ * This file contains Global styles.
+ * 
+ * In general, your styles should *not* be in this file, but in the individual
+ * component files. For details, see the Pacomo specification:
+ *
+ * https://github.com/unicorn-standard/pacomo
+ */
+
+@import url('http://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html, body, main {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  font-family: Roboto;
+}
+
+body {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+// Reset fonts for relevant elements
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+#react-app {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+}
