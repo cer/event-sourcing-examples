@@ -7,22 +7,22 @@ import java.util.List;
 
 public class CustomerQueryService {
 
-  private CustomerInfoRepository customerInfoRepository;
+  private QuerySideCustomerRepository querySideCustomerRepository;
 
-  public CustomerQueryService(CustomerInfoRepository customerInfoRepository) {
-    this.customerInfoRepository = customerInfoRepository;
+  public CustomerQueryService(QuerySideCustomerRepository querySideCustomerRepository) {
+    this.querySideCustomerRepository = querySideCustomerRepository;
   }
 
-  public Observable<CustomerInfoWithId> findByCustomerId(EntityIdentifier customerId) {
-    CustomerInfoWithId customer = customerInfoRepository.findOne(customerId.getId());
+  public Observable<QuerySideCustomer> findByCustomerId(EntityIdentifier customerId) {
+    QuerySideCustomer customer = querySideCustomerRepository.findOne(customerId.getId());
     if (customer == null)
       return Observable.error(new CustomerNotFoundException(customerId.getId()));
     else
       return Observable.just(customer);
   }
 
-  public Observable<List<CustomerInfoWithId>> findByEmail(String email){
-    List<CustomerInfoWithId> customers = customerInfoRepository.findByEmailLike(email);
+  public Observable<List<QuerySideCustomer>> findByEmail(String email){
+    List<QuerySideCustomer> customers = querySideCustomerRepository.findByEmailLike(email);
     if (customers.isEmpty())
       return Observable.error(new CustomersNotFoundException());
     else

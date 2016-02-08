@@ -10,6 +10,8 @@ public class CreateAccountRequest {
   @NotNull
   private String customerId;
 
+  private String title;
+
   @NotNull
   @DecimalMin("0")
   private BigDecimal initialBalance;
@@ -17,8 +19,9 @@ public class CreateAccountRequest {
   public CreateAccountRequest() {
   }
 
-  public CreateAccountRequest(String customerId, BigDecimal initialBalance) {
-
+  public CreateAccountRequest(String customerId, String title, BigDecimal initialBalance) {
+    this.customerId = customerId;
+    this.title = title;
     this.initialBalance = initialBalance;
   }
 
@@ -36,5 +39,13 @@ public class CreateAccountRequest {
 
   public void setInitialBalance(BigDecimal initialBalance) {
     this.initialBalance = initialBalance;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 }

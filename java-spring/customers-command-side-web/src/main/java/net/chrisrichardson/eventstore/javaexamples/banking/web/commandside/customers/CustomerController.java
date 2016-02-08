@@ -4,18 +4,16 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.c
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rx.Observable;
 
 /**
  * Created by popikyardo on 03.02.16.
  */
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/customer")
 public class CustomerController {
 
     private CustomerService customerService;
@@ -26,8 +24,15 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Observable<CustomerResponse> createAccount(@Validated @RequestBody CustomerInfo request) {
+    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo request) {
         return customerService.createCustomer(request)
                 .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), request));
     }
+
+    @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
+    public Observable<ResponseEntity<?>> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountsRequest request) {
+        return customerService.addToAccount(id, request.getId(), request.getTitle(), request.getOwner())
+                .map(entityAndEventInfo -> ResponseEntity.ok().build());
+    }
+
 }

@@ -1,7 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.customers;
 
 import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerInfoWithId;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerQueryService;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomersNotFoundException;
@@ -52,14 +52,14 @@ public class CustomerQueryController {
 
     }
 
-    private CustomerResponse getCustomerResponse(CustomerInfoWithId customerInfoWithId) {
-        return new CustomerResponse(customerInfoWithId.getId(), new CustomerInfo(customerInfoWithId.getEmail(),
-                customerInfoWithId.getSsn(),
-                customerInfoWithId.getPhoneNumber(),
-                customerInfoWithId.getAddress()));
+    private CustomerResponse getCustomerResponse(QuerySideCustomer querySideCustomer) {
+        return new CustomerResponse(querySideCustomer.getId(), new CustomerInfo(querySideCustomer.getEmail(),
+                querySideCustomer.getSsn(),
+                querySideCustomer.getPhoneNumber(),
+                querySideCustomer.getAddress()));
     }
 
-    private CustomersQueryResponse getCustomersQueryResponse(List<CustomerInfoWithId> customersList) {
+    private CustomersQueryResponse getCustomersQueryResponse(List<QuerySideCustomer> customersList) {
         return new CustomersQueryResponse(customersList
                 .stream()
                 .map(this::getCustomerResponse)

@@ -6,9 +6,12 @@ import java.math.BigDecimal;
 public class OpenAccountCommand implements AccountCommand {
 
   private String customerId;
+  private String title;
   private BigDecimal initialBalance;
 
-  public OpenAccountCommand(String customerId, BigDecimal initialBalance) {
+  public OpenAccountCommand(String customerId, String title, BigDecimal initialBalance) {
+    this.customerId = customerId;
+    this.title = title;
     this.initialBalance = initialBalance;
   }
 
@@ -18,5 +21,9 @@ public class OpenAccountCommand implements AccountCommand {
 
   public String getCustomerId() {
     return customerId;
+  }
+
+  public String getTitle() {
+    return title;
   }
 }

@@ -55,7 +55,9 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/js/**").permitAll()
                 .antMatchers("/styles/**").permitAll()
                 .antMatchers("/views/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                .antMatchers(HttpMethod.POST, "/register/step_1").permitAll()
+                .antMatchers(HttpMethod.POST, "/register/step_2").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
     }

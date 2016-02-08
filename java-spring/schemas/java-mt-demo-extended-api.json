@@ -272,6 +272,47 @@
           }
         }
       }
+    },
+    "/customers/{id}/toaccounts": {
+      "post": {
+        "tags": [
+          "customer-service-command-side-controller"
+        ],
+        "summary": "addToAccount",
+        "operationId": "addToAccountUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ToAccountsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -376,6 +417,20 @@
         }
       }
     },
+    "ToAccountsRequest":{
+      "required": [ "id", "owner" ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        }
+      }
+    },
     "Address": {
       "properties": {
         "street1": {
@@ -392,7 +447,7 @@
         },
         "zipCode": {
           "type": "string"
-        },
+        }
       }
     }
   }

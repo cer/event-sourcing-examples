@@ -19,12 +19,12 @@ public class QuerySideCustomerConfiguration {
     }
 
     @Bean
-    public CustomerInfoUpdateService customerInfoUpdateService(CustomerInfoRepository customerInfoRepository) {
-        return new CustomerInfoUpdateService(customerInfoRepository);
+    public CustomerInfoUpdateService customerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository) {
+        return new CustomerInfoUpdateService(querySideCustomerRepository);
     }
 
     @Bean
-    public CustomerQueryService customerQueryService(CustomerInfoRepository accountInfoRepository) {
+    public CustomerQueryService customerQueryService(QuerySideCustomerRepository accountInfoRepository) {
         return new CustomerQueryService(accountInfoRepository);
     }
 

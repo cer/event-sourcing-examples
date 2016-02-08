@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-interface CustomerInfoRepository extends MongoRepository<CustomerInfoWithId, String> {
+interface QuerySideCustomerRepository extends MongoRepository<QuerySideCustomer, String> {
 
-    List<CustomerInfoWithId> findByEmailLike(String email);
+    List<QuerySideCustomer> findByEmailLike(String email);
 }

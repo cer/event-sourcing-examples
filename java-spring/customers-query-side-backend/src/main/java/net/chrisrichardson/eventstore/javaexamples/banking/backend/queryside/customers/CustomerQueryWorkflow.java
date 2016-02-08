@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAddedToAccount;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerCreatedEvent;
 import net.chrisrichardson.eventstore.subscriptions.CompoundEventHandler;
 import net.chrisrichardson.eventstore.subscriptions.DispatchedEvent;
@@ -28,10 +29,21 @@ public class CustomerQueryWorkflow implements CompoundEventHandler {
     public Observable<Object> create(DispatchedEvent<CustomerCreatedEvent> de) {
         CustomerCreatedEvent event = de.event();
         String id = de.getEntityIdentifier().getId();
-        String eventId = de.eventId().asString();
-        logger.info("**************** customer version=" + id + ", " + eventId);
 
         customerInfoUpdateService.create(id, event.getCustomerInfo());
         return Observable.just(null);
     }
+    @EventHandlerMethod
+    public Observable<Object> addToAccount(DispatchedEvent<CustomerAddedToAccount> de) {
+        CustomerAddedToAccount event = de.event();
+        String id = de.getEntityIdentifier().getId();
+
+        ToAccountInfo toAccountInfo = new ToAccountInfo(event.getAccountId(),
+                event.getTitle(),
+                event.getAccountOwner());
+
+        customerInfoUpdateService.addToAccount(id, toAccountInfo);
+        return Observable.just(null);
+    }
+
 }

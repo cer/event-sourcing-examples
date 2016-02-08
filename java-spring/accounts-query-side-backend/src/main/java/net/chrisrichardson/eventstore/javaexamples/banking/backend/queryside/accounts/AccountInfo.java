@@ -9,6 +9,7 @@ public class AccountInfo {
 
   private String id;
   private String customerId;
+  private String title;
   private long balance;
   private List<AccountChangeInfo> changes;
   private List<AccountTransactionInfo> transactions;
@@ -17,10 +18,11 @@ public class AccountInfo {
   private AccountInfo() {
   }
 
-  public AccountInfo(String id, String customerId, long balance, List<AccountChangeInfo> changes, List<AccountTransactionInfo> transactions, String version) {
+  public AccountInfo(String id, String customerId, String title, long balance, List<AccountChangeInfo> changes, List<AccountTransactionInfo> transactions, String version) {
 
     this.id = id;
     this.customerId = customerId;
+    this.title = title;
     this.balance = balance;
     this.changes = changes;
     this.transactions = transactions;
@@ -33,6 +35,10 @@ public class AccountInfo {
 
   public String getCustomerId() {
     return customerId;
+  }
+
+  public String getTitle() {
+    return title;
   }
 
   public long getBalance() {

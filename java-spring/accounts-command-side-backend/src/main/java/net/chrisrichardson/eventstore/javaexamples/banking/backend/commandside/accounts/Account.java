@@ -16,7 +16,7 @@ public class Account extends ReflectiveMutableCommandProcessingAggregate<Account
   private BigDecimal balance;
 
   public List<Event> process(OpenAccountCommand cmd) {
-    return EventUtil.events(new AccountOpenedEvent(cmd.getCustomerId(), cmd.getInitialBalance()));
+    return EventUtil.events(new AccountOpenedEvent(cmd.getCustomerId(), cmd.getTitle(), cmd.getInitialBalance()));
   }
 
   public List<Event> process(DebitAccountCommand cmd) {
