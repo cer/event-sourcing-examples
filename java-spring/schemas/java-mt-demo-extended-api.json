@@ -34,7 +34,81 @@
     }
   ],
   "paths": {
-    "/authenticate": {
+    "/register/step_1": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "doRegisterStep1",
+        "operationId": "doRegisterStep1UsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterStep1Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/register/step_2": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "doRegisterStep1",
+        "operationId": "doRegisterStep1UsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterStep2Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/login": {
       "post": {
         "tags": [
           "auth-controller"
@@ -217,7 +291,7 @@
       }
     },
     "CustomerInfo": {
-      "required": [ "email", "ssn", "phoneNumber", "address" ],
+      "required": [ "email" ],
       "properties": {
         "email": {
           "type": "string"
@@ -271,6 +345,34 @@
         },
         "balance": {
           "type": "number"
+        }
+      }
+    },
+    "RegisterStep1Request": {
+      "required": [ "email" ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "RegisterStep2Request": {
+      "required": [ "ssn", "phoneNumber" ],
+      "properties": {
+        "ssn": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
         }
       }
     },
