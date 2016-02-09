@@ -26,11 +26,11 @@ public class CustomerInfoUpdateService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public void create(String id, CustomerInfo customerInfo) {
+    public void create(String id, String firstName, String lastName, CustomerInfo customerInfo) {
         try {
             accountInfoRepository.save(new QuerySideCustomer(id,
-                            "",
-                            "",
+                            firstName,
+                            lastName,
                             customerInfo.getEmail(),
                             customerInfo.getSsn(),
                             customerInfo.getPhoneNumber(),

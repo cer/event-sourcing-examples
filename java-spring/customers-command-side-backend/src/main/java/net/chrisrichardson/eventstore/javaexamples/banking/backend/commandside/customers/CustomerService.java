@@ -14,8 +14,8 @@ public class CustomerService {
     this.accountRepository = accountRepository;
   }
 
-  public rx.Observable<EntityWithIdAndVersion<Customer>> createCustomer(CustomerInfo customerInfo) {
-    return accountRepository.save(new CreateCustomerCommand(customerInfo));
+  public rx.Observable<EntityWithIdAndVersion<Customer>> createCustomer(String firstName, String lastName, CustomerInfo customerInfo) {
+    return accountRepository.save(new CreateCustomerCommand(firstName, lastName, customerInfo));
   }
 
   public rx.Observable<EntityWithIdAndVersion<Customer>> addToAccount(String customerId, String accountId, String title, String owner) {

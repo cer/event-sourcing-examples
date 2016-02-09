@@ -3,12 +3,17 @@ package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by popikyardo on 03.02.16.
  */
 public class CustomerInfo {
+    @NotNull
     protected String email;
+    @NotNull
     protected String ssn;
+    @NotNull
     protected String phoneNumber;
     protected Address address;
 

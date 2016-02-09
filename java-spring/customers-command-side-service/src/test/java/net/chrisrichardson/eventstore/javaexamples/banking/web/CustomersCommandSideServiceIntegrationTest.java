@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers.CreateCustomerRequest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class CustomersCommandSideServiceIntegrationTest {
   public void shouldCreateCustomer() {
     CustomerInfo customerInfo = generateCustomerInfo();
 
-    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"),customerInfo, CustomerResponse.class).getBody();
+    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"),new CreateCustomerRequest("John", "Doe", customerInfo), CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
 
     Assert.assertNotNull(customerId);

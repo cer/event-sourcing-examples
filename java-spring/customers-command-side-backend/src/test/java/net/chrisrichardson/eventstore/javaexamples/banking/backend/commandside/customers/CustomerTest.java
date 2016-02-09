@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.
 import net.chrisrichardson.eventstore.CommandProcessingAggregates;
 import net.chrisrichardson.eventstore.Event;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountOpenedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerCreatedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import org.junit.Assert;
@@ -19,10 +20,10 @@ public class CustomerTest {
 
     CustomerInfo customerInfo = generateCustomerInfo();
 
-    List<Event> events = CommandProcessingAggregates.processToList(customer, new CreateCustomerCommand(customerInfo));
+    List<Event> events = CommandProcessingAggregates.processToList(customer, new CreateCustomerCommand("John", "Doe", customerInfo));
 
     Assert.assertEquals(1, events.size());
-    Assert.assertEquals(AccountOpenedEvent.class, events.get(0).getClass());
+    Assert.assertEquals(CustomerCreatedEvent.class, events.get(0).getClass());
 
     customer.applyEvent(events.get(0));
     Assert.assertEquals(customerInfo, customer.getCustomerInfo());

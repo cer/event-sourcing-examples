@@ -3,15 +3,20 @@ package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by popikyardo on 02.02.16.
  */
 public class Address {
-
+    @NotNull
     private String street1;
     private String street2;
+    @NotNull
     private String city;
+    @NotNull
     private String state;
+    @NotNull
     private String zipCode;
 
     public Address() {

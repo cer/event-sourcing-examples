@@ -34,80 +34,6 @@
     }
   ],
   "paths": {
-    "/register/step_1": {
-      "post": {
-        "tags": [
-          "auth-controller"
-        ],
-        "summary": "doRegisterStep1",
-        "operationId": "doRegisterStep1UsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "request",
-            "description": "request",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/RegisterStep1Request"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomerResponse"
-            }
-          },
-          "400": {
-            "description": "Validation error"
-          }
-        }
-      }
-    },
-    "/register/step_2": {
-      "post": {
-        "tags": [
-          "auth-controller"
-        ],
-        "summary": "doRegisterStep1",
-        "operationId": "doRegisterStep1UsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "request",
-            "description": "request",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/RegisterStep2Request"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomerResponse"
-            }
-          },
-          "400": {
-            "description": "Validation error"
-          }
-        }
-      }
-    },
     "/login": {
       "post": {
         "tags": [
@@ -224,7 +150,7 @@
             "description": "customer",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CustomerInfo"
+              "$ref": "#/definitions/CreateCustomerRequest"
             }
           }
         ],
@@ -389,8 +315,8 @@
         }
       }
     },
-    "RegisterStep1Request": {
-      "required": [ "email" ],
+    "CreateCustomerRequest": {
+      "required": [ "email", "ssn", "phoneNumber" ],
       "properties": {
         "firstName": {
           "type": "string"
@@ -400,12 +326,7 @@
         },
         "email": {
           "type": "string"
-        }
-      }
-    },
-    "RegisterStep2Request": {
-      "required": [ "ssn", "phoneNumber" ],
-      "properties": {
+        },
         "ssn": {
           "type": "string"
         },
@@ -432,6 +353,7 @@
       }
     },
     "Address": {
+      "required": [ "street1", "city", "state", "zipCode" ],
       "properties": {
         "street1": {
           "type": "string"

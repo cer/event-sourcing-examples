@@ -1,7 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,9 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo request) {
-        return customerService.createCustomer(request)
-                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), request));
+    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CreateCustomerRequest request) {
+        return customerService.createCustomer(request.getFirstName(), request.getLastName(), request.getCustomerInfo())
+                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), request.getCustomerInfo()));
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)

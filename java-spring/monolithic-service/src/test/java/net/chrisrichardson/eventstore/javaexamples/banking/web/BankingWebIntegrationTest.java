@@ -50,10 +50,10 @@ public class BankingWebIntegrationTest {
     BigDecimal finalFromAccountBalance = initialFromAccountBalance.subtract(amountToTransfer);
     BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);

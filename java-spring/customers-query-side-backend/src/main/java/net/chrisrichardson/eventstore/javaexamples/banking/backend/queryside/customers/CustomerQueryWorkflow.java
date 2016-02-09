@@ -30,7 +30,7 @@ public class CustomerQueryWorkflow implements CompoundEventHandler {
         CustomerCreatedEvent event = de.event();
         String id = de.getEntityIdentifier().getId();
 
-        customerInfoUpdateService.create(id, event.getCustomerInfo());
+        customerInfoUpdateService.create(id, event.getFirstName(), event.getLastName(), event.getCustomerInfo());
         return Observable.just(null);
     }
     @EventHandlerMethod
