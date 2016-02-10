@@ -1,46 +1,27 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers;
 
 import net.chrisrichardson.eventstore.Event;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 
 /**
  * Created by Main on 08.02.2016.
  */
 public class CustomerAddedToAccount implements Event {
 
-    private String accountId;
-    private String accountOwner;
-    private String title;
+    private ToAccountInfo toAccountInfo;
 
     public CustomerAddedToAccount() {
     }
 
-    public CustomerAddedToAccount(String accountId, String accountOwner, String title) {
-        this.accountId = accountId;
-        this.accountOwner = accountOwner;
-        this.title = title;
+    public CustomerAddedToAccount( ToAccountInfo toAccountInfo) {
+        this.toAccountInfo = toAccountInfo;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public ToAccountInfo getToAccountInfo() {
+        return toAccountInfo;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getAccountOwner() {
-        return accountOwner;
-    }
-
-    public void setAccountOwner(String accountOwner) {
-        this.accountOwner = accountOwner;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setToAccountInfo(ToAccountInfo toAccountInfo) {
+        this.toAccountInfo = toAccountInfo;
     }
 }

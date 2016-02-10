@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
  * Created by popikyardo on 03.02.16.
  */
 public class CustomerInfo {
+    private Name name;
     @NotNull
     protected String email;
     @NotNull
@@ -20,11 +21,16 @@ public class CustomerInfo {
     public CustomerInfo() {
     }
 
-    public CustomerInfo(String email, String ssn, String phoneNumber, Address address) {
+    public CustomerInfo(Name name, String email, String ssn, String phoneNumber, Address address) {
+        this.name = name;
         this.email = email;
         this.ssn = ssn;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public Name getName() {
+        return name;
     }
 
     public String getEmail() {

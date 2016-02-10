@@ -3,7 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers.CreateCustomerRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,39 +21,40 @@ import org.springframework.web.client.RestTemplate;
 @IntegrationTest({"server.port=0", "management.port=0"})
 public class CustomersCommandSideServiceIntegrationTest {
 
-  @Value("${local.server.port}")
-  private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-  private String baseUrl(String path) {
-    return "http://localhost:" + port + "/" + path;
-  }
+    private String baseUrl(String path) {
+        return "http://localhost:" + port + "/" + path;
+    }
 
-  @Autowired
-  RestTemplate restTemplate;
+    @Autowired
+    RestTemplate restTemplate;
 
 
-  @Test
-  public void shouldCreateCustomer() {
-    CustomerInfo customerInfo = generateCustomerInfo();
+    @Test
+    public void shouldCreateCustomer() {
+        CustomerInfo customerInfo = generateCustomerInfo();
 
-    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"),new CreateCustomerRequest("John", "Doe", customerInfo), CustomerResponse.class).getBody();
-    final String customerId = customerResponse.getId();
+        final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+        final String customerId = customerResponse.getId();
 
-    Assert.assertNotNull(customerId);
-    Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
-  }
+        Assert.assertNotNull(customerId);
+        Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+    }
 
-  private CustomerInfo generateCustomerInfo() {
-    return new CustomerInfo(
-            "current@email.com",
-            "000-00-0000",
-            "1-111-111-1111",
-            new Address("street 1",
-                    "street 2",
-                    "City",
-                    "State",
-                    "1111111")
-    );
-  }
+    private CustomerInfo generateCustomerInfo() {
+        return new CustomerInfo(
+                new Name("John", "Doe"),
+                "current@email.com",
+                "000-00-0000",
+                "1-111-111-1111",
+                new Address("street 1",
+                        "street 2",
+                        "City",
+                        "State",
+                        "1111111")
+        );
+    }
 
 }

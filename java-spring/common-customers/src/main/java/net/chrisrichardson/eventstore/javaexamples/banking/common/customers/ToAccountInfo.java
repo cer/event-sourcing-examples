@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
 
 /**

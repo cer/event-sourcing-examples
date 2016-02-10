@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@Import(CustomersQuerySideServiceConfiguration.class)
+@Import({CustomersQuerySideServiceConfiguration.class, CustomersCommandSideServiceConfiguration.class})
 public class CustomersQuerySideServiceTestConfiguration {
 
   @Bean

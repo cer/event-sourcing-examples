@@ -1,7 +1,9 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +14,7 @@ import rx.Observable;
  * Created by popikyardo on 03.02.16.
  */
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
 
     private CustomerService customerService;
@@ -23,14 +25,14 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CreateCustomerRequest request) {
-        return customerService.createCustomer(request.getFirstName(), request.getLastName(), request.getCustomerInfo())
-                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), request.getCustomerInfo()));
+    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo request) {
+        return customerService.createCustomer(request)
+                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), request));
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
-    public Observable<ResponseEntity<?>> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountsRequest request) {
-        return customerService.addToAccount(id, request.getId(), request.getTitle(), request.getOwner())
+    public Observable<ResponseEntity<?>> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
+        return customerService.addToAccount(id, request)
                 .map(entityAndEventInfo -> ResponseEntity.ok().build());
     }
 

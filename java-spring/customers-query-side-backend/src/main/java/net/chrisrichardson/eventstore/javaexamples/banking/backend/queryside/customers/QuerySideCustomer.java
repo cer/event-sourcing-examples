@@ -2,6 +2,8 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.cu
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 
 import java.util.List;
 
@@ -10,28 +12,16 @@ import java.util.List;
  */
 public class QuerySideCustomer extends CustomerInfo {
     private String id;
-    protected String firstName;
-    protected String lastName;
     private List<ToAccountInfo> toAccounts;
 
-    public QuerySideCustomer(String id, String firstName, String lastName, String email, String ssn, String phoneNumber, Address address, List<ToAccountInfo> toAccounts) {
-        super(email, ssn, phoneNumber, address);
+    public QuerySideCustomer(String id, Name name, String email, String ssn, String phoneNumber, Address address, List<ToAccountInfo> toAccounts) {
+        super(name, email, ssn, phoneNumber, address);
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.toAccounts = toAccounts;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public List<ToAccountInfo> getToAccounts() {

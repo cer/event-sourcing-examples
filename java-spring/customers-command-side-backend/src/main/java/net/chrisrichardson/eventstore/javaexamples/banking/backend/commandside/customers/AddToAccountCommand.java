@@ -1,29 +1,19 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
+
 /**
  * Created by Main on 08.02.2016.
  */
 public class AddToAccountCommand implements CustomerCommand {
 
-    private String accountId;
-    private String accountOwner;
-    private String title;
+    private ToAccountInfo toAccountInfo;
 
-    public AddToAccountCommand(String accountId, String accountOwner, String title) {
-        this.accountId = accountId;
-        this.accountOwner = accountOwner;
-        this.title = title;
+    public AddToAccountCommand(ToAccountInfo toAccountInfo) {
+        this.toAccountInfo = toAccountInfo;
     }
 
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public String getAccountOwner() {
-        return accountOwner;
-    }
-
-    public String getTitle() {
-        return title;
+    public ToAccountInfo getToAccountInfo() {
+        return toAccountInfo;
     }
 }

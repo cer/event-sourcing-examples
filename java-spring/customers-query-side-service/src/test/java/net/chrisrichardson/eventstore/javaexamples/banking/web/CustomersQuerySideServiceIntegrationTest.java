@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
@@ -16,8 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import rx.Observable;
-
-import java.math.BigDecimal;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
@@ -68,6 +67,7 @@ public class CustomersQuerySideServiceIntegrationTest {
 
   private CustomerInfo generateCustomerInfo() {
     return new CustomerInfo(
+            new Name("John", "Doe"),
             "current@email.com",
             "000-00-0000",
             "1-111-111-1111",

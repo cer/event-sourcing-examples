@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,11 +27,10 @@ public class CustomerInfoUpdateService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public void create(String id, String firstName, String lastName, CustomerInfo customerInfo) {
+    public void create(String id, CustomerInfo customerInfo) {
         try {
             accountInfoRepository.save(new QuerySideCustomer(id,
-                            firstName,
-                            lastName,
+                            customerInfo.getName(),
                             customerInfo.getEmail(),
                             customerInfo.getSsn(),
                             customerInfo.getPhoneNumber(),
