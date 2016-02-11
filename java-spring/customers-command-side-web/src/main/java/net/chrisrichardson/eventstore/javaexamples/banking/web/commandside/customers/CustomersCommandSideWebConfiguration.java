@@ -19,7 +19,7 @@ import java.util.List;
 @Configuration
 @Import({CustomerConfiguration.class})
 @ComponentScan
-public class CommandSideWebCustomersConfiguration extends WebMvcConfigurerAdapter {
+public class CustomersCommandSideWebConfiguration extends WebMvcConfigurerAdapter {
 
     class FakeThing {}
 

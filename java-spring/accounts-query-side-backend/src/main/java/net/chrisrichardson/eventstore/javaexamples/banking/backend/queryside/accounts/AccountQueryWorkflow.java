@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 
 import static net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.MoneyUtil.toIntegerRepr;
 
-@EventSubscriber(id="querySideEventHandlers")
+@EventSubscriber(id="accountQuerySideEventHandlers")
 public class AccountQueryWorkflow implements CompoundEventHandler {
 
   private Logger logger = LoggerFactory.getLogger(getClass());

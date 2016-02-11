@@ -5,16 +5,16 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Cust
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Main on 05.02.2016.
  */
 public class QuerySideCustomer extends CustomerInfo {
     private String id;
-    private List<ToAccountInfo> toAccounts;
+    private Map<String, ToAccountInfo> toAccounts;
 
-    public QuerySideCustomer(String id, Name name, String email, String ssn, String phoneNumber, Address address, List<ToAccountInfo> toAccounts) {
+    public QuerySideCustomer(String id, Name name, String email, String ssn, String phoneNumber, Address address, Map<String, ToAccountInfo> toAccounts) {
         super(name, email, ssn, phoneNumber, address);
         this.id = id;
         this.toAccounts = toAccounts;
@@ -24,7 +24,7 @@ public class QuerySideCustomer extends CustomerInfo {
         return id;
     }
 
-    public List<ToAccountInfo> getToAccounts() {
+    public Map<String, ToAccountInfo> getToAccounts() {
         return toAccounts;
     }
 }

@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
@@ -71,6 +72,19 @@ public class BankingWebIntegrationTest {
 
   }
 
+  @Test
+  public void shouldCreateCustomers() {
+    CustomerInfo customerInfo = generateCustomerInfo();
+
+    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+    final String customerId = customerResponse.getId();
+
+    Assert.assertNotNull(customerId);
+    Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+
+    assertCustomerResponse(customerId, customerInfo);
+  }
+
   private BigDecimal toCents(BigDecimal dollarAmount) {
     return dollarAmount.multiply(new BigDecimal(100));
   }
@@ -93,4 +107,38 @@ public class BankingWebIntegrationTest {
             });
   }
 
+  private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
+    eventually(
+            new Producer<CustomerResponse>() {
+              @Override
+              public Observable<CustomerResponse> produce() {
+                return Observable.just(restTemplate.getForEntity(baseUrl("/customers/" + customerId), CustomerResponse.class).getBody());
+              }
+            },
+            new Verifier<CustomerResponse>() {
+              @Override
+              public void verify(CustomerResponse customerResponse) {
+                Assert.assertEquals(customerId, customerResponse.getId());
+                Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+              }
+            });
+  }
+
+  private CustomerInfo generateCustomerInfo() {
+    return new CustomerInfo(
+            new Name("John", "Doe"),
+            "current@email.com",
+            "000-00-0000",
+            "1-111-111-1111",
+            new Address("street 1",
+                    "street 2",
+                    "City",
+                    "State",
+                    "1111111")
+    );
+  }
+
+  private ToAccountInfo generateToAccountInfo() {
+    return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
+  }
 }

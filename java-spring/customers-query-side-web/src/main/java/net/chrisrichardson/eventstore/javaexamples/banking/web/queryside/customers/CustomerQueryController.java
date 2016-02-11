@@ -1,12 +1,11 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.customers;
 
 import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerQueryService;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomersNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import rx.Observable;
@@ -39,14 +38,9 @@ public class CustomerQueryController {
                 .map(this::getCustomersQueryResponse);
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "customer not found")
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public void customerNotFound() {
-
-    }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "customers not found")
-    @ExceptionHandler(CustomersNotFoundException.class)
+    @ExceptionHandler(EmptyResultDataAccessException.class)
     public void customersNotFound() {
 
     }

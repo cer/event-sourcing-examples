@@ -14,7 +14,7 @@ import rx.Observable;
 /**
  * Created by Main on 04.02.2016.
  */
-@EventSubscriber(id = "querySideEventHandlers")
+@EventSubscriber(id = "customerQuerySideEventHandlers")
 public class CustomerQueryWorkflow implements CompoundEventHandler {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

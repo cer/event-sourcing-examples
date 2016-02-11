@@ -1,13 +1,11 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers;
 
-import net.chrisrichardson.eventstore.Event;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 
 /**
  * Created by popikyardo on 02.02.16.
  */
-public class CustomerCreatedEvent implements Event {
+public class CustomerCreatedEvent extends CustomerEvent {
 
     private CustomerInfo customerInfo;
 

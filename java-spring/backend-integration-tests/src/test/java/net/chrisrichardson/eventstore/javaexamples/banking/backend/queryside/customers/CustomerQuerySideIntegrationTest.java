@@ -8,6 +8,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.acc
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
@@ -40,11 +41,13 @@ public class CustomerQuerySideIntegrationTest {
     private EventStore eventStore;
 
     @Test
-    public void shouldCreateCustomer() throws Exception {
+    public void shouldCreateCustomerAndAddToAccount() throws Exception {
         CustomerInfo customerInfo = generateCustomerInfo();
         EntityWithIdAndVersion<Customer> customer = await(customerService.createCustomer(customerInfo));
 
-        Thread.sleep(10000);
+        ToAccountInfo toAccountInfo = generateToAccountInfo();
+        EntityWithIdAndVersion<Customer> customerWithNewAccount = await(customerService.addToAccount(customer.getEntityIdentifier().getId(), toAccountInfo));
+
         eventually(
                 new Producer<QuerySideCustomer>() {
                     @Override
@@ -60,6 +63,10 @@ public class CustomerQuerySideIntegrationTest {
                         Assert.assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
                         Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
                         Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
+
+                        Assert.assertNotNull(querySideCustomer.getToAccounts());
+                        Assert.assertFalse(querySideCustomer.getToAccounts().isEmpty());
+                        Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);
                     }
                 });
     }
@@ -76,5 +83,9 @@ public class CustomerQuerySideIntegrationTest {
                         "State",
                         "1111111")
         );
+    }
+
+    private ToAccountInfo generateToAccountInfo() {
+        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
     }
 }

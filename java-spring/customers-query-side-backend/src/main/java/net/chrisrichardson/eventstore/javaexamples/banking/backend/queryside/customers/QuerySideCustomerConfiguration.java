@@ -19,8 +19,8 @@ public class QuerySideCustomerConfiguration {
     }
 
     @Bean
-    public CustomerInfoUpdateService customerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository, MongoTemplate mongoTemplate) {
-        return new CustomerInfoUpdateService(querySideCustomerRepository, mongoTemplate);
+    public CustomerInfoUpdateService customerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository) {
+        return new CustomerInfoUpdateService(querySideCustomerRepository);
     }
 
     @Bean
