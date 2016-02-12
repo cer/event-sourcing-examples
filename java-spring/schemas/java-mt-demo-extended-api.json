@@ -1,0 +1,377 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Api Documentation",
+    "version": "1.0",
+    "title": "Api Documentation",
+    "termsOfService": "urn:tos",
+    "contact": {
+      "name": "Contact Email"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "customer-service-command-side-controller",
+      "description": "Customer Service Commandside Controller"
+    },
+    {
+      "name": "customer-service-query-side-controller",
+      "description": "Customer Service Queryside Controller"
+    },
+    {
+      "name": "account-query-side-controller",
+      "description": "Account Service Queryside Controller"
+    },
+    {
+      "name": "auth-controller",
+      "description": "Authentication Controller"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "doAuth",
+        "operationId": "doAuthUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuthRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "get": {
+        "tags": [
+          "account-query-side-controller"
+        ],
+        "summary": "getAllAccountsByCustomer",
+        "operationId": "getAllAccountsByCustomerUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "customer id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomersQueryResponse"
+            }
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "customer-service-query-side-controller"
+        ],
+        "summary": "getAllCustomersByEmail",
+        "operationId": "getAllCustomersByEmailUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+	    "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "customer's email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomersQueryResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "customer-service-command-side-controller"
+        ],
+        "summary": "saveCustomer",
+        "operationId": "saveCustomerUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "customer",
+            "description": "customer",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "tags": [
+          "customer-service-query-side-controller"
+        ],
+        "summary": "getBoard",
+        "operationId": "getBoardUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          }
+        }
+      }
+    },
+    "/customers/{id}/toaccounts": {
+      "post": {
+        "tags": [
+          "customer-service-command-side-controller"
+        ],
+        "summary": "addToAccount",
+        "operationId": "addToAccountUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ToAccountsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AuthRequest": {
+      "required": [ "email" ],
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthResponse": {
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerInfo": {
+      "required": [ "email" ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
+        }
+      }
+    },
+    "CustomersQueryResponse": {
+      "properties": {
+        "customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomerResponse"
+          }
+        }
+      }
+    },
+    "CustomerResponse": {
+      "required": [ "id", "customerInfo" ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "customerInfo": {
+          "$ref": "#/definitions/CustomerInfo"
+        }
+      }
+    },
+    "AccountsQueryResponse": {
+      "properties": {
+        "customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GetAccountResponse"
+          }
+        }
+      }
+    },
+    "GetAccountResponse": {
+      "properties": {
+        "accountId": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number"
+        }
+      }
+    },
+    "CreateCustomerRequest": {
+      "required": [ "email", "ssn", "phoneNumber" ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
+        }
+      }
+    },
+    "ToAccountsRequest":{
+      "required": [ "id", "owner" ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        }
+      }
+    },
+    "Address": {
+      "required": [ "street1", "city", "state", "zipCode" ],
+      "properties": {
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+

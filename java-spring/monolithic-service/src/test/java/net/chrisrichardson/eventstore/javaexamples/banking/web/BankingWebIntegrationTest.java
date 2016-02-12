@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
@@ -50,10 +51,10 @@ public class BankingWebIntegrationTest {
     BigDecimal finalFromAccountBalance = initialFromAccountBalance.subtract(amountToTransfer);
     BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);
@@ -69,6 +70,19 @@ public class BankingWebIntegrationTest {
     assertAccountBalance(fromAccountId, finalFromAccountBalance);
     assertAccountBalance(toAccountId, finalToAccountBalance);
 
+  }
+
+  @Test
+  public void shouldCreateCustomers() {
+    CustomerInfo customerInfo = generateCustomerInfo();
+
+    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+    final String customerId = customerResponse.getId();
+
+    Assert.assertNotNull(customerId);
+    Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+
+    assertCustomerResponse(customerId, customerInfo);
   }
 
   private BigDecimal toCents(BigDecimal dollarAmount) {
@@ -93,4 +107,38 @@ public class BankingWebIntegrationTest {
             });
   }
 
+  private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
+    eventually(
+            new Producer<CustomerResponse>() {
+              @Override
+              public Observable<CustomerResponse> produce() {
+                return Observable.just(restTemplate.getForEntity(baseUrl("/customers/" + customerId), CustomerResponse.class).getBody());
+              }
+            },
+            new Verifier<CustomerResponse>() {
+              @Override
+              public void verify(CustomerResponse customerResponse) {
+                Assert.assertEquals(customerId, customerResponse.getId());
+                Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+              }
+            });
+  }
+
+  private CustomerInfo generateCustomerInfo() {
+    return new CustomerInfo(
+            new Name("John", "Doe"),
+            "current@email.com",
+            "000-00-0000",
+            "1-111-111-1111",
+            new Address("street 1",
+                    "street 2",
+                    "City",
+                    "State",
+                    "1111111")
+    );
+  }
+
+  private ToAccountInfo generateToAccountInfo() {
+    return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
+  }
 }

@@ -63,10 +63,10 @@ public class EndToEndTest {
     BigDecimal finalFromAccountBalance = initialFromAccountBalance.subtract(amountToTransfer);
     BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest(initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CreateAccountResponse fromAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My #1 Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest(initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My #2 Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);

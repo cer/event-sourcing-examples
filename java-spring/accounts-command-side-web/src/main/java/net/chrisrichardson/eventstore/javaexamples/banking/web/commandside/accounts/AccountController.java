@@ -22,7 +22,7 @@ public class AccountController {
 
   @RequestMapping(method = RequestMethod.POST)
   public Observable<CreateAccountResponse> createAccount(@Validated @RequestBody CreateAccountRequest request) {
-    return accountService.openAccount(request.getInitialBalance())
+    return accountService.openAccount(request.getCustomerId(), request.getTitle(), request.getInitialBalance())
             .map(entityAndEventInfo -> new CreateAccountResponse(entityAndEventInfo.getEntityIdentifier().getId()));
   }
 }

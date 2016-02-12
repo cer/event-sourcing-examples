@@ -1,0 +1,28 @@
+package net.chrisrichardson.eventstore.javaexamples.banking.commonauth;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+/**
+ * Created by popikyardo on 21.09.15.
+ */
+@ConfigurationProperties(locations = "classpath:auth.properties", ignoreUnknownFields = false, prefix = "auth")
+public class AuthProperties {
+    private String serverSecret;
+    private Integer serverInteger;
+
+    public String getServerSecret() {
+        return serverSecret;
+    }
+
+    public void setServerSecret(String serverSecret) {
+        this.serverSecret = serverSecret;
+    }
+
+    public Integer getServerInteger() {
+        return serverInteger;
+    }
+
+    public void setServerInteger(Integer serverInteger) {
+        this.serverInteger = serverInteger;
+    }
+}
