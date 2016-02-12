@@ -20,9 +20,12 @@ gulp.task('dist', () => runSequence('dist:clean', 'dist:build', 'dist:index'));
 gulp.task('clean', ['dist:clean', 'serve:clean']);
 gulp.task('open', () => open('http://localhost:3000'));
 
+gulp.task('export', () => runSequence('dist:clean', 'dist:build', 'dist:index', 'export:clean', 'export:copy'));
+
 // Remove all built files
 gulp.task('serve:clean', cb => del('build', {dot: true}, cb));
 gulp.task('dist:clean', cb => del(['dist', 'dist-intermediate'], {dot: true}, cb));
+gulp.task('export:clean', cb => del(['../prebuilt-web-client/**'], {dot: true, force: true}, cb));
 
 // Copy static files across to our final directory
 gulp.task('serve:static', () => 
@@ -41,6 +44,11 @@ gulp.task('dist:static', () =>
     .pipe(gulp.dest('dist'))
     .pipe($.size({title: 'static'}))
 );
+
+gulp.task('export:copy', () => {
+  return gulp.src(['dist/**'])
+    .pipe(gulp.dest('../prebuilt-web-client'));
+});
 
 // Copy our index file and inject css/script imports for this build
 gulp.task('serve:index', () => {
@@ -73,7 +81,8 @@ gulp.task('serve:start', ['serve:static'], () => {
   return new WebpackDevServer(webpack(config), {
     contentBase: 'build',
     publicPath: config.output.publicPath,
-    watchDelay: 100
+    watchDelay: 100,
+    historyApiFallback: true
   })
     .listen(PORT, '0.0.0.0', (err) => {
       if (err) throw new $.util.PluginError('webpack-dev-server', err);

@@ -9,7 +9,7 @@ export default (DEBUG, PATH, PORT=3000) => ({
   ] : []).concat([
     './src/main.less',
     'babel-polyfill',
-    './src/main',
+    './src/client',
   ]),
 
   output: {
@@ -36,6 +36,12 @@ export default (DEBUG, PATH, PORT=3000) => ({
           plugins: ['transform-runtime'],
           presets: ['es2015', 'stage-0', 'react'],
         }
+      },
+
+      //json
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
       },
 
       // Load styles

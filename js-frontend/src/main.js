@@ -11,14 +11,14 @@ import rootReducer from './reducers'
 // Add middleware to allow our action creators to return functions and arrays
 const createStoreWithMiddleware = applyMiddleware(
   reduxThunk,
-  reduxMulti,
-)(createStore)
+  reduxMulti
+)(createStore);
 
 // Ensure our listeners are only called once, even when one of the above
 // middleware call the underlying store's `dispatch` multiple times
 const createStoreWithBatching = batchedSubscribe(
   fn => fn()
-)(createStoreWithMiddleware)
+)(createStoreWithMiddleware);
 
 // Create a store with our application reducer
 const store = createStoreWithBatching(rootReducer)

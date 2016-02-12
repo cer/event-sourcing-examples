@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Application from '../Application'
+import Application from '../App'
 
 
 // Store a reference to our application's root DOM node to prevent repeating
