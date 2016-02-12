@@ -19,9 +19,5 @@ dependencies {
 
 test {
     ignoreFailures true
-
-    environment 'EVENTUATE_API_KEY_ID', '20CAXGPA3DE56WXO2SFBUDGZ9'
-    environment 'EVENTUATE_API_KEY_SECRET', 'gU6n78drWCIgkgzVStvI3BhV3MfzDyjWKCN7p0PBimI'
-    environment 'SPRING_DATA_MONGODB_URI', 'mongodb://198.50.218.51/mydb'
 }
 
