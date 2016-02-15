@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

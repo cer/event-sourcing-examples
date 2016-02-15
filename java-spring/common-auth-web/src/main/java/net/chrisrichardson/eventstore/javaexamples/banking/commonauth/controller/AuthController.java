@@ -1,8 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.CustomerAuthService;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,16 +31,18 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private CustomerAuthService customerAuthService;
+
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @RequestMapping(value = "/login", method = POST)
-    public ResponseEntity<AuthResponse> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
-        User user = new User();
-        user.setEmail(request.getEmail());
+    public ResponseEntity<CustomerResponse> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
+        QuerySideCustomer customer = customerAuthService.findByEmail(request.getEmail());
 
-        Token token = tokenService.allocateToken(objectMapper.writeValueAsString(user));
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new AuthResponse(token.getKey()));
+        Token token = tokenService.allocateToken(objectMapper.writeValueAsString(new User(request.getEmail())));
+        return ResponseEntity.status(HttpStatus.OK).header("access-token", token.getKey())
+                .body(new CustomerResponse(customer.getId(), customer));
     }
 
 

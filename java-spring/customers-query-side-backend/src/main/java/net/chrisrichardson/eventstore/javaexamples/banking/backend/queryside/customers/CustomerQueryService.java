@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
 import net.chrisrichardson.eventstore.EntityIdentifier;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import org.springframework.dao.EmptyResultDataAccessException;
 import rx.Observable;
 

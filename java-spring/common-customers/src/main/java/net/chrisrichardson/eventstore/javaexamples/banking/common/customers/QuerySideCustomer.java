@@ -1,9 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
-
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
 import java.util.Map;
 

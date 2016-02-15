@@ -18,6 +18,13 @@ public class User implements UserDetails {
 
     private String email;
 
+    public User() {
+    }
+
+    public User(String email) {
+        this.email = email;
+    }
+
     public void setUsername(String username) {
         this.email = username;
     }
