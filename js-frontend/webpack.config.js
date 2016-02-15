@@ -30,6 +30,7 @@ export default (DEBUG, PATH, PORT=3000) => ({
       { test: /\.jsx?$/,
         include: [
           path.resolve(__dirname, "src"),
+          path.resolve(__dirname, "node_modules/redux-auth/src/views/bootstrap")
         ],
         loader: "babel-loader",
         query: {

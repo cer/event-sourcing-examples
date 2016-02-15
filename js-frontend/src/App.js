@@ -182,25 +182,26 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
         //apiUrl: __API_URL__
         apiUrl: '/api'
       }
-    }, {
-      evilUser: {
-        //apiUrl:                __API_URL__,
-        apiUrl:                '/api',
-        signOutPath:           "/mangs/sign_out",
-        emailSignInPath:       "/mangs/sign_in",
-        emailRegistrationPath: "/mangs",
-        accountUpdatePath:     "/mangs",
-        accountDeletePath:     "/mangs",
-        passwordResetPath:     "/mangs/password",
-        passwordUpdatePath:    "/mangs/password",
-        tokenValidationPath:   "/mangs/validate_token",
-        authProviderPaths: {
-          github:    "/mangs/github",
-          facebook:  "/mangs/facebook",
-          google:    "/mangs/google_oauth2"
-        }
-      }
     }
+    //, {
+    //  evilUser: {
+    //    //apiUrl:                __API_URL__,
+    //    apiUrl:                '/api',
+    //    signOutPath:           "/mangs/sign_out",
+    //    emailSignInPath:       "/mangs/sign_in",
+    //    emailRegistrationPath: "/mangs",
+    //    accountUpdatePath:     "/mangs",
+    //    accountDeletePath:     "/mangs",
+    //    passwordResetPath:     "/mangs/password",
+    //    passwordUpdatePath:    "/mangs/password",
+    //    tokenValidationPath:   "/mangs/validate_token",
+    //    authProviderPaths: {
+    //      github:    "/mangs/github",
+    //      facebook:  "/mangs/facebook",
+    //      google:    "/mangs/google_oauth2"
+    //    }
+    //  }
+    //}
   ], {
     cookies,
     isServer,

@@ -5,18 +5,14 @@ import React from "react";
 import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import { EmailSignUpForm } from "redux-auth/bootstrap-theme"
+//import { EmailSignUpForm } from "redux-auth/bootstrap-theme"
+import EmailSignUpForm from "../controls/bootstrap/EmailSignUpForm";
 
 export class SignUp extends React.Component {
   render () {
 
-    return <EmailSignUpForm />;
-    //return (
-    //  <div>
-    //    <PageHeader>Sign Up Page</PageHeader>
-    //    <p>Here you can register.</p>
-    //  </div>
-    //);
+    return <EmailSignUpForm endpoint="default" />;
+
   }
 }
 export default connect(({routes}) => ({routes}))(SignUp);

@@ -5,11 +5,32 @@ import React from "react";
 import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
 
+//import ButtonLoader from "./ButtonLoader";
+import { Input } from "react-bootstrap";
+import ButtonLoader from "../controls/bootstrap/ButtonLoader";
+
+//export {bootstrap, materialUi} from "./views";
+
+
 // bootstrap theme
-import { EmailSignInForm } from "redux-auth/bootstrap-theme";
+//import { EmailSignInForm } from "redux-auth/bootstrap-theme";
+import EmailSignInForm from "../controls/bootstrap/EmailSignInForm";
+
 
 export class SignIn extends React.Component {
+
   render () {
+    const signInProps = {
+      inputProps: {
+        password: {
+          className: 'hide hidden',
+          style: { display: 'none' },
+          value: null,
+          disabled: true
+        }
+      }
+    };
+
     return <EmailSignInForm />;
     //return (
     //  <div>
