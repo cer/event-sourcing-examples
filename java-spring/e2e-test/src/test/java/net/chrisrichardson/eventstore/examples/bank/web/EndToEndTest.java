@@ -1,6 +1,10 @@
 package net.chrisrichardson.eventstore.examples.bank.web;
 
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
@@ -40,6 +44,13 @@ public class EndToEndTest {
   private String transactionsCommandSideBaseUrl(String path) {
     return makeBaseUrl(8082, path);
   }
+  private String customersCommandSideBaseUrl(String path) {
+    return makeBaseUrl(8083, path);
+  }
+
+  private String customersQuerySideBaseUrl(String path) {
+    return makeBaseUrl(8084, path);
+  }
 
   RestTemplate restTemplate = new RestTemplate();
 
@@ -54,7 +65,8 @@ public class EndToEndTest {
 
 
   @Test
-  public void shouldCreateAccountsAndTransferMoney() {
+  public void shouldCreateCustomerAndAccountsAndTransferMoney() {
+    CustomerInfo customerInfo = generateCustomerInfo();
 
     BigDecimal initialFromAccountBalance = new BigDecimal(500);
     BigDecimal initialToAccountBalance = new BigDecimal(100);
@@ -63,10 +75,16 @@ public class EndToEndTest {
     BigDecimal finalFromAccountBalance = initialFromAccountBalance.subtract(amountToTransfer);
     BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My #1 Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CustomerResponse customerResponse = restTemplate.postForEntity(customersCommandSideBaseUrl("/customers"),customerInfo, CustomerResponse.class).getBody();
+    final String customerId = customerResponse.getId();
+
+    assertCustomerResponse(customerId, customerInfo);
+
+
+    final CreateAccountResponse fromAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest(customerId, "My #1 Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My #2 Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest(customerId, "My #2 Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);
@@ -105,6 +123,37 @@ public class EndToEndTest {
                 Assert.assertEquals(inCents, accountInfo.getBalance());
               }
             });
+  }
+
+  private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
+    eventually(
+            new Producer<CustomerResponse>() {
+              @Override
+              public Observable<CustomerResponse> produce() {
+                return Observable.just(restTemplate.getForEntity(customersQuerySideBaseUrl("/customers/" + customerId), CustomerResponse.class).getBody());
+              }
+            },
+            new Verifier<CustomerResponse>() {
+              @Override
+              public void verify(CustomerResponse customerResponse) {
+                Assert.assertEquals(customerId, customerResponse.getId());
+                Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+              }
+            });
+  }
+
+  private CustomerInfo generateCustomerInfo() {
+    return new CustomerInfo(
+            new Name("John", "Doe"),
+            "current@email.com",
+            "000-00-0000",
+            "1-111-111-1111",
+            new Address("street 1",
+                    "street 2",
+                    "City",
+                    "State",
+                    "1111111")
+    );
   }
 
 }
