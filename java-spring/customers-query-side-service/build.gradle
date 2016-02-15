@@ -18,6 +18,6 @@ dependencies {
 }
 
 test {
-    ignoreFailures true
+    ignoreFailures System.getenv("EVENTUATE_API_KEY_ID") == null
 }
 
