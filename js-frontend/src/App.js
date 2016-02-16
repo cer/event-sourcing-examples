@@ -5,19 +5,23 @@
 import React from "react";
 import { Provider} from "react-redux";
 import { ReduxRouter} from "redux-router";
+//import { Router, IndexRoute, Route, browserHistory } from 'react-router';
+//import { syncHistory, routeReducer } from 'react-router-redux';
+
 import { Route, IndexRoute} from "react-router";
 import { configure, authStateReducer} from "redux-auth";
 import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
 import { createStore, compose, applyMiddleware} from "redux";
-import { createHistory, createMemoryHistory} from "history";
+import { createHistory, createHashHistory, createMemoryHistory } from "history";
 import { routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
 import { reduxReactRouter as serverRouter } from "redux-router/server";
 import { combineReducers} from "redux";
+
 import thunk from "redux-thunk";
 
-import {connect} from 'react-redux';
-import {pushState} from 'redux-router';
+import { connect } from 'react-redux';
+import { pushState } from 'redux-router';
 
 //import demoButtons from "./reducers/request-test-buttons";
 //import demoUi from "./reducers/demo-ui";
@@ -114,7 +118,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
         debugger;
         if (!this.props.isAuthenticated) {
           let redirectAfterLogin = this.props.location.pathname;
-          this.props.dispatch(pushState(null, `/login?next=${redirectAfterLogin}`));
+          this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
         }
       }
 
@@ -147,16 +151,15 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   const routes = (
     <Route path="/" component={App}>
       <IndexRoute component={Main} />
-      <Route path="login" component={SignIn} />
+      <Route path="signin" component={SignIn} />
       <Route path="register" component={SignUp} />
       <Route path="account" component={requireAuthentication(Account)} />
-      <Route path="account2" component={requireAuthentication(Account)} />
     </Route>
   );
 
   // these methods will differ from server to client
   var reduxReactRouter    = clientRouter;
-  var createHistoryMethod = createHistory;
+  var createHistoryMethod = createHashHistory;
 
   if (isServer) {
     reduxReactRouter    = serverRouter;
@@ -180,7 +183,9 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     {
       default: {
         //apiUrl: __API_URL__
-        apiUrl: '/api'
+        apiUrl: '/',
+        emailSignInPath: 'login',
+        emailRegistrationPath: 'customers'
       }
     }
     //, {
