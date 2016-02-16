@@ -20,5 +20,9 @@ dependencies {
 
 }
 
+task copyAngularJS(type: Copy) {
+    from "../../prebuilt-web-client"
+    into "build/resources/main/static"
+}
 
-
+jar.dependsOn(copyAngularJS)
