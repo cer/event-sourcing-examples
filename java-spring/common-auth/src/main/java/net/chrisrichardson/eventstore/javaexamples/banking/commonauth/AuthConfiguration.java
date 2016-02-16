@@ -47,16 +47,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .formLogin().loginPage("/index.html").failureUrl("/index.html").and()
                 .authorizeRequests()
-                .antMatchers("/index.html").permitAll()
-                .antMatchers("/health").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/v2/api-docs").permitAll()
-                .antMatchers("/**.js").permitAll()
-                .antMatchers("/**.css").permitAll()
-                .antMatchers(HttpMethod.POST, "/customers").permitAll()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
     }
