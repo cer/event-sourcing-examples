@@ -32,5 +32,5 @@ include 'customers-query-side-web'
 include 'common-customers'
 include 'customers-command-side-service'
 include 'customers-query-side-service'
-include 'common-auth-controller'
+include 'common-auth-web'
 
