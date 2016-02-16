@@ -43,6 +43,7 @@ class EmailSignUpForm extends React.Component {
   handleSubmit (event) {
     event.preventDefault();
     let formData = this.props.auth.getIn(["emailSignUp", this.getEndpoint(), "form"]).toJS();
+    debugger;
     this.props.dispatch(emailSignUp(formData, this.getEndpoint()));
   }
 
