@@ -20,9 +20,10 @@ dependencies {
 
 }
 
-task copyAngularJS(type: Copy) {
+task copyWebStatic(type: Copy) {
     from "../../prebuilt-web-client"
     into "build/resources/main/static"
 }
 
-jar.dependsOn(copyAngularJS)
+jar.dependsOn(copyWebStatic)
+bootRun.dependsOn(copyWebStatic)
