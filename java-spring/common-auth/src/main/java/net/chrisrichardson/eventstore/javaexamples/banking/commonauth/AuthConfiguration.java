@@ -47,6 +47,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .formLogin().loginPage("/index.html").failureUrl("/index.html").and()
                 .authorizeRequests()
                 .antMatchers("/index.html").permitAll()
                 .antMatchers("/health").permitAll()
