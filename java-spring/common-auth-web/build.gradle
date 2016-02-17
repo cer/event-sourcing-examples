@@ -7,7 +7,6 @@ dependencies {
 
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
 
     testCompile "junit:junit:4.11"
 }

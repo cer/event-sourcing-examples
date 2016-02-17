@@ -8,7 +8,6 @@ import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.Auth
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.ErrorResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +48,6 @@ public class AuthController {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     public ErrorResponse customersNotFound() {
-        return new ErrorResponse("customers not found");
+        return new ErrorResponse("Customer not found");
     }
 }
