@@ -20,7 +20,7 @@ gulp.task('dist', () => runSequence('dist:clean', 'dist:build', 'dist:index'));
 gulp.task('clean', ['dist:clean', 'serve:clean']);
 gulp.task('open', () => open('http://localhost:3000'));
 
-gulp.task('export', () => runSequence('dist:clean', 'dist:build', 'dist:index', 'export:clean', 'export:copy'));
+gulp.task('export', () => runSequence(/*'dist:clean', 'dist:build', 'dist:index',*/ 'export:clean', 'export:copy'));
 
 // Remove all built files
 gulp.task('serve:clean', cb => del('build', {dot: true}, cb));
@@ -78,11 +78,25 @@ gulp.task('dist:index', () => {
 gulp.task('serve:start', ['serve:static'], () => {
   const config = webpackConfig(true, 'build', PORT);
 
+  // https://webpack.github.io/docs/webpack-dev-server.html
   return new WebpackDevServer(webpack(config), {
     contentBase: 'build',
     publicPath: config.output.publicPath,
     watchDelay: 100,
-    historyApiFallback: true
+    historyApiFallback: true,
+    //proxy: {
+    //  "*": "http://localhost:8080"
+    //}
+
+    proxy: {
+      '/login' : {
+        target: 'http://localhost:8080'
+      },
+      '/customers' : {
+        target: 'http://localhost:8080'
+      }
+
+    }
   })
     .listen(PORT, '0.0.0.0', (err) => {
       if (err) throw new $.util.PluginError('webpack-dev-server', err);

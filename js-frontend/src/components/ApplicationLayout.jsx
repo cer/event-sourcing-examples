@@ -1,7 +1,7 @@
-import './ApplicationLayout.less'
+//import './ApplicationLayout.less'
 
 import React, {PropTypes} from 'react'
-import { pacomoTransformer } from '../utils/pacomo'
+//import { pacomoTransformer } from '../utils/pacomo'
 import Link from './Link'
 
 
@@ -9,7 +9,7 @@ const ApplicationLayout = ({
   children,
   locationName,
 }) =>
-  <div>
+  (<div>
     <nav className='navbar'>
       <Link
         name='documentList'
@@ -24,11 +24,12 @@ const ApplicationLayout = ({
     <main className='content'>
       {children}
     </main>
-  </div>
+  </div>);
 
 ApplicationLayout.propTypes = {
   children: PropTypes.element.isRequired,
-  locationName: PropTypes.string,
-}
+  locationName: PropTypes.string
+};
 
-export default pacomoTransformer(ApplicationLayout)
+export default ApplicationLayout;
+//export default pacomoTransformer(ApplicationLayout)
