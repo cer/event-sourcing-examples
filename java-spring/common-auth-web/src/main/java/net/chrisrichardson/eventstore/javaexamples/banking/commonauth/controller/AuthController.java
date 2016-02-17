@@ -7,14 +7,14 @@ import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.CustomerAu
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.token.Token;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -45,5 +45,9 @@ public class AuthController {
                 .body(new CustomerResponse(customer.getId(), customer));
     }
 
-
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+    public String customersNotFound() {
+        return "customers not found";
+    }
 }
