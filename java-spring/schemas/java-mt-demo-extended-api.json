@@ -62,39 +62,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/AuthResponse"
-            }
-          }
-        }
-      }
-    },
-    "/accounts": {
-      "get": {
-        "tags": [
-          "account-query-side-controller"
-        ],
-        "summary": "getAllAccountsByCustomer",
-        "operationId": "getAllAccountsByCustomerUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "customerId",
-            "in": "query",
-            "description": "customer id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomersQueryResponse"
+              "$ref": "#/definitions/CustomerResponse"
             }
           }
         }
@@ -226,7 +194,7 @@
             "description": "request",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ToAccountsRequest"
+              "$ref": "#/definitions/ToAccountInfo"
             }
           }
         ],
@@ -329,7 +297,7 @@
         }
       }
     },
-    "ToAccountsRequest":{
+    "ToAccountInfo":{
       "required": [ "id", "owner" ],
       "properties": {
         "id": {
