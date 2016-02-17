@@ -5,6 +5,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Cust
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.CustomerAuthService;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.ErrorResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -47,7 +48,7 @@ public class AuthController {
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
-    public String customersNotFound() {
-        return "customers not found";
+    public ErrorResponse customersNotFound() {
+        return new ErrorResponse("customers not found");
     }
 }
