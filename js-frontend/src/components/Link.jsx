@@ -13,7 +13,7 @@ const Link = ({
 Link.propTypes = {
   name: PropTypes.string.isRequired,
   options: PropTypes.object,
-  children: PropTypes.node.isRequired,
-}
+  children: PropTypes.node.isRequired
+};
 
-export default Link
+export default Link;

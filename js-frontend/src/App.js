@@ -8,8 +8,8 @@ import { ReduxRouter} from "redux-router";
 //import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 //import { syncHistory, routeReducer } from 'react-router-redux';
 
-import { Route, IndexRoute} from "react-router";
-import { configure, authStateReducer} from "redux-auth";
+import { Route, IndexRoute, Link, IndexLink} from "react-router";
+import { configure as reduxAuthConfigure, authStateReducer} from "redux-auth";
 import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
 import { createStore, compose, applyMiddleware} from "redux";
@@ -25,8 +25,8 @@ import { pushState } from 'redux-router';
 
 //import demoButtons from "./reducers/request-test-buttons";
 //import demoUi from "./reducers/demo-ui";
-//import Container from "./views/partials/Container";
-//import Main from "./views/Main";
+import Container from "./components/partials/Container";
+import Main from "./views/Main";
 import Account from "./views/Account";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
@@ -34,47 +34,15 @@ import SignUp from "./views/SignUp";
 
 
 // TODO: !!!!
+//         <GlobalComponents />
+
 class App extends React.Component {
   render() {
     return (
       <Container>
-        <GlobalComponents />
         <AuthGlobals />
         {this.props.children}
       </Container>
-    );
-  }
-}
-
-class Main extends React.Component {
-  render() {
-    return (
-      <div className="well">
-        Component: Main <br/>
-        {this.props.children}
-      </div>
-    );
-  }
-}
-
-class GlobalComponents extends React.Component {
-  render() {
-    return (
-      <div className="well">
-        Component: GlobalComponents <br/>
-        {this.props.children}
-      </div>
-    );
-  }
-}
-
-class Container extends React.Component {
-  render() {
-    return (
-      <div className="well">
-        Component: Container <br/>
-        {this.props.children}
-      </div>
     );
   }
 }
@@ -179,7 +147,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   /**
    * The React Router 1.0 routes for both the server and the client.
    */
-  return store.dispatch(configure([
+  return store.dispatch(reduxAuthConfigure([
     {
       default: {
         //apiUrl: __API_URL__
@@ -211,7 +179,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     cookies,
     isServer,
     currentLocation
-  })).then(({redirectPath, blank} = {}) => {
+  })).then(({ redirectPath, blank } = {}) => {
     // hack for material-ui server-side rendering.
     // see https://github.com/callemall/material-ui/pull/2007
     if (userAgent) {
@@ -223,6 +191,8 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
       // be rendered
       return <noscript />;
     }
+
+    console.log(`redirect path: ${redirectPath}`)
 
     return ({
       blank,
