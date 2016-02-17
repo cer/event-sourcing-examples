@@ -150,7 +150,7 @@
             "description": "customer",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateCustomerRequest"
+              "$ref": "#/definitions/CustomerInfo"
             }
           }
         ],
@@ -260,6 +260,9 @@
     "CustomerInfo": {
       "required": [ "email" ],
       "properties": {
+        "name": {
+          "$ref": "#/definitions/Name"
+        },
         "email": {
           "type": "string"
         },
@@ -315,26 +318,14 @@
         }
       }
     },
-    "CreateCustomerRequest": {
-      "required": [ "email", "ssn", "phoneNumber" ],
+    "Name": {
+      "required": [ "firstName", "lastName" ],
       "properties": {
         "firstName": {
           "type": "string"
         },
         "lastName": {
           "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "ssn": {
-          "type": "string"
-        },
-        "phoneNumber": {
-          "type": "string"
-        },
-        "address": {
-          "$ref": "#/definitions/Address"
         }
       }
     },

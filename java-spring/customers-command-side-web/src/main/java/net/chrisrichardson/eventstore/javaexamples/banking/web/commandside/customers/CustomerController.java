@@ -25,9 +25,9 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo request) {
-        return customerService.createCustomer(request)
-                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), request));
+    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo customer) {
+        return customerService.createCustomer(customer)
+                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), customer));
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
