@@ -5,6 +5,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Addr
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
+import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
@@ -15,6 +16,7 @@ import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -81,10 +83,21 @@ public class EndToEndTest {
     assertCustomerResponse(customerId, customerInfo);
 
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest(customerId, "My #1 Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CreateAccountResponse fromAccount = BasicAuthUtils.doRestTemplateRequest(restTemplate,
+            accountsCommandSideBaseUrl("/accounts"),
+            HttpMethod.POST,
+            CreateAccountResponse.class,
+            new CreateAccountRequest(customerId, "My #1 Account", initialFromAccountBalance)
+    );
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(accountsCommandSideBaseUrl("/accounts"), new CreateAccountRequest(customerId, "My #2 Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = BasicAuthUtils.doRestTemplateRequest(restTemplate,
+            accountsCommandSideBaseUrl("/accounts"),
+            HttpMethod.POST,
+            CreateAccountResponse.class,
+            new CreateAccountRequest(customerId, "My #2 Account", initialToAccountBalance)
+    );
+
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);
@@ -94,8 +107,12 @@ public class EndToEndTest {
     assertAccountBalance(toAccountId, initialToAccountBalance);
 
 
-    final CreateMoneyTransferResponse moneyTransfer = restTemplate.postForEntity(transactionsCommandSideBaseUrl("/transfers"),
-            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer), CreateMoneyTransferResponse.class).getBody();
+    final CreateMoneyTransferResponse moneyTransfer =  BasicAuthUtils.doRestTemplateRequest(restTemplate,
+            transactionsCommandSideBaseUrl("/transfers"),
+            HttpMethod.POST,
+            CreateMoneyTransferResponse.class,
+            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer)
+    );
 
     assertAccountBalance(fromAccountId, finalFromAccountBalance);
     assertAccountBalance(toAccountId, finalToAccountBalance);
@@ -113,7 +130,10 @@ public class EndToEndTest {
             new Producer<GetAccountResponse>() {
               @Override
               public Observable<GetAccountResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(accountsQuerySideBaseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
+                  return Observable.just(BasicAuthUtils.doRestTemplateRequest(restTemplate,
+                          accountsQuerySideBaseUrl("/accounts/" + fromAccountId),
+                          HttpMethod.GET,
+                          GetAccountResponse.class));
               }
             },
             new Verifier<GetAccountResponse>() {
@@ -130,7 +150,10 @@ public class EndToEndTest {
             new Producer<CustomerResponse>() {
               @Override
               public Observable<CustomerResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(customersQuerySideBaseUrl("/customers/" + customerId), CustomerResponse.class).getBody());
+                  return Observable.just(BasicAuthUtils.doRestTemplateRequest(restTemplate,
+                          customersQuerySideBaseUrl("/customers/" + customerId),
+                          HttpMethod.GET,
+                          CustomerResponse.class));
               }
             },
             new Verifier<CustomerResponse>() {

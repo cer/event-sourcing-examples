@@ -1,5 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Created by popikyardo on 03.02.16.
  */
@@ -30,5 +33,15 @@ public class CustomerResponse {
 
     public void setCustomerInfo(CustomerInfo customerInfo) {
         this.customerInfo = customerInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

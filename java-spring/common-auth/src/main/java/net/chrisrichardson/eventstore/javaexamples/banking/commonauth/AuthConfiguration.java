@@ -2,8 +2,8 @@ package net.chrisrichardson.eventstore.javaexamples.banking.commonauth;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.filter.StatelessAuthenticationFilter;
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,8 +15,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
 import org.springframework.security.core.token.TokenService;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -51,13 +53,16 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public UserDetailsService userDetailsServiceBean() {
         return email -> {
-            QuerySideCustomer customer = customerAuthService.findByEmail(email);
+/*            QuerySideCustomer customer = customerAuthService.findByEmail(email);
             if (customer != null) {
                 return new User(email);
             } else {
                 throw new UsernameNotFoundException(String.format("could not find the customer '%s'", email));
-            }
-        };
+            }*/
+            //authorize everyone with basic authentication
+            return  new User(email, "", true, true, true, true,
+                    AuthorityUtils.createAuthorityList("USER"));
+    };
     }
 
     @Bean
