@@ -44,3 +44,20 @@ textarea {
   height: 100%;
   min-height: 100%;
 }
+
+body {
+  padding-bottom: 50px;
+  /* height: 100%; */
+  /* min-height: 100%; */
+  height: auto;
+}
+.footer-navigation {
+  height: 1px;
+  & > .container {
+    height: 100%;
+    & > * {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}
