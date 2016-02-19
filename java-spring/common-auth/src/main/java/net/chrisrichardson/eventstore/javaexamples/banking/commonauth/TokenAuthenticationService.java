@@ -21,7 +21,7 @@ public class TokenAuthenticationService {
     @Autowired
     private TokenService tokenService;
 
-    private static final String AUTH_HEADER_NAME = "x-access-token";
+    private static final String AUTH_HEADER_NAME = "access-token";
     private static final long DAY = 1000 * 60 * 60 * 24;
 
     private ObjectMapper mapper = new ObjectMapper();
