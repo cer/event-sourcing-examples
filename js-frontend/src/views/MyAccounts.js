@@ -2,15 +2,28 @@
  * Created by andrew on 17/02/16.
  */
 import React from "react";
-import IndexPanel from "./../components/partials/IndexPanel";
 import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 import { Link, IndexLink} from "react-router";
 import { connect } from "react-redux";
 import * as BSTheme from "redux-auth/bootstrap-theme";
-import * as DefaultTheme from "redux-auth";
+//import * as DefaultTheme from "redux-auth";
 import Select from "react-select";
+import * as Modals from './modals';
+import IndexPanel from "./../components/partials/IndexPanel";
 
-class Main extends React.Component {
+
+const resetModals = {
+  showAccountModal: false,
+  show3rdPartyAccountModal: false,
+  showDeleteAccountModal: false
+};
+
+class MyAccounts extends React.Component {
+
+  constructor(...args) {
+    super(...args);
+    this.state = { ...resetModals };
+  }
   updateTheme (theme) {
     //this.props.dispatch(updateDemoTheme(theme));
   }
@@ -19,20 +32,63 @@ class Main extends React.Component {
     //this.props.dispatch(updateDemoEndpoint(endpoint));
   }
 
+  createAccountModal() {
+    this.setState({
+      showAccountModal: true
+    });
+  }
+
+  createAccountModalConfirmed() {
+
+  }
+
+  create3rdPartyAccountModal() {
+
+    this.setState({
+      show3rdPartyAccountModal: true
+    });
+  }
+
+  create3rdPartyAccountModalConfirmed() {
+
+  }
+
+  remove3rdPartyAccountModal() {
+
+    const account = null;
+    this.setState({
+      accountToRemove: account,
+      showDeleteAccountModal: true
+    });
+  }
+
+  remove3rdPartyAccountModalConfirmed() {
+
+  }
+
+  close() {
+    this.setState({
+      ...resetModals
+    });
+  }
+
   render () {
 
     //const deployTooltip = (<Tooltip>
     //  Create a new instance of this demo on your own Heroku server.
     //</Tooltip>);
 
+    const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
+    const { accountToRemove = null } = this.state;
+
     return (
       <div>
         <PageHeader>
             My Accounts
-          <Nav pullRight="true">
-            <ButtonGroup pullRight="true">
-              <Button bsStyle="link">Create Account</Button>
-              <Button bsStyle="link">Add 3rd Party Recipients</Button>
+          <Nav pullRight={true}>
+            <ButtonGroup>
+              <Button bsStyle={"link"} onClick={this.createAccountModal.bind(this)}>Create Account</Button>
+              <Button bsStyle={"link"} onClick={this.create3rdPartyAccountModal.bind(this)}>Add 3rd Party Recipients</Button>
             </ButtonGroup>
           </Nav>
         </PageHeader>
@@ -41,18 +97,18 @@ class Main extends React.Component {
           <IndexPanel header="Personal Info:">
 
             <Row>
-              <Col xs="4">Customer:</Col>
-              <Col xs="8"><strong>Kevin McCallister</strong></Col>
+              <Col xs={4}>Customer:</Col>
+              <Col xs={8}><strong>Kevin McCallister</strong></Col>
             </Row>
 
             <Row>
-              <Col xs="4">Email:</Col>
-              <Col xs="8"><strong>current@email.com</strong></Col>
+              <Col xs={4}>Email:</Col>
+              <Col xs={8}><strong>current@email.com</strong></Col>
             </Row>
 
             <Row>
-              <Col xs="4">SSN:</Col>
-              <Col xs="8"><strong>1234567890-09876</strong></Col>
+              <Col xs={4}>SSN:</Col>
+              <Col xs={8}><strong>1234567890-09876</strong></Col>
             </Row>
 
 
@@ -73,11 +129,29 @@ class Main extends React.Component {
             <td>$100.00</td>
           </tr>
           <tr>
-            <td><a href="#">Account Title #1</a></td>
-            <td>$150.00</td>
+            <td><a href="#">Account Title #2</a></td>
+            <td><Button bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this)}>remove</Button>
+            </td>
           </tr>
           </tbody>
         </Table>
+
+
+        <Modals.NewAccountModal show={showAccountModal}
+                                action={this.createAccountModalConfirmed.bind(this)}
+                                onHide={this.close.bind(this)}
+                                key={0} />
+
+        <Modals.Add3rdPartyAccountModal show={show3rdPartyAccountModal}
+                                        action={this.create3rdPartyAccountModalConfirmed.bind(this)}
+                                        onHide={this.close.bind(this)}
+                                        key={1} />
+
+        <Modals.RemoveAccountBookmarkModal show={showDeleteAccountModal}
+                                           account={accountToRemove}
+                                           action={this.remove3rdPartyAccountModalConfirmed.bind(this)}
+                                           onHide={this.close.bind(this)}
+                                           key={2} />
 
       </div>
     );
@@ -147,7 +221,7 @@ export default connect(({auth, demoUi = new Map()}) => {
     currentUserUid: auth.getIn(["user", "attributes", "provider"]) || "none",
     currentUserProvider: auth.getIn(["user", "attributes", "uid"]) || "none",
     currentUserEndpoint: auth.getIn(["user", "endpointKey"]) || "none",
-    theme: demoUi.get("theme"),
+    //theme: demoUi.get("theme"),
     pageEndpoint: demoUi.get("endpoint")
   })
-})(Main);
+})(MyAccounts);

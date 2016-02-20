@@ -35,9 +35,9 @@ class Container extends React.Component {
           {this.props.children}
         </Grid>
 
-        <Navbar fixedBottom="true" className="footer-navigation">
-          <Col xs="12" sm="6">&copy; 2016 Eventuate.io</Col>
-          <Col xs="12" sm="6" className="text-right">
+        <Navbar fixedBottom={true} className="footer-navigation">
+          <Col xs={12} sm={6}>&copy; 2016 Eventuate.io</Col>
+          <Col xs={12} sm={6} className="text-right">
             <a href="#">Terms</a> |&nbsp;
             <a href="#">Policy</a> |&nbsp;
             <a href="#">Contact</a> |&nbsp;

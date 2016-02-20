@@ -9,7 +9,7 @@ export default (DEBUG, PATH, PORT=3000) => ({
   ] : []).concat([
     './src/main.less',
     'babel-polyfill',
-    './src/client',
+    './src/client'
   ]),
 
   output: {
@@ -22,7 +22,8 @@ export default (DEBUG, PATH, PORT=3000) => ({
   debug: DEBUG,
 
   // For options, see http://webpack.github.io/docs/configuration.html#devtool
-  devtool: DEBUG && "eval",
+  //devtool: DEBUG && "eval",
+  devtool: DEBUG && "cheap-module-eval-source-map",
 
   module: {
     loaders: [
@@ -65,7 +66,9 @@ export default (DEBUG, PATH, PORT=3000) => ({
   },
 
   plugins: DEBUG
-    ? []
+    ? [
+    //new
+  ]
     : [
       new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}),
       new ExtractTextPlugin("style.css", {allChunks: false}),

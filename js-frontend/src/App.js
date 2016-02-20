@@ -3,22 +3,23 @@
  */
 
 import React from "react";
+import { createStore, compose, applyMiddleware, combineReducers} from "redux";
 import { Provider} from "react-redux";
+import thunk from "redux-thunk";
+
+import { Route, IndexRoute, Link, IndexLink } from "react-router";
 import { ReduxRouter} from "redux-router";
+
 //import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 //import { syncHistory, routeReducer } from 'react-router-redux';
 
-import { Route, IndexRoute, Link, IndexLink} from "react-router";
-import { configure as reduxAuthConfigure, authStateReducer} from "redux-auth";
+import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
 import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
-import { createStore, compose, applyMiddleware} from "redux";
 import { createHistory, createHashHistory, createMemoryHistory } from "history";
 import { routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
 import { reduxReactRouter as serverRouter } from "redux-router/server";
-import { combineReducers} from "redux";
 
-import thunk from "redux-thunk";
 
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
@@ -26,7 +27,7 @@ import { pushState } from 'redux-router';
 //import demoButtons from "./reducers/request-test-buttons";
 //import demoUi from "./reducers/demo-ui";
 import Container from "./components/partials/Container";
-import Main from "./views/Main";
+import MyAccounts from "./views/MyAccounts";
 import Account from "./views/Account";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
@@ -70,6 +71,18 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   //    cb();
   //  }, 0);
   //};
+
+  const requireAuth = next =>
+    (nextState, transition, cb) => {
+      debugger;
+      if (!auth.isLoggedIn()) {
+        transition.to('/login', null, {redirect: nextState.location});
+        return;
+      }
+      next(nextState, transition);
+    };
+
+  const mw = compose(requireAuth);
 
   const requireAuthentication = (Component) => {
     class AuthenticatedComponent extends React.Component {
@@ -115,24 +128,22 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
 
   // define app routes
   //      <Route path="account" component={Account} onEnter={requireAuth} />
+  //<Route path="account" component={requireAuthentication(Account)} />
 
   const routes = (
     <Route path="/" component={App}>
-      <IndexRoute component={Main} />
+      <IndexRoute component={MyAccounts} />
+      <Route onEnter={mw} path="acc" component={Account} />
+
       <Route path="signin" component={SignIn} />
       <Route path="register" component={SignUp} />
-      <Route path="account" component={requireAuthentication(Account)} />
+      <Route path="account/:id" component={Account} />
     </Route>
   );
 
   // these methods will differ from server to client
-  var reduxReactRouter    = clientRouter;
-  var createHistoryMethod = createHashHistory;
-
-  if (isServer) {
-    reduxReactRouter    = serverRouter;
-    createHistoryMethod = createMemoryHistory;
-  }
+  const reduxReactRouter    = isServer ? serverRouter : clientRouter;
+  const createHistoryMethod = isServer ? createMemoryHistory : createHashHistory;
 
   // create the redux store
   const store = compose(
@@ -192,7 +203,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
       return <noscript />;
     }
 
-    console.log(`redirect path: ${redirectPath}`)
+    console.log(`redirect path: ${redirectPath}`);
 
     return ({
       blank,
