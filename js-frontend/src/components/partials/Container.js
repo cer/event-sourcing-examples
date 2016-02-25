@@ -4,6 +4,7 @@
 import React, { PropTypes } from "react";
 import { Grid, Col, Navbar, NavItem, Nav, NavbarBrand, Footer } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { SignOutButton } from "redux-auth/bootstrap-theme";
 
 //if (!global.__SERVER__ && !global.__TEST__) {
 //  require("../../styles/main.scss");
@@ -28,6 +29,9 @@ class Container extends React.Component {
             <LinkContainer to="/account">
               <NavItem eventKey={2}>Account</NavItem>
             </LinkContainer>
+          </Nav>
+          <Nav right={true}>
+            <SignOutButton></SignOutButton>
           </Nav>
         </Navbar>
 

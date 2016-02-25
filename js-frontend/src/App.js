@@ -6,6 +6,7 @@ import React from "react";
 import { createStore, compose, applyMiddleware, combineReducers} from "redux";
 import { Provider} from "react-redux";
 import thunk from "redux-thunk";
+import createLogger from 'redux-logger';
 
 import { Route, IndexRoute, Link, IndexLink } from "react-router";
 import { ReduxRouter} from "redux-router";
@@ -23,6 +24,8 @@ import { reduxReactRouter as serverRouter } from "redux-router/server";
 
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
+
+import { requireAuthentication } from './components/AuthComponent';
 
 //import demoButtons from "./reducers/request-test-buttons";
 //import demoUi from "./reducers/demo-ui";
@@ -72,59 +75,6 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   //  }, 0);
   //};
 
-  const requireAuth = next =>
-    (nextState, transition, cb) => {
-      debugger;
-      if (!auth.isLoggedIn()) {
-        transition.to('/login', null, {redirect: nextState.location});
-        return;
-      }
-      next(nextState, transition);
-    };
-
-  const mw = compose(requireAuth);
-
-  const requireAuthentication = (Component) => {
-    class AuthenticatedComponent extends React.Component {
-
-      componentWillMount() {
-        this.checkAuth();
-      }
-
-      componentWillReceiveProps(nextProps) {
-        this.checkAuth();
-      }
-
-      checkAuth() {
-        debugger;
-        if (!this.props.isAuthenticated) {
-          let redirectAfterLogin = this.props.location.pathname;
-          this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
-        }
-      }
-
-      render() {
-        debugger;
-        return (
-          <div>
-            {this.props.isAuthenticated === true
-              ? <Component {...this.props}/>
-              : null
-            }
-          </div>
-        )
-
-      }
-    }
-
-    const mapStateToProps = (state) => ({
-      token: state.auth.token,
-      userName: state.auth.userName,
-      isAuthenticated: state.auth.isAuthenticated
-    });
-
-    return connect(mapStateToProps)(AuthenticatedComponent);
-  };
 
   // define app routes
   //      <Route path="account" component={Account} onEnter={requireAuth} />
@@ -132,12 +82,10 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
 
   const routes = (
     <Route path="/" component={App}>
-      <IndexRoute component={MyAccounts} />
-      <Route onEnter={mw} path="acc" component={Account} />
-
+      <IndexRoute component={requireAuthentication(MyAccounts)} />
       <Route path="signin" component={SignIn} />
       <Route path="register" component={SignUp} />
-      <Route path="account/:id" component={Account} />
+      <Route path="account/:accountId" component={requireAuthentication(Account)} />
     </Route>
   );
 
@@ -148,6 +96,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   // create the redux store
   const store = compose(
     applyMiddleware(thunk),
+    applyMiddleware(createLogger()),
     reduxReactRouter({
       createHistory: createHistoryMethod,
       routes
@@ -158,7 +107,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   /**
    * The React Router 1.0 routes for both the server and the client.
    */
-  return store.dispatch(reduxAuthConfigure([
+  return store.dispatch(((() => { debugger; })() , reduxAuthConfigure)([
     {
       default: {
         //apiUrl: __API_URL__
@@ -189,7 +138,14 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   ], {
     cookies,
     isServer,
-    currentLocation
+    currentLocation,
+    tokenFormat: {
+      "access-token": "{{ access-token }}",
+      "uid": "true"
+    },
+    initialCredentials: {
+      'uid': 123
+    }
   })).then(({ redirectPath, blank } = {}) => {
     // hack for material-ui server-side rendering.
     // see https://github.com/callemall/material-ui/pull/2007

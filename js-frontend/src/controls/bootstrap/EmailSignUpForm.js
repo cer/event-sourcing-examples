@@ -7,6 +7,7 @@ import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
 import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
 import IndexPanel from "./../../components/partials/IndexPanel";
+import { customerInfoMap } from '../../entities/formToPayloadMappers';
 
 import { Glyphicon } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -45,8 +46,8 @@ class EmailSignUpForm extends React.Component {
   handleSubmit (event) {
     event.preventDefault();
     let formData = this.props.auth.getIn(["emailSignUp", this.getEndpoint(), "form"]).toJS();
-    debugger;
-    this.props.dispatch(emailSignUp(formData, this.getEndpoint()));
+    console.log(customerInfoMap(formData));
+    this.props.dispatch(emailSignUp(customerInfoMap(formData), this.getEndpoint()));
   }
 
   render () {
@@ -61,6 +62,7 @@ class EmailSignUpForm extends React.Component {
             onSubmit={this.handleSubmit.bind(this)}>
 
         <IndexPanel header="basic">
+
           <Input type="text"
                  label="First name"
                  placeholder="First name"

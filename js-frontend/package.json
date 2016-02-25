@@ -65,6 +65,7 @@
     "redux": "^3.0.2",
     "redux-auth": "0.0.2",
     "redux-batched-subscribe": "^0.1.4",
+    "redux-logger": "^2.5.2",
     "redux-multi": "^0.1.9",
     "redux-router": "^1.0.0-beta7",
     "redux-thunk": "^1.0.3",

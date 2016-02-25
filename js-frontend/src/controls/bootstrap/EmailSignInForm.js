@@ -3,6 +3,8 @@
  */
 import React, {PropTypes} from "react";
 import auth from "redux-auth";
+import * as BS from "react-bootstrap";
+
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
 import { emailSignInFormUpdate, emailSignIn } from "redux-auth";
@@ -54,7 +56,6 @@ class EmailSignInForm extends React.Component {
   handleSubmit (event) {
     event.preventDefault();
     let formData = this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form"]).toJS();
-    debugger;
     this.props.dispatch(emailSignIn(formData, this.getEndpoint()));
   }
 
@@ -71,6 +72,7 @@ class EmailSignInForm extends React.Component {
                className="email-sign-in-email"
                label="Email"
                placeholder="Email"
+               name="email"
                disabled={disabled}
                value={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form", "email"])}
                errors={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "errors", "email"])}
