@@ -1,13 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
 
 import java.nio.charset.Charset;
 
@@ -28,11 +25,11 @@ public class BasicAuthUtils {
         };
     }
 
-    public static <T> T doRestTemplateRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType) {
-        return doRestTemplateRequest(restTemplate, url, httpMethod, responseType, null);
+    public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType) {
+        return doBasicAuthenticatedRequest(restTemplate, url, httpMethod, responseType, null);
     }
 
-    public static <T> T doRestTemplateRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject) {
+    public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject) {
         HttpEntity httpEntity;
         if(requestObject!=null) {
             httpEntity = new HttpEntity(requestObject, BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));

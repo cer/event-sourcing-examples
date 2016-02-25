@@ -83,7 +83,7 @@ public class EndToEndTest {
     assertCustomerResponse(customerId, customerInfo);
 
 
-    final CreateAccountResponse fromAccount = BasicAuthUtils.doRestTemplateRequest(restTemplate,
+    final CreateAccountResponse fromAccount = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
             accountsCommandSideBaseUrl("/accounts"),
             HttpMethod.POST,
             CreateAccountResponse.class,
@@ -91,7 +91,7 @@ public class EndToEndTest {
     );
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = BasicAuthUtils.doRestTemplateRequest(restTemplate,
+    CreateAccountResponse toAccount = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
             accountsCommandSideBaseUrl("/accounts"),
             HttpMethod.POST,
             CreateAccountResponse.class,
@@ -107,7 +107,7 @@ public class EndToEndTest {
     assertAccountBalance(toAccountId, initialToAccountBalance);
 
 
-    final CreateMoneyTransferResponse moneyTransfer =  BasicAuthUtils.doRestTemplateRequest(restTemplate,
+    final CreateMoneyTransferResponse moneyTransfer =  BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
             transactionsCommandSideBaseUrl("/transfers"),
             HttpMethod.POST,
             CreateMoneyTransferResponse.class,
@@ -130,7 +130,7 @@ public class EndToEndTest {
             new Producer<GetAccountResponse>() {
               @Override
               public Observable<GetAccountResponse> produce() {
-                  return Observable.just(BasicAuthUtils.doRestTemplateRequest(restTemplate,
+                  return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
                           accountsQuerySideBaseUrl("/accounts/" + fromAccountId),
                           HttpMethod.GET,
                           GetAccountResponse.class));
@@ -150,7 +150,7 @@ public class EndToEndTest {
             new Producer<CustomerResponse>() {
               @Override
               public Observable<CustomerResponse> produce() {
-                  return Observable.just(BasicAuthUtils.doRestTemplateRequest(restTemplate,
+                  return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
                           customersQuerySideBaseUrl("/customers/" + customerId),
                           HttpMethod.GET,
                           CustomerResponse.class));
