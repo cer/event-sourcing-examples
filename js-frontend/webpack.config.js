@@ -30,13 +30,14 @@ export default (DEBUG, PATH, PORT=3000) => ({
       // Load ES6/JSX
       { test: /\.jsx?$/,
         include: [
-          path.resolve(__dirname, "src"),
-          path.resolve(__dirname, "node_modules/redux-auth/src/views/bootstrap")
+          path.resolve(__dirname, "src")
+          //,
+          //path.resolve(__dirname, "node_modules/redux-auth/src/views/bootstrap")
         ],
         loader: "babel-loader",
         query: {
           plugins: ['transform-runtime'],
-          presets: ['es2015', 'stage-0', 'react'],
+          presets: ['es2015', 'react', 'stage-0']
         }
       },
 
@@ -78,11 +79,11 @@ export default (DEBUG, PATH, PORT=3000) => ({
         mangle: {screw_ie8: true, keep_fnames: true}
       }),
       new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.AggressiveMergingPlugin(),
+      new webpack.optimize.AggressiveMergingPlugin()
     ],
 
   resolveLoader: {
-    root: path.join(__dirname, "node_modules"),
+    root: path.join(__dirname, "node_modules")
   },
 
   resolve: {
@@ -97,6 +98,6 @@ export default (DEBUG, PATH, PORT=3000) => ({
     },
 
     // Allow to omit extensions when requiring these files
-    extensions: ["", ".js", ".jsx"],
+    extensions: ["", ".js", ".jsx"]
   }
 });

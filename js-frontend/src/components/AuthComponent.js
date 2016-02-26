@@ -10,7 +10,6 @@ export function requireAuthentication(Component) {
   class AuthComponent extends React.Component {
 
     componentWillMount() {
-      debugger;
       if (!this.props.isAuthenticated) {
 
         // redirect to login and add next param so we can redirect again after login
@@ -20,6 +19,11 @@ export function requireAuthentication(Component) {
     }
 
     render() {
+      if (!this.props.isAuthenticated) {
+        return (<div className="panel">
+          <h2 className="text-danger">No anonymous access!</h2>
+        </div>)
+      }
       // render the component that requires auth (passed to this wrapper)
       return (
         <Component  {...this.props} />
@@ -29,12 +33,12 @@ export function requireAuthentication(Component) {
 
   const mapStateToProps =
     (state) => {
-      debugger;
+      console.info('state', state);
       return ({
-        token: state.auth.token,
+        //token: state.auth.token,
         //userName: state.auth.userName,
         //isAuthenticated: state.auth.isAuthenticated
-        isAuthenticated: state.auth.getIn(['user', 'isSignedIn'])
+        isAuthenticated: state.auth.user.isSignedIn
       })
     };
 

@@ -2,15 +2,19 @@
  * Created by andrew on 15/02/16.
  */
 import React, {PropTypes} from "react";
-import auth from "redux-auth";
+//import auth from "redux-auth";
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
-import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
+//import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
 import IndexPanel from "./../../components/partials/IndexPanel";
 import { customerInfoMap } from '../../entities/formToPayloadMappers';
 
 import { Glyphicon } from "react-bootstrap";
 import { connect } from "react-redux";
+
+const emailSignUpFormUpdate = () => {debugger; },
+  emailSignUp  = () => {debugger; };
+
 
 class EmailSignUpForm extends React.Component {
   static propTypes = {

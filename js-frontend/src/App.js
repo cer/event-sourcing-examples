@@ -4,7 +4,8 @@
 
 import React from "react";
 import { createStore, compose, applyMiddleware, combineReducers} from "redux";
-import { Provider} from "react-redux";
+import { Provider, connect} from "react-redux";
+
 import thunk from "redux-thunk";
 import createLogger from 'redux-logger';
 
@@ -14,16 +15,15 @@ import { ReduxRouter} from "redux-router";
 //import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 //import { syncHistory, routeReducer } from 'react-router-redux';
 
-import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
-import { AuthGlobals } from "redux-auth/bootstrap-theme";
+//import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
+//import { authStateReducer } from "redux-auth";
+import authStateReducer from "./reducers/auth";
+import { configure as reduxAuthConfigure } from './actions/configure';
+//import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
 import { createHistory, createHashHistory, createMemoryHistory } from "history";
-import { routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
+import { pushState, routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
 import { reduxReactRouter as serverRouter } from "redux-router/server";
-
-
-import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
 
 import { requireAuthentication } from './components/AuthComponent';
 
@@ -35,10 +35,7 @@ import Account from "./views/Account";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
 //import GlobalComponents from "./views/partials/GlobalComponents";
-
-
-// TODO: !!!!
-//         <GlobalComponents />
+const AuthGlobals = () => (<div></div>);
 
 class App extends React.Component {
   render() {
@@ -60,26 +57,6 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     //demoUi
   });
 
-  //let store;
-
-  //// access control method, used above in the "account" route
-  //const requireAuth = (nextState, transition, cb) => {
-  //  // the setTimeout is necessary because of this bug:
-  //  // https://github.com/rackt/redux-router/pull/62
-  //  // this will result in a bunch of warnings, but it doesn't seem to be a serious problem
-  //  setTimeout(() => {
-  //    if (!store.getState().auth.getIn(["user", "isSignedIn"])) {
-  //      transition(null, "/login");
-  //    }
-  //    cb();
-  //  }, 0);
-  //};
-
-
-  // define app routes
-  //      <Route path="account" component={Account} onEnter={requireAuth} />
-  //<Route path="account" component={requireAuthentication(Account)} />
-
   const routes = (
     <Route path="/" component={App}>
       <IndexRoute component={requireAuthentication(MyAccounts)} />
@@ -95,11 +72,10 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
 
   // create the redux store
   const store = compose(
-    applyMiddleware(thunk),
-    applyMiddleware(createLogger()),
+    applyMiddleware(thunk, createLogger()),
     reduxReactRouter({
-      createHistory: createHistoryMethod,
-      routes
+      routes,
+      createHistory: createHistoryMethod
     })
   )(createStore)(reducer);
 
@@ -107,44 +83,36 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   /**
    * The React Router 1.0 routes for both the server and the client.
    */
-  return store.dispatch(((() => { debugger; })() , reduxAuthConfigure)([
+  return store.dispatch(reduxAuthConfigure([
     {
       default: {
-        //apiUrl: __API_URL__
         apiUrl: '/',
         emailSignInPath: 'login',
         emailRegistrationPath: 'customers'
       }
     }
-    //, {
-    //  evilUser: {
-    //    //apiUrl:                __API_URL__,
-    //    apiUrl:                '/api',
-    //    signOutPath:           "/mangs/sign_out",
-    //    emailSignInPath:       "/mangs/sign_in",
-    //    emailRegistrationPath: "/mangs",
-    //    accountUpdatePath:     "/mangs",
-    //    accountDeletePath:     "/mangs",
-    //    passwordResetPath:     "/mangs/password",
-    //    passwordUpdatePath:    "/mangs/password",
-    //    tokenValidationPath:   "/mangs/validate_token",
-    //    authProviderPaths: {
-    //      github:    "/mangs/github",
-    //      facebook:  "/mangs/facebook",
-    //      google:    "/mangs/google_oauth2"
-    //    }
-    //  }
-    //}
   ], {
     cookies,
     isServer,
     currentLocation,
     tokenFormat: {
-      "access-token": "{{ access-token }}",
-      "uid": "true"
+      "access-token": "{{ access-token }}"
     },
-    initialCredentials: {
-      'uid': 123
+    handleLoginResponse: function(resp) {
+      debugger;
+
+      return resp.data;
+    },
+
+    handleAccountUpdateResponse: function(resp) {
+      debugger;
+
+      return resp.data;
+    },
+
+    handleTokenValidationResponse: function(resp) {
+      debugger;
+      return resp.data;
     }
   })).then(({ redirectPath, blank } = {}) => {
     // hack for material-ui server-side rendering.

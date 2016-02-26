@@ -21,10 +21,8 @@ import EmailSignInForm from "../controls/bootstrap/EmailSignInForm";
 export class SignIn extends React.Component {
 
   componentWillMount() {
-    debugger;
     if (this.props.isAuthenticated) {
 
-      debugger;
 
       //// redirect to login and add next param so we can redirect again after login
       //const redirectAfterLogin = this.props.location.pathname;

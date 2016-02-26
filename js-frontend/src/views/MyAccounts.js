@@ -5,7 +5,6 @@ import React from "react";
 import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 import { Link, IndexLink} from "react-router";
 import { connect } from "react-redux";
-import * as BSTheme from "redux-auth/bootstrap-theme";
 //import * as DefaultTheme from "redux-auth";
 import Select from "react-select";
 import * as Modals from './modals';
@@ -218,10 +217,10 @@ class MyAccounts extends React.Component {
 
 export default connect(({auth, demoUi = new Map()}) => {
   return ({
-    currentUserUid: auth.getIn(["user", "attributes", "provider"]) || "none",
-    currentUserProvider: auth.getIn(["user", "attributes", "uid"]) || "none",
-    currentUserEndpoint: auth.getIn(["user", "endpointKey"]) || "none",
+    currentUserUid: auth.user && auth.user.attributes && auth.user.attributes.provider || "none",
+    currentUserProvider: auth.user && auth.user.attributes && auth.user.attributes.uid || "none",
+    currentUserEndpoint:  "none",
     //theme: demoUi.get("theme"),
-    pageEndpoint: demoUi.get("endpoint")
+    pageEndpoint: null
   })
 })(MyAccounts);
