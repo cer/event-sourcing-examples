@@ -173,4 +173,4 @@ export function retrieveData (key) {
     // unescape quotes
     return unescapeQuotes(val);
   }
-};
+}

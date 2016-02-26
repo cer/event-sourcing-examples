@@ -17,15 +17,20 @@ import {
 function getAuthHeaders(url) {
   if (isApiRequest(url)) {
     // fetch current auth headers from storage
-    const currentHeaders = retrieveData(C.SAVED_CREDS_KEY) || {},
+    let currentHeaders = retrieveData(C.SAVED_CREDS_KEY) || {},
       nextHeaders = {};
 
+    if (currentHeaders === 'undefined') {
+      currentHeaders = {};
+    }
     // bust IE cache
     nextHeaders["If-Modified-Since"] = "Mon, 26 Jul 1997 05:00:00 GMT";
 
     // set header for each key in `tokenFormat` config
     for (var key in getTokenFormat()) {
-      nextHeaders[key] = currentHeaders[key];
+      if (key in currentHeaders) {
+        nextHeaders[key] = currentHeaders[key];
+      }
     }
 
     return nextHeaders;
@@ -35,6 +40,7 @@ function getAuthHeaders(url) {
 }
 
 function updateAuthCredentials(resp) {
+
   // check config apiUrl matches the current response url
   if (isApiRequest(resp.url)) {
     // set header for each key in `tokenFormat` config

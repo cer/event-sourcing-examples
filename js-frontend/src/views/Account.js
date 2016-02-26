@@ -44,6 +44,8 @@ export class Account extends React.Component {
 
   render () {
 
+    debugger;
+
     const { showAccountModal } = this.state;
 
     return (

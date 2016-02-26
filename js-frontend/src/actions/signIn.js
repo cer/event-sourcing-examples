@@ -7,6 +7,7 @@ import {
   getCurrentEndpointKey
 } from "../utils/sessionStorage";
 
+import { entityReceived } from './entities';
 import { storeCurrentEndpointKey } from "./configure";
 import { parseResponse } from "../utils/handleFetchResponse";
 import fetch from "../utils/fetch";
@@ -53,13 +54,22 @@ export function emailSignIn(body) {
       },
       method: "post",
       body: root.JSON.stringify(body)
-    })
-      .then(parseResponse)
-      .then(function(K) {
-        debugger;
-        return K;
+    }).then(parseResponse)
+      .then(function(data = {}) {
+        const { id, customerInfo } = data;
+        if (id && customerInfo) {
+          const user = {
+            ...customerInfo,
+            uid: id
+          };
+          dispatch(entityReceived(id, user));
+          return user;
+        }
+        return data;
       })
-      .then((user) => dispatch(emailSignInComplete(user)))
+      .then((user) => {
+        dispatch(emailSignInComplete(user));
+      })
       .catch((errors) => {
         // revert endpoint key to what it was before failed request
         setCurrentEndpointKey(prevEndpointKey);

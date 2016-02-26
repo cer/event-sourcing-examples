@@ -19,6 +19,9 @@ export default defineActionTypes({
     SIGN_OUT_COMPLETE
   `,
 
+  ENTITIES: `
+    RECEIVED
+  `,
   DOCUMENT_LIST_VIEW: `
     SET_QUERY
   `,

@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { Input } from "react-bootstrap";
 import * as BS from "react-bootstrap";
 
+import {pushState} from "redux-router";
+
 import ButtonLoader from "../controls/bootstrap/ButtonLoader";
 
 //export {bootstrap, materialUi} from "./views";
@@ -21,9 +23,14 @@ import EmailSignInForm from "../controls/bootstrap/EmailSignInForm";
 export class SignIn extends React.Component {
 
   componentWillMount() {
-    if (this.props.isAuthenticated) {
 
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.user.isSignedIn) {
+//debugger;
+      this.props.dispatch(pushState(null, nextProps.location.query.next));
       //// redirect to login and add next param so we can redirect again after login
       //const redirectAfterLogin = this.props.location.pathname;
       //this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
@@ -51,9 +58,11 @@ export class SignIn extends React.Component {
   }
 }
 export default connect(({
+  //dispatch,
     routes,
     auth
   }) => ({
+  //dispatch,
     routes,
     auth
 }))(SignIn);

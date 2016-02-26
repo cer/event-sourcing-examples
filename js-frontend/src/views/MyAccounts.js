@@ -76,6 +76,18 @@ class MyAccounts extends React.Component {
     //const deployTooltip = (<Tooltip>
     //  Create a new instance of this demo on your own Heroku server.
     //</Tooltip>);
+    debugger;
+    const user = this.props.auth.user.attributes;
+    const {
+      email,
+      ssn,
+      name
+      } = user;
+    const {
+      firstName,
+      lastName
+      } = name;
+
 
     const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
     const { accountToRemove = null } = this.state;
@@ -97,17 +109,17 @@ class MyAccounts extends React.Component {
 
             <Row>
               <Col xs={4}>Customer:</Col>
-              <Col xs={8}><strong>Kevin McCallister</strong></Col>
+              <Col xs={8}><strong>{ `${firstName} ${lastName}` }</strong></Col>
             </Row>
 
             <Row>
               <Col xs={4}>Email:</Col>
-              <Col xs={8}><strong>current@email.com</strong></Col>
+              <Col xs={8}><strong>{ email }</strong></Col>
             </Row>
 
             <Row>
               <Col xs={4}>SSN:</Col>
-              <Col xs={8}><strong>1234567890-09876</strong></Col>
+              <Col xs={8}><strong>{ ssn }</strong></Col>
             </Row>
 
 
@@ -217,6 +229,7 @@ class MyAccounts extends React.Component {
 
 export default connect(({auth, demoUi = new Map()}) => {
   return ({
+    auth,
     currentUserUid: auth.user && auth.user.attributes && auth.user.attributes.provider || "none",
     currentUserProvider: auth.user && auth.user.attributes && auth.user.attributes.uid || "none",
     currentUserEndpoint:  "none",

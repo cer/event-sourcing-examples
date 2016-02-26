@@ -7,6 +7,12 @@ import {
   authenticateComplete,
   authenticateError
 } from "./authenticate";
+
+import {
+  retrieveData,
+} from "../utils/sessionStorage";
+
+
 import {applyConfig} from "../utils/clientSettings";
 
 //import {
@@ -25,11 +31,11 @@ export const STORE_CURRENT_ENDPOINT_KEY = "STORE_CURRENT_ENDPOINT_KEY";
 
 export function setEndpointKeys(endpoints, currentEndpointKey, defaultEndpointKey) {
   return { type: SET_ENDPOINT_KEYS, endpoints, currentEndpointKey, defaultEndpointKey };
-};
+}
 
 export function storeCurrentEndpointKey(currentEndpointKey) {
   return { type: STORE_CURRENT_ENDPOINT_KEY, currentEndpointKey };
-};
+}
 
 export function configure(endpoint={}, settings={}) {
 
@@ -49,15 +55,19 @@ export function configure(endpoint={}, settings={}) {
 
     let {authRedirectPath, authRedirectHeaders} = getRedirectInfo(window.location);
 
-    if (authRedirectPath) {
-      dispatch(pushState(null, authRedirectPath));
-    }
+    // TODO: FiX!
+    //if (authRedirectPath) {
+    //  dispatch(pushState(null, authRedirectPath));
+    //}
 
-    if (authRedirectHeaders && authRedirectHeaders["access-token"]) {
-      debugger;
+    const currentHeaders = retrieveData(C.SAVED_CREDS_KEY) || {};
+
+    //if (authRedirectHeaders && authRedirectHeaders["access-token"]) {
+    if (currentHeaders && currentHeaders["access-token"]) {
       settings.initialCredentials = {
-        ...settings.initialCredentials,
-        ...authRedirectHeaders
+        ...(settings.initialCredentials || {}),
+        ...authRedirectHeaders,
+        ...currentHeaders
       };
     }
 

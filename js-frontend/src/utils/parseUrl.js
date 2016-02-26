@@ -26,7 +26,7 @@ export function normalizeTokenKeys (params) {
 };
 
 const getAnchorSearch = function(location) {
-  const rawAnchor = location.anchor || "",
+  const rawAnchor = location.hash || "",
         arr       = rawAnchor.split("?");
   return (arr.length > 1) ? arr[1] : null;
 };

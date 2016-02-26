@@ -14,16 +14,15 @@ export const userReducer = (state = {...userInitalState}, action) => {
       const { user } = action;
       return {...state,
         attributes: user,
-        isSignedIn: true
+        isSignedIn: !!user
       };
     }
 
     case T.AUTH.SIGN_IN_COMPLETE: {
-
       const { user } = action;
       return {...state,
-        attributes: user.data,
-        isSignedIn: true
+        attributes: user,
+        isSignedIn: !!user
       };
     }
     case T.AUTH.SIGN_OUT_COMPLETE:
