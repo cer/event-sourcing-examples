@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 
 import java.util.List;
 
@@ -9,20 +10,20 @@ import java.util.List;
  */
 public class CustomersQueryResponse {
 
-    private List<CustomerResponse> customers;
+    private List<QuerySideCustomer> customers;
 
     public CustomersQueryResponse() {
     }
 
-    public CustomersQueryResponse(List<CustomerResponse> customers) {
+    public CustomersQueryResponse(List<QuerySideCustomer> customers) {
         this.customers = customers;
     }
 
-    public List<CustomerResponse> getCustomers() {
+    public List<QuerySideCustomer> getCustomers() {
         return customers;
     }
 
-    public void setCustomers(List<CustomerResponse> customers) {
+    public void setCustomers(List<QuerySideCustomer> customers) {
         this.customers = customers;
     }
 }

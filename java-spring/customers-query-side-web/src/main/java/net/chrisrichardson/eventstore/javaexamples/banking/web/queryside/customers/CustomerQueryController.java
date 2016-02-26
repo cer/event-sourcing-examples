@@ -27,9 +27,8 @@ public class CustomerQueryController {
     }
 
     @RequestMapping(value = "/customers/{customerId}", method = RequestMethod.GET)
-    public Observable<CustomerResponse> getCustomer(@PathVariable String customerId) {
-        return customerQueryService.findByCustomerId(new EntityIdentifier(customerId))
-                .map(this::getCustomerResponse);
+    public Observable<QuerySideCustomer> getCustomer(@PathVariable String customerId) {
+        return customerQueryService.findByCustomerId(new EntityIdentifier(customerId));
     }
 
     @RequestMapping(value = "/customers", method = RequestMethod.GET)
@@ -50,10 +49,6 @@ public class CustomerQueryController {
     }
 
     private CustomersQueryResponse getCustomersQueryResponse(List<QuerySideCustomer> customersList) {
-        return new CustomersQueryResponse(customersList
-                .stream()
-                .map(this::getCustomerResponse)
-                .collect(Collectors.toList())
-        );
+        return new CustomersQueryResponse(customersList);
     }
 }

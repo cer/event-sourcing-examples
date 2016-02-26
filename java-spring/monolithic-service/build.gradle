@@ -9,6 +9,7 @@ dependencies {
     compile project(":customers-command-side-web")
     compile project(":customers-query-side-web")
     compile project(":common-auth-web")
+    compile project(":common-swagger")
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
