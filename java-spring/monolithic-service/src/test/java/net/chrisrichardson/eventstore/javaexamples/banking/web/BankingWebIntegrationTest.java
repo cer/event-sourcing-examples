@@ -109,7 +109,7 @@ public class BankingWebIntegrationTest {
                 toAccountInfo
         );
 
-        //assertToAccountsContains(customerId, toAccountInfo);
+        assertToAccountsContains(customerId, toAccountInfo);
     }
 
     private BigDecimal toCents(BigDecimal dollarAmount) {

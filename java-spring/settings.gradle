@@ -33,4 +33,5 @@ include 'common-customers'
 include 'customers-command-side-service'
 include 'customers-query-side-service'
 include 'common-auth-web'
+include 'api-gateway-service'
 

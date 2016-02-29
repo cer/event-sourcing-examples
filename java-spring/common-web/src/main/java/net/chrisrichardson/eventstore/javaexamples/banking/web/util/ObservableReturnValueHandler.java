@@ -14,7 +14,7 @@ public class ObservableReturnValueHandler implements HandlerMethodReturnValueHan
 
 	@Override
 	public boolean supportsReturnType(MethodParameter returnType) {
-		return Observable.class.equals(returnType.getParameterType());
+		return Observable.class.isAssignableFrom(returnType.getParameterType());
 	}
 
 	@Override

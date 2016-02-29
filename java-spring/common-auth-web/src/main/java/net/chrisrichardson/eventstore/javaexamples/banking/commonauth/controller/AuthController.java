@@ -1,7 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.CustomerAuthService;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
@@ -37,12 +36,12 @@ public class AuthController {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     @RequestMapping(value = "/login", method = POST)
-    public ResponseEntity<CustomerResponse> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
+    public ResponseEntity<QuerySideCustomer> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
         QuerySideCustomer customer = customerAuthService.findByEmail(request.getEmail());
 
         Token token = tokenService.allocateToken(objectMapper.writeValueAsString(new User(request.getEmail())));
         return ResponseEntity.status(HttpStatus.OK).header("access-token", token.getKey())
-                .body(new CustomerResponse(customer.getId(), customer));
+                .body(customer);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

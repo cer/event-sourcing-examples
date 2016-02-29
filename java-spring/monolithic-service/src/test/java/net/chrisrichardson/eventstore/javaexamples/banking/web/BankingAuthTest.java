@@ -54,9 +54,9 @@ public class BankingAuthTest {
 
         AuthRequest authRequest = new AuthRequest(email);
 
-        final CustomerResponse loginCustomerResponse = restTemplate.postForEntity(baseUrl("/login"), authRequest, CustomerResponse.class).getBody();
+        final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), authRequest, QuerySideCustomer.class).getBody();
 
-        Assert.assertEquals(customerResponse, loginCustomerResponse);
+        assertQuerySideCustomerEqualscCustomerInfo(loginQuerySideCustomer, customerResponse.getCustomerInfo());
     }
 
     private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
@@ -72,13 +72,9 @@ public class BankingAuthTest {
                 },
                 new Verifier<QuerySideCustomer>() {
                     @Override
-                    public void verify(QuerySideCustomer customerResponse) {
-                        Assert.assertEquals(customerId, customerResponse.getId());
-                        Assert.assertEquals(customerInfo.getName(), customerResponse.getName());
-                        Assert.assertEquals(customerInfo.getEmail(), customerResponse.getEmail());
-                        Assert.assertEquals(customerInfo.getPhoneNumber(), customerResponse.getPhoneNumber());
-                        Assert.assertEquals(customerInfo.getSsn(), customerResponse.getSsn());
-                        Assert.assertEquals(customerInfo.getAddress(), customerResponse.getAddress());
+                    public void verify(QuerySideCustomer querySideCustomer) {
+                        Assert.assertEquals(customerId, querySideCustomer.getId());
+                        assertQuerySideCustomerEqualscCustomerInfo(querySideCustomer, customerInfo);
                     }
                 });
     }
@@ -99,5 +95,13 @@ public class BankingAuthTest {
 
     private String uniqueEmail() {
         return System.currentTimeMillis() + "@email.com";
+    }
+
+    private void assertQuerySideCustomerEqualscCustomerInfo(QuerySideCustomer querySideCustomer, CustomerInfo customerInfo) {
+        Assert.assertEquals(querySideCustomer.getName(), customerInfo.getName());
+        Assert.assertEquals(querySideCustomer.getEmail(), customerInfo.getEmail());
+        Assert.assertEquals(querySideCustomer.getPhoneNumber(), customerInfo.getPhoneNumber());
+        Assert.assertEquals(querySideCustomer.getSsn(), customerInfo.getSsn());
+        Assert.assertEquals(querySideCustomer.getAddress(), customerInfo.getAddress());
     }
 }
