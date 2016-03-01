@@ -1,10 +1,7 @@
 package net.chrisrichardson.eventstore.examples.bank.web;
 
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
@@ -147,20 +144,20 @@ public class EndToEndTest {
 
   private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
     eventually(
-            new Producer<CustomerResponse>() {
+            new Producer<QuerySideCustomer>() {
               @Override
-              public Observable<CustomerResponse> produce() {
-                  return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                          customersQuerySideBaseUrl("/customers/" + customerId),
-                          HttpMethod.GET,
-                          CustomerResponse.class));
+              public Observable<QuerySideCustomer> produce() {
+                return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                        customersQuerySideBaseUrl("/customers/" + customerId),
+                        HttpMethod.GET,
+                        QuerySideCustomer.class));
               }
             },
-            new Verifier<CustomerResponse>() {
+            new Verifier<QuerySideCustomer>() {
               @Override
-              public void verify(CustomerResponse customerResponse) {
-                Assert.assertEquals(customerId, customerResponse.getId());
-                Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+              public void verify(QuerySideCustomer querySideCustomer) {
+                Assert.assertEquals(customerId, querySideCustomer.getId());
+                assertQuerySideCustomerEqualscCustomerInfo(querySideCustomer, customerInfo);
               }
             });
   }
@@ -179,4 +176,11 @@ public class EndToEndTest {
     );
   }
 
+  private void assertQuerySideCustomerEqualscCustomerInfo(QuerySideCustomer querySideCustomer, CustomerInfo customerInfo) {
+    Assert.assertEquals(querySideCustomer.getName(), customerInfo.getName());
+    Assert.assertEquals(querySideCustomer.getEmail(), customerInfo.getEmail());
+    Assert.assertEquals(querySideCustomer.getPhoneNumber(), customerInfo.getPhoneNumber());
+    Assert.assertEquals(querySideCustomer.getSsn(), customerInfo.getSsn());
+    Assert.assertEquals(querySideCustomer.getAddress(), customerInfo.getAddress());
+  }
 }

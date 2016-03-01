@@ -31,7 +31,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * Created by popikyardo on 15.01.16.
  */
 @RestController
-@RequestMapping("/api")
 public class GatewayController {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
@@ -50,7 +49,7 @@ public class GatewayController {
                 .build();
     }
 
-    @RequestMapping(value = "/**", method = {GET, POST, PUT, DELETE})
+    @RequestMapping(value = "/**", method = {GET, POST})
     public String proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
         HttpUriRequest proxiedRequest = createHttpUriRequest(request);
         log.info("request: {}", proxiedRequest);
