@@ -4,7 +4,6 @@ import net.chrisrichardson.eventstore.EntityWithIdAndVersion;
 import net.chrisrichardson.eventstore.EventStore;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.Customer;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
@@ -19,6 +18,8 @@ import rx.Observable;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.await;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
 
 /**
  * Created by Main on 10.02.2016.
@@ -61,28 +62,10 @@ public class CustomerQuerySideIntegrationTest {
                         Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
                         Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
 
-/*                        Assert.assertNotNull(querySideCustomer.getToAccounts());
+                        Assert.assertNotNull(querySideCustomer.getToAccounts());
                         Assert.assertFalse(querySideCustomer.getToAccounts().isEmpty());
-                        Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);*/
+                        Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);
                     }
                 });
-    }
-
-    private CustomerInfo generateCustomerInfo() {
-        return new CustomerInfo(
-                new Name("John", "Doe"),
-                "current@email.com",
-                "000-00-0000",
-                "1-111-111-1111",
-                new Address("street 1",
-                        "street 2",
-                        "City",
-                        "State",
-                        "1111111")
-        );
-    }
-
-    private ToAccountInfo generateToAccountInfo() {
-        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
     }
 }

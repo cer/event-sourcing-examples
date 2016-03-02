@@ -1,7 +1,8 @@
 package net.chrisrichardson.eventstore.examples.bank.web;
 
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
@@ -11,6 +12,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.account
 import net.chrisrichardson.eventstore.json.EventStoreCommonObjectMapping;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -22,6 +24,7 @@ import rx.Observable;
 import java.math.BigDecimal;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 
 public class EndToEndTest {
 
@@ -53,6 +56,8 @@ public class EndToEndTest {
 
   RestTemplate restTemplate = new RestTemplate();
 
+  CustomersTestUtils customersTestUtils;
+
   {
 
   for (HttpMessageConverter<?> mc : restTemplate.getMessageConverters()) {
@@ -60,6 +65,8 @@ public class EndToEndTest {
       ((MappingJackson2HttpMessageConverter) mc).setObjectMapper(EventStoreCommonObjectMapping.getObjectMapper());
     }
   }
+
+    customersTestUtils = new CustomersTestUtils(restTemplate, customersQuerySideBaseUrl("/customers/"));
   }
 
 
@@ -77,7 +84,7 @@ public class EndToEndTest {
     final CustomerResponse customerResponse = restTemplate.postForEntity(customersCommandSideBaseUrl("/customers"),customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
 
-    assertCustomerResponse(customerId, customerInfo);
+    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
 
     final CreateAccountResponse fromAccount = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
@@ -142,45 +149,4 @@ public class EndToEndTest {
             });
   }
 
-  private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
-    eventually(
-            new Producer<QuerySideCustomer>() {
-              @Override
-              public Observable<QuerySideCustomer> produce() {
-                return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                        customersQuerySideBaseUrl("/customers/" + customerId),
-                        HttpMethod.GET,
-                        QuerySideCustomer.class));
-              }
-            },
-            new Verifier<QuerySideCustomer>() {
-              @Override
-              public void verify(QuerySideCustomer querySideCustomer) {
-                Assert.assertEquals(customerId, querySideCustomer.getId());
-                assertQuerySideCustomerEqualscCustomerInfo(querySideCustomer, customerInfo);
-              }
-            });
-  }
-
-  private CustomerInfo generateCustomerInfo() {
-    return new CustomerInfo(
-            new Name("John", "Doe"),
-            "current@email.com",
-            "000-00-0000",
-            "1-111-111-1111",
-            new Address("street 1",
-                    "street 2",
-                    "City",
-                    "State",
-                    "1111111")
-    );
-  }
-
-  private void assertQuerySideCustomerEqualscCustomerInfo(QuerySideCustomer querySideCustomer, CustomerInfo customerInfo) {
-    Assert.assertEquals(querySideCustomer.getName(), customerInfo.getName());
-    Assert.assertEquals(querySideCustomer.getEmail(), customerInfo.getEmail());
-    Assert.assertEquals(querySideCustomer.getPhoneNumber(), customerInfo.getPhoneNumber());
-    Assert.assertEquals(querySideCustomer.getSsn(), customerInfo.getSsn());
-    Assert.assertEquals(querySideCustomer.getAddress(), customerInfo.getAddress());
-  }
 }

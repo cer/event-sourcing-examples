@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 
+import javax.annotation.PostConstruct;
+
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = CustomersQuerySideServiceTestConfiguration.class)
@@ -33,51 +37,23 @@ public class CustomersQuerySideServiceIntegrationTest {
   @Autowired
   RestTemplate restTemplate;
 
+  CustomersTestUtils customersTestUtils;
+
+  @PostConstruct
+  private void init() {
+    customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+  }
+
 
   @Test
   public void shouldGetCustomerById() {
 
     CustomerInfo customerInfo = generateCustomerInfo();
 
-    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"),customerInfo, CustomerResponse.class).getBody();
+    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
 
-    assertCustomerResponse(customerId, customerInfo);
-  }
-
-  private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
-    eventually(
-            new Producer<QuerySideCustomer>() {
-              @Override
-              public Observable<QuerySideCustomer> produce() {
-                return Observable.just(restTemplate.getForEntity(baseUrl("/customers/" + customerId), QuerySideCustomer.class).getBody());
-              }
-            },
-            new Verifier<QuerySideCustomer>() {
-              @Override
-              public void verify(QuerySideCustomer customerResponse) {
-                Assert.assertEquals(customerId, customerResponse.getId());
-                Assert.assertEquals(customerInfo.getName(), customerResponse.getName());
-                Assert.assertEquals(customerInfo.getEmail(), customerResponse.getEmail());
-                Assert.assertEquals(customerInfo.getPhoneNumber(), customerResponse.getPhoneNumber());
-                Assert.assertEquals(customerInfo.getSsn(), customerResponse.getSsn());
-                Assert.assertEquals(customerInfo.getAddress(), customerResponse.getAddress());
-              }
-            });
-  }
-
-  private CustomerInfo generateCustomerInfo() {
-    return new CustomerInfo(
-            new Name("John", "Doe"),
-            "current@email.com",
-            "000-00-0000",
-            "1-111-111-1111",
-            new Address("street 1",
-                    "street 2",
-                    "City",
-                    "State",
-                    "1111111")
-    );
+    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
   }
 
 }
