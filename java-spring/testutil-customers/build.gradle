@@ -1,0 +1,8 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(":testutil")
+    compile project(":common-auth")
+    compile project(":common-customers")
+    compile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}

@@ -1,8 +1,7 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.customers;
+package net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside;
 
 import net.chrisrichardson.eventstore.EntityIdentifier;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerQueryService;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import rx.Observable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by Main on 05.02.2016.
@@ -42,10 +40,6 @@ public class CustomerQueryController {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public void customersNotFound() {
 
-    }
-
-    private CustomerResponse getCustomerResponse(QuerySideCustomer querySideCustomer) {
-        return new CustomerResponse(querySideCustomer.getId(), querySideCustomer);
     }
 
     private CustomersQueryResponse getCustomersQueryResponse(List<QuerySideCustomer> customersList) {

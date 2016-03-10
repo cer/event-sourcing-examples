@@ -1,10 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
 
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
+import javax.annotation.PostConstruct;
+
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 
 /**
  * Created by Main on 15.02.2016.
@@ -35,6 +35,13 @@ public class BankingAuthTest {
     @Autowired
     RestTemplate restTemplate;
 
+    CustomersTestUtils customersTestUtils;
+
+    @PostConstruct
+    private void init() {
+        customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+    }
+
     private String baseUrl(String path) {
         return "http://localhost:" + port + "/" + path;
     }
@@ -50,52 +57,15 @@ public class BankingAuthTest {
         Assert.assertNotNull(customerId);
         Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-        assertCustomerResponse(customerId, customerInfo);
+        customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
         AuthRequest authRequest = new AuthRequest(email);
 
-        final CustomerResponse loginCustomerResponse = restTemplate.postForEntity(baseUrl("/login"), authRequest, CustomerResponse.class).getBody();
+        final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), authRequest, QuerySideCustomer.class).getBody();
 
-        Assert.assertEquals(customerResponse, loginCustomerResponse);
+        customersTestUtils.assertQuerySideCustomerEqualscCustomerInfo(loginQuerySideCustomer, customerResponse.getCustomerInfo());
     }
 
-    private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
-        eventually(
-                new Producer<QuerySideCustomer>() {
-                    @Override
-                    public Observable<QuerySideCustomer> produce() {
-                        return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                                baseUrl("/customers/" + customerId),
-                                HttpMethod.GET,
-                                QuerySideCustomer.class));
-                    }
-                },
-                new Verifier<QuerySideCustomer>() {
-                    @Override
-                    public void verify(QuerySideCustomer customerResponse) {
-                        Assert.assertEquals(customerId, customerResponse.getId());
-                        Assert.assertEquals(customerInfo.getName(), customerResponse.getName());
-                        Assert.assertEquals(customerInfo.getEmail(), customerResponse.getEmail());
-                        Assert.assertEquals(customerInfo.getPhoneNumber(), customerResponse.getPhoneNumber());
-                        Assert.assertEquals(customerInfo.getSsn(), customerResponse.getSsn());
-                        Assert.assertEquals(customerInfo.getAddress(), customerResponse.getAddress());
-                    }
-                });
-    }
-
-    private CustomerInfo generateCustomerInfo(String email) {
-        return new CustomerInfo(
-                new Name("John", "Doe"),
-                email,
-                "000-00-0000",
-                "1-111-111-1111",
-                new Address("street 1",
-                        "street 2",
-                        "City",
-                        "State",
-                        "1111111")
-        );
-    }
 
     private String uniqueEmail() {
         return System.currentTimeMillis() + "@email.com";

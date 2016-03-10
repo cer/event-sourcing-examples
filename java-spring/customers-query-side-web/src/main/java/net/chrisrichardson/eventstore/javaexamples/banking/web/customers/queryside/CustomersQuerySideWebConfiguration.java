@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside;
+package net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.QuerySideCustomerConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.util.ObservableReturnValueHandler;

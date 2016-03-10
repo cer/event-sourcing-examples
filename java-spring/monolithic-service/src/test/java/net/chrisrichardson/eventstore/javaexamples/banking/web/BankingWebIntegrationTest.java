@@ -9,6 +9,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.trans
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +23,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BankingWebTestConfiguration.class)
@@ -41,6 +45,13 @@ public class BankingWebIntegrationTest {
 
     @Autowired
     RestTemplate restTemplate;
+
+    CustomersTestUtils customersTestUtils;
+
+    @PostConstruct
+    private void init() {
+        customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+    }
 
 
     @Test
@@ -98,7 +109,7 @@ public class BankingWebIntegrationTest {
         Assert.assertNotNull(customerId);
         Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-        //assertCustomerResponse(customerId, customerInfo);
+        customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
         ToAccountInfo toAccountInfo = generateToAccountInfo();
 
@@ -109,7 +120,7 @@ public class BankingWebIntegrationTest {
                 toAccountInfo
         );
 
-        //assertToAccountsContains(customerId, toAccountInfo);
+        assertToAccountsContains(customerId, toAccountInfo);
     }
 
     private BigDecimal toCents(BigDecimal dollarAmount) {
@@ -137,30 +148,6 @@ public class BankingWebIntegrationTest {
                 });
     }
 
-    private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
-        eventually(
-                new Producer<QuerySideCustomer>() {
-                    @Override
-                    public Observable<QuerySideCustomer> produce() {
-                        return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                                baseUrl("/customers/" + customerId),
-                                HttpMethod.GET,
-                                QuerySideCustomer.class));
-                    }
-                },
-                new Verifier<QuerySideCustomer>() {
-                    @Override
-                    public void verify(QuerySideCustomer customerResponse) {
-                        Assert.assertEquals(customerId, customerResponse.getId());
-                        Assert.assertEquals(customerInfo.getName(), customerResponse.getName());
-                        Assert.assertEquals(customerInfo.getEmail(), customerResponse.getEmail());
-                        Assert.assertEquals(customerInfo.getPhoneNumber(), customerResponse.getPhoneNumber());
-                        Assert.assertEquals(customerInfo.getSsn(), customerResponse.getSsn());
-                        Assert.assertEquals(customerInfo.getAddress(), customerResponse.getAddress());
-                    }
-                });
-    }
-
     private void assertToAccountsContains(final String customerId, final ToAccountInfo toAccountInfo) {
         eventually(
                 new Producer<QuerySideCustomer>() {
@@ -180,24 +167,5 @@ public class BankingWebIntegrationTest {
                     }
                 });
     }
-
-    private CustomerInfo generateCustomerInfo() {
-        return new CustomerInfo(
-                new Name("John", "Doe"),
-                "current@email.com",
-                "000-00-0000",
-                "1-111-111-1111",
-                new Address("street 1",
-                        "street 2",
-                        "City",
-                        "State",
-                        "1111111")
-        );
-    }
-
-    private ToAccountInfo generateToAccountInfo() {
-        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
-    }
-
 
 }

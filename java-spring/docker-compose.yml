@@ -1,3 +1,21 @@
+apigateway:
+  image: java:8
+  working_dir: /app
+  volumes:
+    - ./api-gateway-service/build/libs:/app
+  command: java -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transactions.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
+  ports:
+    - "8080:8080"
+  links:
+    - accountscommandside
+    - transactionscommandside
+    - accountsqueryside
+    - customerscommandside
+    - customersqueryside
+  environment:
+    EVENTUATE_API_KEY_ID:
+    EVENTUATE_API_KEY_SECRET:
+
 accountscommandside:
   image: java:8
   working_dir: /app
@@ -5,7 +23,7 @@ accountscommandside:
     - ./accounts-command-side-service/build/libs:/app
   command: java -jar /app/accounts-command-side-service.jar
   ports:
-    - "8080:8080"
+    - "8085:8080"
   environment:
     EVENTUATE_API_KEY_ID:
     EVENTUATE_API_KEY_SECRET:

@@ -5,7 +5,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.commonswagger.CommonS
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CommandSideWebAccountsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers.CustomersCommandSideWebConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CommandSideWebTransactionsConfiguration;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.CustomersQuerySideWebConfiguration;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.CustomersQuerySideWebConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.QuerySideWebConfiguration;
 import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

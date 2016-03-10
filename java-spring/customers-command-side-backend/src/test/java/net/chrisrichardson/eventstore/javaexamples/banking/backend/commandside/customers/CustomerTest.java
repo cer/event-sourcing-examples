@@ -3,13 +3,13 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.
 import net.chrisrichardson.eventstore.CommandProcessingAggregates;
 import net.chrisrichardson.eventstore.Event;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerCreatedEvent;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
+
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 
 public class CustomerTest {
 
@@ -26,19 +26,5 @@ public class CustomerTest {
 
         customer.applyEvent(events.get(0));
         Assert.assertEquals(customerInfo, customer.getCustomerInfo());
-    }
-
-    private CustomerInfo generateCustomerInfo() {
-        return new CustomerInfo(
-                new Name("John", "Doe"),
-                "current@email.com",
-                "000-00-0000",
-                "1-111-111-1111",
-                new Address("street 1",
-                        "street 2",
-                        "City",
-                        "State",
-                        "1111111")
-        );
     }
 }
