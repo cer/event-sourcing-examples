@@ -126,7 +126,7 @@ export default function getRedirectInfo(currentLocation) {
     var authRedirectPath = getLocationWithoutParams(currentLocation, authKeys);
 
     if (authRedirectPath !== currentLocation) {
-      return {authRedirectHeaders, authRedirectPath};
+      return { authRedirectHeaders, authRedirectPath };
     } else {
       return {};
     }

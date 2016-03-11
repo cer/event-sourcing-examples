@@ -4,9 +4,12 @@
 import React, { PropTypes } from "react";
 import { Grid, Col, Navbar, NavItem, Nav, NavbarBrand, Footer } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+
+import HeaderLinks from '../HeaderLinks';
+
 //import { SignOutButton } from "redux-auth/bootstrap-theme";
 
-const SignOutButton = () => (<div>SignOutButton!</div>);
+//const SignOutButton = () => (<div>SignOutButton!</div>);
 
 
 //if (!global.__SERVER__ && !global.__TEST__) {
@@ -33,9 +36,9 @@ class Container extends React.Component {
               <NavItem eventKey={2}>Account</NavItem>
             </LinkContainer>
           </Nav>
-          <Nav pullRight={true}>
-            <SignOutButton></SignOutButton>
-          </Nav>
+          <div>
+            <HeaderLinks />
+          </div>
         </Navbar>
 
         <Grid className="content">

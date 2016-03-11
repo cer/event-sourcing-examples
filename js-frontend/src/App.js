@@ -86,15 +86,16 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   return store.dispatch(reduxAuthConfigure([
     {
       default: {
-        apiUrl: '/',
-        emailSignInPath: 'login',
-        emailRegistrationPath: 'customers'
+        //apiUrl: '/',
+        emailSignInPath: '/login',
+        emailRegistrationPath: '/customers'
       }
     }
   ], {
     cookies,
     isServer,
     currentLocation,
+    storage: 'localStorage',
     tokenFormat: {
       "access-token": "{{ access-token }}"
     },

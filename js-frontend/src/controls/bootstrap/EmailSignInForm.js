@@ -11,6 +11,8 @@ import ButtonLoader from "./ButtonLoader";
 import { Glyphicon } from "react-bootstrap";
 import { connect } from "react-redux";
 
+import read from '../../utils/readProp';
+
 import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
 
 /*
@@ -24,19 +26,6 @@ import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
  onChange={this.handleInput.bind(this, "password")}
  {...this.props.inputProps.password} />
   */
-
-function read(src, path = '', defaultVal = '') {
-  const [pathItem = null, ...rest] = path.split('.');
-  if (pathItem === null ) {
-    return src;
-  } else if (rest.length === 0) {
-    if (!src) { return defaultVal; }
-    return src[pathItem];
-  } else {
-    if (!src) { return defaultVal; }
-    return read(src[pathItem], rest.join('.'));
-  }
-}
 
 class EmailSignInForm extends React.Component {
 
@@ -64,16 +53,19 @@ class EmailSignInForm extends React.Component {
   handleSubmit (event) {
     event.preventDefault();
     let formData = { ...this.props.auth.signIn.form };
-    this.props.dispatch(emailSignIn(formData, null));
+    this.props.dispatch(emailSignIn(formData));
   }
 
   render () {
 
     try {
-    let disabled = (
+    const disabled = (
       this.props.auth.user.isSignedIn ||
       this.props.auth.signIn.loading
     );
+
+      //const error = read(this.props.auth, 'signIn.errors.email', null);
+      //debugger;
 
     return (
       <form className='redux-auth email-sign-in-form clearfix'
@@ -85,7 +77,7 @@ class EmailSignInForm extends React.Component {
                name="email"
                disabled={disabled}
                value={read(this.props.auth, 'signIn.form.email', '')}
-               errors={read(this.props.auth, 'signIn.errors.email', null)}
+               errors={read(this.props.auth, 'signIn.errors.email', {})}
                onChange={this.handleInput.bind(this, "email")}
           {...this.props.inputProps.email} />
 

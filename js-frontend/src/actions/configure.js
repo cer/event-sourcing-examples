@@ -25,6 +25,7 @@ import {applyConfig} from "../utils/clientSettings";
 import {destroySession} from "../utils/sessionStorage";
 import getRedirectInfo from "../utils/parseUrl";
 import {pushState} from "redux-router";
+import root from '../utils/root';
 
 export const SET_ENDPOINT_KEYS = "SET_ENDPOINT_KEYS";
 export const STORE_CURRENT_ENDPOINT_KEY = "STORE_CURRENT_ENDPOINT_KEY";
@@ -40,6 +41,7 @@ export function storeCurrentEndpointKey(currentEndpointKey) {
 export function configure(endpoint={}, settings={}) {
 
   return dispatch => {
+
     // don't render anything for OAuth redirects
     if (settings.currentLocation && settings.currentLocation.match(/blank=true/)) {
       return Promise.resolve({blank: true});
@@ -53,7 +55,7 @@ export function configure(endpoint={}, settings={}) {
       user,
       headers;
 
-    let {authRedirectPath, authRedirectHeaders} = getRedirectInfo(window.location);
+    //let { authRedirectPath, authRedirectHeaders} = getRedirectInfo(root.location);
 
     // TODO: FiX!
     //if (authRedirectPath) {
@@ -64,18 +66,21 @@ export function configure(endpoint={}, settings={}) {
 
     //if (authRedirectHeaders && authRedirectHeaders["access-token"]) {
     if (currentHeaders && currentHeaders["access-token"]) {
-      settings.initialCredentials = {
-        ...(settings.initialCredentials || {}),
-        ...authRedirectHeaders,
-        ...currentHeaders
-      };
+
+      //settings.initialCredentials = {
+      //  ...(settings.initialCredentials || {}),
+      //  ...authRedirectHeaders,
+      //  ...currentHeaders
+      //};
+    } else {
+      destroySession();
     }
 
     // if tokens were invalidated by server, make sure to clear browser
     // credentials
-    if (!settings.initialCredentials) {
-      destroySession();
-    }
+    //if (!settings.initialCredentials) {
+    //  destroySession();
+    //}
 
     promise = Promise.resolve(applyConfig({ dispatch, endpoint, settings }));
 

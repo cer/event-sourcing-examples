@@ -2,19 +2,20 @@
  * Created by andrew on 26/02/16.
  */
 import {
-  getEmailSignInUrl,
   setCurrentEndpointKey,
   getCurrentEndpointKey
 } from "../utils/sessionStorage";
 
 import { entityReceived } from './entities';
 import { storeCurrentEndpointKey } from "./configure";
-import { parseResponse } from "../utils/handleFetchResponse";
-import fetch from "../utils/fetch";
+//import { parseResponse } from "../utils/handleFetchResponse";
+//import fetch from "../utils/fetch";
+
+import { apiSignIn } from '../utils/api';
 
 import T from '../constants/ACTION_TYPES';
 
-import root from '../utils/root';
+//import root from '../utils/root';
 
 export function emailSignInFormUpdate(key, value) {
   return { type: T.AUTH.SIGN_IN_FORM_UPDATE, key, value };
@@ -47,14 +48,7 @@ export function emailSignIn(body) {
 
     dispatch(emailSignInStart());
 
-    return fetch(getEmailSignInUrl(currentEndpointKey), {
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      method: "post",
-      body: root.JSON.stringify(body)
-    }).then(parseResponse)
+    return apiSignIn(body)
       .then(function(data = {}) {
         const { id, customerInfo } = data;
         if (id && customerInfo) {
@@ -62,6 +56,7 @@ export function emailSignIn(body) {
             ...customerInfo,
             uid: id
           };
+          debugger;
           dispatch(entityReceived(id, user));
           return user;
         }

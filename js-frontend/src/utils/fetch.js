@@ -3,13 +3,11 @@
  */
 import originalFetch from "isomorphic-fetch";
 import * as C from "./constants";
-//import extend from "extend";
+
 import {
-  getApiUrl,
   retrieveData,
   persistData,
   getTokenFormat,
-  getSessionEndpointKey,
   isApiRequest
 } from "./sessionStorage";
 

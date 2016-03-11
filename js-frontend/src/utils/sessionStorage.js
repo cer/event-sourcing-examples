@@ -3,12 +3,10 @@
  */
 import Cookies from "js-cookie";
 import * as C from "./constants";
+
+import root from './root';
 //import "babel-polyfill";
 
-
-// even though this code shouldn't be used server-side, node will throw
-// errors if "window" is used
-var root = Function("return this")() || (42, eval)("this");
 
 // stateful variables that persist throughout session
 root.authState = {
@@ -33,14 +31,22 @@ export function getCurrentEndpoint () {
   return root.authState.currentEndpoint;
 }
 
+/**
+ * @deprecated
+ * @param k
+ */
 export function setCurrentEndpointKey (k) {
   persistData(C.SAVED_CONFIG_KEY, k || getDefaultEndpointKey());
 }
 
 export function getCurrentEndpointKey () {
-  return retrieveData(C.SAVED_CONFIG_KEY) || getDefaultEndpointKey();
+  return getDefaultEndpointKey();
 }
 
+/**
+ * @deprecated
+ * @param k
+ */
 export function setDefaultEndpointKey (k) {
   persistData(C.DEFAULT_CONFIG_KEY, k);
 }
@@ -81,7 +87,7 @@ export function destroySession () {
 
 function unescapeQuotes (val) {
   return val && val.replace(/("|')/g, "");
-};
+}
 
 export function getInitialEndpointKey () {
   return unescapeQuotes(
@@ -94,35 +100,33 @@ export function isApiRequest(url) {
   return true;
 }
 
-// TODO: make this really work
-export function getSessionEndpointKey (k) {
-  let key = k || getCurrentEndpointKey();
-  if (!key) {
-    throw "You must configure redux-auth before use.";
-  } else {
-    return key;
-  }
+export function getSessionEndpointKey () {
+  return getCurrentEndpointKey();
 }
 
 export function getSessionEndpoint (k) {
-  return getCurrentEndpoint()[getSessionEndpointKey(k)];
+  return getCurrentEndpoint()[getSessionEndpointKey()];
 }
 
 
-// only should work for current session
-export function getSignOutUrl (endpointKey) {
-  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).signOutPath}`
-}
+//// only should work for current session
+//export function getSignOutUrl (endpointKey) {
+//  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).signOutPath}`
+//}
 
 export function getEmailSignInUrl (endpointKey) {
-  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).emailSignInPath}`
+  return `${getSessionEndpoint(endpointKey).emailSignInPath}`
 }
 
 export function getEmailSignUpUrl (endpointKey) {
-  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).emailRegistrationPath}?config_name=${endpointKey}`
+  return `${getSessionEndpoint(endpointKey).emailRegistrationPath}`
 }
 
-
+/**
+ * @deprecated
+ * @param key
+ * @returns {string|string}
+ */
 export function getApiUrl(key) {
   let configKey = getSessionEndpointKey(key);
   return root.authState.currentEndpoint[configKey].apiUrl;
