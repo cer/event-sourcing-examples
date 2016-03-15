@@ -33,6 +33,10 @@ export const signUpReducer = (state = { ...signUpInitialState, form: {...signUpI
       const { key, value } = action;
       return {
         ...state,
+        errors: {
+          ...(state.errors || {}),
+          [key]: []
+        },
         form: {
           ...state.form,
           [key]: value

@@ -8,11 +8,11 @@ class AuthInput extends React.Component {
   static propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
-    errors: PropTypes.object
+    errors: PropTypes.array
   };
 
   static defaultProps = {
-    label: "",
+    label: '',
     value: null,
     errors: []
   };
@@ -22,7 +22,8 @@ class AuthInput extends React.Component {
   }
 
   renderErrorList () {
-    if (this.props.errors.size) {
+
+    if (this.props.errors.length) {
       return (
         <div className='auth-error-message has-error'>
           {this.props.errors.map((err, i) => {

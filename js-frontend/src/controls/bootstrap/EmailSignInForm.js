@@ -2,16 +2,13 @@
  * Created by andrew on 15/02/16.
  */
 import React, {PropTypes} from "react";
-//import auth from "redux-auth";
-import * as BS from "react-bootstrap";
+import { connect } from "react-redux";
+import read from '../../utils/readProp';
 
+import * as BS from "react-bootstrap";
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
-//import { emailSignInFormUpdate, emailSignIn } from "redux-auth";
-import { Glyphicon } from "react-bootstrap";
-import { connect } from "react-redux";
 
-import read from '../../utils/readProp';
 
 import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
 
@@ -83,7 +80,7 @@ class EmailSignInForm extends React.Component {
 
         <ButtonLoader loading={read(this.props.auth, 'signIn.loading', false)}
                       type="submit"
-                      icon={<Glyphicon glyph="log-in" />}
+                      icon={<BS.Glyphicon glyph="log-in" />}
                       className='email-sign-in-submit pull-right'
                       disabled={disabled}
                       onClick={this.handleSubmit.bind(this)}

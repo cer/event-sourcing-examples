@@ -1,37 +1,171 @@
 /**
  * Created by andrew on 20/02/16.
  */
-import React from "react";
-import { PageHeader, OverlayTrigger, Modal, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
-import { Link, IndexLink} from "react-router";
+import React, { PropTypes } from "react";
 import { connect } from "react-redux";
-import Select from "react-select";
+
+import * as BS from "react-bootstrap";
+import Input from "../../controls/bootstrap/Input";
+import ButtonLoader from "../../controls/bootstrap/ButtonLoader";
+
+//import { PageHeader, OverlayTrigger, Modal, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
+import { Link, IndexLink} from "react-router";
+import read from '../../utils/readProp';
+
+import { accountCreateFormUpdate, accountCreateError } from '../../actions/entities';
+
+const formValidation = (payload) => ['title', 'balance', 'description'].reduce((memo, prop) => {
+  let result = [];
+  const value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
+
+  switch (prop) {
+    case 'title':
+    case 'balance':
+      if (/^$/.test(value)) {
+        result.push('required');
+      }
+  }
+
+  switch (prop) {
+    case 'balance':
+      if (!/\d+/.test(value)) {
+        result.push('need to be a number');
+      }
+  }
+
+  switch (prop) {
+    case 'description':
+      if (value.length > 400) {
+        result.push('need to less than 400 symbols long');
+      }
+
+  }
+  if (result.length) {
+    memo[prop] = result;
+    memo.hasErrors = true;
+  }
+  return memo;
+}, {});
 
 export class NewAccountModal extends React.Component {
-  render() {
-    return (<Modal show={this.props.show} onHide={this.props.onHide} key={0}>
-      <Modal.Header closeButton>
-        <Modal.Title>New Account</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <form>
-          Title <br/>
-          Balance <br/>
-          Description
-        </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={this.props.onHide}>Cancel</Button>
-        <Button bsStyle="primary" onClick={this.props.action}>Create</Button>
-      </Modal.Footer>
-    </Modal>);
+
+  static propTypes = {
+    inputProps: PropTypes.shape({
+      title: PropTypes.object,
+      balance: PropTypes.object,
+      description: PropTypes.object,
+      submit: PropTypes.object
+    }),
+    action: PropTypes.func,
+    account: PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    inputProps: {
+      title: {},
+      balance: {},
+      description: {},
+      submit: {}
+    }
+  };
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const payload = { ...this.props.account.form };
+
+    const validationErrors = formValidation(payload);
+    if (validationErrors.hasErrors) {
+      this.props.dispatch(accountCreateError(validationErrors));
+      return;
+    }
+
+    const { action } = this.props;
+
+    if (action) {
+      action(event, payload);
+    }
   }
+
+  handleInput(key, val) {
+      this.props.dispatch(accountCreateFormUpdate(key, val));
+  }
+
+  render() {
+
+    const disabled = (
+      this.props.account.loading
+    );
+
+    const actionLabel = 'Create';
+
+    return (<BS.Modal show={this.props.show} onHide={this.props.onHide} key={0}>
+      <BS.Modal.Header closeButton>
+        <BS.Modal.Title>New Account</BS.Modal.Title>
+      </BS.Modal.Header>
+      <BS.Modal.Body>
+        <form className='account-create-form clearfix'
+              onSubmit={this.handleSubmit.bind(this)}>
+
+          <Input type="text"
+                 className="account-create-title"
+                 label="Title"
+                 placeholder="Title"
+                 name="title"
+                 disabled={disabled}
+                 value={read(this.props.account, 'form.title', '')}
+                 errors={read(this.props.account, 'errors.title', [])}
+                 onChange={this.handleInput.bind(this, "title")}
+            {...this.props.inputProps.title} />
+
+          <Input type="text"
+                 className="account-create-balance"
+                 label="Balance"
+                 placeholder="Balance"
+                 name="balance"
+                 addonBefore={
+                 (<BS.Glyphicon glyph="usd" />)
+                 }
+                 addonAfter=".00"
+                 disabled={disabled}
+                 value={read(this.props.account, 'form.balance', '')}
+                 errors={read(this.props.account, 'errors.balance', [])}
+                 onChange={this.handleInput.bind(this, 'balance')}
+            {...this.props.inputProps.balance} />
+
+          <Input type="textarea"
+                 className="account-create-description"
+                 label="Description"
+                 placeholder="Description"
+                 name="description"
+                 disabled={disabled}
+                 value={read(this.props.account, 'form.description', '')}
+                 errors={read(this.props.account, 'errors.description', [])}
+                 onChange={this.handleInput.bind(this, 'description')}
+            {...this.props.inputProps.description} />
+
+
+        </form>
+
+      </BS.Modal.Body>
+      <BS.Modal.Footer>
+        <BS.Button onClick={this.props.onHide}>Cancel</BS.Button>
+        <ButtonLoader loading={read(this.props.account, 'loading', false)}
+                      type="submit"
+                      bsStyle="primary"
+                      icon={<BS.Glyphicon glyph="plus" />}
+                      disabled={disabled}
+                      onClick={this.handleSubmit.bind(this)}
+          {...this.props.inputProps.submit}>
+          {actionLabel}
+        </ButtonLoader>
+      </BS.Modal.Footer>
+    </BS.Modal>);
+  }
+  //                      className='account-create-submit pull-right'
+
 }
 
-const mapStateToProps = (state) => ({
-  //token: state.auth.token,
-  //userName: state.auth.userName,
-  //isAuthenticated: state.auth.isAuthenticated
-});
+const mapStateToProps = ({ }) => ({ });
 
 export default connect(mapStateToProps)(NewAccountModal);

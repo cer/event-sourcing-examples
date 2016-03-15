@@ -35,7 +35,7 @@ export function authenticateError(errors) {
 }
 
 
-export function authenticate() {
+export function authenticate(forceReread) {
   return dispatch => {
 
     dispatch(authenticateStart());
@@ -51,7 +51,7 @@ export function authenticate() {
 
       const savedUser = retrieveUserData();
 
-      if (savedUser) {
+      if (savedUser && !forceReread) {
         return rs(savedUser);
       }
 

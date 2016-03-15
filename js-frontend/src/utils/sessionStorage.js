@@ -115,20 +115,20 @@ export function getSessionEndpoint (k) {
 //  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).signOutPath}`
 //}
 
-export function getEmailSignInUrl (endpointKey) {
-  return `${getSessionEndpoint(endpointKey).emailSignInPath}`
+export function getEmailSignInUrl () {
+  return `${getSessionEndpoint().emailSignInPath}`
 }
 
-export function getEmailSignUpUrl (endpointKey) {
-  return `${getSessionEndpoint(endpointKey).emailRegistrationPath}`
+export function getEmailSignUpUrl () {
+  return `${getSessionEndpoint().emailRegistrationPath}`
 }
 
-export function getCurrentUserUrl (endpointKey) {
-  return `${getSessionEndpoint(endpointKey).currentUserPath}`
+export function getCurrentUserUrl () {
+  return `${getSessionEndpoint().currentUserPath}`
 }
 
-export function getAccountsUrl (endpointKey) {
-  return `${getSessionEndpoint(endpointKey).accountsPath}`
+export function getAccountsUrl () {
+  return `${getSessionEndpoint().accountsPath}`
 }
 
 /**

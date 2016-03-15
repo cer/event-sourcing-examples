@@ -45,7 +45,8 @@ export function apiGetCurrentUser() {
   }).then(parseResponse);
 }
 
-export function apiCreateAccount(customerId, title, initialBalance) {
+export function apiCreateAccount(customerId, {
+  title, balance: initialBalance, description }) {
   //{
   //"accountId": "0000015377cf131b-a250093f26850000"
 //}
@@ -56,7 +57,24 @@ export function apiCreateAccount(customerId, title, initialBalance) {
       "Content-Type": "application/json"
     },
     method: "post",
-    body: root.JSON.stringify({ customerId, title, initialBalance })
+    body: root.JSON.stringify({
+      customerId,
+      title,
+      initialBalance,
+      description })
+  }).then(parseResponse);
+}
+
+export function apiRetrieveAccounts(customerId) {
+  return fetch(getAccountsUrl(), {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "get",
+    body: {
+      customerId
+    }
   }).then(parseResponse);
 }
 
@@ -82,3 +100,4 @@ export function apiRetrieveUsers(search) {
     }
   }).then(parseResponse);
 }
+

@@ -6,12 +6,10 @@ import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
 
 //import ButtonLoader from "./ButtonLoader";
-import { Input } from "react-bootstrap";
-import * as BS from "react-bootstrap";
+
 
 import {pushState} from "redux-router";
 
-import ButtonLoader from "../controls/bootstrap/ButtonLoader";
 
 //export {bootstrap, materialUi} from "./views";
 

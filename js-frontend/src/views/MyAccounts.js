@@ -10,6 +10,8 @@ import Select from "react-select";
 import * as Modals from './modals';
 import IndexPanel from "./../components/partials/IndexPanel";
 
+import * as A from '../actions/entities';
+
 
 const resetModals = {
   showAccountModal: false,
@@ -23,13 +25,6 @@ class MyAccounts extends React.Component {
     super(...args);
     this.state = { ...resetModals };
   }
-  updateTheme (theme) {
-    //this.props.dispatch(updateDemoTheme(theme));
-  }
-
-  updateEndpoint (endpoint) {
-    //this.props.dispatch(updateDemoEndpoint(endpoint));
-  }
 
   createAccountModal() {
     this.setState({
@@ -37,7 +32,15 @@ class MyAccounts extends React.Component {
     });
   }
 
-  createAccountModalConfirmed() {
+  createAccountModalConfirmed(evt, payload) {
+
+    const {
+      id: customerId
+      } = this.props.auth.user.attributes;
+
+    this.props.dispatch(A.accountCreate(customerId, payload))
+      .then(this.close.bind(this));
+
 
   }
 
@@ -52,9 +55,10 @@ class MyAccounts extends React.Component {
 
   }
 
-  remove3rdPartyAccountModal() {
+  remove3rdPartyAccountModal(evt, evtKey) {
 
-    const account = null;
+    debugger;
+    const account = evtKey;
     this.setState({
       accountToRemove: account,
       showDeleteAccountModal: true
@@ -78,6 +82,7 @@ class MyAccounts extends React.Component {
     //</Tooltip>);
     const user = this.props.auth.user.attributes;
     const {
+      id: customerId,
       email = '',
       ssn = '',
       name = {},
@@ -86,10 +91,8 @@ class MyAccounts extends React.Component {
       toAccounts
       } = user;
 
-    const {
-      firstName = '',
-      lastName = ''
-      } = name;
+    const firstName = name.firstName || '';
+    const lastName = name.lastName || '';
 
     const {
       city,
@@ -99,10 +102,24 @@ class MyAccounts extends React.Component {
       zipCode
       } = address;
 
-
-
     const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
     const { accountToRemove = null } = this.state;
+
+    const refAccountsData = this.props.app.accounts.other || [];
+
+    const refAccounts = refAccountsData.map((item, idx) => (
+      <tr key={`ref_${idx}`}>
+        <td><a href="#">${item.title}</a>{
+          (item.description) ? [
+            (<br />),
+            <span>{ item.description }</span>
+          ]: null
+        }
+        </td>
+        <td><Button eventKey={item.id} bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this)}>remove</Button>
+        </td>
+      </tr>
+    ));
 
     return (
       <div>
@@ -142,7 +159,6 @@ class MyAccounts extends React.Component {
 
           </IndexPanel>
 
-
         </Row>
         <Table>
           <thead>
@@ -156,17 +172,14 @@ class MyAccounts extends React.Component {
             <td><a href="#">Account Title #1</a></td>
             <td>$100.00</td>
           </tr>
-          <tr>
-            <td><a href="#">Account Title #2</a></td>
-            <td><Button bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this)}>remove</Button>
-            </td>
-          </tr>
+          { refAccounts }
           </tbody>
         </Table>
 
 
         <Modals.NewAccountModal show={showAccountModal}
                                 action={this.createAccountModalConfirmed.bind(this)}
+                                account={ this.props.app.accounts.create }
                                 onHide={this.close.bind(this)}
                                 key={0} />
 
@@ -244,13 +257,8 @@ class MyAccounts extends React.Component {
  </IndexPanel>
 */
 
-export default connect(({auth, demoUi = new Map()}) => {
+export default connect(({ auth, app }) => {
   return ({
-    auth,
-    currentUserUid: auth.user && auth.user.attributes && auth.user.attributes.provider || "none",
-    currentUserProvider: auth.user && auth.user.attributes && auth.user.attributes.uid || "none",
-    currentUserEndpoint:  "none",
-    //theme: demoUi.get("theme"),
-    pageEndpoint: null
+    auth, app
   })
 })(MyAccounts);

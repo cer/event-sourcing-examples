@@ -78,7 +78,7 @@ class EmailSignUpForm extends React.Component {
                  className="email-sign-up-email"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.fname', '')}
-                 errors={read(this.props.auth, 'signUp.errors.fname', {})}
+                 errors={read(this.props.auth, 'signUp.errors.fname', [])}
                  onChange={this.handleInput.bind(this, "fname")}
             {...this.props.inputProps.fname} />
 
@@ -88,7 +88,7 @@ class EmailSignUpForm extends React.Component {
                  className="email-sign-up-email"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.lname', '')}
-                 errors={read(this.props.auth, 'signUp.errors.lname', {})}
+                 errors={read(this.props.auth, 'signUp.errors.lname', [])}
                  onChange={this.handleInput.bind(this, "lname")}
             {...this.props.inputProps.lname} />
 
@@ -98,7 +98,7 @@ class EmailSignUpForm extends React.Component {
                  className="email-sign-up-email"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.email', '')}
-                 errors={read(this.props.auth, 'signUp.errors.email', {})}
+                 errors={read(this.props.auth, 'signUp.errors.email', [])}
                  onChange={this.handleInput.bind(this, "email")}
             {...this.props.inputProps.email} />
 
@@ -110,9 +110,10 @@ class EmailSignUpForm extends React.Component {
                  label="SSN"
                  placeholder="SSN"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.ssn', '')}
-                 errors={read(this.props.auth, 'signUp.errors.ssn', {})}
+                 errors={read(this.props.auth, 'signUp.errors.ssn', [])}
                  onChange={this.handleInput.bind(this, "ssn")}
             {...this.props.inputProps.ssn} />
 
@@ -120,9 +121,10 @@ class EmailSignUpForm extends React.Component {
                  label="Phone"
                  placeholder="Phone"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.phoneNumber', '')}
-                 errors={read(this.props.auth, 'signUp.errors.phoneNumber', {})}
+                 errors={read(this.props.auth, 'signUp.errors.phoneNumber', [])}
                  onChange={this.handleInput.bind(this, "phoneNumber")}
             {...this.props.inputProps.phoneNumber} />
 
@@ -130,9 +132,10 @@ class EmailSignUpForm extends React.Component {
                  label="Address 1"
                  placeholder="Address 1"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.address1', '')}
-                 errors={read(this.props.auth, 'signUp.errors.address1', {})}
+                 errors={read(this.props.auth, 'signUp.errors.address1', [])}
                  onChange={this.handleInput.bind(this, "address1")}
             {...this.props.inputProps.address1} />
 
@@ -140,9 +143,10 @@ class EmailSignUpForm extends React.Component {
                  label="Address 2"
                  placeholder="Address 2"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.address2', '')}
-                 errors={read(this.props.auth, 'signUp.errors.address2', {})}
+                 errors={read(this.props.auth, 'signUp.errors.address2', [])}
                  onChange={this.handleInput.bind(this, "address2")}
             {...this.props.inputProps.address2} />
 
@@ -150,6 +154,7 @@ class EmailSignUpForm extends React.Component {
                  label="City"
                  placeholder="City"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.city', '')}
                  errors={read(this.props.auth, 'signUp.errors.city', {})}
@@ -160,9 +165,10 @@ class EmailSignUpForm extends React.Component {
                  label="State"
                  placeholder="State"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.state', '')}
-                 errors={read(this.props.auth, 'signUp.errors.state', {})}
+                 errors={read(this.props.auth, 'signUp.errors.state', [])}
                  onChange={this.handleInput.bind(this, "state")}
             {...this.props.inputProps.state} />
 
@@ -170,9 +176,10 @@ class EmailSignUpForm extends React.Component {
                  label="ZIP"
                  placeholder="ZIP"
                  className="email-sign-up-email"
+                 bsSize="small"
                  disabled={disabled}
                  value={read(this.props.auth, 'signUp.form.zip', '')}
-                 errors={read(this.props.auth, 'signUp.errors.zip', {})}
+                 errors={read(this.props.auth, 'signUp.errors.zip', [])}
                  onChange={this.handleInput.bind(this, "zip")}
                  {...this.props.inputProps.zip} />
 

@@ -24,34 +24,26 @@ export default defineActionTypes({
   `,
 
   ENTITIES: `
+    REQUESTED
     RECEIVED
-  `,
-  DOCUMENT_LIST_VIEW: `
-    SET_QUERY
+    RECEIVED_LIST
   `,
 
-  DOCUMENT_VIEW: `
-    UPDATE_DATA
-    SET_ERRORS
-    REMOVE_STALE_ERRORS
-    CLEAR
-  `,
-
-
-  /*
-   * Data model
-   */
-
-  DOCUMENT_DATA: `
-    UPDATE
-  `,
-
-  /*
-   * Application
-   */
-
-  NAVIGATION: `
-    START
-    COMPLETE
+  ACCOUNTS: `
+    LIST_START
+    LIST_COMPLETE
+    LIST_ERROR
+    LIST_REF_START
+    LIST_REF_COMPLETE
+    LIST_REF_ERROR
+    CREATE_START
+    CREATE_COMPLETE
+    CREATE_ERROR
+    CREATE_FORM_UPDATE
+    CREATE_REF_START
+    CREATE_REF_COMPLETE
+    CREATE_REF_ERROR
+    CREATE_REF_FORM_UPDATE
   `
+
 })

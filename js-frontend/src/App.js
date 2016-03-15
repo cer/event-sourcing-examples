@@ -17,7 +17,8 @@ import { ReduxRouter} from "redux-router";
 
 //import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
 //import { authStateReducer } from "redux-auth";
-import authStateReducer from "./reducers/auth";
+import authStateReducer from './reducers/auth';
+import appStateReducer from './reducers/data'
 import { configure as reduxAuthConfigure } from './actions/configure';
 //import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
@@ -52,9 +53,8 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
 
   const reducer = combineReducers({
     auth:   authStateReducer,
+    app:   appStateReducer,
     router: routerStateReducer
-    //demoButtons,
-    //demoUi
   });
 
   const routes = (
