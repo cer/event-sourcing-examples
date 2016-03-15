@@ -46,7 +46,7 @@ accountsqueryside:
   working_dir: /app
   volumes:
     - ./accounts-query-side-service/build/libs:/app
-  command: java -jar /app/accounts-query-side-service.jar 
+  command: java -jar /app/accounts-query-side-service.jar
   ports:
     - "8081:8080"
   links:

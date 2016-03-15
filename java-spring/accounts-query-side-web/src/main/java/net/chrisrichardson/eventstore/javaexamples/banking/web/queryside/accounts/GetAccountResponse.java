@@ -4,30 +4,50 @@ import java.math.BigDecimal;
 
 
 public class GetAccountResponse {
-  private String accountId;
-  private BigDecimal balance;
+    private String accountId;
+    private BigDecimal balance;
+    private String title;
+    private String description;
 
-  public GetAccountResponse() {
-  }
+    public GetAccountResponse() {
+    }
 
-  public GetAccountResponse(String accountId, BigDecimal balance) {
-    this.accountId = accountId;
-    this.balance = balance;
-  }
+    public GetAccountResponse(String accountId, BigDecimal balance, String title, String description) {
+        this.accountId = accountId;
+        this.balance = balance;
+        this.title = title;
+        this.description = description;
+    }
 
-  public void setBalance(BigDecimal balance) {
-    this.balance = balance;
-  }
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
 
-  public void setAccountId(String accountId) {
-    this.accountId = accountId;
-  }
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
 
-  public String getAccountId() {
-    return accountId;
-  }
+    public String getAccountId() {
+        return accountId;
+    }
 
-  public BigDecimal getBalance() {
-    return balance;
-  }
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

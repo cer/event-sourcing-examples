@@ -17,7 +17,7 @@ public class AccountTest {
     String title = "My Account";
     String customerId = "00000000-00000000";
     BigDecimal initialBalance = new BigDecimal(512);
-    List<Event> events = CommandProcessingAggregates.processToList(account, (AccountCommand)new OpenAccountCommand(customerId, title, initialBalance));
+    List<Event> events = CommandProcessingAggregates.processToList(account, (AccountCommand)new OpenAccountCommand(customerId, title, initialBalance, ""));
 
     Assert.assertEquals(1, events.size());
     Assert.assertEquals(AccountOpenedEvent.class, events.get(0).getClass());
