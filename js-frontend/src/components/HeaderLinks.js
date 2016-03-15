@@ -17,8 +17,7 @@ import { signOut } from '../actions/signOut';
 export class HeaderLinks extends React.Component {
 
   signOut(evt, key) {
-    debugger;
-    signOut();
+    this.props.dispatch(signOut());
   }
 
   render() {

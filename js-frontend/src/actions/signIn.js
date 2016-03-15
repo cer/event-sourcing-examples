@@ -3,7 +3,8 @@
  */
 import {
   setCurrentEndpointKey,
-  getCurrentEndpointKey
+  getCurrentEndpointKey,
+  persistUserData
 } from "../utils/sessionStorage";
 
 import { entityReceived } from './entities';
@@ -36,39 +37,34 @@ export function emailSignInError(errors) {
 export function emailSignIn(body) {
   return dispatch => {
     // save previous endpoint key in case of failure
-    var prevEndpointKey = getCurrentEndpointKey();
+    //var prevEndpointKey = getCurrentEndpointKey();
 
     const endpointKey = 'default';
 
     // necessary for fetch to recognize the response as an api request
-    setCurrentEndpointKey(endpointKey);
-    var currentEndpointKey = getCurrentEndpointKey();
-
-    dispatch(storeCurrentEndpointKey(currentEndpointKey));
+    //setCurrentEndpointKey(endpointKey);
+    //var currentEndpointKey = getCurrentEndpointKey();
+    //
+    //dispatch(storeCurrentEndpointKey(currentEndpointKey));
 
     dispatch(emailSignInStart());
 
     return apiSignIn(body)
       .then(function(data = {}) {
-        const { id, customerInfo } = data;
-        if (id && customerInfo) {
-          const user = {
-            ...customerInfo,
-            uid: id
-          };
-          debugger;
-          dispatch(entityReceived(id, user));
-          return user;
+        const { id } = data;
+        if (id ) {
+          dispatch(entityReceived(id, data));
         }
         return data;
       })
       .then((user) => {
+        persistUserData(user);
         dispatch(emailSignInComplete(user));
       })
       .catch((errors) => {
         // revert endpoint key to what it was before failed request
-        setCurrentEndpointKey(prevEndpointKey);
-        dispatch(storeCurrentEndpointKey(prevEndpointKey));
+        //setCurrentEndpointKey(prevEndpointKey);
+        //dispatch(storeCurrentEndpointKey(prevEndpointKey));
         return dispatch(emailSignInError(errors));
       });
   };

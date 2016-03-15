@@ -76,17 +76,29 @@ class MyAccounts extends React.Component {
     //const deployTooltip = (<Tooltip>
     //  Create a new instance of this demo on your own Heroku server.
     //</Tooltip>);
-    debugger;
     const user = this.props.auth.user.attributes;
     const {
-      email,
-      ssn,
-      name
+      email = '',
+      ssn = '',
+      name = {},
+      phoneNumber = '',
+      address,
+      toAccounts
       } = user;
+
     const {
-      firstName,
-      lastName
+      firstName = '',
+      lastName = ''
       } = name;
+
+    const {
+      city,
+      state,
+      street1,
+      street2,
+      zipCode
+      } = address;
+
 
 
     const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
@@ -115,6 +127,11 @@ class MyAccounts extends React.Component {
             <Row>
               <Col xs={4}>Email:</Col>
               <Col xs={8}><strong>{ email }</strong></Col>
+            </Row>
+
+            <Row>
+              <Col xs={4}>Phone:</Col>
+              <Col xs={8}><strong>{ phoneNumber }</strong></Col>
             </Row>
 
             <Row>

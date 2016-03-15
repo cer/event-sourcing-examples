@@ -19,7 +19,7 @@ import {emailSignUpFormUpdate, emailSignUp} from '../../actions/signUp';
 
 class EmailSignUpForm extends React.Component {
   static propTypes = {
-    endpoint: PropTypes.string,
+    //endpoint: PropTypes.string,
     inputProps: PropTypes.shape({
       email: PropTypes.object,
       password: PropTypes.object,
@@ -58,6 +58,7 @@ class EmailSignUpForm extends React.Component {
   }
 
   render () {
+
     try {
 
       const disabled = (
@@ -120,10 +121,10 @@ class EmailSignUpForm extends React.Component {
                  placeholder="Phone"
                  className="email-sign-up-email"
                  disabled={disabled}
-                 value={read(this.props.auth, 'signUp.form.phone', '')}
-                 errors={read(this.props.auth, 'signUp.errors.phone', {})}
-                 onChange={this.handleInput.bind(this, "phone")}
-            {...this.props.inputProps.phone} />
+                 value={read(this.props.auth, 'signUp.form.phoneNumber', '')}
+                 errors={read(this.props.auth, 'signUp.errors.phoneNumber', {})}
+                 onChange={this.handleInput.bind(this, "phoneNumber")}
+            {...this.props.inputProps.phoneNumber} />
 
           <Input type="text"
                  label="Address 1"

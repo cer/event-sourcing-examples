@@ -10,14 +10,7 @@ const userInitalState = {
 
 export const userReducer = (state = {...userInitalState}, action) => {
   switch(action.type) {
-    case T.AUTH.AUTHENTICATE_COMPLETE: {
-      const { user } = action;
-      return {...state,
-        attributes: user,
-        isSignedIn: !!user
-      };
-    }
-
+    case T.AUTH.AUTHENTICATE_COMPLETE:
     case T.AUTH.SIGN_IN_COMPLETE: {
       const { user } = action;
       return {...state,

@@ -9,7 +9,7 @@ export const customerInfoMap = ({
   email, //: "arevinsky@gmail.com"
   fname, //: "Andrew"
   lname, //: "Revinsky"
-  phone, //: "+79031570864"
+  phoneNumber, //: "+79031570864"
   state, //: "Kentucky"
   zip //: "125315"
   }) => ({
@@ -19,7 +19,7 @@ export const customerInfoMap = ({
   },
   email,
   ssn,
-  "phoneNumber": phone,
+  "phoneNumber": phoneNumber,
   "address": {
     "street1": address1,
     "street2": address2,

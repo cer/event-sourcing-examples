@@ -3,7 +3,6 @@
  */
 import React, { PropTypes } from "react";
 import { Input, Glyphicon } from "react-bootstrap";
-import Immutable from "immutable";
 
 class AuthInput extends React.Component {
   static propTypes = {
@@ -15,7 +14,7 @@ class AuthInput extends React.Component {
   static defaultProps = {
     label: "",
     value: null,
-    errors: Immutable.fromJS([])
+    errors: []
   };
 
   handleInput (ev) {

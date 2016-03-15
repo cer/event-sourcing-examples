@@ -12,7 +12,7 @@ import root from './root';
 root.authState = {
   currentSettings:    {},
   currentEndpoint:    {},
-  defaultEndpointKey: null
+  defaultEndpointKey: 'default'
 };
 
 export function setCurrentSettings (s) {
@@ -67,7 +67,8 @@ export function resetConfig () {
 export function destroySession () {
   var sessionKeys = [
     C.SAVED_CREDS_KEY,
-    C.SAVED_CONFIG_KEY
+    C.SAVED_CONFIG_KEY,
+    C.SAVED_USER_INFO
   ];
 
   for (var key in sessionKeys) {
@@ -122,6 +123,14 @@ export function getEmailSignUpUrl (endpointKey) {
   return `${getSessionEndpoint(endpointKey).emailRegistrationPath}`
 }
 
+export function getCurrentUserUrl (endpointKey) {
+  return `${getSessionEndpoint(endpointKey).currentUserPath}`
+}
+
+export function getAccountsUrl (endpointKey) {
+  return `${getSessionEndpoint(endpointKey).accountsPath}`
+}
+
 /**
  * @deprecated
  * @param key
@@ -136,6 +145,17 @@ export function getTokenFormat() {
   return root.authState.currentSettings.tokenFormat;
 }
 
+export function persistUserData(user) {
+  persistData(C.SAVED_USER_INFO, user);
+}
+
+export function retrieveUserData() {
+  return retrieveData(C.SAVED_USER_INFO);
+}
+
+export function retrieveHeaders() {
+  return retrieveData(C.SAVED_CREDS_KEY) || {};
+}
 
 export function persistData (key, val) {
   val = root.JSON.stringify(val);

@@ -20,7 +20,7 @@ export class SignUp extends React.Component {
           Register
         </PageHeader>
         <BS.Well>
-          <EmailSignUpForm endpoint="default" />
+          <EmailSignUpForm />
         </BS.Well>
       </div>
     );

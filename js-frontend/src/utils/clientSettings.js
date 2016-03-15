@@ -16,7 +16,8 @@ import {
   setCurrentEndpoint,
   setCurrentEndpointKey,
   retrieveData,
-  persistData
+  persistData,
+  destroySession
 } from "./sessionStorage";
 
 // can't use "window" with node app
@@ -68,6 +69,11 @@ const defaultSettings = {
 
 // save session configuration
 export function applyConfig({ dispatch, endpoint={}, settings={}, reset=false } = {}) {
+
+  if (settings.currentLocation && settings.currentLocation.match(/blank=true/)) {
+    return Promise.resolve({blank: true});
+  }
+
   let currentEndpointKey;
 
   if (reset) {
@@ -79,6 +85,16 @@ export function applyConfig({ dispatch, endpoint={}, settings={}, reset=false } 
   }
 
   setCurrentSettings({ ...defaultSettings, ...settings });
+
+  const currentHeaders = retrieveData(C.SAVED_CREDS_KEY) || {};
+
+  const accessToken = currentHeaders["access-token"];
+
+  //if (authRedirectHeaders && authRedirectHeaders["access-token"]) {
+  if (!accessToken) {
+    destroySession();
+  }
+
 
   let { defaultEndpointKey, currentEndpoint } = parseEndpointConfig(
     endpoint, getInitialEndpointKey()
@@ -92,26 +108,15 @@ export function applyConfig({ dispatch, endpoint={}, settings={}, reset=false } 
   setDefaultEndpointKey(defaultEndpointKey);
   setCurrentEndpoint(currentEndpoint);
 
-  dispatch(setEndpointKeys(Object.keys(currentEndpoint), currentEndpointKey, defaultEndpointKey));
+  dispatch(setEndpointKeys(
+    Object.keys(currentEndpoint),
+    currentEndpointKey,
+    defaultEndpointKey));
+
   setCurrentEndpointKey(currentEndpointKey);
 
 
-  if (getCurrentSettings().initialCredentials) {
 
-    // skip initial headers check (i.e. check was already done server-side)
-    let { user, headers, config } = getCurrentSettings().initialCredentials;
-    persistData(C.SAVED_CREDS_KEY, headers);
-    return Promise.resolve(user);
-  }
-
-  const savedCreds = retrieveData(C.SAVED_CREDS_KEY);
-
-  if (savedCreds) {
-    // verify session credentials with API
-    debugger;
-    return fetch(savedCreds)
-  }
-
-  return Promise.reject({ reason: "No credentials." })
+  return Promise.resolve();
 
 }
