@@ -66,7 +66,10 @@ export function apiCreateAccount(customerId, {
 }
 
 export function apiRetrieveAccounts(customerId) {
-  return fetch(getAccountsUrl(), {
+
+  const params = {customerId };
+  const query = Object.keys(params).map(key => [encodeURIComponent(key), encodeURIComponent(params[key])].join('=')).join('&')
+  return fetch(`${getAccountsUrl()}?${query}`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"

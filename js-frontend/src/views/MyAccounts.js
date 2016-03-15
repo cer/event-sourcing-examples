@@ -26,6 +26,13 @@ class MyAccounts extends React.Component {
     this.state = { ...resetModals };
   }
 
+  componentWillMount() {
+    const {
+      id: customerId
+      } = this.props.auth.user.attributes;
+    this.props.dispatch(A.fetchOwnAccounts(customerId));
+  }
+
   createAccountModal() {
     this.setState({
       showAccountModal: true
@@ -40,7 +47,6 @@ class MyAccounts extends React.Component {
 
     this.props.dispatch(A.accountCreate(customerId, payload))
       .then(this.close.bind(this));
-
 
   }
 
@@ -105,18 +111,41 @@ class MyAccounts extends React.Component {
     const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
     const { accountToRemove = null } = this.state;
 
-    const refAccountsData = this.props.app.accounts.other || [];
+    const ownAccountsData = this.props.app.accounts.own || [];
 
-    const refAccounts = refAccountsData.map((item, idx) => (
-      <tr key={`ref_${idx}`}>
-        <td><a href="#">${item.title}</a>{
-          (item.description) ? [
+    //accountId: "000001537c2cf075-a250093f26850000"
+    //balance: 0
+    //description: null
+    //title: "Sample"
+
+    const ownAccounts = ownAccountsData.map(({
+      accountId, balance, description = '', title
+      }, idx) => (
+      <tr key={`own_${idx}`}>
+        <td><Link to={`/account/${accountId}`}>{ title }</Link>{
+          (description) ? [
             (<br />),
-            <span>{ item.description }</span>
+            <span>{ description }</span>
+          ]: null
+        }</td>
+        <td>${ balance }</td>
+      </tr>
+    ));
+    const refAccountsData = this.props.app.accounts.other || [];
+    const refAccounts = refAccountsData.map(({
+      title,
+      description = '',
+      id
+      }, idx) => (
+      <tr key={`ref_${idx}`}>
+        <td><Link to={`/account/${id}`}>{ title }</Link>{
+          (description) ? [
+            (<br />),
+            <span>{ description }</span>
           ]: null
         }
         </td>
-        <td><Button eventKey={item.id} bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this)}>remove</Button>
+        <td><Button eventKey={ id } bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this)}>remove</Button>
         </td>
       </tr>
     ));
@@ -168,10 +197,7 @@ class MyAccounts extends React.Component {
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td><a href="#">Account Title #1</a></td>
-            <td>$100.00</td>
-          </tr>
+          { ownAccounts }
           { refAccounts }
           </tbody>
         </Table>

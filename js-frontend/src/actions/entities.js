@@ -10,11 +10,11 @@ export const entityRequested = makeActionCreator(T.ENTITIES.REQUESTED, 'id');
 export const entityReceived = makeActionCreator(T.ENTITIES.RECEIVED, 'id', 'entity');
 
 export const accountsListRequested = makeActionCreator(T.ACCOUNTS.LIST_START);
-export const accountsListReceived = makeActionCreator(T.ACCOUNTS.LIST_COMPLETE, 'data');
+export const accountsListReceived = makeActionCreator(T.ACCOUNTS.LIST_COMPLETE, 'payload');
 export const accountsListError = makeActionCreator(T.ACCOUNTS.LIST_ERROR, 'error');
 
 //export const accountsRefListRequested = makeActionCreator(T.ACCOUNTS.LIST_REF_START, 'id');
-export const accountsRefListReceived = makeActionCreator(T.ACCOUNTS.LIST_REF_COMPLETE, 'data');
+export const accountsRefListReceived = makeActionCreator(T.ACCOUNTS.LIST_REF_COMPLETE, 'payload');
 //export const accountsRefListError = makeActionCreator(T.ACCOUNTS.LIST_REF_ERROR, 'id');
 
 export const accountCreateStart = makeActionCreator(T.ACCOUNTS.CREATE_START);
@@ -59,5 +59,15 @@ export function accountCreate(customerId, payload) {
         return Promise.resolve({ error: err });
 
       })
+  };
+}
+
+export function fetchOwnAccounts(customerId) {
+  return dispatch => {
+    //dispatch(accountsListRequested());
+    return api.apiRetrieveAccounts(customerId)
+      .then(data => {
+        dispatch(accountsListReceived(data));
+      });
   };
 }

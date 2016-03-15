@@ -6,6 +6,8 @@ import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
 
 //import ButtonLoader from "./ButtonLoader";
+import * as BS from "react-bootstrap";
+//import ButtonLoader from "../controls/bootstrap/ButtonLoader";
 
 
 import {pushState} from "redux-router";
