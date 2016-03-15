@@ -67,7 +67,7 @@ public class BankingWebIntegrationTest {
                 baseUrl("/accounts"),
                 HttpMethod.POST,
                 CreateAccountResponse.class,
-                new CreateAccountRequest("00000000-00000000", "My 1 Account", initialFromAccountBalance)
+                new CreateAccountRequest("00000000-00000000", "My 1 Account", "", initialFromAccountBalance)
         );
         final String fromAccountId = fromAccount.getAccountId();
 
@@ -75,7 +75,7 @@ public class BankingWebIntegrationTest {
                 baseUrl("/accounts"),
                 HttpMethod.POST,
                 CreateAccountResponse.class,
-                new CreateAccountRequest("00000000-00000000", "My 2 Account", initialToAccountBalance)
+                new CreateAccountRequest("00000000-00000000", "My 2 Account", "", initialToAccountBalance)
         );
 
         String toAccountId = toAccount.getAccountId();

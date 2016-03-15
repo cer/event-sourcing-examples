@@ -13,7 +13,7 @@ public class AccountOpenEventSerializationTest {
 
   @Test
   public void shouldSerde() {
-    AccountOpenedEvent event = new AccountOpenedEvent("00000000-00000000", "My Account", new BigDecimal(55));
+    AccountOpenedEvent event = new AccountOpenedEvent("00000000-00000000", "My Account", new BigDecimal(55), "");
     String json = JSonMapper.toJson(event, EventStoreCommonObjectMapping.getObjectMapper());
     System.out.println("json=" + json);
 

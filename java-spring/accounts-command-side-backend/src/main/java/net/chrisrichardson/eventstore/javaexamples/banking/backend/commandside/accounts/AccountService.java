@@ -14,8 +14,8 @@ public class AccountService  {
     this.accountRepository = accountRepository;
   }
 
-  public rx.Observable<EntityWithIdAndVersion<Account>> openAccount(String customerId, String title, BigDecimal initialBalance) {
-    return accountRepository.save(new OpenAccountCommand(customerId, title, initialBalance));
+  public rx.Observable<EntityWithIdAndVersion<Account>> openAccount(String customerId, String title, BigDecimal initialBalance, String description) {
+    return accountRepository.save(new OpenAccountCommand(customerId, title, initialBalance, description));
   }
 
 }

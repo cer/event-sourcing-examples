@@ -10,14 +10,16 @@ public class AccountOpenedEvent implements Event {
   private String customerId;
   private String title;
   private BigDecimal initialBalance;
+  private String description;
 
   private AccountOpenedEvent() {
   }
 
-  public AccountOpenedEvent(String customerId, String title, BigDecimal initialBalance) {
+  public AccountOpenedEvent(String customerId, String title, BigDecimal initialBalance, String description) {
     this.customerId = customerId;
     this.title = title;
     this.initialBalance = initialBalance;
+    this.description = description;
   }
 
   public String getCustomerId() {
@@ -30,5 +32,9 @@ public class AccountOpenedEvent implements Event {
 
   public BigDecimal getInitialBalance() {
     return initialBalance;
+  }
+
+  public String getDescription() {
+    return description;
   }
 }

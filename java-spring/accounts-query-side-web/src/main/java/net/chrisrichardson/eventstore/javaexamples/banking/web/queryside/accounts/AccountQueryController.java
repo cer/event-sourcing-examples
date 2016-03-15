@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import rx.Observable;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class AccountQueryController {
@@ -23,7 +25,13 @@ public class AccountQueryController {
   @RequestMapping(value="/accounts/{accountId}", method = RequestMethod.GET)
   public Observable<GetAccountResponse> get(@PathVariable String accountId) {
     return accountInfoQueryService.findByAccountId(new EntityIdentifier(accountId))
-            .map(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance())));
+            .map(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription()));
+  }
+
+  @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+  public Observable<List<GetAccountResponse>> getAccountsForCustomer(@RequestParam("customerId") String customerId) {
+    return accountInfoQueryService.findByCustomerId(customerId)
+            .map(accountInfoList -> accountInfoList.stream().map(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription())).collect(Collectors.toList()));
   }
 
   @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="account not found")

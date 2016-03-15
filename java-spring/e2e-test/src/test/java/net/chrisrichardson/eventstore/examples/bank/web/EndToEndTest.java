@@ -91,7 +91,7 @@ public class EndToEndTest {
             accountsCommandSideBaseUrl("/accounts"),
             HttpMethod.POST,
             CreateAccountResponse.class,
-            new CreateAccountRequest(customerId, "My #1 Account", initialFromAccountBalance)
+            new CreateAccountRequest(customerId, "My #1 Account", "", initialFromAccountBalance)
     );
     final String fromAccountId = fromAccount.getAccountId();
 
@@ -99,7 +99,7 @@ public class EndToEndTest {
             accountsCommandSideBaseUrl("/accounts"),
             HttpMethod.POST,
             CreateAccountResponse.class,
-            new CreateAccountRequest(customerId, "My #2 Account", initialToAccountBalance)
+            new CreateAccountRequest(customerId, "My #2 Account", "", initialToAccountBalance)
     );
 
     String toAccountId = toAccount.getAccountId();
