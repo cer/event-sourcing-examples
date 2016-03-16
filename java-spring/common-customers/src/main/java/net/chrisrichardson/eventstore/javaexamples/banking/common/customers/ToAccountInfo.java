@@ -11,14 +11,16 @@ public class ToAccountInfo {
     private String id;
     private String title;
     private String owner;
+    private String description;
 
     public ToAccountInfo() {
     }
 
-    public ToAccountInfo(String id, String title, String owner) {
+    public ToAccountInfo(String id, String title, String owner, String description) {
         this.id = id;
         this.title = title;
         this.owner = owner;
+        this.description = description;
     }
 
     public String getId() {
@@ -43,6 +45,14 @@ public class ToAccountInfo {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

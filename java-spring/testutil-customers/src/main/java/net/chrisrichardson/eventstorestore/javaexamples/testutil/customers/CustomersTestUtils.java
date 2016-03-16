@@ -71,6 +71,6 @@ public class CustomersTestUtils {
     }
 
     public static ToAccountInfo generateToAccountInfo() {
-        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
+        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe","");
     }
 }
