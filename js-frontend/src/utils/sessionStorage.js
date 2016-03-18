@@ -120,7 +120,7 @@ export function getEmailSignInUrl () {
 }
 
 export function getEmailSignUpUrl () {
-  return `${getSessionEndpoint().emailRegistrationPath}`
+  return getCustomersUrl();
 }
 
 export function getCurrentUserUrl () {
@@ -129,6 +129,10 @@ export function getCurrentUserUrl () {
 
 export function getAccountsUrl () {
   return `${getSessionEndpoint().accountsPath}`
+}
+
+export function getCustomersUrl () {
+  return `${getSessionEndpoint().customersPath}`
 }
 
 /**

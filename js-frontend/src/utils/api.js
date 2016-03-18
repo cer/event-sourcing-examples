@@ -6,12 +6,17 @@ import {
   getEmailSignInUrl,
   getEmailSignUpUrl,
   getCurrentUserUrl,
-  getAccountsUrl
+  getAccountsUrl,
+  getCustomersUrl
 } from "./sessionStorage";
 import root from './root';
 
 
 import { parseResponse } from "./handleFetchResponse";
+
+function makeQuery(params) {
+  return Object.keys(params).map(key => [encodeURIComponent(key), encodeURIComponent(params[key])].join('=')).join('&');
+}
 
 export function apiSignIn(body) {
   return fetch(getEmailSignInUrl(), {
@@ -67,19 +72,12 @@ export function apiCreateAccount(customerId, {
 
 export function apiRetrieveAccounts(customerId) {
 
-  const params = {customerId };
-  const query = Object.keys(params).map(key => [encodeURIComponent(key), encodeURIComponent(params[key])].join('=')).join('&');
-
-
-  return fetch(`${getAccountsUrl()}?${query}`, {
+  return fetch(`${getAccountsUrl()}?${makeQuery({ customerId })}`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
     },
-    method: "get",
-    body: {
-      customerId
-    }
+    method: "get"
   }).then(parseResponse);
 }
 
@@ -107,16 +105,12 @@ export function apiDeleteAccount(accountId) {
   }).then(parseResponse);
 }
 
-export function apiRetrieveUsers(search) {
-  return fetch(getCurrentUserUrl(), {
+export function apiRetrieveUsers(email) {
+  return fetch(`${getCustomersUrl()}?${makeQuery({ email })}`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
     },
-    method: "get",
-    body: {
-      email: search
-    }
+    method: "get"
   }).then(parseResponse);
 }
-

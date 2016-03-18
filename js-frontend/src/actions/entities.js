@@ -120,3 +120,43 @@ export function errorMessageTimedOut(error, timeout) {
     }, timeout || 5000);
   };
 }
+
+export const createRefOwnerLookupStart = makeActionCreator(T.ACCOUNTS.CREATE_REF_OWNER_LOOKUP_START, 'payload');
+export const createRefOwnerLookupComplete = makeActionCreator(T.ACCOUNTS.CREATE_REF_OWNER_LOOKUP_COMPLETE, 'payload');
+
+export const createRefAccountLookupStart = makeActionCreator(T.ACCOUNTS.CREATE_REF_ACCOUNT_LOOKUP_START, 'payload');
+export const createRefAccountLookupComplete = makeActionCreator(T.ACCOUNTS.CREATE_REF_ACCOUNT_LOOKUP_COMPLETE, 'payload');
+
+export const createRefOwnerLookup = lookup => {
+  return dispatch => {
+    dispatch(createRefOwnerLookupStart(lookup));
+    return api.apiRetrieveUsers(lookup)
+      .then(data => {
+
+        const { customers = [] } = data || {};
+
+        const arr = customers.map(c => {
+          const { id, name, email } = c;
+          const fullName = ([name.firstName, name.lastName]).filter(i => i).join(' ');
+          const label = email ? `${ fullName } (${ email })` : fullName;
+          return {
+            value: id,
+            label
+          };
+        });
+        dispatch(createRefOwnerLookupComplete(arr));
+        return { options: arr };
+      })
+      .catch(err => {
+        dispatch(createRefOwnerLookupComplete(null));
+        return { options: [] };
+      });
+  };
+};
+
+export const createRefAccountLookup = lookup => {
+  return dispatch => {
+    dispatch(createRefAccountLookupStart());
+    dispatch(createRefAccountLookupComplete([]));
+  };
+};

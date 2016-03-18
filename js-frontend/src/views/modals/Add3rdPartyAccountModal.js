@@ -11,11 +11,13 @@ import { Link, IndexLink} from "react-router";
 import { connect } from "react-redux";
 import Select from "react-select";
 
+import * as A from '../../actions/entities';
+
 export class Add3rdPartyAccountModal extends React.Component {
 
 
-  ownerTypeIn(argq, arg2, arg3) {
-    debugger;
+  ownerTypeIn(val) {
+    this.props.dispatch(A.createRefOwnerLookup(val));
   }
 
   ownerChanged(argq, arg2, arg3) {
@@ -26,11 +28,30 @@ export class Add3rdPartyAccountModal extends React.Component {
     debugger;
   }
 
-  handleInput() {}
+  handleInput(key, value) {
+    //this.props.dispatch(A.createRefOwnerLookup(val));
+debugger;
+  }
 
+  getOwnersOptions(input) {
+    if (!input) {
+      return Promise.resolve({ options: [] });
+    }
+    return this.props.dispatch(A.createRefOwnerLookup(input));
+  }
   render() {
 
     const disabled = false;
+
+    const ownersLookup = this.props.data.ownersLookup;
+    const ownersOptions = ownersLookup.options;
+    const ownersValue = ownersLookup.value;
+    const ownersLoading = ownersLookup.loading;
+
+
+    //              onInputChange={this.ownerTypeIn.bind(this)}
+    //              value={ownersValue}
+
 
     return (
       <Modal show={this.props.show} onHide={this.props.onHide} key={1}>
@@ -41,18 +62,17 @@ export class Add3rdPartyAccountModal extends React.Component {
           <form>
             <label>Owner:</label>
             <Select
-              value={this.props.theme}
-              clearable={false}
-              options={[
- {value: "default", label: "Default"},
- {value: "bootstrap", label: "Bootstrap"},
- {value: "materialUi", label: "Material UI"}
- ]}
-              onInputChange={this.ownerTypeIn.bind(this)}
-              onChange={this.ownerChanged.bind(this)} />
+              name="owner"
+              clearable={true}
+              isLoading={ownersLoading}
+              onBlurResetsInput={false}
+              asyncOptions={this.getOwnersOptions.bind(this)}
+              matchProp="label"
+              onChange={this.handleInput.bind(this, 'owner')} />
 
             <label>Account:</label>
             <Select
+              name="account"
               value={this.props.theme}
               clearable={false}
               options={[
@@ -83,7 +103,8 @@ export class Add3rdPartyAccountModal extends React.Component {
 }
 
 const mapStateToProps = ({ app }) => ({
-  ui: app.ui.bookmarkAccount
+  ui: app.ui.bookmarkAccount,
+  data: app.data.bookmarkAccount
 });
 
 export default connect(mapStateToProps)(Add3rdPartyAccountModal);

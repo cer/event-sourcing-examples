@@ -87,7 +87,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
       default: {
         //apiUrl: '/',
         emailSignInPath: '/login',
-        emailRegistrationPath: '/customers',
+        customersPath: '/customers',
         currentUserPath: '/user',
         accountsPath: '/accounts'
       }
