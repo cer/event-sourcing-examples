@@ -56,7 +56,7 @@ export function accountCreate(customerId, payload) {
           ...payload
         }));
         dispatch(entityReceived(accountId, payload));
-        return authenticate(true);
+        return dispatch(authenticate(true));
       })
       .catch(err => {
         dispatch(accountCreateError(err));
@@ -86,5 +86,37 @@ export function fetchAccount(accountId) {
       .catch(err => {
         dispatch(accountError(err));
       });
+  };
+}
+
+export const deleteAccountRequested = makeActionCreator(T.ACCOUNT.DELETE_START);
+export const deleteAccountComplete = makeActionCreator(T.ACCOUNT.DELETE_COMPLETE);
+export const deleteAccountError = makeActionCreator(T.ACCOUNT.DELETE_ERROR);
+
+export function deleteAccount(customerId, accountId) {
+  return dispatch => {
+    dispatch(deleteAccountRequested());
+    return api.apiDeleteAccount(accountId)
+      .then(data => {
+        //debugger;
+        dispatch(deleteAccountComplete());
+        return Promise.resolve('ok');
+      })
+      .catch(err => {
+        dispatch(deleteAccountError());
+        return Promise.reject(err);
+      })
+  };
+}
+
+export const errorMessageStart = makeActionCreator(T.ERROR.START, 'payload');
+export const errorMessageStop = makeActionCreator(T.ERROR.STOP);
+
+export function errorMessageTimedOut(error, timeout) {
+  return dispatch => {
+    dispatch(errorMessageStart(error));
+    setTimeout(() => {
+      dispatch(errorMessageStop());
+    }, timeout || 5000);
   };
 }

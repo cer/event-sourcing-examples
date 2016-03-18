@@ -93,6 +93,20 @@ export function apiRetrieveAccount(accountId) {
   }).then(parseResponse);
 }
 
+export function apiDeleteAccount(accountId) {
+  return Promise.reject({
+    message: '\'Delete Account\' is not implemented.'
+  });
+
+  return fetch(`${getAccountsUrl()}/${accountId}`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "delete"
+  }).then(parseResponse);
+}
+
 export function apiRetrieveUsers(search) {
   return fetch(getCurrentUserUrl(), {
     headers: {

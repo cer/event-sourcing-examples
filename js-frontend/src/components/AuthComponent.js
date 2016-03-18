@@ -5,6 +5,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
 
+import read from '../utils/readProp';
+
 export function requireAuthentication(Component) {
 
   class AuthComponent extends React.Component {
@@ -45,12 +47,8 @@ export function requireAuthentication(Component) {
 
   const mapStateToProps =
     (state) => {
-      console.info('state', state);
       return ({
-        //token: state.auth.token,
-        //userName: state.auth.userName,
-        //isAuthenticated: state.auth.isAuthenticated
-        isAuthenticated: state.app.auth.user.isSignedIn
+        isAuthenticated: read(state, 'app.auth.user.isSignedIn', false)
       })
     };
 

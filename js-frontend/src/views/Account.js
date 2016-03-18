@@ -101,11 +101,11 @@ export class Account extends React.Component {
       return memo;
     }, []));
 
-    const { title = '[No title]', description: descriptionRaw, balance: balanceRaw } = account;
+    const { title: titleRaw, description: descriptionRaw, balance: balanceRaw } = account;
 
+    const title = titleRaw || '[No title]';
     const balance = ((balanceRaw > 0 && balanceRaw < 1) ? '$0' : '$') + Number(balanceRaw).toFixed(2);
-
-    const description = descriptionRaw || '[No description provided]';
+    const description = descriptionRaw || '[No description]';
 
     return (
       <div>

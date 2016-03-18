@@ -3,4 +3,4 @@
  */
 export { default as Add3rdPartyAccountModal } from './Add3rdPartyAccountModal';
 export { default as NewAccountModal } from './NewAccountModal';
-export { default as RemoveAccountBookmarkModal } from './RemoveAccountBookmarkModal';
+export { default as RemoveAccountBookmarkModal } from './RemoveAccountModal';

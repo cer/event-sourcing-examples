@@ -7,8 +7,8 @@ import { connect } from "react-redux";
 import * as BS from "react-bootstrap";
 import Input from "../../controls/bootstrap/Input";
 import ButtonLoader from "../../controls/bootstrap/ButtonLoader";
-
 //import { PageHeader, OverlayTrigger, Modal, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
+
 import { Link, IndexLink} from "react-router";
 import read from '../../utils/readProp';
 
@@ -83,7 +83,7 @@ export class NewAccountModal extends React.Component {
     const { action } = this.props;
 
     if (action) {
-      action(event, payload);
+      action(payload);
     }
   }
 
@@ -162,10 +162,6 @@ export class NewAccountModal extends React.Component {
       </BS.Modal.Footer>
     </BS.Modal>);
   }
-  //                      className='account-create-submit pull-right'
-
 }
 
-const mapStateToProps = ({ }) => ({ });
-
-export default connect(mapStateToProps)(NewAccountModal);
+export default connect()(NewAccountModal);

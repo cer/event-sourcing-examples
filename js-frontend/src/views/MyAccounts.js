@@ -3,6 +3,7 @@
  */
 import React from "react";
 import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
+import * as BS from "react-bootstrap";
 import { Link, IndexLink} from "react-router";
 import { connect } from "react-redux";
 //import * as DefaultTheme from "redux-auth";
@@ -11,6 +12,7 @@ import * as Modals from './modals';
 import IndexPanel from "./../components/partials/IndexPanel";
 
 import * as A from '../actions/entities';
+import read from '../utils/readProp';
 
 
 const resetModals = {
@@ -39,15 +41,17 @@ class MyAccounts extends React.Component {
     });
   }
 
-  createAccountModalConfirmed(evt, payload) {
+  createAccountModalConfirmed(payload) {
 
     const {
       id: customerId
       } = this.props.auth.user.attributes;
 
     this.props.dispatch(A.accountCreate(customerId, payload))
-      .then(this.close.bind(this));
-
+      .then(() => {
+        this.close.bind(this);
+        this.props.dispatch(A.fetchOwnAccounts(customerId));
+      });
   }
 
   create3rdPartyAccountModal() {
@@ -61,18 +65,22 @@ class MyAccounts extends React.Component {
 
   }
 
-  remove3rdPartyAccountModal(evt, evtKey) {
-
-    debugger;
-    const account = evtKey;
+  remove3rdPartyAccountModal(accountId, evt) {
+    const account = this.props.app.entities[accountId];
     this.setState({
       accountToRemove: account,
       showDeleteAccountModal: true
     });
   }
 
-  remove3rdPartyAccountModalConfirmed() {
-
+  remove3rdPartyAccountModalConfirmed(accountId) {
+    const { customerId } = this.props;
+    this.props.dispatch(A.deleteAccount(customerId, accountId))
+    .then(this.close.bind(this),
+    err => {
+      this.props.dispatch(A.errorMessageTimedOut(err && err.message || err));
+      this.close();
+    });
   }
 
   close() {
@@ -109,7 +117,10 @@ class MyAccounts extends React.Component {
       } = address;
 
     const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
-    const { accountToRemove = null } = this.state;
+    const { accountToRemove = null} = this.state;
+
+    const { error } = this.props;
+    const errorLine = error ? (<BS.Panel bsStyle="danger"><strong>{ error }</strong></BS.Panel>) : [];
 
     const ownAccountsData = this.props.app.accounts.own || [];
 
@@ -122,15 +133,17 @@ class MyAccounts extends React.Component {
       accountId, balance, description = '', title
       }, idx) => (
       <tr key={`own_${idx}`}>
-        <td><Link to={`/account/${accountId}`}>{ title }</Link>{
+        <td key={0}><Link to={`/account/${accountId}`}>{ title }</Link>{
           (description) ? [
             (<br />),
             <span>{ description }</span>
           ]: null
         }</td>
-        <td>${ balance }</td>
+        <td key={1}>${ balance } </td>
+        <td key={2}><BS.Button bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this, accountId)}><BS.Glyphicon glyph="remove" /></BS.Button></td>
       </tr>
     ));
+
     const refAccountsData = this.props.app.accounts.other || [];
     const refAccounts = refAccountsData.map(({
       title,
@@ -138,14 +151,15 @@ class MyAccounts extends React.Component {
       id
       }, idx) => (
       <tr key={`ref_${idx}`}>
-        <td><Link to={`/account/${id}`}>{ title }</Link>{
+        <td key={0}><Link to={`/account/${id}`}>{ title }</Link>{
           (description) ? [
             (<br />),
             <span>{ description }</span>
           ]: null
         }
         </td>
-        <td><Button eventKey={ id } bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this)}>remove</Button>
+        <td key={1}></td>
+        <td key={2}><Button pullRight={true} bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this, id)}><BS.Glyphicon glyph="remove" /></Button>
         </td>
       </tr>
     ));
@@ -161,6 +175,8 @@ class MyAccounts extends React.Component {
             </ButtonGroup>
           </Nav>
         </PageHeader>
+
+        { errorLine }
 
         <Row>
           <IndexPanel header="Personal Info:">
@@ -194,6 +210,7 @@ class MyAccounts extends React.Component {
           <tr>
             <th>Account Title</th>
             <th>Balance</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
@@ -286,6 +303,8 @@ class MyAccounts extends React.Component {
 export default connect(({ app }) => {
   return ({
     auth: app.auth,
-    app: app.data
+    app: app.data,
+    customerId: read(app, 'auth.user.isSignedIn', false) ? read(app, 'auth.user.attributes.id', null): null,
+    error: app.ui.error
   })
 })(MyAccounts);

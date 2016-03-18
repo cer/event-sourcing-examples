@@ -50,6 +50,14 @@ export default defineActionTypes({
     SINGLE_START
     SINGLE_COMPLETE
     SINGLE_ERROR
+    DELETE_START
+    DELETE_COMPLETE
+    DELETE_ERROR
+  `,
+
+  ERROR: `
+    START
+    STOP
   `
 
 })
