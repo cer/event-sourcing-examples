@@ -544,7 +544,23 @@
         }
       }
     },
-    "AccountTransactionInfo": {},
+    "AccountTransactionInfo": {
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fromAccountId": {
+          "type": "string"
+        },
+        "toAccountId": {
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        }
+      }
+    },
     "Map«string,ToAccountInfo»": {
       "type": "object",
       "additionalProperties": {
