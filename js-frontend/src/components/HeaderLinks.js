@@ -57,9 +57,9 @@ export class HeaderLinks extends React.Component {
 export default connect(({
   //dispatch,
   router,
-  auth
+  app
   }) => ({
   //dispatch,
   router,
-  auth
+  auth: app.auth
 }))(HeaderLinks);

@@ -11,9 +11,9 @@ import { transfers } from './transfers';
 import { entities } from './entities';
 
 const dataReducer = combineReducers({
-  accounts,
   transfers,
-  entities
+  entities,
+  accounts
 });
 
 export default dataReducer;

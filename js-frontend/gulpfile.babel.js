@@ -89,19 +89,19 @@ gulp.task('serve:start', ['serve:static'], () => {
     //}
 
     proxy: {
-      '/user' : {
+      '/user*' : {
         target: 'http://localhost:8080'
       },
       '/login' : {
         target: 'http://localhost:8080'
       },
-      '/customers' : {
+      '/customers*' : {
         target: 'http://localhost:8080'
       },
-      '/accounts' : {
+      '/accounts*' : {
         target: 'http://localhost:8080'
       },
-      '/transfers' : {
+      '/transfers*' : {
         target: 'http://localhost:8080'
       }
     }

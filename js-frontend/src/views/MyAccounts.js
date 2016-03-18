@@ -283,8 +283,9 @@ class MyAccounts extends React.Component {
  </IndexPanel>
 */
 
-export default connect(({ auth, app }) => {
+export default connect(({ app }) => {
   return ({
-    auth, app
+    auth: app.auth,
+    app: app.data
   })
 })(MyAccounts);

@@ -17,8 +17,10 @@ import { ReduxRouter} from "redux-router";
 
 //import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
 //import { authStateReducer } from "redux-auth";
-import authStateReducer from './reducers/auth';
-import appStateReducer from './reducers/data'
+//import authStateReducer from './reducers/auth';
+//import appStateReducer from './reducers/data';
+import mainReducer from './reducers';
+
 import { configure as reduxAuthConfigure } from './actions/configure';
 //import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
@@ -36,13 +38,11 @@ import Account from "./views/Account";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
 //import GlobalComponents from "./views/partials/GlobalComponents";
-const AuthGlobals = () => (<div></div>);
 
 class App extends React.Component {
   render() {
     return (
       <Container>
-        <AuthGlobals />
         {this.props.children}
       </Container>
     );
@@ -52,8 +52,7 @@ class App extends React.Component {
 export function initialize({cookies, isServer, currentLocation, userAgent} = {}) {
 
   const reducer = combineReducers({
-    auth:   authStateReducer,
-    app:   appStateReducer,
+    app: mainReducer,
     router: routerStateReducer
   });
 

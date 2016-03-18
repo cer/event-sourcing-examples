@@ -62,9 +62,9 @@ export class SignIn extends React.Component {
 export default connect(({
   //dispatch,
     routes,
-    auth
+    app
   }) => ({
   //dispatch,
     routes,
-    auth
+    auth: app.auth
 }))(SignIn);

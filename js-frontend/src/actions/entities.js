@@ -27,6 +27,10 @@ export const accountRefCreateComplete = makeActionCreator(T.ACCOUNTS.CREATE_REF_
 export const accountRefCreateError = makeActionCreator(T.ACCOUNTS.CREATE_REF_ERROR, 'error');
 export const accountRefCreateFormUpdate = makeActionCreator(T.ACCOUNTS.CREATE_REF_FORM_UPDATE,  'key', 'value');
 
+export const accountRequested = makeActionCreator(T.ACCOUNT.SINGLE_START);
+export const accountComplete = makeActionCreator(T.ACCOUNT.SINGLE_COMPLETE, 'payload');
+export const accountError = makeActionCreator(T.ACCOUNT.SINGLE_ERROR, 'error');
+
 
 export function accountsList(userId) {
   return dispatch => {
@@ -68,6 +72,19 @@ export function fetchOwnAccounts(customerId) {
     return api.apiRetrieveAccounts(customerId)
       .then(data => {
         dispatch(accountsListReceived(data));
+      });
+  };
+}
+
+export function fetchAccount(accountId) {
+  return dispatch => {
+    dispatch(accountRequested());
+    return api.apiRetrieveAccount(accountId)
+      .then(data => {
+        dispatch(accountComplete(data));
+      })
+      .catch(err => {
+        dispatch(accountError(err));
       });
   };
 }

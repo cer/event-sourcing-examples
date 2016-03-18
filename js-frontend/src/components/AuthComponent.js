@@ -50,7 +50,7 @@ export function requireAuthentication(Component) {
         //token: state.auth.token,
         //userName: state.auth.userName,
         //isAuthenticated: state.auth.isAuthenticated
-        isAuthenticated: state.auth.user.isSignedIn
+        isAuthenticated: state.app.auth.user.isSignedIn
       })
     };
 

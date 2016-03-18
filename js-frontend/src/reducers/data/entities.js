@@ -52,6 +52,18 @@ export const entities = (state = {...initialState}, action) => {
         ...hashMap
       };
     }
+
+    case T.ACCOUNT.SINGLE_COMPLETE: {
+      const { payload = {} } = action;
+      const { accountId } = payload;
+      if (!accountId) {
+        return state;
+      }
+      return {
+        ...state,
+        [accountId]: payload
+      };
+    }
     case T.ENTITIES.RECEIVED_LIST:
     default:
       return state;

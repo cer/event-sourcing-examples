@@ -44,6 +44,12 @@ export default defineActionTypes({
     CREATE_REF_COMPLETE
     CREATE_REF_ERROR
     CREATE_REF_FORM_UPDATE
+  `,
+
+  ACCOUNT: `
+    SINGLE_START
+    SINGLE_COMPLETE
+    SINGLE_ERROR
   `
 
 })
