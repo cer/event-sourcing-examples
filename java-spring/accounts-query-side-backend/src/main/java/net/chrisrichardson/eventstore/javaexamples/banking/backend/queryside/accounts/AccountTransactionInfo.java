@@ -13,4 +13,36 @@ public class AccountTransactionInfo {
     this.toAccountId = toAccountId;
     this.amount = amount;
   }
+
+  public String getTransactionId() {
+    return transactionId;
+  }
+
+  public void setTransactionId(String transactionId) {
+    this.transactionId = transactionId;
+  }
+
+  public String getFromAccountId() {
+    return fromAccountId;
+  }
+
+  public void setFromAccountId(String fromAccountId) {
+    this.fromAccountId = fromAccountId;
+  }
+
+  public String getToAccountId() {
+    return toAccountId;
+  }
+
+  public void setToAccountId(String toAccountId) {
+    this.toAccountId = toAccountId;
+  }
+
+  public long getAmount() {
+    return amount;
+  }
+
+  public void setAmount(long amount) {
+    this.amount = amount;
+  }
 }

@@ -43,6 +43,39 @@
   ],
   "paths": {
     "/accounts": {
+      "get": {
+        "tags": [
+          "account-query-controller"
+        ],
+        "summary": "getAccountsForCustomer",
+        "operationId": "getAccountsForCustomerUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "customerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetAccountResponse"
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "account-controller"
@@ -103,6 +136,41 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/GetAccountResponse"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/history": {
+      "get": {
+        "tags": [
+          "account-query-controller"
+        ],
+        "summary": "getTransactionsHistory",
+        "operationId": "getTransactionsHistoryUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "accountId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountTransactionInfo"
+              }
             }
           }
         }
@@ -312,6 +380,29 @@
           }
         }
       }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "getCurrentUser",
+        "operationId": "getCurrentUserUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/QuerySideCustomer"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -385,6 +476,9 @@
     },
     "ToAccountInfo": {
       "properties": {
+        "description": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
@@ -414,12 +508,21 @@
         "balance": {
           "type": "number",
           "format": "double"
+        },
+        "description": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
         }
       }
     },
     "CreateAccountRequest": {
       "properties": {
         "customerId": {
+          "type": "string"
+        },
+        "description": {
           "type": "string"
         },
         "initialBalance": {
@@ -439,6 +542,29 @@
             "$ref": "#/definitions/QuerySideCustomer"
           }
         }
+      }
+    },
+    "AccountTransactionInfo": {
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fromAccountId": {
+          "type": "string"
+        },
+        "toAccountId": {
+          "type": "string"
+        },
+        "transactionId": {
+          "type": "string"
+        }
+      }
+    },
+    "Map«string,ToAccountInfo»": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/ToAccountInfo"
       }
     },
     "CreateMoneyTransferRequest": {

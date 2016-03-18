@@ -1,8 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts;
 
 import net.chrisrichardson.eventstore.EntityIdentifier;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountQueryService;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountTransactionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class AccountQueryController {
     this.accountInfoQueryService = accountInfoQueryService;
   }
 
-  @RequestMapping(value="/accounts/{accountId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/accounts/{accountId}", method = RequestMethod.GET)
   public Observable<GetAccountResponse> get(@PathVariable String accountId) {
     return accountInfoQueryService.findByAccountId(new EntityIdentifier(accountId))
             .map(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription()));
@@ -32,6 +34,12 @@ public class AccountQueryController {
   public Observable<List<GetAccountResponse>> getAccountsForCustomer(@RequestParam("customerId") String customerId) {
     return accountInfoQueryService.findByCustomerId(customerId)
             .map(accountInfoList -> accountInfoList.stream().map(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription())).collect(Collectors.toList()));
+  }
+
+  @RequestMapping(value = "/accounts/{accountId}/history", method = RequestMethod.GET)
+  public Observable<List<AccountTransactionInfo>> getTransactionsHistory(@PathVariable String accountId) {
+    return accountInfoQueryService.findByAccountId(new EntityIdentifier(accountId))
+            .map(AccountInfo::getTransactions);
   }
 
   @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="account not found")
