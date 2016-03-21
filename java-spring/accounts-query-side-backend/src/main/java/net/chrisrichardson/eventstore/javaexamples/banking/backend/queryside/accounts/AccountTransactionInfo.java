@@ -1,11 +1,17 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 public class AccountTransactionInfo {
 
   private String transactionId;
   private String fromAccountId;
   private String toAccountId;
   private long amount;
+
+  public AccountTransactionInfo() {
+  }
 
   public AccountTransactionInfo(String transactionId, String fromAccountId, String toAccountId, long amount) {
     this.transactionId = transactionId;
@@ -44,5 +50,15 @@ public class AccountTransactionInfo {
 
   public void setAmount(long amount) {
     this.amount = amount;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return EqualsBuilder.reflectionEquals(this, o);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this);
   }
 }
