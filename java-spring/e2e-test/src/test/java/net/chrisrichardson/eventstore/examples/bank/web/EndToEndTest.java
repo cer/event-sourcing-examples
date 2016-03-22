@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.examples.bank.web;
 
 
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountTransactionInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
@@ -15,6 +16,8 @@ import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -22,9 +25,11 @@ import org.springframework.web.client.RestTemplate;
 import rx.Observable;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static org.junit.Assert.assertTrue;
 
 public class EndToEndTest {
 
@@ -115,13 +120,56 @@ public class EndToEndTest {
             transactionsCommandSideBaseUrl("/transfers"),
             HttpMethod.POST,
             CreateMoneyTransferResponse.class,
-            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer)
+            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer, "")
     );
 
     assertAccountBalance(fromAccountId, finalFromAccountBalance);
     assertAccountBalance(toAccountId, finalToAccountBalance);
 
     // TOOD - check state of money transfer
+
+    List<AccountTransactionInfo> transactionInfoList = restTemplate.exchange(accountsQuerySideBaseUrl("/accounts/"+fromAccountId+"/history"),
+            HttpMethod.GET,
+            new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
+            new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody();
+
+    assertTrue(transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId()) &&
+            ti.getFromAccountId().equals(fromAccountId) &&
+            ti.getToAccountId().equals(toAccountId) &&
+            ti.getAmount() == toCents(amountToTransfer).longValue()).findFirst().isPresent());
+  }
+
+  @Test
+  public void shouldCreateAccountsAndGetByCustomer() {
+    BigDecimal initialFromAccountBalance = new BigDecimal(500);
+    CustomerInfo customerInfo = generateCustomerInfo();
+
+    final CustomerResponse customerResponse = restTemplate.postForEntity(customersCommandSideBaseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+    final String customerId = customerResponse.getId();
+
+    Assert.assertNotNull(customerId);
+    Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+
+    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
+
+    final CreateAccountResponse account = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+            accountsCommandSideBaseUrl("/accounts"),
+            HttpMethod.POST,
+            CreateAccountResponse.class,
+            new CreateAccountRequest(customerId, "My 1 Account", "", initialFromAccountBalance)
+    );
+    final String accountId = account.getAccountId();
+
+    Assert.assertNotNull(accountId);
+
+    assertAccountBalance(accountId, initialFromAccountBalance);
+
+    List<GetAccountResponse> accountResponseList = restTemplate.exchange(accountsQuerySideBaseUrl("/accounts?customerId="+customerId),
+            HttpMethod.GET,
+            new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
+            new ParameterizedTypeReference<List<GetAccountResponse>>() {}).getBody();
+
+    assertTrue(accountResponseList.stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst().isPresent());
   }
 
   private BigDecimal toCents(BigDecimal dollarAmount) {

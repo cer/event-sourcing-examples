@@ -1,9 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
-import net.chrisrichardson.eventstore.Aggregate;
 import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.EntityNotFoundException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import rx.Observable;
 
 import java.util.List;
@@ -25,10 +22,6 @@ public class AccountQueryService {
   }
 
   public Observable<List<AccountInfo>> findByCustomerId(String customerId) {
-    List<AccountInfo> result = accountInfoRepository.findByCustomerId(customerId);
-    if(result.isEmpty())
-      return Observable.error(new EmptyResultDataAccessException(1));
-    else
-      return Observable.just(result);
+      return Observable.just(accountInfoRepository.findByCustomerId(customerId));
   }
 }
