@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import rx.Observable;
 
-
 /**
  * Created by popikyardo on 03.02.16.
  */
@@ -31,9 +30,9 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
-    public Observable<ToAccountInfo> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
+    public Observable<String> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
         return customerService.addToAccount(id, request)
-                .map(entityAndEventInfo -> request);
+                .map(entityAndEventInfo -> "\"" + entityAndEventInfo.entityVersion().asString() + "\"");
     }
 
 }
