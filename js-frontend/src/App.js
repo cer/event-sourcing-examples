@@ -89,7 +89,8 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
         emailSignInPath: '/login',
         customersPath: '/customers',
         currentUserPath: '/user',
-        accountsPath: '/accounts'
+        accountsPath: '/accounts',
+        transfersPath: '/transfers'
       }
     }
   ], {

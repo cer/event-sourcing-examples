@@ -13,6 +13,8 @@ import IndexPanel from "./../components/partials/IndexPanel";
 
 import * as A from '../actions/entities';
 import read from '../utils/readProp';
+import { Money } from '../components/Money';
+
 
 
 const resetModals = {
@@ -50,7 +52,11 @@ class MyAccounts extends React.Component {
     this.props.dispatch(A.accountCreate(customerId, payload))
       .then(() => {
         this.close.bind(this);
-        this.props.dispatch(A.fetchOwnAccounts(customerId));
+        return this.props.dispatch(A.fetchOwnAccounts(customerId));
+      })
+      .catch(err => {
+        debugger;
+        this.props.dispatch(A.accountCreateError(err));
       });
   }
 
@@ -139,7 +145,7 @@ class MyAccounts extends React.Component {
             <span>{ description }</span>
           ]: null
         }</td>
-        <td key={1}>${ balance } </td>
+        <td key={1}><Money amount={balance} /></td>
         <td key={2}><BS.Button bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this, accountId)}><BS.Glyphicon glyph="remove" /></BS.Button></td>
       </tr>
     ));

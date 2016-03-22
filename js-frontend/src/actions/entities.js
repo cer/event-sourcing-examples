@@ -59,12 +59,15 @@ export function accountCreate(customerId, payload) {
         return dispatch(authenticate(true));
       })
       .catch(err => {
+        debugger;
         dispatch(accountCreateError(err));
         return Promise.resolve({ error: err });
-
       })
   };
 }
+
+
+
 
 export function fetchOwnAccounts(customerId) {
   return dispatch => {
@@ -154,9 +157,54 @@ export const createRefOwnerLookup = lookup => {
   };
 };
 
-export const createRefAccountLookup = lookup => {
+export const createRefAccountLookup = customerId => {
   return dispatch => {
     dispatch(createRefAccountLookupStart());
-    dispatch(createRefAccountLookupComplete([]));
+    return api.apiRetrieveUser(customerId)
+      .then(data => {
+        debugger;
+        dispatch(createRefAccountLookupComplete([]));
+      });
+  };
+};
+
+
+export const makeTransferRequested = makeActionCreator(T.TRANSFERS.MAKE_START, 'payload');
+export const makeTransferComplete = makeActionCreator(T.TRANSFERS.MAKE_COMPLETE, 'payload');
+export const makeTransferError = makeActionCreator(T.TRANSFERS.MAKE_ERROR, 'error');
+export const makeTransferFormUpdate = makeActionCreator(T.TRANSFERS.MAKE_FORM_UPDATE, 'key', 'value');
+
+export const makeTransfer = (accountId, payload) => {
+  return dispatch => {
+    dispatch(makeTransferRequested());
+    return api.apiMakeTransfer(accountId, payload)
+      .then(data => {
+        const { moneyTransferId } = data;
+        dispatch(makeTransferComplete(data));
+        return moneyTransferId;
+      })
+      .catch(err => {
+        dispatch(makeTransferError(err));
+        return err;
+      });
+  };
+};
+
+export const getTransfersRequested = makeActionCreator(T.TRANSFERS.LIST_START);
+export const getTransfersComplete = makeActionCreator(T.TRANSFERS.LIST_COMPLETE, 'payload');
+export const getTransfersError = makeActionCreator(T.TRANSFERS.LIST_ERROR, 'error');
+
+export const getTransfers = (accountId) => {
+  return dispatch => {
+    dispatch(getTransfersRequested());
+    return api.apiRetrieveTransfers(accountId)
+      .then(data => {
+        dispatch(getTransfersComplete(data));
+        return data;
+      })
+      .catch(err => {
+        dispatch(getTransfersError(err));
+        return err;
+      });
   };
 };

@@ -23,7 +23,11 @@ export function parseResponse (response) {
       message.replace(jvmPattern, (m, name) => {
         errors[name] = ['Required'];
       });
-      return { errors };
+
+      if (Object.keys(errors).length) {
+        return { errors };
+      }
+      return { errors: message };
     }).then(err => Promise.reject(err));
   }
 }

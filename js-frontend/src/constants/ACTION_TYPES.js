@@ -58,6 +58,16 @@ export default defineActionTypes({
     DELETE_COMPLETE
     DELETE_ERROR
   `,
+  
+  TRANSFERS: `
+    MAKE_START
+    MAKE_COMPLETE
+    MAKE_ERROR
+    MAKE_FORM_UPDATE
+    LIST_START
+    LIST_COMPLETE
+    LIST_ERROR
+  `,
 
   ERROR: `
     START

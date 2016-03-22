@@ -7,39 +7,36 @@
 import T from '../../constants/ACTION_TYPES';
 
 const initialState = {
-};
-
-const nodeInitialState = {
   loading: false,
-  data: {}
+  errors: {},
+  data: []
 };
 
 export const transfers = (state = {...initialState}, action) => {
   switch(action.type) {
-    case T.ENTITIES.REQUESTED: {
-      const { id } = action;
+    
+    case T.TRANSFERS.LIST_START: {
       return {
         ...state,
-        [id]: {
-          ...nodeInitialState,
-          loading: true
-        }
-      }
+        loading: true
+      };
     }
-    case T.ENTITIES.RECEIVED: {
-      const { id, entity = {} } = action;
+    case T.TRANSFERS.LIST_COMPLETE: {
+      const { payload } = action;
+      return {
+        ...initialState,
+        data: [...payload]
+      };
+    }
+    case T.TRANSFERS.LIST_ERROR: {
+      const { error } = action;
       return {
         ...state,
-        [id]: {
-          ...(state[id] || nodeInitialState),
-          loading: false,
-          data: {
-            ...entity
-          }
-        }
-      }
+        loading: false,
+        errors: Object.isSealed(error) ? { message: error } : { ...error }
+      };
     }
-    case T.ENTITIES.RECEIVED_LIST:
+      
     default:
       return state;
   }

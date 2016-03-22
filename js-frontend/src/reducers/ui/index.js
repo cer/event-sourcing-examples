@@ -9,11 +9,14 @@ import { combineReducers } from 'redux';
 import { account } from './account';
 import { error } from './errors';
 import { bookmarkAccount } from './bookmarkAccount';
+import { transfersMake } from './transfersMake';
+
 
 const uiReducer = combineReducers({
   account,
   error,
-  bookmarkAccount
+  bookmarkAccount,
+  transfersMake
 });
 
 export default uiReducer;

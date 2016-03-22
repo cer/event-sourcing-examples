@@ -135,6 +135,10 @@ export function getCustomersUrl () {
   return `${getSessionEndpoint().customersPath}`
 }
 
+export function getTransfersUrl () {
+  return `${getSessionEndpoint().transfersPath}`
+}
+
 /**
  * @deprecated
  * @param key

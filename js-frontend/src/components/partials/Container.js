@@ -32,9 +32,6 @@ class Container extends React.Component {
             <LinkContainer to="/" onlyActiveOnIndex={true}>
               <NavItem eventKey={1}>Home</NavItem>
             </LinkContainer>
-            <LinkContainer to="/account">
-              <NavItem eventKey={2}>Account</NavItem>
-            </LinkContainer>
           </Nav>
           <div>
             <HeaderLinks />

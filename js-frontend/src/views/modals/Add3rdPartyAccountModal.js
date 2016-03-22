@@ -15,22 +15,17 @@ import * as A from '../../actions/entities';
 
 export class Add3rdPartyAccountModal extends React.Component {
 
-
-  ownerTypeIn(val) {
-    this.props.dispatch(A.createRefOwnerLookup(val));
-  }
-
-  ownerChanged(argq, arg2, arg3) {
-    debugger;
-  }
-
-  accountChanged(argq, arg2, arg3) {
-    debugger;
-  }
-
   handleInput(key, value) {
-    //this.props.dispatch(A.createRefOwnerLookup(val));
-debugger;
+    this.props.dispatch(A.accountRefCreateFormUpdate(key, value));
+    switch(key) {
+      case 'owner':
+        debugger;
+        if (value) {
+          this.props.dispatch(A.createRefAccountLookup(value));
+        } else {
+          this.props.dispatch(A.createRefAccountLookupComplete({}));
+        }
+    }
   }
 
   getOwnersOptions(input) {
@@ -39,6 +34,7 @@ debugger;
     }
     return this.props.dispatch(A.createRefOwnerLookup(input));
   }
+
   render() {
 
     const disabled = false;
@@ -80,7 +76,7 @@ debugger;
  {value: "bootstrap", label: "Bootstrap"},
  {value: "materialUi", label: "Material UI"}
  ]}
-              onChange={this.accountChanged.bind(this)} />
+              onChange={this.handleInput.bind(this, 'account')} />
 
             <Input type="textarea"
                    className="account-create-description"

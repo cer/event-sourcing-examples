@@ -9,12 +9,19 @@ import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, Butt
 import * as BS  from "react-bootstrap";
 import Select from "react-select";
 import Spinner from "react-loader";
+import Input from "../controls/bootstrap/Input";
+import { Money, moneyText } from '../components/Money';
+import { TransfersTable } from '../components/TransfersTable';
+
 import { Link, IndexLink} from "react-router";
 
 
 import IndexPanel from "./../components/partials/IndexPanel";
 import * as Modals from './modals';
 import * as A from '../actions/entities';
+import read from '../utils/readProp';
+
+
 
 const resetModals = {
   showAccountModal: false
@@ -26,15 +33,20 @@ export class Account extends React.Component {
     this.state = { ...resetModals };
   }
 
-  componentWillMount() {
+  loadAccountInfo() {
     const {
       id: customerId
-      } = this.props.auth.user.attributes;
+    } = this.props.auth.user.attributes;
     this.props.dispatch(A.fetchOwnAccounts(customerId));
 
     const { dispatch, params } = this.props;
     const { accountId } = params;
     dispatch(A.fetchAccount(accountId));
+    dispatch(A.getTransfers(accountId));
+  }
+
+  componentWillMount() {
+    this.loadAccountInfo();
   }
 
   createAccountModal() {
@@ -47,15 +59,25 @@ export class Account extends React.Component {
     debugger;
   }
 
-  accountChanged(){
-
-  }
 
   close() {
     this.setState({
       ...resetModals
     });
   }
+
+  handleInput(key, value) {
+    this.props.dispatch(A.makeTransferFormUpdate(key, value));
+  }
+  initiateTransfer(){
+    const { dispatch, params, transfer } = this.props;
+    const { accountId } = params;
+    dispatch(A.makeTransfer(accountId, transfer.form ))
+      .then(() => {
+        this.loadAccountInfo();
+      });
+  }
+
 
   render () {
 
@@ -86,7 +108,7 @@ export class Account extends React.Component {
       if (itemAccountId != accountId) {
         memo.push({
           value: itemAccountId ,
-          label: `${title}: $${ Number(balance).toFixed(2) }`
+          label: `${title}: ${ moneyText(balance) }`
         });
       }
       return memo;
@@ -101,11 +123,12 @@ export class Account extends React.Component {
       return memo;
     }, []));
 
-    const { title: titleRaw, description: descriptionRaw, balance: balanceRaw } = account;
+    const { title: titleRaw, description: descriptionRaw, balance } = account;
 
     const title = titleRaw || '[No title]';
-    const balance = ((balanceRaw > 0 && balanceRaw < 1) ? '$0' : '$') + Number(balanceRaw).toFixed(2);
     const description = descriptionRaw || '[No description]';
+
+    const transferDisabled = this.props.transfer.loading;
 
     return (
       <div>
@@ -128,7 +151,7 @@ export class Account extends React.Component {
 
             <Row>
               <Col xs={4}>Balance:</Col>
-              <Col xs={8}><strong>{ balance }</strong></Col>
+              <Col xs={8}><strong><Money amount={balance} /></strong></Col>
             </Row>
 
             <Row>
@@ -148,22 +171,45 @@ export class Account extends React.Component {
           <Col xs={4}>
             <label>Transfer To:</label>
             <Select
-              value={''}
-              clearable={false}
+              value={read(this.props.transfer, 'form.account', '')}
+              clearable={true}
               options={transferTo}
-              onChange={this.accountChanged.bind(this)} />
+              disabled={transferDisabled}
+              onChange={this.handleInput.bind(this, 'account')}
+            />
           </Col>
           <Col xs={3}>
-            <label>Amount:</label>
-            <BS.Input type="text" />
+            <Input type="text"
+                   className=""
+                   label="Amount:"
+                   placeholder="Amount"
+                   name="amount"
+                   addonBefore={
+                 (<BS.Glyphicon glyph="usd" />)
+                 }
+                   addonAfter=".00"
+                   disabled={transferDisabled}
+                   value={read(this.props.transfer, 'form.amount', '')}
+                   errors={read(this.props.transfer, 'errors.amount', []) || []}
+                   onChange={this.handleInput.bind(this, 'amount')}
+            />
             </Col>
           <Col xs={3}>
-            <label>Description:</label>
-            <BS.Input type="textarea" />
+            <Input type="textarea"
+                   className=""
+                   label="Description:"
+                   placeholder="Description"
+                   name="description"
+                   disabled={transferDisabled}
+                   value={read(this.props.transfer, 'form.description', '') || ''}
+                   errors={read(this.props.transfer, 'errors.description', []) || []}
+                   onChange={this.handleInput.bind(this, 'description')}
+            />
           </Col>
           <Col xs={2}>
             <br/>
-            <Button bsStyle="primary">Transfer</Button>
+            <Button bsStyle="primary"
+                    onClick={this.initiateTransfer.bind(this)}>Transfer</Button>
           </Col>
         </Row>
 
@@ -172,28 +218,7 @@ export class Account extends React.Component {
             <h3>Account History:</h3>
           </Col>
         </Row>
-        <Table>
-          <thead>
-          <tr>
-            <th>Date</th>
-            <th>What</th>
-            <th>Counter Account</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Status</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td><a href="#">Account Title #1</a></td>
-            <td>$100.00</td>
-          </tr>
-          <tr>
-            <td><a href="#">Account Title #2</a></td>
-            <td>$100.00</td>
-          </tr>
-          </tbody>
-        </Table>
+        <TransfersTable { ...this.props.transfers } />
 
         <Modals.NewAccountModal show={showAccountModal}
                                 action={this.createAccountModalConfirmed.bind(this)}
@@ -213,5 +238,7 @@ export default connect(({
   }) => ({
   auth: app.auth,
   data: app.data,
-  ui: app.ui.account
+  transfers: app.data.transfers,
+  ui: app.ui.account,
+  transfer: app.ui.transfersMake
 }))(Account);

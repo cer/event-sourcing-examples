@@ -116,7 +116,7 @@ export class NewAccountModal extends React.Component {
                  value={read(this.props.account, 'form.title', '')}
                  errors={read(this.props.account, 'errors.title', [])}
                  onChange={this.handleInput.bind(this, "title")}
-            {...this.props.inputProps.title} />
+          />
 
           <Input type="text"
                  className="account-create-balance"
@@ -131,7 +131,7 @@ export class NewAccountModal extends React.Component {
                  value={read(this.props.account, 'form.balance', '')}
                  errors={read(this.props.account, 'errors.balance', [])}
                  onChange={this.handleInput.bind(this, 'balance')}
-            {...this.props.inputProps.balance} />
+          />
 
           <Input type="textarea"
                  className="account-create-description"
@@ -139,10 +139,10 @@ export class NewAccountModal extends React.Component {
                  placeholder="Description"
                  name="description"
                  disabled={disabled}
-                 value={read(this.props.account, 'form.description', '')}
+                 value={read(this.props.account, 'form.description', '') || ''}
                  errors={read(this.props.account, 'errors.description', [])}
                  onChange={this.handleInput.bind(this, 'description')}
-            {...this.props.inputProps.description} />
+           />
 
 
         </form>

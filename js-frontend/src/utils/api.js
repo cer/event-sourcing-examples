@@ -7,7 +7,8 @@ import {
   getEmailSignUpUrl,
   getCurrentUserUrl,
   getAccountsUrl,
-  getCustomersUrl
+  getCustomersUrl,
+  getTransfersUrl
 } from "./sessionStorage";
 import root from './root';
 
@@ -70,9 +71,38 @@ export function apiCreateAccount(customerId, {
   }).then(parseResponse);
 }
 
+export function apiMakeTransfer(fromAccountId, {
+  account, amount, description }) {
+
+  return fetch(getTransfersUrl(), {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "post",
+    body: root.JSON.stringify({
+      "amount": amount,
+      "fromAccountId": fromAccountId,
+      "toAccountId": account,
+      description
+    })
+  }).then(parseResponse);
+}
+
 export function apiRetrieveAccounts(customerId) {
 
   return fetch(`${getAccountsUrl()}?${makeQuery({ customerId })}`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "get"
+  }).then(parseResponse);
+}
+
+export function apiRetrieveTransfers(accountId) {
+
+  return fetch(`${getAccountsUrl()}/${accountId}/history`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
@@ -107,6 +137,16 @@ export function apiDeleteAccount(accountId) {
 
 export function apiRetrieveUsers(email) {
   return fetch(`${getCustomersUrl()}?${makeQuery({ email })}`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "get"
+  }).then(parseResponse);
+}
+
+export function apiRetrieveUser(customerId) {
+  return fetch(`${getCustomersUrl()}?${makeQuery({ customerId })}`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
