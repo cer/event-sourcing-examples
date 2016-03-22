@@ -5,10 +5,10 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Cust
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import rx.Observable;
+
 
 /**
  * Created by popikyardo on 03.02.16.
@@ -31,9 +31,9 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
-    public Observable<String> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
+    public Observable<ToAccountInfo> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
         return customerService.addToAccount(id, request)
-                .map(entityAndEventInfo -> entityAndEventInfo.entityVersion().asString());
+                .map(entityAndEventInfo -> request);
     }
 
 }
