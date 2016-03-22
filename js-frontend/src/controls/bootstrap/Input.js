@@ -25,7 +25,7 @@ class AuthInput extends React.Component {
 
     if (this.props.errors.length) {
       return (
-        <div className='auth-error-message has-error'>
+        <div className="auth-error-message has-error">
           {this.props.errors.map((err, i) => {
             return (
               <p className="control-label inline-error-item"

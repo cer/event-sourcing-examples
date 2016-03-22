@@ -34,7 +34,7 @@ const formValidation = (payload) => ['owner', 'account', 'title', 'description']
         result.push('need to less than 400 symbols long');
       }
   }
-  
+
   if (result.length) {
     memo[prop] = result;
     memo.hasErrors = true;
@@ -75,6 +75,13 @@ export class Add3rdPartyAccountModal extends React.Component {
     }
   }
 
+  onHide() {
+    this.props.dispatch(A.accountRefCreateComplete({}));
+    if (this.props.onHide) {
+      this.props.onHide();
+    }
+  }
+
   getOwnersOptions(input) {
     if (!input) {
       return Promise.resolve({ options: [] });
@@ -87,13 +94,24 @@ export class Add3rdPartyAccountModal extends React.Component {
 
     const ownersLoading = read(this.props.data, 'ownersLookup.loading', false);
 
+    const formErrors = read(this.props.data, 'errors.errors', '');
+
     return (
-      <BS.Modal show={this.props.show} onHide={this.props.onHide} key={1}>
+      <BS.Modal show={this.props.show} onHide={this.onHide.bind(this)} key={1}>
         <BS.Modal.Header closeButton>
           <BS.Modal.Title>Add 3rd Party Account</BS.Modal.Title>
         </BS.Modal.Header>
         <BS.Modal.Body>
           <form>
+            <div className="form-group" style={{
+            display: formErrors ? 'block' : 'none'
+            }}>
+              <AuxErrorLabel
+                label="Form:"
+                errors={formErrors.length ? [formErrors] : [] }
+              />
+            </div>
+
             <label>Owner:</label>
             <div className="form-group">
               <Select
@@ -149,7 +167,7 @@ export class Add3rdPartyAccountModal extends React.Component {
           </form>
         </BS.Modal.Body>
         <BS.Modal.Footer>
-          <BS.Button onClick={this.props.onHide}>Cancel</BS.Button>
+          <BS.Button onClick={this.onHide.bind(this)}>Cancel</BS.Button>
           <ButtonLoader loading={read(this.props.data, 'loading', false)}
                         type="submit"
                         bsStyle="primary"

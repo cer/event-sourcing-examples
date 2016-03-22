@@ -259,64 +259,6 @@ class MyAccounts extends React.Component {
     );
   }
 }
-/*
- <IndexPanel header="Other  User"><label>current user provider</label>
- <p>{this.props.currentUserUid}</p>
-
- <label>current user uid</label>
- <p>{this.props.currentUserProvider}</p>
-
- <IndexLink to="/">Home</IndexLink><br/>
- <Link to="/signin">Login</Link><br/>
- <Link to="/register">Register</Link><br/>
- <Link to="/account">Account</Link><br/>
-
- <label>currently selected theme</label>
- <Select
- value={this.props.theme}
- clearable={false}
- options={[
- {value: "default", label: "Default"},
- {value: "bootstrap", label: "Bootstrap"},
- {value: "materialUi", label: "Material UI"}
- ]}
- onChange={this.updateTheme.bind(this)} />
-
- <label>currently selected endpoint</label>
- <Select
- value={this.props.pageEndpoint}
- clearable={false}
- options={[
- {value: "default", label: "Default User Class"},
- {value: "evilUser", label: "Alternate User Class"}
- ]}
- onChange={this.updateEndpoint.bind(this)} />
-
- <Table>
- <thead>
- <tr>
- <th colSpan={2}>
- ajax test
- </th>
- </tr>
- </thead>
- <tbody>
- <tr>
- <td>Default user:</td>
- <td></td>
- </tr>
- <tr>
- <td>Alternate user class:</td>
- <td></td>
- </tr>
- <tr>
- <td>Group that includes both user classes:</td>
- <td></td>
- </tr>
- </tbody>
- </Table>
- </IndexPanel>
-*/
 
 export default connect(({ app }) => {
   return ({

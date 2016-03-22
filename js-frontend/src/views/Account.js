@@ -91,7 +91,6 @@ export class Account extends React.Component {
 
     const  account = entities[accountId];
 
-
     if (loading) {
       return (<h2><Spinner ref="spinner" loaded={false} /> Loading..</h2>);
     }
