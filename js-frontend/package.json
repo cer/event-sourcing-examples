@@ -66,6 +66,7 @@
     "react-router-bootstrap": "^0.20.1",
     "react-router-redux": "^3.0.0",
     "react-select": "^0.9.1",
+    "react-timeago": "^2.2.1",
     "redux": "^3.0.2",
     "redux-batched-subscribe": "^0.1.4",
     "redux-logger": "^2.6.0",

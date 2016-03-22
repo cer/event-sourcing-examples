@@ -74,7 +74,9 @@ export class Account extends React.Component {
     const { accountId } = params;
     dispatch(A.makeTransfer(accountId, transfer.form ))
       .then(() => {
-        this.loadAccountInfo();
+        setTimeout(() => {
+          this.loadAccountInfo();
+        }, 500);
       });
   }
 

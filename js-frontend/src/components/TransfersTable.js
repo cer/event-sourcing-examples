@@ -4,7 +4,7 @@
 import React from "react";
 import Spinner from "react-loader";
 import * as BS  from "react-bootstrap";
-
+import TimeAgo from 'react-timeago';
 
 import { Money } from './Money';
 import AccountInfo from './AccountInfo';
@@ -29,7 +29,7 @@ export class TransfersTable extends React.Component {
       date = null,
       status = ''
     }, idx) => (<tr key={idx}>
-      <td>{ date || 'N/a'}</td>
+      <td><TimeAgo date={date} /></td>
       <td><AccountInfo accountId={ fromAccountId } /></td>
       <td><AccountInfo accountId={ toAccountId } /></td>
       <td><Money amount={ amount } /></td>
