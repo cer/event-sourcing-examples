@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import rx.Observable;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/transfers")
 public class MoneyTransferController {
@@ -27,7 +29,9 @@ public class MoneyTransferController {
     TransferDetails transferDetails = new TransferDetails(
             new EntityIdentifier(request.getFromAccountId()),
             new EntityIdentifier(request.getToAccountId()),
-            request.getAmount());
+            request.getAmount(),
+            new Date(),
+            request.getDescription());
     return moneyTransferService.transferMoney(transferDetails)
             .map(entityAndEventInfo -> new CreateMoneyTransferResponse(entityAndEventInfo.getEntityIdentifier().getId()));
   }

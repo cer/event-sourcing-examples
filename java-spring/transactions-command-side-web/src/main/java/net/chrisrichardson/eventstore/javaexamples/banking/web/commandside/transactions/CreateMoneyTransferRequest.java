@@ -15,13 +15,16 @@ public class CreateMoneyTransferRequest {
   @DecimalMin("0.01")
   private BigDecimal amount;
 
+  private String description;
+
   public CreateMoneyTransferRequest() {
   }
 
-  public CreateMoneyTransferRequest(String fromAccountId, String toAccountId, BigDecimal amount) {
+  public CreateMoneyTransferRequest(String fromAccountId, String toAccountId, BigDecimal amount, String description) {
     this.fromAccountId = fromAccountId;
     this.toAccountId = toAccountId;
     this.amount = amount;
+    this.description = description;
   }
 
   public void setFromAccountId(String fromAccountId) {
@@ -36,6 +39,10 @@ public class CreateMoneyTransferRequest {
     this.amount = amount;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public String getFromAccountId() {
     return fromAccountId;
   }
@@ -46,5 +53,9 @@ public class CreateMoneyTransferRequest {
 
   public BigDecimal getAmount() {
     return amount;
+  }
+
+  public String getDescription() {
+    return description;
   }
 }

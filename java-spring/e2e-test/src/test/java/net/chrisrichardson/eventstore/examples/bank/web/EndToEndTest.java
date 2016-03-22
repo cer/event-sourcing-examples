@@ -120,7 +120,7 @@ public class EndToEndTest {
             transactionsCommandSideBaseUrl("/transfers"),
             HttpMethod.POST,
             CreateMoneyTransferResponse.class,
-            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer)
+            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer, "")
     );
 
     assertAccountBalance(fromAccountId, finalFromAccountBalance);
