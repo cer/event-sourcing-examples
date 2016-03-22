@@ -85,10 +85,16 @@ export const bookmarkAccount = (state = {...initialState}, action) => {
         ...state.form,
         [key]: value
       };
+
+      const nextErrors = {
+        ...state.errors,
+        [key]: null
+      };
       return {
         ...state,
         accountsDisabled: nextAccountsDisabled,
-        form: nextForm
+        form: nextForm,
+        errors: nextErrors
       };
     }
     case T.ACCOUNTS.CREATE_REF_OWNER_LOOKUP_START:

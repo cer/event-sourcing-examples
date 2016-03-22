@@ -71,6 +71,23 @@ export function apiCreateAccount(customerId, {
   }).then(parseResponse);
 }
 
+export function apiCreateRefAccount(customerId, {
+  owner, account: accountId, title, description }) {
+
+  return fetch(`${getCustomersUrl()}/${customerId}/toaccounts`, {
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "post",
+    body: root.JSON.stringify({
+      owner,
+      id: accountId,
+      title,
+      description })
+  }).then(parseResponse);
+}
+
 export function apiMakeTransfer(fromAccountId, {
   account, amount, description }) {
 
@@ -146,7 +163,7 @@ export function apiRetrieveUsers(email) {
 }
 
 export function apiRetrieveUser(customerId) {
-  return fetch(`${getCustomersUrl()}?${makeQuery({ customerId })}`, {
+  return fetch(`${getCustomersUrl()}/${ customerId }`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"

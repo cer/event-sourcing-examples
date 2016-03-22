@@ -67,8 +67,20 @@ class MyAccounts extends React.Component {
     });
   }
 
-  create3rdPartyAccountModalConfirmed() {
+  create3rdPartyAccountModalConfirmed(payload) {
+    const {
+      id: customerId
+    } = this.props.auth.user.attributes;
 
+    this.props.dispatch(A.accountRefCreate(customerId, payload))
+      .then(() => {
+        this.close.bind(this);
+        return this.props.dispatch(A.fetchOwnAccounts(customerId));
+      })
+      .catch(err => {
+        debugger;
+        this.props.dispatch(A.accountRefCreateError(err));
+      });
   }
 
   remove3rdPartyAccountModal(accountId, evt) {

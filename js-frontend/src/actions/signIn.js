@@ -38,9 +38,7 @@ export function emailSignIn(body) {
   return dispatch => {
     // save previous endpoint key in case of failure
     //var prevEndpointKey = getCurrentEndpointKey();
-
-    const endpointKey = 'default';
-
+    
     // necessary for fetch to recognize the response as an api request
     //setCurrentEndpointKey(endpointKey);
     //var currentEndpointKey = getCurrentEndpointKey();

@@ -13,17 +13,15 @@ export const accountsListRequested = makeActionCreator(T.ACCOUNTS.LIST_START);
 export const accountsListReceived = makeActionCreator(T.ACCOUNTS.LIST_COMPLETE, 'payload');
 export const accountsListError = makeActionCreator(T.ACCOUNTS.LIST_ERROR, 'error');
 
-//export const accountsRefListRequested = makeActionCreator(T.ACCOUNTS.LIST_REF_START, 'id');
 export const accountsRefListReceived = makeActionCreator(T.ACCOUNTS.LIST_REF_COMPLETE, 'payload');
-//export const accountsRefListError = makeActionCreator(T.ACCOUNTS.LIST_REF_ERROR, 'id');
 
 export const accountCreateStart = makeActionCreator(T.ACCOUNTS.CREATE_START);
-export const accountCreateComplete = makeActionCreator(T.ACCOUNTS.CREATE_COMPLETE, 'accountId');
+export const accountCreateComplete = makeActionCreator(T.ACCOUNTS.CREATE_COMPLETE, 'payload');
 export const accountCreateError = makeActionCreator(T.ACCOUNTS.CREATE_ERROR, 'error');
 export const accountCreateFormUpdate = makeActionCreator(T.ACCOUNTS.CREATE_FORM_UPDATE, 'key', 'value');
 
-export const accountRefCreateStart = makeActionCreator(T.ACCOUNTS.CREATE_REF_START, 'data');
-export const accountRefCreateComplete = makeActionCreator(T.ACCOUNTS.CREATE_REF_COMPLETE, 'data');
+export const accountRefCreateStart = makeActionCreator(T.ACCOUNTS.CREATE_REF_START);
+export const accountRefCreateComplete = makeActionCreator(T.ACCOUNTS.CREATE_REF_COMPLETE, 'payload');
 export const accountRefCreateError = makeActionCreator(T.ACCOUNTS.CREATE_REF_ERROR, 'error');
 export const accountRefCreateFormUpdate = makeActionCreator(T.ACCOUNTS.CREATE_REF_FORM_UPDATE,  'key', 'value');
 
@@ -61,6 +59,26 @@ export function accountCreate(customerId, payload) {
       .catch(err => {
         debugger;
         dispatch(accountCreateError(err));
+        return Promise.resolve({ error: err });
+      })
+  };
+}
+
+export function accountRefCreate(customerId, payload) {
+  return dispatch => {
+    dispatch(accountRefCreateStart());
+    return api.apiCreateRefAccount(customerId, payload)
+      .then(({ id }) => {
+        dispatch(accountRefCreateComplete({
+          ...payload,
+          id
+        }));
+        dispatch(entityReceived(id, payload));
+        return dispatch(authenticate(true));
+      })
+      .catch(err => {
+        debugger;
+        dispatch(accountRefCreateError(err));
         return Promise.resolve({ error: err });
       })
   };
@@ -151,7 +169,7 @@ export const createRefOwnerLookup = lookup => {
         return { options: arr };
       })
       .catch(err => {
-        dispatch(createRefOwnerLookupComplete(null));
+        dispatch(createRefOwnerLookupComplete([]));
         return { options: [] };
       });
   };
@@ -160,10 +178,18 @@ export const createRefOwnerLookup = lookup => {
 export const createRefAccountLookup = customerId => {
   return dispatch => {
     dispatch(createRefAccountLookupStart());
-    return api.apiRetrieveUser(customerId)
+    return api.apiRetrieveAccounts(customerId)
       .then(data => {
-        debugger;
+        const arr = data.map(({ accountId, title }) => ({
+          value: accountId,
+          label: title
+        }));
+        dispatch(createRefAccountLookupComplete(arr));
+        return { options: arr };
+      })
+      .catch(err => {
         dispatch(createRefAccountLookupComplete([]));
+        return { options: [] };
       });
   };
 };

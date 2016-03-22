@@ -38,7 +38,9 @@ export function emailSignUp(body) {
       .then(({data}) => {
         dispatch(emailSignUpComplete(data));
         const { email } = body;
-        return dispatch(emailSignIn({ email }));
+        return new Promise((rs, rj) => {
+          dispatch(emailSignIn({ email })).then(rs).catch(rj);
+        });
       })
       .catch(({errors}) => dispatch(emailSignUpError(errors)));
 
