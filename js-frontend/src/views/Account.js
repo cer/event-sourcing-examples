@@ -168,7 +168,7 @@ export class Account extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={4}>
+          <Col sm={4}>
             <label>Transfer To:</label>
             <Select
               value={read(this.props.transfer, 'form.account', '')}
@@ -178,7 +178,7 @@ export class Account extends React.Component {
               onChange={this.handleInput.bind(this, 'account')}
             />
           </Col>
-          <Col xs={3}>
+          <Col sm={3}>
             <Input type="text"
                    className=""
                    label="Amount:"
@@ -194,7 +194,7 @@ export class Account extends React.Component {
                    onChange={this.handleInput.bind(this, 'amount')}
             />
             </Col>
-          <Col xs={3}>
+          <Col sm={3}>
             <Input type="textarea"
                    className=""
                    label="Description:"
@@ -206,7 +206,7 @@ export class Account extends React.Component {
                    onChange={this.handleInput.bind(this, 'description')}
             />
           </Col>
-          <Col xs={2}>
+          <Col sm={2}>
             <br/>
             <Button bsStyle="primary"
                     onClick={this.initiateTransfer.bind(this)}>Transfer</Button>
