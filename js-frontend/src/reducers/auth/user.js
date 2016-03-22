@@ -3,12 +3,12 @@
  */
 import T from '../../constants/ACTION_TYPES';
 
-const userInitalState = {
+const initalState = {
   attributes: null,
   isSignedIn: false
 };
 
-export const userReducer = (state = {...userInitalState}, action) => {
+export const userReducer = (state = {...initalState}, action) => {
   switch(action.type) {
     case T.AUTH.AUTHENTICATE_COMPLETE:
     case T.AUTH.SIGN_IN_COMPLETE: {
@@ -21,7 +21,7 @@ export const userReducer = (state = {...userInitalState}, action) => {
     case T.AUTH.SIGN_OUT_COMPLETE:
     case T.AUTH.AUTHENTICATE_ERROR:
       return {
-        ...userInitalState
+        ...initalState
       };
     default: return state;
   }

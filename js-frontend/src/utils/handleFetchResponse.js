@@ -18,7 +18,7 @@ export function parseResponse (response) {
       if (!message) {
         return rest;
       }
-      const jvmPattern = /\[Field error in object 'customerInfo' on field '(\w+)'/gm;
+      const jvmPattern = /\[Field error in object '\w+' on field '(\w+)'/gm;
       let errors = {};
       message.replace(jvmPattern, (m, name) => {
         errors[name] = ['Required'];

@@ -19,7 +19,7 @@ export function configureError({errors, ...props} = {}) {
   return {
     ...props,
     type: T.AUTH.CONFIGURE_ERROR,
-    errors
+    error: errors
   };
 }
 

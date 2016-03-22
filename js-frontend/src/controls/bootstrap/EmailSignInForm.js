@@ -74,7 +74,7 @@ class EmailSignInForm extends React.Component {
                name="email"
                disabled={disabled}
                value={read(this.props.auth, 'signIn.form.email', '')}
-               errors={read(this.props.auth, 'signIn.errors.email', {})}
+               errors={read(this.props.auth, 'signIn.errors.email', [])}
                onChange={this.handleInput.bind(this, "email")}
           {...this.props.inputProps.email} />
 

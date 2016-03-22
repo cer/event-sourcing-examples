@@ -11,6 +11,7 @@ export const error = (state = null, action ) => {
     }
     case T.ERROR.START:
       return action.payload;
+    
     default:
       return state;
   }

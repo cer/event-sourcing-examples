@@ -6,6 +6,7 @@
  */
 import T from '../../constants/ACTION_TYPES';
 import { combineReducers } from 'redux';
+import createFormReducer from '../createFormReducer';
 
 const ownAccountsReducer = (state = [], action ) => {
   switch (action.type) {
@@ -44,53 +45,13 @@ const otherAccountsReducer = (state = [], action ) => {
   }
 };
 
-const createAccountInitialState = {
-  form: {},
-  loading: false,
-  errors: {}
-};
-const createAccountReducer = (state = { ...createAccountInitialState }, action ) => {
-  switch(action.type) {
-    case T.ACCOUNTS.CREATE_START: {
-      return {
-        ...state,
-        loading: true
-      };
-    }
-    case T.ACCOUNTS.CREATE_COMPLETE: {
-      return {
-        ...createAccountInitialState
-      };
-    }
-    case T.ACCOUNTS.CREATE_ERROR: {
-      const { error = {} } = action;
-      return {
-        ...state,
-        loading: false,
-        errors: {
-          ...error
-        }
-      };
 
-    }
-    case T.ACCOUNTS.CREATE_FORM_UPDATE: {
-      const { key, value } = action;
-      return {
-        ...state,
-        form: {
-          ...state.form,
-          [key]: value
-        },
-        errors: {
-          ...state.errors,
-          [key]: []
-        }
-      };
-    }
-    default:
-      return state;
-  }
-};
+const createAccountReducer = createFormReducer([
+  T.ACCOUNTS.CREATE_START,
+  T.ACCOUNTS.CREATE_COMPLETE,
+  T.ACCOUNTS.CREATE_ERROR,
+  T.ACCOUNTS.CREATE_FORM_UPDATE
+]);
 
 export const accounts = combineReducers({
   own: ownAccountsReducer,
@@ -98,42 +59,3 @@ export const accounts = combineReducers({
   create: createAccountReducer
 });
 
-
-//export const accounts = (state = {...initialState}, action) => {
-//  switch(action.type) {
-//    case T.ACCOUNTS.LIST_START:
-//    case T.ACCOUNTS.LIST_COMPLETE:
-//    case T.ACCOUNTS.LIST_ERROR:
-//
-//    //case T.ACCOUNTS.LIST_REF_START:
-//    case T.AUTH.AUTHENTICATE_COMPLETE:
-//    case T.AUTH.SIGN_IN_COMPLETE: {
-//      const { user } = action;
-//      const { toAccounts = [] } = user;
-//      return accounts(state, {
-//        type: T.ACCOUNTS.LIST_REF_COMPLETE, data: toAccounts
-//      });
-//    }
-//
-//    case T.ACCOUNTS.LIST_REF_COMPLETE: {
-//      const { data = [] } = action;
-//      return {
-//        ...state,
-//        other: [
-//          ...data
-//        ]
-//      };
-//    }
-//    //case T.ACCOUNTS.LIST_REF_ERROR:
-//
-//
-//
-//    case T.ACCOUNTS.CREATE_REF_START:
-//    case T.ACCOUNTS.CREATE_REF_COMPLETE:
-//    case T.ACCOUNTS.CREATE_REF_ERROR:
-//    case T.ACCOUNTS.CREATE_REF_FORM_UPDATE:
-//
-//    default:
-//      return state;
-//  }
-//};

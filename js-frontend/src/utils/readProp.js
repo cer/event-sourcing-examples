@@ -5,10 +5,10 @@ export default function read(src, path = '', defaultVal = null) {
   const [pathItem = null, ...rest] = path.split('.');
 
   if (pathItem === null ) {
-    return src;
+    return src || defaultVal;
   } else if (rest.length === 0) {
     if (!src) { return defaultVal; }
-    return src[pathItem];
+    return src[pathItem] || defaultVal;
   }
 
   if (!src) { return defaultVal; }
