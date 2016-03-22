@@ -53,7 +53,12 @@ public class AccountQueryWorkflow implements CompoundEventHandler {
     logger.info("**************** account version=" + fromAccountId + ", " + de.eventId().asString());
     logger.info("**************** account version=" + toAccountId + ", " + de.eventId().asString());
 
-    AccountTransactionInfo ti = new AccountTransactionInfo(moneyTransferId, fromAccountId, toAccountId, toIntegerRepr(de.event().getDetails().getAmount()));
+    AccountTransactionInfo ti = new AccountTransactionInfo(moneyTransferId,
+            fromAccountId,
+            toAccountId,
+            toIntegerRepr(de.event().getDetails().getAmount()),
+            de.event().getDetails().getDate(),
+            de.event().getDetails().getDescription());
 
 
     accountInfoUpdateService.addTransaction(eventId, fromAccountId, ti);
