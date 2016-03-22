@@ -8,7 +8,7 @@ import read from '../../utils/readProp';
 import * as BS from "react-bootstrap";
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
-
+import AuxErrorLabel from './AuxErrorLabel';
 
 import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
 
@@ -63,10 +63,22 @@ class EmailSignInForm extends React.Component {
 
       //const error = read(this.props.auth, 'signIn.errors.email', null);
       //debugger;
+      const formErrors = read(this.props.auth, 'signIn.errors.errors', '');
 
-    return (
+
+      return (
       <form className='redux-auth email-sign-in-form clearfix'
             onSubmit={this.handleSubmit.bind(this)}>
+
+        <div className="form-group" style={{
+            display: formErrors ? 'block' : 'none'
+            }}>
+          <AuxErrorLabel
+            label="Form:"
+            errors={formErrors.length ? [formErrors] : [] }
+          />
+        </div>
+
         <Input type="text"
                className="email-sign-in-email"
                label="Email"

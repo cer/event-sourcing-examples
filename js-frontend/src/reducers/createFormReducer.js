@@ -23,7 +23,7 @@ const createFormReducer = ([KEY_REQUEST, KEY_SUCCESS, KEY_ERROR, KEY_UPDATE]) =>
         return {
           ...state,
           loading: false,
-          errors: Object.isSealed(error) ? { aggregate: error } : { ...error }
+          errors: error
         }
       }
       case KEY_SUCCESS: {

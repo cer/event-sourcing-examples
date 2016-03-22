@@ -13,37 +13,19 @@ import { storeCurrentEndpointKey } from "./configure";
 //import fetch from "../utils/fetch";
 
 import { apiSignIn } from '../utils/api';
+import { makeActionCreator } from '../utils/actions';
 
 import T from '../constants/ACTION_TYPES';
 
 //import root from '../utils/root';
 
-export function emailSignInFormUpdate(key, value) {
-  return { type: T.AUTH.SIGN_IN_FORM_UPDATE, key, value };
-}
-
-export function emailSignInStart() {
-  return { type: T.AUTH.SIGN_IN_START };
-}
-
-export function emailSignInComplete(user) {
-  return { type: T.AUTH.SIGN_IN_COMPLETE, user };
-}
-
-export function emailSignInError(errors) {
-  return { type: T.AUTH.SIGN_IN_ERROR, errors };
-}
+export const emailSignInFormUpdate = makeActionCreator(T.AUTH.SIGN_IN_FORM_UPDATE, 'key', 'value');
+export const emailSignInStart = makeActionCreator(T.AUTH.SIGN_IN_START);
+export const emailSignInComplete = makeActionCreator(T.AUTH.SIGN_IN_COMPLETE, 'user');
+export const emailSignInError = makeActionCreator(T.AUTH.SIGN_IN_ERROR, 'error');
 
 export function emailSignIn(body) {
   return dispatch => {
-    // save previous endpoint key in case of failure
-    //var prevEndpointKey = getCurrentEndpointKey();
-    
-    // necessary for fetch to recognize the response as an api request
-    //setCurrentEndpointKey(endpointKey);
-    //var currentEndpointKey = getCurrentEndpointKey();
-    //
-    //dispatch(storeCurrentEndpointKey(currentEndpointKey));
 
     dispatch(emailSignInStart());
 
