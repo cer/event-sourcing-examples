@@ -33,7 +33,7 @@ public class CustomerController {
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
     public Observable<String> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
         return customerService.addToAccount(id, request)
-                .map(entityAndEventInfo -> entityAndEventInfo.entityVersion().asString());
+                .map(entityAndEventInfo -> "\"" + entityAndEventInfo.entityVersion().asString() + "\"");
     }
 
 }
