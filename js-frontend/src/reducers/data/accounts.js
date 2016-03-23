@@ -35,7 +35,7 @@ const otherAccountsReducer = (state = [], action ) => {
 
     case T.ACCOUNTS.LIST_REF_COMPLETE: {
       const { payload = {} } = action;
-      const accounts = Object.keys(payload).map(key => ((payload[key].id = payload[key].accountId), payload[key]));
+      const accounts = Object.keys(payload).map(key => payload[key]);
       return [
         ...accounts
       ];
@@ -53,9 +53,17 @@ const createAccountReducer = createFormReducer([
   T.ACCOUNTS.CREATE_FORM_UPDATE
 ]);
 
+const editAccountReducer = createFormReducer([
+  T.ACCOUNTS.EDIT_START,
+  T.ACCOUNTS.EDIT_COMPLETE,
+  T.ACCOUNTS.EDIT_ERROR,
+  T.ACCOUNTS.EDIT_FORM_UPDATE
+]);
+
 export const accounts = combineReducers({
   own: ownAccountsReducer,
   other: otherAccountsReducer,
-  create: createAccountReducer
+  create: createAccountReducer,
+  edit: editAccountReducer
 });
 

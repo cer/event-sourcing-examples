@@ -53,14 +53,15 @@ export function accountCreate(customerId, payload) {
           id: accountId,
           ...payload
         }));
-        dispatch(entityReceived(accountId, payload));
-        return dispatch(authenticate(true));
+        // dispatch(entityReceived(accountId, payload));
+        dispatch(authenticate(true));
+        return accountId;
       })
       .catch(err => {
         debugger;
         dispatch(accountCreateError(err));
-        return Promise.resolve({ error: err });
-      })
+        // return Promise.resolve({ error: err });
+      });
   };
 }
 

@@ -18,23 +18,6 @@ import {emailSignUpFormUpdate, emailSignUp} from '../../actions/signUp';
 
 
 class EmailSignUpForm extends React.Component {
-  static propTypes = {
-    //endpoint: PropTypes.string,
-    inputProps: PropTypes.shape({
-      email: PropTypes.object,
-      password: PropTypes.object,
-      passwordConfirmation: PropTypes.object,
-      submit: PropTypes.object
-    })
-  };
-
-  static defaultProps = {
-    inputProps: {
-      email: {},
-      password: {},
-      submit: {}
-    }
-  };
 
   getEndpoint () {
     return (
@@ -52,19 +35,15 @@ class EmailSignUpForm extends React.Component {
     event.preventDefault();
 
     let formData = { ...this.props.auth.signUp.form };
-
-    console.log(customerInfoMap(formData));
     this.props.dispatch(emailSignUp(customerInfoMap(formData)));
   }
 
   render () {
 
-    try {
-
-      const disabled = (
-        this.props.auth.user.isSignedIn ||
-        this.props.auth.signUp.loading
-      );
+    const disabled = (
+      this.props.auth.user.isSignedIn ||
+      this.props.auth.signUp.loading
+    );
 
     return (
       <form className='redux-auth email-sign-up-form clearfix'
@@ -80,7 +59,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.fname', '')}
                  errors={read(this.props.auth, 'signUp.errors.fname', [])}
                  onChange={this.handleInput.bind(this, "fname")}
-            {...this.props.inputProps.fname} />
+          />
 
           <Input type="text"
                  label="Last name"
@@ -90,7 +69,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.lname', '')}
                  errors={read(this.props.auth, 'signUp.errors.lname', [])}
                  onChange={this.handleInput.bind(this, "lname")}
-            {...this.props.inputProps.lname} />
+          />
 
           <Input type="text"
                  label="Email"
@@ -100,7 +79,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.email', '')}
                  errors={read(this.props.auth, 'signUp.errors.email', [])}
                  onChange={this.handleInput.bind(this, "email")}
-            {...this.props.inputProps.email} />
+          />
 
 
         </IndexPanel>
@@ -115,7 +94,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.ssn', '')}
                  errors={read(this.props.auth, 'signUp.errors.ssn', [])}
                  onChange={this.handleInput.bind(this, "ssn")}
-            {...this.props.inputProps.ssn} />
+          />
 
           <Input type="text"
                  label="Phone"
@@ -126,7 +105,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.phoneNumber', '')}
                  errors={read(this.props.auth, 'signUp.errors.phoneNumber', [])}
                  onChange={this.handleInput.bind(this, "phoneNumber")}
-            {...this.props.inputProps.phoneNumber} />
+          />
 
           <Input type="text"
                  label="Address 1"
@@ -137,7 +116,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.address1', '')}
                  errors={read(this.props.auth, 'signUp.errors.address1', [])}
                  onChange={this.handleInput.bind(this, "address1")}
-            {...this.props.inputProps.address1} />
+          />
 
           <Input type="text"
                  label="Address 2"
@@ -148,7 +127,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.address2', '')}
                  errors={read(this.props.auth, 'signUp.errors.address2', [])}
                  onChange={this.handleInput.bind(this, "address2")}
-            {...this.props.inputProps.address2} />
+          />
 
           <Input type="text"
                  label="City"
@@ -159,7 +138,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.city', '')}
                  errors={read(this.props.auth, 'signUp.errors.city', {})}
                  onChange={this.handleInput.bind(this, "city")}
-            {...this.props.inputProps.city} />
+          />
 
           <Input type="text"
                  label="State"
@@ -170,7 +149,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.state', '')}
                  errors={read(this.props.auth, 'signUp.errors.state', [])}
                  onChange={this.handleInput.bind(this, "state")}
-            {...this.props.inputProps.state} />
+          />
 
           <Input type="text"
                  label="ZIP"
@@ -181,7 +160,7 @@ class EmailSignUpForm extends React.Component {
                  value={read(this.props.auth, 'signUp.form.zip', '')}
                  errors={read(this.props.auth, 'signUp.errors.zip', [])}
                  onChange={this.handleInput.bind(this, "zip")}
-                 {...this.props.inputProps.zip} />
+          />
 
         </IndexPanel>
 
@@ -193,15 +172,12 @@ class EmailSignUpForm extends React.Component {
                       icon={<Glyphicon glyph="send" />}
                       disabled={disabled}
                       onClick={this.handleSubmit.bind(this)}
-                      { ...this.props.inputProps.submit } >
+        >
           Sign Up
         </ButtonLoader>
       </form>
     );
-    } catch (ex){
-      console.error('Render exception: ', ex);
-      return [' ERROR '];
-    }
+
   }
 }
 

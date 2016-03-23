@@ -50,25 +50,10 @@ const formValidation = (payload) => ['title', 'balance', 'description'].reduce((
 export class NewAccountModal extends React.Component {
 
   static propTypes = {
-    inputProps: PropTypes.shape({
-      title: PropTypes.object,
-      balance: PropTypes.object,
-      description: PropTypes.object,
-      submit: PropTypes.object
-    }),
     action: PropTypes.func,
     account: PropTypes.object.isRequired
   };
-
-  static defaultProps = {
-    inputProps: {
-      title: {},
-      balance: {},
-      description: {},
-      submit: {}
-    }
-  };
-
+  
   handleSubmit(event) {
     event.preventDefault();
 
@@ -156,7 +141,7 @@ export class NewAccountModal extends React.Component {
                       icon={<BS.Glyphicon glyph="plus" />}
                       disabled={disabled}
                       onClick={this.handleSubmit.bind(this)}
-          {...this.props.inputProps.submit}>
+          >
           {actionLabel}
         </ButtonLoader>
       </BS.Modal.Footer>

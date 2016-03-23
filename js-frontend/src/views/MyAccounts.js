@@ -50,8 +50,8 @@ class MyAccounts extends React.Component {
       } = this.props.auth.user.attributes;
 
     this.props.dispatch(A.accountCreate(customerId, payload))
-      .then(() => {
-        this.close.bind(this);
+      .then((accountId) => {
+        this.close();
         return this.props.dispatch(A.fetchOwnAccounts(customerId));
       })
       .catch(err => {
@@ -61,7 +61,6 @@ class MyAccounts extends React.Component {
   }
 
   create3rdPartyAccountModal() {
-
     this.setState({
       show3rdPartyAccountModal: true
     });
@@ -74,7 +73,7 @@ class MyAccounts extends React.Component {
 
     this.props.dispatch(A.accountRefCreate(customerId, payload))
       .then(() => {
-        this.close.bind(this);
+        this.close();
         return this.props.dispatch(A.fetchOwnAccounts(customerId));
       })
       .catch(err => {
@@ -94,7 +93,9 @@ class MyAccounts extends React.Component {
   remove3rdPartyAccountModalConfirmed(accountId) {
     const { customerId } = this.props;
     this.props.dispatch(A.deleteAccount(customerId, accountId))
-    .then(this.close.bind(this),
+    .then(() => {
+        this.close();
+    },
     err => {
       this.props.dispatch(A.errorMessageTimedOut(err && err.message || err));
       this.close();
@@ -134,7 +135,11 @@ class MyAccounts extends React.Component {
       zipCode
       } = address;
 
-    const { showAccountModal, show3rdPartyAccountModal, showDeleteAccountModal } = this.state;
+    const {
+      showAccountModal,
+      show3rdPartyAccountModal,
+      showDeleteAccountModal } = this.state;
+
     const { accountToRemove = null} = this.state;
 
     const { error } = this.props;
@@ -182,6 +187,10 @@ class MyAccounts extends React.Component {
       </tr>
     ));
 
+    const accounts = (!!(ownAccounts.length + refAccounts.length)) ? [].concat(ownAccounts, refAccounts) : (<tr>
+      <td colSpan={3}>No account exists: <Button bsStyle={"link"} onClick={this.createAccountModal.bind(this)}>create a new one</Button> or <Button bsStyle={"link"} onClick={this.create3rdPartyAccountModal.bind(this)}>add a recipient</Button></td>
+    </tr>);
+
     return (
       <div>
         <PageHeader>
@@ -223,6 +232,7 @@ class MyAccounts extends React.Component {
           </IndexPanel>
 
         </Row>
+
         <Table>
           <thead>
           <tr>
@@ -232,8 +242,7 @@ class MyAccounts extends React.Component {
           </tr>
           </thead>
           <tbody>
-          { ownAccounts }
-          { refAccounts }
+          { accounts }
           </tbody>
         </Table>
 

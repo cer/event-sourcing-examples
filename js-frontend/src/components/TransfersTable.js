@@ -20,7 +20,7 @@ export class TransfersTable extends React.Component {
       return (<div className="text-danger">Errors..</div>);
     }
 
-    const transfers = data.map(({
+    const transfers = data.length ? data.map(({
       amount,
       fromAccountId,
       toAccountId,
@@ -35,7 +35,10 @@ export class TransfersTable extends React.Component {
       <td><Money amount={ amount } /></td>
       <td>{ description || 'N/a'}</td>
       <td>{ status || 'N/a' }</td>
-    </tr>));
+    </tr>)) : (<tr>
+      <td colSpan={6}>No transfers for this account just yet.</td>
+    </tr>);
+
 
     return (
       <BS.Table striped bordered condensed hover>

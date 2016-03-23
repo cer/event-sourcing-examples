@@ -10,7 +10,8 @@ import { entityReceived } from './entities';
 import { storeCurrentEndpointKey } from "./configure";
 //import { parseResponse } from "../utils/handleFetchResponse";
 import { apiSignUp } from "../utils/api";
-import { emailSignIn } from './signIn';
+import { emailSignInFormUpdate } from './signIn';
+import { push } from 'redux-router';
 
 import T from '../constants/ACTION_TYPES';
 
@@ -38,9 +39,8 @@ export function emailSignUp(body) {
       .then(({data}) => {
         dispatch(emailSignUpComplete(data));
         const { email } = body;
-        return new Promise((rs, rj) => {
-          dispatch(emailSignIn({ email })).then(rs).catch(rj);
-        });
+        dispatch(emailSignInFormUpdate('email', email));
+        dispatch(push('/signin'));
       })
       .catch(({errors}) => dispatch(emailSignUpError(errors)));
 
