@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.AddToAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
@@ -30,9 +31,9 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
-    public Observable<String> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
+    public Observable<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
         return customerService.addToAccount(id, request)
-                .map(entityAndEventInfo -> entityAndEventInfo.entityVersion().asString());
+                .map(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.entityVersion().asString()));
     }
 
 }
