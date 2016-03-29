@@ -12,9 +12,11 @@ apigateway:
     - accountsqueryside
     - customerscommandside
     - customersqueryside
+    - mongodb
   environment:
     EVENTUATE_API_KEY_ID:
     EVENTUATE_API_KEY_SECRET:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
 
 accountscommandside:
   image: java:8
