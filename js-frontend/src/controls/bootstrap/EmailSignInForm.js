@@ -2,12 +2,15 @@
  * Created by andrew on 15/02/16.
  */
 import React, {PropTypes} from "react";
-import auth from "redux-auth";
+import { connect } from "react-redux";
+import read from '../../utils/readProp';
+
+import * as BS from "react-bootstrap";
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
-import { emailSignInFormUpdate, emailSignIn } from "redux-auth";
-import { Glyphicon } from "react-bootstrap";
-import { connect } from "react-redux";
+import AuxErrorLabel from './AuxErrorLabel';
+
+import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
 
 /*
  <Input type="password"
@@ -22,6 +25,7 @@ import { connect } from "react-redux";
   */
 
 class EmailSignInForm extends React.Component {
+
   static propTypes = {
     endpoint: PropTypes.string,
     inputProps: PropTypes.shape({
@@ -39,47 +43,56 @@ class EmailSignInForm extends React.Component {
     }
   };
 
-  getEndpoint () {
-    return (
-      this.props.endpoint ||
-      this.props.auth.getIn(["configure", "currentEndpointKey"]) ||
-      this.props.auth.getIn(["configure", "defaultEndpointKey"])
-    );
-  }
-
   handleInput (key, val) {
-    this.props.dispatch(emailSignInFormUpdate(this.getEndpoint(), key, val));
+    this.props.dispatch(emailSignInFormUpdate(key, val));
   }
 
   handleSubmit (event) {
     event.preventDefault();
-    let formData = this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form"]).toJS();
-    debugger;
-    this.props.dispatch(emailSignIn(formData, this.getEndpoint()));
+    let formData = { ...this.props.auth.signIn.form };
+    this.props.dispatch(emailSignIn(formData));
   }
 
   render () {
-    let disabled = (
-      this.props.auth.getIn(["user", "isSignedIn"]) ||
-      this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "loading"])
+
+    try {
+    const disabled = (
+      this.props.auth.user.isSignedIn ||
+      this.props.auth.signIn.loading
     );
 
-    return (
+      //const error = read(this.props.auth, 'signIn.errors.email', null);
+      //debugger;
+      const formErrors = read(this.props.auth, 'signIn.errors.errors', '');
+
+
+      return (
       <form className='redux-auth email-sign-in-form clearfix'
             onSubmit={this.handleSubmit.bind(this)}>
+
+        <div className="form-group" style={{
+            display: formErrors ? 'block' : 'none'
+            }}>
+          <AuxErrorLabel
+            label="Form:"
+            errors={formErrors.length ? [formErrors] : [] }
+          />
+        </div>
+
         <Input type="text"
                className="email-sign-in-email"
                label="Email"
                placeholder="Email"
+               name="email"
                disabled={disabled}
-               value={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form", "email"])}
-               errors={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "errors", "email"])}
+               value={read(this.props.auth, 'signIn.form.email', '')}
+               errors={read(this.props.auth, 'signIn.errors.email', [])}
                onChange={this.handleInput.bind(this, "email")}
           {...this.props.inputProps.email} />
 
-        <ButtonLoader loading={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "loading"])}
+        <ButtonLoader loading={read(this.props.auth, 'signIn.loading', false)}
                       type="submit"
-                      icon={<Glyphicon glyph="log-in" />}
+                      icon={<BS.Glyphicon glyph="log-in" />}
                       className='email-sign-in-submit pull-right'
                       disabled={disabled}
                       onClick={this.handleSubmit.bind(this)}
@@ -88,7 +101,11 @@ class EmailSignInForm extends React.Component {
         </ButtonLoader>
       </form>
     );
+    } catch (ex){
+      console.error('Render exception: ', ex);
+      return [' ERROR '];
+    }
   }
 }
 
-export default connect(({auth}) => ({auth}))(EmailSignInForm);
+export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);

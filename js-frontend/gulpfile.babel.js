@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 const $ = gulpLoadPlugins({camelize: true});
 
 
-// Main tasks
+// MyAccounts tasks
 gulp.task('serve', () => runSequence('serve:clean', 'serve:index', 'serve:start'));
 gulp.task('dist', () => runSequence('dist:clean', 'dist:build', 'dist:index'));
 gulp.task('clean', ['dist:clean', 'serve:clean']);
@@ -89,13 +89,21 @@ gulp.task('serve:start', ['serve:static'], () => {
     //}
 
     proxy: {
+      '/user*' : {
+        target: 'http://localhost:8080'
+      },
       '/login' : {
         target: 'http://localhost:8080'
       },
-      '/customers' : {
+      '/customers*' : {
+        target: 'http://localhost:8080'
+      },
+      '/accounts*' : {
+        target: 'http://localhost:8080'
+      },
+      '/transfers*' : {
         target: 'http://localhost:8080'
       }
-
     }
   })
     .listen(PORT, '0.0.0.0', (err) => {

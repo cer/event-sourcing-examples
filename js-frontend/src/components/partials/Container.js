@@ -2,8 +2,15 @@
  * Created by andrew on 17/02/16.
  */
 import React, { PropTypes } from "react";
-import { Grid, Navbar, NavItem, Nav, NavbarBrand } from "react-bootstrap";
+import { Grid, Col, Navbar, NavItem, Nav, NavbarBrand, Footer } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+
+import HeaderLinks from '../HeaderLinks';
+
+//import { SignOutButton } from "redux-auth/bootstrap-theme";
+
+//const SignOutButton = () => (<div>SignOutButton!</div>);
+
 
 //if (!global.__SERVER__ && !global.__TEST__) {
 //  require("../../styles/main.scss");
@@ -25,17 +32,25 @@ class Container extends React.Component {
             <LinkContainer to="/" onlyActiveOnIndex={true}>
               <NavItem eventKey={1}>Home</NavItem>
             </LinkContainer>
-            <LinkContainer to="/account">
-              <NavItem eventKey={2}>Account</NavItem>
-            </LinkContainer>
           </Nav>
+          <div>
+            <HeaderLinks />
+          </div>
         </Navbar>
 
         <Grid className="content">
           {this.props.children}
         </Grid>
 
-
+        <Navbar fixedBottom={true} className="footer-navigation">
+          <Col xs={12} sm={6}>&copy; 2016 Eventuate.io</Col>
+          <Col xs={12} sm={6} className="text-right">
+            <a href="#">Terms</a> |&nbsp;
+            <a href="#">Policy</a> |&nbsp;
+            <a href="#">Contact</a> |&nbsp;
+            <a href="#">About</a>
+          </Col>
+        </Navbar>
       </div>
     );
   }

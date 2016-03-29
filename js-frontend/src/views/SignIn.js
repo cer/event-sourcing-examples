@@ -6,8 +6,12 @@ import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
 
 //import ButtonLoader from "./ButtonLoader";
-import { Input } from "react-bootstrap";
-import ButtonLoader from "../controls/bootstrap/ButtonLoader";
+import * as BS from "react-bootstrap";
+//import ButtonLoader from "../controls/bootstrap/ButtonLoader";
+
+
+import {pushState} from "redux-router";
+
 
 //export {bootstrap, materialUi} from "./views";
 
@@ -16,8 +20,24 @@ import ButtonLoader from "../controls/bootstrap/ButtonLoader";
 //import { EmailSignInForm } from "redux-auth/bootstrap-theme";
 import EmailSignInForm from "../controls/bootstrap/EmailSignInForm";
 
-
 export class SignIn extends React.Component {
+
+  checkRedirect(props) {
+    if (props.auth.user.isSignedIn) {
+      props.dispatch(pushState(null, props.location.query.next));
+      //// redirect to login and add next param so we can redirect again after login
+      //const redirectAfterLogin = this.props.location.pathname;
+      //this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
+    }
+  }
+  componentWillMount() {
+    this.checkRedirect(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.checkRedirect(nextProps);
+
+  }
 
   render () {
     const signInProps = {
@@ -31,13 +51,20 @@ export class SignIn extends React.Component {
       }
     };
 
-    return <EmailSignInForm />;
-    //return (
-    //  <div>
-    //    <PageHeader>Sign In First</PageHeader>
-    //    <p>Unauthenticated users can't access the account page.</p>
-    //  </div>
-    //);
+    return (
+      <BS.Well>
+        <PageHeader>Sign In</PageHeader>
+        <EmailSignInForm {...this.props} />
+      </BS.Well>
+    );
   }
 }
-export default connect(({routes}) => ({routes}))(SignIn);
+export default connect(({
+  //dispatch,
+    routes,
+    app
+  }) => ({
+  //dispatch,
+    routes,
+    auth: app.auth
+}))(SignIn);

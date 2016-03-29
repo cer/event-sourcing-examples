@@ -1,21 +1,16 @@
-import { combineReducers } from 'redux'
+/**
+ * Created by andrew on 18/03/16.
+ */
+import { combineReducers } from 'redux';
 
+import authStateReducer from './auth';
+import appStateReducer from './data'
+import uiReducer from './ui'
 
-import navigation from './navigationReducer'
+const mainReducer = combineReducers({
+  auth:   authStateReducer,
+  data:   appStateReducer,
+  ui: uiReducer
+});
 
-import documentListView from './view/documentListViewReducer'
-import documentView from './view/documentViewReducer'
-
-import documentData from './data/documentDataReducer'
-
-
-export default combineReducers({
-  navigation,
-  view: combineReducers({
-    documentList: documentListView,
-    document: documentView,
-  }),
-  data: combineReducers({
-    document: documentData,
-  }),
-})
+export default mainReducer;

@@ -2,31 +2,31 @@
  * Created by andrew on 15/02/16.
  */
 import React, { PropTypes } from "react";
-import { Input, Glyphicon } from "react-bootstrap";
+import { Glyphicon } from "react-bootstrap";
 
-class AuthInput extends React.Component {
+
+class AuxErrorLabel extends React.Component {
+
   static propTypes = {
     label: PropTypes.string,
-    value: PropTypes.string,
     errors: PropTypes.array
   };
 
   static defaultProps = {
     label: '',
-    value: null,
     errors: []
   };
+  
+//        <Input {...this.props}
+//   bsStyle={(this.props.errors.length) ? "error" : null}
+// onChange={this.handleInput.bind(this)} />
+  render () {
+    const { errors } = this.props;
 
-  handleInput (ev) {
-    this.props.onChange(ev.target.value);
-  }
-
-  renderErrorList () {
-
-    if (this.props.errors.length) {
+    if (errors.length) {
       return (
-        <div className="auth-error-message has-error">
-          {this.props.errors.map((err, i) => {
+        <div className='has-error'>
+          { errors.map((err, i) => {
             return (
               <p className="control-label inline-error-item"
                  style={{paddingLeft: "20px", position: "relative", marginBottom: "28px"}}
@@ -48,17 +48,6 @@ class AuthInput extends React.Component {
       return <span />;
     }
   }
-
-  render () {
-    return (
-      <div>
-        <Input {...this.props}
-          bsStyle={(this.props.errors.length) ? "error" : null}
-          onChange={this.handleInput.bind(this)} />
-        {this.renderErrorList()}
-      </div>
-    );
-  }
 }
 
-export default AuthInput;
+export default AuxErrorLabel;
