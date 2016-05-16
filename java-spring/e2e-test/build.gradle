@@ -1,8 +1,6 @@
 apply plugin: VerifyMongoDBConfigurationPlugin
 
 dependencies {
-    compile "org.scala-lang:scala-library:2.10.2"
-
     testCompile project(":accounts-command-side-web")
     testCompile project(":transactions-command-side-web")
     testCompile project(":accounts-query-side-web")
@@ -10,8 +8,6 @@ dependencies {
     testCompile project(":testutil")
     testCompile "junit:junit:4.11"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-    testCompile scalaTestDependency
-
 }
 
 test {

@@ -13,10 +13,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
-import rx.Observable;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
@@ -51,8 +51,8 @@ public class AccountsQuerySideServiceIntegrationTest {
     eventually(
             new Producer<GetAccountResponse>() {
               @Override
-              public Observable<GetAccountResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
+              public CompletableFuture<GetAccountResponse> produce() {
+                return CompletableFuture.completedFuture(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
               }
             },
             new Verifier<GetAccountResponse>() {

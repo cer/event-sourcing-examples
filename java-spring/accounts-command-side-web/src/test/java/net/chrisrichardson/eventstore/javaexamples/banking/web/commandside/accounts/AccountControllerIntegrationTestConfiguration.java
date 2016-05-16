@@ -1,11 +1,11 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts;
 
-import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration;
+import io.eventuate.javaclient.spring.EventuateJdbcEventStoreConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({CommandSideWebAccountsConfiguration.class, JdbcEventStoreConfiguration.class})
+@Import({CommandSideWebAccountsConfiguration.class, EventuateJdbcEventStoreConfiguration.class})
 public class AccountControllerIntegrationTestConfiguration {
 
 }

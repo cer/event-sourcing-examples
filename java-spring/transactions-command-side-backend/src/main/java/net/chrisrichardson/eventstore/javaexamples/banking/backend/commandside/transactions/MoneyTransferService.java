@@ -1,9 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions;
 
-import net.chrisrichardson.eventstore.EntityWithIdAndVersion;
+import io.eventuate.AggregateRepository;
+import io.eventuate.EntityWithIdAndVersion;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.TransferDetails;
-import net.chrisrichardson.eventstore.repository.AggregateRepository;
-import rx.Observable;
+
+import java.util.concurrent.CompletableFuture;
 
 public class MoneyTransferService {
   private final AggregateRepository<MoneyTransfer, MoneyTransferCommand> aggregateRepository;
@@ -12,7 +13,7 @@ public class MoneyTransferService {
     this.aggregateRepository = aggregateRepository;
   }
 
-  public Observable<EntityWithIdAndVersion<MoneyTransfer>> transferMoney(TransferDetails transferDetails) {
+  public CompletableFuture<EntityWithIdAndVersion<MoneyTransfer>> transferMoney(TransferDetails transferDetails) {
     return aggregateRepository.save(new CreateMoneyTransferCommand(transferDetails));
   }
 

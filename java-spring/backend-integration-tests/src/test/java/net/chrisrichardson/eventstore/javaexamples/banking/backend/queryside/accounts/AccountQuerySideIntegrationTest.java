@@ -1,8 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
-import net.chrisrichardson.eventstore.EntityWithIdAndVersion;
-import net.chrisrichardson.eventstore.EntityWithMetadata;
-import net.chrisrichardson.eventstore.EventStore;
+import io.eventuate.EntityWithIdAndVersion;
+import io.eventuate.EntityWithMetadata;
+import io.eventuate.EventuateAggregateStore;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.Account;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransfer;
@@ -37,7 +37,7 @@ public class AccountQuerySideIntegrationTest {
   private MoneyTransferService moneyTransferService;
 
   @Autowired
-  private EventStore eventStore;
+  private EventuateAggregateStore eventStore;
 
   @Autowired
   private AccountQueryService accountQueryService;
@@ -50,49 +50,19 @@ public class AccountQuerySideIntegrationTest {
     final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount(new BigDecimal(300)));
 
     final EntityWithIdAndVersion<MoneyTransfer> transaction = await(
-            moneyTransferService.transferMoney(new TransferDetails(fromAccount.getEntityIdentifier(),
-                    toAccount.getEntityIdentifier(),
+            moneyTransferService.transferMoney(new TransferDetails(fromAccount.getEntityId(),
+                    toAccount.getEntityId(),
                     new BigDecimal(80))));
 
     eventually(
-            new Producer<EntityWithMetadata<MoneyTransfer>>() {
-              @Override
-              public Observable<EntityWithMetadata<MoneyTransfer>> produce() {
-                return eventStore.find(MoneyTransfer.class, transaction.getEntityIdentifier());
-              }
-            },
-            new Verifier<EntityWithMetadata<MoneyTransfer>>() {
-              @Override
-              public void verify(EntityWithMetadata<MoneyTransfer> updatedTransaction) {
-                Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.entity().getState());
-              }
-            });
+            () -> eventStore.find(MoneyTransfer.class, transaction.getEntityId()),
+            updatedTransaction -> Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.getEntity().getState()));
 
     eventually(
-            new Producer<AccountInfo>() {
-              @Override
-              public Observable<AccountInfo> produce() {
-                return accountQueryService.findByAccountId(fromAccount.getEntityIdentifier());
-              }
-            },
-            new Verifier<AccountInfo>() {
-              @Override
-              public void verify(AccountInfo accountInfo) {
-                Assert.assertEquals(70*100, accountInfo.getBalance());
-              }
-            });
+            () -> accountQueryService.findByAccountId(fromAccount.getEntityId()),
+            accountInfo -> Assert.assertEquals(70*100, accountInfo.getBalance()));
     eventually(
-            new Producer<AccountInfo>() {
-              @Override
-              public Observable<AccountInfo> produce() {
-                return accountQueryService.findByAccountId(toAccount.getEntityIdentifier());
-              }
-            },
-            new Verifier<AccountInfo>() {
-              @Override
-              public void verify(AccountInfo accountInfo) {
-                Assert.assertEquals(380*100, accountInfo.getBalance());
-              }
-            });
+            () -> accountQueryService.findByAccountId(toAccount.getEntityId()),
+            accountInfo -> Assert.assertEquals(380*100, accountInfo.getBalance()));
   }
 }

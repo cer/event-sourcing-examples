@@ -1,30 +1,31 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions;
 
 
-import net.chrisrichardson.eventstore.javaapi.consumer.EventHandlerContext;
+import io.eventuate.EntityWithIdAndVersion;
+import io.eventuate.EventHandlerContext;
+import io.eventuate.EventHandlerMethod;
+import io.eventuate.EventSubscriber;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountDebitFailedDueToInsufficientFundsEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountDebitedEvent;
-import net.chrisrichardson.eventstore.subscriptions.CompoundEventHandler;
-import net.chrisrichardson.eventstore.subscriptions.EventHandlerMethod;
-import net.chrisrichardson.eventstore.subscriptions.EventSubscriber;
-import rx.Observable;
+
+import java.util.concurrent.CompletableFuture;
 
 @EventSubscriber(id="transferEventHandlers")
-public class MoneyTransferWorkflow implements CompoundEventHandler {
+public class MoneyTransferWorkflow {
 
   @EventHandlerMethod
-  public Observable<?> recordDebit(EventHandlerContext<AccountDebitedEvent> ctx) {
+  public CompletableFuture<EntityWithIdAndVersion<MoneyTransfer>> recordDebit(EventHandlerContext<AccountDebitedEvent> ctx) {
     return ctx.update(MoneyTransfer.class, ctx.getEvent().getTransactionId(), new RecordDebitCommand());
   }
 
   @EventHandlerMethod
-  public Observable<?> recordDebitFailed(EventHandlerContext<AccountDebitFailedDueToInsufficientFundsEvent> ctx) {
+  public CompletableFuture<EntityWithIdAndVersion<MoneyTransfer>> recordDebitFailed(EventHandlerContext<AccountDebitFailedDueToInsufficientFundsEvent> ctx) {
     return ctx.update(MoneyTransfer.class, ctx.getEvent().getTransactionId(), new RecordDebitFailedCommand());
   }
 
   @EventHandlerMethod
-  public Observable<?> recordCredit(EventHandlerContext<AccountCreditedEvent> ctx) {
+  public CompletableFuture<EntityWithIdAndVersion<MoneyTransfer>> recordCredit(EventHandlerContext<AccountCreditedEvent> ctx) {
     return ctx.update(MoneyTransfer.class, ctx.getEvent().getTransactionId(), new RecordCreditCommand());
   }
 

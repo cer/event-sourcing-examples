@@ -6,17 +6,14 @@ import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accou
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
-import net.chrisrichardson.eventstore.json.EventStoreCommonObjectMapping;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
@@ -43,14 +40,14 @@ public class EndToEndTest {
 
   RestTemplate restTemplate = new RestTemplate();
 
-  {
+  /*{
 
   for (HttpMessageConverter<?> mc : restTemplate.getMessageConverters()) {
     if (mc instanceof MappingJackson2HttpMessageConverter) {
-      ((MappingJackson2HttpMessageConverter) mc).setObjectMapper(EventStoreCommonObjectMapping.getObjectMapper());
+      ((MappingJackson2HttpMessageConverter) mc).setObjectMapper(JSonMapper.objectMapper);
     }
   }
-  }
+  }*/
 
 
   @Test
@@ -92,18 +89,10 @@ public class EndToEndTest {
   private void assertAccountBalance(final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
     final BigDecimal inCents = toCents(expectedBalanceInDollars);
     eventually(
-            new Producer<GetAccountResponse>() {
-              @Override
-              public Observable<GetAccountResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(accountsQuerySideBaseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
-              }
-            },
-            new Verifier<GetAccountResponse>() {
-              @Override
-              public void verify(GetAccountResponse accountInfo) {
-                Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
-                Assert.assertEquals(inCents, accountInfo.getBalance());
-              }
+            () -> CompletableFuture.completedFuture(restTemplate.getForEntity(accountsQuerySideBaseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody()),
+            accountInfo -> {
+              Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
+              Assert.assertEquals(inCents, accountInfo.getBalance());
             });
   }
 

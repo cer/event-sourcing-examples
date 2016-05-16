@@ -1,6 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions;
 
-import net.chrisrichardson.eventstore.Event;
+// import io.eventuate.Event;
+
+import io.eventuate.Event;
 
 public class DebitRecordedEvent implements Event {
   private TransferDetails details;

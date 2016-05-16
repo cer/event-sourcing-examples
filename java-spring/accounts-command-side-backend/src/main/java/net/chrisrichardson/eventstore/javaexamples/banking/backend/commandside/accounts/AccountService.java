@@ -1,10 +1,12 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts;
 
 
-import net.chrisrichardson.eventstore.EntityWithIdAndVersion;
-import net.chrisrichardson.eventstore.repository.AggregateRepository;
+
+import io.eventuate.AggregateRepository;
+import io.eventuate.EntityWithIdAndVersion;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 public class AccountService  {
 
@@ -14,7 +16,7 @@ public class AccountService  {
     this.accountRepository = accountRepository;
   }
 
-  public rx.Observable<EntityWithIdAndVersion<Account>> openAccount(BigDecimal initialBalance) {
+  public CompletableFuture<EntityWithIdAndVersion<Account>> openAccount(BigDecimal initialBalance) {
     return accountRepository.save(new OpenAccountCommand(initialBalance));
   }
 

@@ -17,10 +17,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
-import rx.Observable;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
@@ -78,18 +78,10 @@ public class BankingWebIntegrationTest {
   private void assertAccountBalance(final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
     final BigDecimal inCents = toCents(expectedBalanceInDollars);
     eventually(
-            new Producer<GetAccountResponse>() {
-              @Override
-              public Observable<GetAccountResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
-              }
-            },
-            new Verifier<GetAccountResponse>() {
-              @Override
-              public void verify(GetAccountResponse accountInfo) {
-                Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
-                Assert.assertEquals(inCents, accountInfo.getBalance());
-              }
+            () -> CompletableFuture.completedFuture(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody()),
+            accountInfo -> {
+              Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
+              Assert.assertEquals(inCents, accountInfo.getBalance());
             });
   }
 
