@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import io.eventuate.javaclient.spring.EventuateJdbcEventStoreConfiguration;
+import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CommandSideWebAccountsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CommandSideWebTransactionsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.QuerySideWebConfiguration;

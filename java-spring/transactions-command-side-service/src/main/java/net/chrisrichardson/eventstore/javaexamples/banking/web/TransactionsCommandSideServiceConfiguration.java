@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import io.eventuate.javaclient.httpstomp.spring.EventuateHttpStompClientConfiguration;
+import io.eventuate.javaclient.spring.httpstomp.EventuateHttpStompClientConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonswagger.CommonSwaggerConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CommandSideWebTransactionsConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
