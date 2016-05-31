@@ -1,5 +1,5 @@
 accountscommandside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./accounts-command-side-service/build/libs:/app
@@ -11,7 +11,7 @@ accountscommandside:
     EVENTUATE_API_KEY_SECRET:
 
 transactionscommandside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./transactions-command-side-service/build/libs:/app
@@ -24,11 +24,11 @@ transactionscommandside:
 
 
 accountsqueryside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./accounts-query-side-service/build/libs:/app
-  command: java -jar /app/accounts-query-side-service.jar 
+  command: java -jar /app/accounts-query-side-service.jar
   ports:
     - "8081:8080"
   links:
