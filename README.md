@@ -1,7 +1,7 @@
 #Event-Sourcing+CQRS example application
 
 This example application is the money transfer application described in my talk [Building and deploying microservices with event sourcing, CQRS and Docker](http://plainoldobjects.com/presentations/building-and-deploying-microservices-with-event-sourcing-cqrs-and-docker/).
-This talk describe a way of architecting highly scalable and available applications that is based on microservices, polyglot persistence,
+This talk describes a way of architecting highly scalable and available applications that is based on microservices, polyglot persistence,
 event sourcing (ES) and command query responsibility segregation (CQRS).
 Applications consist of loosely coupled components that communicate using events.
 These components can be deployed either as separate services or packaged as a monolithic application for simplified development and testing.
