@@ -11,6 +11,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
 
     compile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
+    compile project(":common-swagger")
 
     testCompile project(":testutil")
     testCompile "org.springframework.boot:spring-boot-starter-test"
