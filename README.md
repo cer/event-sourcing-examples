@@ -99,7 +99,7 @@ You can run the `docker-compose up -d mongodb` to run MongoDB and then set `SPRI
   export SPRING_DATA_MONGODB_URI=mongodb://$(docker-machine ip default)/yourdb
 ```
 
-Second, some of the tests in accounts-command-side-service, transactions-command-side-service, accounts-query-side-service and e2e-test need you need to set some environment variables that tell them how to connect to the Event Store server.
+Second, some of the tests in accounts-command-side-service, transactions-command-side-service, accounts-query-side-service and e2e-test require you to set some environment variables that tell them how to connect to the Event Store server.
 But don't worry.
 The build is configured to ignore failures for those projects.
 
