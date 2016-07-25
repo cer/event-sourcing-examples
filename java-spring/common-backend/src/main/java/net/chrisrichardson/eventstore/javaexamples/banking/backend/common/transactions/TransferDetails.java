@@ -4,15 +4,14 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.trans
 case class TransferDetails(fromAccountId : EntityIdentifier, toAccountId : EntityIdentifier, amount : BigDecimal)
  */
 
-import net.chrisrichardson.eventstore.EntityIdentifier;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class TransferDetails {
 
-  private EntityIdentifier fromAccountId;
-  private EntityIdentifier toAccountId;
+  private String fromAccountId;
+  private String toAccountId;
   private BigDecimal amount;
   private Date date;
   private String description;
@@ -20,11 +19,11 @@ public class TransferDetails {
   private TransferDetails() {
   }
 
-  public TransferDetails(EntityIdentifier fromAccountId, EntityIdentifier toAccountId, BigDecimal amount) {
+  public TransferDetails(String fromAccountId, String toAccountId, BigDecimal amount) {
     this(fromAccountId, toAccountId, amount, new Date(), "");
   }
 
-  public TransferDetails(EntityIdentifier fromAccountId, EntityIdentifier toAccountId, BigDecimal amount, Date date, String description) {
+  public TransferDetails(String fromAccountId, String toAccountId, BigDecimal amount, Date date, String description) {
     this.fromAccountId = fromAccountId;
     this.toAccountId = toAccountId;
     this.amount = amount;
@@ -32,11 +31,11 @@ public class TransferDetails {
     this.description = description;
   }
 
-  public EntityIdentifier getFromAccountId() {
+  public String getFromAccountId() {
     return fromAccountId;
   }
 
-  public EntityIdentifier getToAccountId() {
+  public String getToAccountId() {
     return toAccountId;
   }
 

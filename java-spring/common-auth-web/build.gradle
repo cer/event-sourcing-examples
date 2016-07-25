@@ -3,7 +3,6 @@ apply plugin: 'java'
 dependencies {
     compile project(":common-auth")
     compile project(":common-customers")
-    compile project(":common-web")
 
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"

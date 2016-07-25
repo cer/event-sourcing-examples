@@ -1,7 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
 
-import net.chrisrichardson.eventstore.javaapi.consumer.EnableJavaEventHandlers;
+import io.eventuate.javaclient.spring.EnableEventHandlers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @EnableMongoRepositories
-@EnableJavaEventHandlers
+@EnableEventHandlers
 public class QuerySideAccountConfiguration {
 
   @Bean

@@ -1,7 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers;
 
-import net.chrisrichardson.eventstore.Event;
-import net.chrisrichardson.eventstore.EventEntity;
+
+import io.eventuate.Event;
+import io.eventuate.EventEntity;
 
 /**
  * Created by Main on 11.02.2016.

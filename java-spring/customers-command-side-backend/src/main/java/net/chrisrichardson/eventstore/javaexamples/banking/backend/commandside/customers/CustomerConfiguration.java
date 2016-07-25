@@ -1,13 +1,13 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers;
 
-import net.chrisrichardson.eventstore.EventStore;
-import net.chrisrichardson.eventstore.javaapi.consumer.EnableJavaEventHandlers;
-import net.chrisrichardson.eventstore.repository.AggregateRepository;
+import io.eventuate.AggregateRepository;
+import io.eventuate.EventuateAggregateStore;
+import io.eventuate.javaclient.spring.EnableEventHandlers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableJavaEventHandlers
+@EnableEventHandlers
 public class CustomerConfiguration {
 
   @Bean
@@ -16,7 +16,7 @@ public class CustomerConfiguration {
   }
 
   @Bean
-  public AggregateRepository<Customer, CustomerCommand> customerRepository(EventStore eventStore) {
+  public AggregateRepository<Customer, CustomerCommand> customerRepository(EventuateAggregateStore eventStore) {
     return new AggregateRepository<Customer, CustomerCommand>(Customer.class, eventStore);
   }
 

@@ -10,7 +10,6 @@ import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accou
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
-import net.chrisrichardson.eventstore.json.EventStoreCommonObjectMapping;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
@@ -19,13 +18,12 @@ import org.junit.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
@@ -61,18 +59,7 @@ public class EndToEndTest {
 
   RestTemplate restTemplate = new RestTemplate();
 
-  CustomersTestUtils customersTestUtils;
-
-  {
-
-  for (HttpMessageConverter<?> mc : restTemplate.getMessageConverters()) {
-    if (mc instanceof MappingJackson2HttpMessageConverter) {
-      ((MappingJackson2HttpMessageConverter) mc).setObjectMapper(EventStoreCommonObjectMapping.getObjectMapper());
-    }
-  }
-
-    customersTestUtils = new CustomersTestUtils(restTemplate, customersQuerySideBaseUrl("/customers/"));
-  }
+  CustomersTestUtils customersTestUtils = new CustomersTestUtils(restTemplate, customersQuerySideBaseUrl("/customers/"));
 
 
   @Test
@@ -181,8 +168,8 @@ public class EndToEndTest {
     eventually(
             new Producer<GetAccountResponse>() {
               @Override
-              public Observable<GetAccountResponse> produce() {
-                  return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+              public CompletableFuture<GetAccountResponse> produce() {
+                  return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
                           accountsQuerySideBaseUrl("/accounts/" + fromAccountId),
                           HttpMethod.GET,
                           GetAccountResponse.class));

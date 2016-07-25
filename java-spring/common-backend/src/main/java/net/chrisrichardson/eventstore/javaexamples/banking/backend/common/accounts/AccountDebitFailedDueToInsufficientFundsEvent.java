@@ -1,20 +1,20 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import net.chrisrichardson.eventstore.Aggregate;
-import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.Event;
+import io.eventuate.Aggregate;
+
+import io.eventuate.Event;
 
 public class AccountDebitFailedDueToInsufficientFundsEvent implements Event {
-  private EntityIdentifier transactionId;
+  private String transactionId;
 
   private AccountDebitFailedDueToInsufficientFundsEvent() {
   }
 
-  public AccountDebitFailedDueToInsufficientFundsEvent(EntityIdentifier transactionId) {
+  public AccountDebitFailedDueToInsufficientFundsEvent(String transactionId) {
     this.transactionId = transactionId;
   }
 
-  public EntityIdentifier getTransactionId() {
+  public String getTransactionId() {
     return transactionId;
   }
 }

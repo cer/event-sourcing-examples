@@ -1,11 +1,12 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers;
 
 
-import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.EntityWithIdAndVersion;
+import io.eventuate.AggregateRepository;
+import io.eventuate.EntityWithIdAndVersion;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
-import net.chrisrichardson.eventstore.repository.AggregateRepository;
+
+import java.util.concurrent.CompletableFuture;
 
 public class CustomerService {
 
@@ -15,12 +16,11 @@ public class CustomerService {
     this.accountRepository = accountRepository;
   }
 
-  public rx.Observable<EntityWithIdAndVersion<Customer>> createCustomer(CustomerInfo customerInfo) {
+  public CompletableFuture<EntityWithIdAndVersion<Customer>> createCustomer(CustomerInfo customerInfo) {
     return accountRepository.save(new CreateCustomerCommand(customerInfo));
   }
 
-  public rx.Observable<EntityWithIdAndVersion<Customer>> addToAccount(String customerId, ToAccountInfo toAccountInfo) {
-    return accountRepository.update(new EntityIdentifier(customerId), new AddToAccountCommand(toAccountInfo));
+  public CompletableFuture<EntityWithIdAndVersion<Customer>> addToAccount(String customerId, ToAccountInfo toAccountInfo) {
+    return accountRepository.update(customerId, new AddToAccountCommand(toAccountInfo));
   }
-
 }

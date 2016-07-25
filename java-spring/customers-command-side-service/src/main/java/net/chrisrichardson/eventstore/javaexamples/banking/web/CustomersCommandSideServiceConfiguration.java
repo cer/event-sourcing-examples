@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.client.config.EventStoreHttpClientConfiguration;
+import io.eventuate.javaclient.spring.httpstomp.EventuateHttpStompClientConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonswagger.CommonSwaggerConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers.CustomersCommandSideWebConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,7 +13,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
-@Import({CustomersCommandSideWebConfiguration.class, EventStoreHttpClientConfiguration.class, CommonSwaggerConfiguration.class})
+@Import({CustomersCommandSideWebConfiguration.class, EventuateHttpStompClientConfiguration.class, CommonSwaggerConfiguration.class})
 @EnableAutoConfiguration
 @ComponentScan
 public class CustomersCommandSideServiceConfiguration {

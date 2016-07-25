@@ -1,6 +1,5 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 
 import java.util.List;

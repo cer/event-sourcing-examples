@@ -7,7 +7,8 @@ import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
+
+import java.util.concurrent.CompletableFuture;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
@@ -28,8 +29,8 @@ public class CustomersTestUtils {
         eventually(
                 new Producer<QuerySideCustomer>() {
                     @Override
-                    public Observable<QuerySideCustomer> produce() {
-                        return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                    public CompletableFuture<QuerySideCustomer> produce() {
+                        return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
                                 customersBaseUrl + customerId,
                                 HttpMethod.GET,
                                 QuerySideCustomer.class));

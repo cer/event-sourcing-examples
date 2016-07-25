@@ -8,7 +8,8 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import rx.Observable;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by popikyardo on 03.02.16.
@@ -25,15 +26,15 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Observable<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo customer) {
+    public CompletableFuture<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo customer) {
         return customerService.createCustomer(customer)
-                .map(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityIdentifier().getId(), customer));
+                .thenApply(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityId(), customer));
     }
 
     @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
-    public Observable<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
+    public CompletableFuture<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
         return customerService.addToAccount(id, request)
-                .map(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.entityVersion().asString()));
+                .thenApply(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.getEntityVersion().toString()));
     }
 
 }

@@ -2,12 +2,12 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.AuthConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonswagger.CommonSwaggerConfiguration;
+import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CommandSideWebAccountsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers.CustomersCommandSideWebConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CommandSideWebTransactionsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.CustomersQuerySideWebConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.QuerySideWebConfiguration;
-import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, JdbcEventStoreConfiguration.class, QuerySideWebConfiguration.class, CustomersQuerySideWebConfiguration.class, CustomersCommandSideWebConfiguration.class, AuthConfiguration.class, CommonSwaggerConfiguration.class})
+@Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, EventuateJdbcEventStoreConfiguration.class, QuerySideWebConfiguration.class, CustomersQuerySideWebConfiguration.class, CustomersCommandSideWebConfiguration.class, AuthConfiguration.class, CommonSwaggerConfiguration.class})
 @EnableAutoConfiguration
 @ComponentScan
 public class BankingWebConfiguration extends WebMvcConfigurerAdapter {

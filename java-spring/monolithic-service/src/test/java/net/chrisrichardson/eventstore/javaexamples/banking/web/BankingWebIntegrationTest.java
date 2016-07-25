@@ -24,12 +24,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
-
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.List;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
@@ -90,7 +89,6 @@ public class BankingWebIntegrationTest {
 
         assertAccountBalance(fromAccountId, initialFromAccountBalance);
         assertAccountBalance(toAccountId, initialToAccountBalance);
-
 
         final CreateMoneyTransferResponse moneyTransfer = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
                 baseUrl("/transfers"),
@@ -180,11 +178,11 @@ public class BankingWebIntegrationTest {
         eventually(
                 new Producer<GetAccountResponse>() {
                     @Override
-                    public Observable<GetAccountResponse> produce() {
-                        return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                                        baseUrl("/accounts/" + fromAccountId),
-                                        HttpMethod.GET,
-                                        GetAccountResponse.class));
+                    public CompletableFuture<GetAccountResponse> produce() {
+                        return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                                baseUrl("/accounts/" + fromAccountId),
+                                HttpMethod.GET,
+                                GetAccountResponse.class));
                     }
                 },
                 new Verifier<GetAccountResponse>() {
@@ -200,8 +198,8 @@ public class BankingWebIntegrationTest {
         eventually(
                 new Producer<QuerySideCustomer>() {
                     @Override
-                    public Observable<QuerySideCustomer> produce() {
-                        return Observable.just(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                    public CompletableFuture<QuerySideCustomer> produce() {
+                        return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
                                 baseUrl("/customers/" + customerId),
                                 HttpMethod.GET,
                                 QuerySideCustomer.class));
@@ -215,5 +213,4 @@ public class BankingWebIntegrationTest {
                     }
                 });
     }
-
 }

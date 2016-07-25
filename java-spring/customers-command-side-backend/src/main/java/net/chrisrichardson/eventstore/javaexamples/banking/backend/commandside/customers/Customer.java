@@ -1,8 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers;
 
-import net.chrisrichardson.eventstore.Event;
-import net.chrisrichardson.eventstore.EventUtil;
-import net.chrisrichardson.eventstore.ReflectiveMutableCommandProcessingAggregate;
+import io.eventuate.Event;
+import io.eventuate.EventUtil;
+import io.eventuate.ReflectiveMutableCommandProcessingAggregate;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAddedToAccount;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerCreatedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
