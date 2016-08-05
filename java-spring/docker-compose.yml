@@ -1,5 +1,5 @@
 apigateway:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./api-gateway-service/build/libs:/app
@@ -19,7 +19,7 @@ apigateway:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
 
 accountscommandside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./accounts-command-side-service/build/libs:/app
@@ -31,7 +31,7 @@ accountscommandside:
     EVENTUATE_API_KEY_SECRET:
 
 transactionscommandside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./transactions-command-side-service/build/libs:/app
@@ -44,7 +44,7 @@ transactionscommandside:
 
 
 accountsqueryside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./accounts-query-side-service/build/libs:/app
@@ -59,7 +59,7 @@ accountsqueryside:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
 
 customerscommandside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./customers-command-side-service/build/libs:/app
@@ -71,7 +71,7 @@ customerscommandside:
     EVENTUATE_API_KEY_SECRET:
 
 customersqueryside:
-  image: java:8
+  image: java:openjdk-8u91-jdk
   working_dir: /app
   volumes:
     - ./customers-query-side-service/build/libs:/app

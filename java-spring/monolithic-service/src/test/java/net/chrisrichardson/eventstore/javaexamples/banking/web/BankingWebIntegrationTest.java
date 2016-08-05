@@ -28,10 +28,12 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -106,10 +108,18 @@ public class BankingWebIntegrationTest {
                 new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody();
 
 
-        assertTrue(transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId()) &&
-                                                            ti.getFromAccountId().equals(fromAccountId) &&
-                                                            ti.getToAccountId().equals(toAccountId) &&
-                                                            ti.getAmount() == toCents(amountToTransfer).longValue()).findFirst().isPresent());
+        Optional<AccountTransactionInfo> first = transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
+
+        assertTrue(first.isPresent());
+
+        AccountTransactionInfo ti = first.get();
+
+        assertEquals(fromAccountId, ti.getFromAccountId());
+        assertEquals(toAccountId, ti.getToAccountId());
+        assertEquals(toAccountId, ti.getToAccountId());
+        assertEquals(fromAccountId, ti.getFromAccountId());
+        assertEquals(toCents(amountToTransfer).longValue(), ti.getAmount());
+
     }
 
     @Test
@@ -121,7 +131,7 @@ public class BankingWebIntegrationTest {
         final String customerId = customerResponse.getId();
 
         Assert.assertNotNull(customerId);
-        Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+        assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
         customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
@@ -153,7 +163,7 @@ public class BankingWebIntegrationTest {
         final String customerId = customerResponse.getId();
 
         Assert.assertNotNull(customerId);
-        Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+        assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
         customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
@@ -188,8 +198,8 @@ public class BankingWebIntegrationTest {
                 new Verifier<GetAccountResponse>() {
                     @Override
                     public void verify(GetAccountResponse accountInfo) {
-                        Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
-                        Assert.assertEquals(inCents, accountInfo.getBalance());
+                        assertEquals(fromAccountId, accountInfo.getAccountId());
+                        assertEquals(inCents, accountInfo.getBalance());
                     }
                 });
     }
@@ -208,7 +218,7 @@ public class BankingWebIntegrationTest {
                 new Verifier<QuerySideCustomer>() {
                     @Override
                     public void verify(QuerySideCustomer customerResponse) {
-                        Assert.assertEquals(customerId, customerResponse.getId());
+                        assertEquals(customerId, customerResponse.getId());
                         assertTrue(customerResponse.getToAccounts().values().stream().anyMatch(t -> t.equals(toAccountInfo)));
                     }
                 });
