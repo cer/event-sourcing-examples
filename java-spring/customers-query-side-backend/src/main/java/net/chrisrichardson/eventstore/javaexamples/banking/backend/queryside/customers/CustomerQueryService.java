@@ -1,10 +1,11 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
-import net.chrisrichardson.eventstore.EntityIdentifier;
+import io.eventuate.CompletableFutureUtil;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import org.springframework.dao.EmptyResultDataAccessException;
-import rx.Observable;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class CustomerQueryService {
 
@@ -14,19 +15,19 @@ public class CustomerQueryService {
     this.querySideCustomerRepository = querySideCustomerRepository;
   }
 
-  public Observable<QuerySideCustomer> findByCustomerId(EntityIdentifier customerId) {
-    QuerySideCustomer customer = querySideCustomerRepository.findOne(customerId.getId());
+  public CompletableFuture<QuerySideCustomer> findByCustomerId(String customerId) {
+    QuerySideCustomer customer = querySideCustomerRepository.findOne(customerId);
     if (customer == null)
-      return Observable.error(new EmptyResultDataAccessException(1));
+      return CompletableFutureUtil.failedFuture(new EmptyResultDataAccessException(1));
     else
-      return Observable.just(customer);
+      return CompletableFuture.completedFuture(customer);
   }
 
-  public Observable<List<QuerySideCustomer>> findByEmail(String email){
+  public CompletableFuture<List<QuerySideCustomer>> findByEmail(String email){
     List<QuerySideCustomer> customers = querySideCustomerRepository.findByEmailLike(email);
     if (customers.isEmpty())
-      return Observable.error(new EmptyResultDataAccessException(1));
+      return CompletableFutureUtil.failedFuture(new EmptyResultDataAccessException(1));
     else
-      return Observable.just(customers);
+      return CompletableFuture.completedFuture(customers);
   }
 }

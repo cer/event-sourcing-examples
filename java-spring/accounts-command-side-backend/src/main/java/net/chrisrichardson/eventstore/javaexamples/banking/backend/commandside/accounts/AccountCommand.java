@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts;
 
-import net.chrisrichardson.eventstore.Command;
+
+import io.eventuate.Command;
 
 interface AccountCommand extends Command {
 }

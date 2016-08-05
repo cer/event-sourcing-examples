@@ -1,15 +1,15 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts;
 
-import net.chrisrichardson.eventstore.Aggregate;
-import net.chrisrichardson.eventstore.EntityIdentifier;
+import io.eventuate.Aggregate;
+
 
 import java.math.BigDecimal;
 
 public class CreditAccountCommand implements AccountCommand {
   private final BigDecimal amount;
-  private final EntityIdentifier transactionId;
+  private final String transactionId;
 
-  public CreditAccountCommand(BigDecimal amount, EntityIdentifier transactionId) {
+  public CreditAccountCommand(BigDecimal amount, String transactionId) {
 
     this.amount = amount;
     this.transactionId = transactionId;
@@ -19,7 +19,7 @@ public class CreditAccountCommand implements AccountCommand {
     return amount;
   }
 
-  public EntityIdentifier getTransactionId() {
+  public String getTransactionId() {
     return transactionId;
   }
 }

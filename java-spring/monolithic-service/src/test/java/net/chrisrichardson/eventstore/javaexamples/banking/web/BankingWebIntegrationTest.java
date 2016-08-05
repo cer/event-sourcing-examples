@@ -1,11 +1,16 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountTransactionInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CreateMoneyTransferResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,17 +18,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
-
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
-import rx.Observable;
-
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BankingWebTestConfiguration.class)
@@ -31,114 +42,185 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil
 @IntegrationTest({"server.port=0", "management.port=0"})
 public class BankingWebIntegrationTest {
 
-  @Value("${local.server.port}")
-  private int port;
+    @Value("${local.server.port}")
+    private int port;
 
-  private String baseUrl(String path) {
-    return "http://localhost:" + port + "/" + path;
-  }
+    private String baseUrl(String path) {
+        return "http://localhost:" + port + "/" + path;
+    }
 
-  @Autowired
-  RestTemplate restTemplate;
+    @Autowired
+    RestTemplate restTemplate;
 
+    CustomersTestUtils customersTestUtils;
 
-  @Test
-  public void shouldCreateAccountsAndTransferMoney() {
-    BigDecimal initialFromAccountBalance = new BigDecimal(500);
-    BigDecimal initialToAccountBalance = new BigDecimal(100);
-    BigDecimal amountToTransfer = new BigDecimal(150);
-
-    BigDecimal finalFromAccountBalance = initialFromAccountBalance.subtract(amountToTransfer);
-    BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
-
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My Account", initialFromAccountBalance), CreateAccountResponse.class).getBody();
-    final String fromAccountId = fromAccount.getAccountId();
-
-    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest("00000000-00000000", "My Account", initialToAccountBalance), CreateAccountResponse.class).getBody();
-    String toAccountId = toAccount.getAccountId();
-
-    Assert.assertNotNull(fromAccountId);
-    Assert.assertNotNull(toAccountId);
-
-    assertAccountBalance(fromAccountId, initialFromAccountBalance);
-    assertAccountBalance(toAccountId, initialToAccountBalance);
+    @PostConstruct
+    private void init() {
+        customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+    }
 
 
-    final CreateMoneyTransferResponse moneyTransfer = restTemplate.postForEntity(baseUrl("/transfers"),
-            new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer), CreateMoneyTransferResponse.class).getBody();
+    @Test
+    public void shouldCreateAccountsAndTransferMoney() {
+        BigDecimal initialFromAccountBalance = new BigDecimal(500);
+        BigDecimal initialToAccountBalance = new BigDecimal(100);
+        BigDecimal amountToTransfer = new BigDecimal(150);
 
-    assertAccountBalance(fromAccountId, finalFromAccountBalance);
-    assertAccountBalance(toAccountId, finalToAccountBalance);
+        BigDecimal finalFromAccountBalance = initialFromAccountBalance.subtract(amountToTransfer);
+        BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
 
-  }
+        final CreateAccountResponse fromAccount = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                baseUrl("/accounts"),
+                HttpMethod.POST,
+                CreateAccountResponse.class,
+                new CreateAccountRequest("00000000-00000000", "My 1 Account", "", initialFromAccountBalance)
+        );
+        final String fromAccountId = fromAccount.getAccountId();
 
-  @Test
-  public void shouldCreateCustomers() {
-    CustomerInfo customerInfo = generateCustomerInfo();
+        CreateAccountResponse toAccount = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                baseUrl("/accounts"),
+                HttpMethod.POST,
+                CreateAccountResponse.class,
+                new CreateAccountRequest("00000000-00000000", "My 2 Account", "", initialToAccountBalance)
+        );
 
-    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
-    final String customerId = customerResponse.getId();
+        String toAccountId = toAccount.getAccountId();
 
-    Assert.assertNotNull(customerId);
-    Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+        Assert.assertNotNull(fromAccountId);
+        Assert.assertNotNull(toAccountId);
 
-    assertCustomerResponse(customerId, customerInfo);
-  }
+        assertAccountBalance(fromAccountId, initialFromAccountBalance);
+        assertAccountBalance(toAccountId, initialToAccountBalance);
 
-  private BigDecimal toCents(BigDecimal dollarAmount) {
-    return dollarAmount.multiply(new BigDecimal(100));
-  }
+        final CreateMoneyTransferResponse moneyTransfer = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                baseUrl("/transfers"),
+                HttpMethod.POST,
+                CreateMoneyTransferResponse.class,
+                new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer, "")
+        );
 
-  private void assertAccountBalance(final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
-    final BigDecimal inCents = toCents(expectedBalanceInDollars);
-    eventually(
-            new Producer<GetAccountResponse>() {
-              @Override
-              public Observable<GetAccountResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
-              }
-            },
-            new Verifier<GetAccountResponse>() {
-              @Override
-              public void verify(GetAccountResponse accountInfo) {
-                Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
-                Assert.assertEquals(inCents, accountInfo.getBalance());
-              }
-            });
-  }
+        assertAccountBalance(fromAccountId, finalFromAccountBalance);
+        assertAccountBalance(toAccountId, finalToAccountBalance);
 
-  private void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
-    eventually(
-            new Producer<CustomerResponse>() {
-              @Override
-              public Observable<CustomerResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(baseUrl("/customers/" + customerId), CustomerResponse.class).getBody());
-              }
-            },
-            new Verifier<CustomerResponse>() {
-              @Override
-              public void verify(CustomerResponse customerResponse) {
-                Assert.assertEquals(customerId, customerResponse.getId());
-                Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
-              }
-            });
-  }
+        List<AccountTransactionInfo> transactionInfoList = restTemplate.exchange(baseUrl("/accounts/"+fromAccountId+"/history"),
+                HttpMethod.GET,
+                new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
+                new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody();
 
-  private CustomerInfo generateCustomerInfo() {
-    return new CustomerInfo(
-            new Name("John", "Doe"),
-            "current@email.com",
-            "000-00-0000",
-            "1-111-111-1111",
-            new Address("street 1",
-                    "street 2",
-                    "City",
-                    "State",
-                    "1111111")
-    );
-  }
 
-  private ToAccountInfo generateToAccountInfo() {
-    return new ToAccountInfo("11111111-11111111", "New Account", "John Doe");
-  }
+        Optional<AccountTransactionInfo> first = transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
+
+        assertTrue(first.isPresent());
+
+        AccountTransactionInfo ti = first.get();
+
+        assertEquals(fromAccountId, ti.getFromAccountId());
+        assertEquals(toAccountId, ti.getToAccountId());
+        assertEquals(toAccountId, ti.getToAccountId());
+        assertEquals(fromAccountId, ti.getFromAccountId());
+        assertEquals(toCents(amountToTransfer).longValue(), ti.getAmount());
+
+    }
+
+    @Test
+    public void shouldCreateAccountsAndGetByCustomer() {
+        BigDecimal initialFromAccountBalance = new BigDecimal(500);
+        CustomerInfo customerInfo = generateCustomerInfo();
+
+        final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+        final String customerId = customerResponse.getId();
+
+        Assert.assertNotNull(customerId);
+        assertEquals(customerInfo, customerResponse.getCustomerInfo());
+
+        customersTestUtils.assertCustomerResponse(customerId, customerInfo);
+
+        final CreateAccountResponse account = BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                baseUrl("/accounts"),
+                HttpMethod.POST,
+                CreateAccountResponse.class,
+                new CreateAccountRequest(customerId, "My 1 Account", "", initialFromAccountBalance)
+        );
+        final String accountId = account.getAccountId();
+
+        Assert.assertNotNull(accountId);
+
+        assertAccountBalance(accountId, initialFromAccountBalance);
+
+        List<GetAccountResponse> accountResponseList = restTemplate.exchange(baseUrl("/accounts?customerId="+customerId),
+                HttpMethod.GET,
+                new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
+                new ParameterizedTypeReference<List<GetAccountResponse>>() {}).getBody();
+
+        assertTrue(accountResponseList.stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst().isPresent());
+    }
+
+    @Test
+    public void shouldCreateCustomersAndAddToAccount() {
+        CustomerInfo customerInfo = generateCustomerInfo();
+
+        final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+        final String customerId = customerResponse.getId();
+
+        Assert.assertNotNull(customerId);
+        assertEquals(customerInfo, customerResponse.getCustomerInfo());
+
+        customersTestUtils.assertCustomerResponse(customerId, customerInfo);
+
+        ToAccountInfo toAccountInfo = generateToAccountInfo();
+
+        BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                baseUrl("/customers/"+customerId+"/toaccounts"),
+                HttpMethod.POST,
+                null,
+                toAccountInfo
+        );
+
+        assertToAccountsContains(customerId, toAccountInfo);
+    }
+
+    private BigDecimal toCents(BigDecimal dollarAmount) {
+        return dollarAmount.multiply(new BigDecimal(100));
+    }
+
+    private void assertAccountBalance(final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
+        final BigDecimal inCents = toCents(expectedBalanceInDollars);
+        eventually(
+                new Producer<GetAccountResponse>() {
+                    @Override
+                    public CompletableFuture<GetAccountResponse> produce() {
+                        return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                                baseUrl("/accounts/" + fromAccountId),
+                                HttpMethod.GET,
+                                GetAccountResponse.class));
+                    }
+                },
+                new Verifier<GetAccountResponse>() {
+                    @Override
+                    public void verify(GetAccountResponse accountInfo) {
+                        assertEquals(fromAccountId, accountInfo.getAccountId());
+                        assertEquals(inCents, accountInfo.getBalance());
+                    }
+                });
+    }
+
+    private void assertToAccountsContains(final String customerId, final ToAccountInfo toAccountInfo) {
+        eventually(
+                new Producer<QuerySideCustomer>() {
+                    @Override
+                    public CompletableFuture<QuerySideCustomer> produce() {
+                        return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+                                baseUrl("/customers/" + customerId),
+                                HttpMethod.GET,
+                                QuerySideCustomer.class));
+                    }
+                },
+                new Verifier<QuerySideCustomer>() {
+                    @Override
+                    public void verify(QuerySideCustomer customerResponse) {
+                        assertEquals(customerId, customerResponse.getId());
+                        assertTrue(customerResponse.getToAccounts().values().stream().anyMatch(t -> t.equals(toAccountInfo)));
+                    }
+                });
+    }
 }

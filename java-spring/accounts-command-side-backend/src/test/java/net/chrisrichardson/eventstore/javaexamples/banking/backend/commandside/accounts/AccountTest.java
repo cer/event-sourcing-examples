@@ -1,7 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts;
 
-import net.chrisrichardson.eventstore.CommandProcessingAggregates;
-import net.chrisrichardson.eventstore.Event;
+import io.eventuate.Event;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountOpenedEvent;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +16,8 @@ public class AccountTest {
     String title = "My Account";
     String customerId = "00000000-00000000";
     BigDecimal initialBalance = new BigDecimal(512);
-    List<Event> events = CommandProcessingAggregates.processToList(account, (AccountCommand)new OpenAccountCommand(customerId, title, initialBalance));
+
+    List<Event> events = account.process(new OpenAccountCommand(customerId, title, initialBalance, ""));
 
     Assert.assertEquals(1, events.size());
     Assert.assertEquals(AccountOpenedEvent.class, events.get(0).getClass());

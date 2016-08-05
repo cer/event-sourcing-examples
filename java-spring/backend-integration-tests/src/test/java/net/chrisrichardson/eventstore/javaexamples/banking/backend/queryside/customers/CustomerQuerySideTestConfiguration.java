@@ -1,11 +1,14 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
+import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerConfiguration;
-import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration;
+
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import({CustomerConfiguration.class, JdbcEventStoreConfiguration.class, QuerySideCustomerConfiguration.class})
+@Import({CustomerConfiguration.class, EventuateJdbcEventStoreConfiguration.class, QuerySideCustomerConfiguration.class})
+@EnableAutoConfiguration
 public class CustomerQuerySideTestConfiguration {
 }

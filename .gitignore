@@ -25,6 +25,12 @@ browserapp/reports
 loginapp/reports
 local_developer_config
 
+js-frontend/node_modules
+js-frontend/build
+js-frontend/dist
+js-frontend/dist-intermediate
+
+
 
 /web/web.log
 *.log

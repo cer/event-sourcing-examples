@@ -1,8 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts;
 
-import net.chrisrichardson.eventstore.Event;
-import net.chrisrichardson.eventstore.EventUtil;
-import net.chrisrichardson.eventstore.ReflectiveMutableCommandProcessingAggregate;
+import io.eventuate.Event;
+import io.eventuate.EventUtil;
+import io.eventuate.ReflectiveMutableCommandProcessingAggregate;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountDebitFailedDueToInsufficientFundsEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountDebitedEvent;
@@ -16,7 +16,7 @@ public class Account extends ReflectiveMutableCommandProcessingAggregate<Account
   private BigDecimal balance;
 
   public List<Event> process(OpenAccountCommand cmd) {
-    return EventUtil.events(new AccountOpenedEvent(cmd.getCustomerId(), cmd.getTitle(), cmd.getInitialBalance()));
+    return EventUtil.events(new AccountOpenedEvent(cmd.getCustomerId(), cmd.getTitle(), cmd.getInitialBalance(), cmd.getDescription()));
   }
 
   public List<Event> process(DebitAccountCommand cmd) {

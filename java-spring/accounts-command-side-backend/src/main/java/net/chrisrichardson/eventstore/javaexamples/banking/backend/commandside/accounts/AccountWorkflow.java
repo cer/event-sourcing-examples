@@ -1,34 +1,36 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts;
 
-import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.javaapi.consumer.EventHandlerContext;
+
+import io.eventuate.EntityWithIdAndVersion;
+import io.eventuate.EventHandlerContext;
+import io.eventuate.EventHandlerMethod;
+import io.eventuate.EventSubscriber;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.DebitRecordedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.MoneyTransferCreatedEvent;
-import net.chrisrichardson.eventstore.subscriptions.*;
-import rx.Observable;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 @EventSubscriber(id="accountEventHandlers")
-public class AccountWorkflow implements CompoundEventHandler {
+public class AccountWorkflow  {
 
   @EventHandlerMethod
-  public Observable<?> debitAccount(EventHandlerContext<MoneyTransferCreatedEvent> ctx) {
+  public CompletableFuture<?> debitAccount(EventHandlerContext<MoneyTransferCreatedEvent> ctx) {
     MoneyTransferCreatedEvent event = ctx.getEvent();
     BigDecimal amount = event.getDetails().getAmount();
-    EntityIdentifier transactionId = ctx.getEntityIdentifier();
+    String transactionId = ctx.getEntityId();
 
-    EntityIdentifier fromAccountId = event.getDetails().getFromAccountId();
+    String fromAccountId = event.getDetails().getFromAccountId();
 
     return ctx.update(Account.class, fromAccountId, new DebitAccountCommand(amount, transactionId));
   }
 
   @EventHandlerMethod
-  public Observable<?> creditAccount(EventHandlerContext<DebitRecordedEvent> ctx) {
+  public CompletableFuture<EntityWithIdAndVersion<Account>> creditAccount(EventHandlerContext<DebitRecordedEvent> ctx) {
     DebitRecordedEvent event = ctx.getEvent();
     BigDecimal amount = event.getDetails().getAmount();
-    EntityIdentifier fromAccountId = event.getDetails().getToAccountId();
-    EntityIdentifier transactionId = ctx.getEntityIdentifier();
+    String fromAccountId = event.getDetails().getToAccountId();
+    String transactionId = ctx.getEntityId();
 
     return ctx.update(Account.class, fromAccountId, new CreditAccountCommand(amount, transactionId));
   }

@@ -17,23 +17,302 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "customer-service-command-side-controller",
-      "description": "Customer Service Commandside Controller"
+      "name": "account-query-controller",
+      "description": "Account Query Controller"
     },
     {
-      "name": "customer-service-query-side-controller",
-      "description": "Customer Service Queryside Controller"
-    },
-    {
-      "name": "account-query-side-controller",
-      "description": "Account Service Queryside Controller"
+      "name": "money-transfer-controller",
+      "description": "Money Transfer Controller"
     },
     {
       "name": "auth-controller",
-      "description": "Authentication Controller"
+      "description": "Auth Controller"
+    },
+    {
+      "name": "customer-controller",
+      "description": "Customer Controller"
+    },
+    {
+      "name": "customer-query-controller",
+      "description": "Customer Query Controller"
+    },
+    {
+      "name": "account-controller",
+      "description": "Account Controller"
     }
   ],
   "paths": {
+    "/accounts": {
+      "get": {
+        "tags": [
+          "account-query-controller"
+        ],
+        "summary": "getAccountsForCustomer",
+        "operationId": "getAccountsForCustomerUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "customerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetAccountResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "account-controller"
+        ],
+        "summary": "createAccount",
+        "operationId": "createAccountUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateAccountRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateAccountResponse"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}": {
+      "get": {
+        "tags": [
+          "account-query-controller"
+        ],
+        "summary": "get",
+        "operationId": "getUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "accountId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetAccountResponse"
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/history": {
+      "get": {
+        "tags": [
+          "account-query-controller"
+        ],
+        "summary": "getTransactionsHistory",
+        "operationId": "getTransactionsHistoryUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "accountId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountTransactionInfo"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "customer-query-controller"
+        ],
+        "summary": "getCustomersByEmail",
+        "operationId": "getCustomersByEmailUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomersQueryResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "customer-controller"
+        ],
+        "summary": "createCustomer",
+        "operationId": "createCustomerUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "customer",
+            "description": "customer",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          }
+        }
+      }
+    },
+    "/customers/{customerId}": {
+      "get": {
+        "tags": [
+          "customer-query-controller"
+        ],
+        "summary": "getCustomer",
+        "operationId": "getCustomerUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "customerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/QuerySideCustomer"
+            }
+          }
+        }
+      }
+    },
+    "/customers/{id}/toaccounts": {
+      "post": {
+        "tags": [
+          "customer-controller"
+        ],
+        "summary": "addToAccount",
+        "operationId": "addToAccountUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "request",
+            "description": "request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ToAccountInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "tags": [
@@ -62,81 +341,19 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/AuthResponse"
+              "$ref": "#/definitions/QuerySideCustomer"
             }
           }
         }
       }
     },
-    "/accounts": {
-      "get": {
-        "tags": [
-          "account-query-side-controller"
-        ],
-        "summary": "getAllAccountsByCustomer",
-        "operationId": "getAllAccountsByCustomerUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "customerId",
-            "in": "query",
-            "description": "customer id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomersQueryResponse"
-            }
-          }
-        }
-      }
-    },
-    "/customers": {
-      "get": {
-        "tags": [
-          "customer-service-query-side-controller"
-        ],
-        "summary": "getAllCustomersByEmail",
-        "operationId": "getAllCustomersByEmailUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-	    "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "description": "customer's email",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomersQueryResponse"
-            }
-          }
-        }
-      },
+    "/transfers": {
       "post": {
         "tags": [
-          "customer-service-command-side-controller"
+          "money-transfer-controller"
         ],
-        "summary": "saveCustomer",
-        "operationId": "saveCustomerUsingPOST",
+        "summary": "createMoneyTransfer",
+        "operationId": "createMoneyTransferUsingPOST",
         "consumes": [
           "application/json"
         ],
@@ -144,164 +361,142 @@
           "*/*"
         ],
         "parameters": [
-          {
-            "in": "body",
-            "name": "customer",
-            "description": "customer",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CreateCustomerRequest"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomerResponse"
-            }
-          },
-          "400": {
-            "description": "Validation error"
-          }
-        }
-      }
-    },
-    "/customers/{id}": {
-      "get": {
-        "tags": [
-          "customer-service-query-side-controller"
-        ],
-        "summary": "getBoard",
-        "operationId": "getBoardUsingGET",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/CustomerResponse"
-            }
-          }
-        }
-      }
-    },
-    "/customers/{id}/toaccounts": {
-      "post": {
-        "tags": [
-          "customer-service-command-side-controller"
-        ],
-        "summary": "addToAccount",
-        "operationId": "addToAccountUsingPOST",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "*/*"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "id",
-            "required": true,
-            "type": "string"
-          },
           {
             "in": "body",
             "name": "request",
             "description": "request",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/ToAccountsRequest"
+              "$ref": "#/definitions/CreateMoneyTransferRequest"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Validation error"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateMoneyTransferResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "getCurrentUser",
+        "operationId": "getCurrentUserUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/QuerySideCustomer"
+            }
           }
         }
       }
     }
   },
   "definitions": {
+    "CreateAccountResponse": {
+      "properties": {
+        "accountId": {
+          "type": "string"
+        }
+      }
+    },
     "AuthRequest": {
-      "required": [ "email" ],
       "properties": {
         "email": {
           "type": "string"
         }
       }
     },
-    "AuthResponse": {
+    "QuerySideCustomer": {
       "properties": {
-        "token": {
-          "type": "string"
-        }
-      }
-    },
-    "CustomerInfo": {
-      "required": [ "email" ],
-      "properties": {
+        "address": {
+          "$ref": "#/definitions/Address"
+        },
         "email": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/definitions/Name"
+        },
+        "phoneNumber": {
           "type": "string"
         },
         "ssn": {
           "type": "string"
         },
-        "phoneNumber": {
-          "type": "string"
-        },
-        "address": {
-          "$ref": "#/definitions/Address"
-        }
-      }
-    },
-    "CustomersQueryResponse": {
-      "properties": {
-        "customers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/CustomerResponse"
+        "toAccounts": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/ToAccountInfo"
           }
         }
       }
     },
-    "CustomerResponse": {
-      "required": [ "id", "customerInfo" ],
+    "Address": {
       "properties": {
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateMoneyTransferResponse": {
+      "properties": {
+        "moneyTransferId": {
+          "type": "string"
+        }
+      }
+    },
+    "ToAccountInfo": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
         "id": {
           "type": "string"
         },
-        "customerInfo": {
-          "$ref": "#/definitions/CustomerInfo"
+        "owner": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
         }
       }
     },
-    "AccountsQueryResponse": {
+    "Name": {
       "properties": {
-        "customers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/GetAccountResponse"
-          }
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
         }
       }
     },
@@ -311,67 +506,109 @@
           "type": "string"
         },
         "balance": {
-          "type": "number"
-        }
-      }
-    },
-    "CreateCustomerRequest": {
-      "required": [ "email", "ssn", "phoneNumber" ],
-      "properties": {
-        "firstName": {
-          "type": "string"
+          "type": "number",
+          "format": "double"
         },
-        "lastName": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        },
-        "ssn": {
-          "type": "string"
-        },
-        "phoneNumber": {
-          "type": "string"
-        },
-        "address": {
-          "$ref": "#/definitions/Address"
-        }
-      }
-    },
-    "ToAccountsRequest":{
-      "required": [ "id", "owner" ],
-      "properties": {
-        "id": {
+        "description": {
           "type": "string"
         },
         "title": {
           "type": "string"
+        }
+      }
+    },
+    "CreateAccountRequest": {
+      "properties": {
+        "customerId": {
+          "type": "string"
         },
-        "owner": {
+        "description": {
+          "type": "string"
+        },
+        "initialBalance": {
+          "type": "number",
+          "format": "double"
+        },
+        "title": {
           "type": "string"
         }
       }
     },
-    "Address": {
-      "required": [ "street1", "city", "state", "zipCode" ],
+    "CustomersQueryResponse": {
       "properties": {
-        "street1": {
+        "customers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/QuerySideCustomer"
+          }
+        }
+      }
+    },
+    "AccountTransactionInfo": {
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "fromAccountId": {
           "type": "string"
         },
-        "street2": {
+        "toAccountId": {
           "type": "string"
         },
-        "city": {
+        "transactionId": {
+          "type": "string"
+        }
+      }
+    },
+    "Map«string,ToAccountInfo»": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/ToAccountInfo"
+      }
+    },
+    "CreateMoneyTransferRequest": {
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "fromAccountId": {
           "type": "string"
         },
-        "state": {
+        "toAccountId": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerInfo": {
+      "properties": {
+        "address": {
+          "$ref": "#/definitions/Address"
+        },
+        "email": {
           "type": "string"
         },
-        "zipCode": {
+        "name": {
+          "$ref": "#/definitions/Name"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerResponse": {
+      "properties": {
+        "customerInfo": {
+          "$ref": "#/definitions/CustomerInfo"
+        },
+        "id": {
           "type": "string"
         }
       }
     }
   }
 }
-

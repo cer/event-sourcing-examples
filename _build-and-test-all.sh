@@ -16,8 +16,12 @@ fi
 ${DOCKER_COMPOSE?} up -d mongodb
 
 if [ -z "$DOCKER_HOST_IP" ] ; then
-  export DOCKER_HOST_IP=$(docker-machine ip default)
-  echo set DOCKER_HOST_IP $DOCKER_HOST_IP
+  if which docker-machine >/dev/null; then
+    export DOCKER_HOST_IP=$(docker-machine ip default)
+  else
+    export DOCKER_HOST_IP=localhost
+ fi
+ echo set DOCKER_HOST_IP $DOCKER_HOST_IP
 fi
 
 if [ -z "$SPRING_DATA_MONGODB_URI" ] ; then
@@ -27,7 +31,7 @@ fi
 
 export SERVICE_HOST=$DOCKER_HOST_IP
 
-./gradlew $* build
+./gradlew $* build -x :e2e-test:test
 
 if [ -z "$EVENTUATE_API_KEY_ID" -o -z "$EVENTUATE_API_KEY_SECRET" ] ; then
   echo You must set EVENTUATE_API_KEY_ID and  EVENTUATE_API_KEY_SECRET
@@ -37,11 +41,11 @@ fi
 
 ${DOCKER_COMPOSE?} up -d
 
-$DIR/wait-for-services.sh $DOCKER_HOST_IP
+$DIR/wait-for-services.sh $DOCKER_HOST_IP 8080 8081 8082
 
 set -e
 
-./gradlew $* :e2e-test:cleanTest :e2e-test:test
+./gradlew -a $* :e2e-test:cleanTest :e2e-test:test -P ignoreE2EFailures=false
 
 ${DOCKER_COMPOSE?} stop
 ${DOCKER_COMPOSE?} rm -v --force
