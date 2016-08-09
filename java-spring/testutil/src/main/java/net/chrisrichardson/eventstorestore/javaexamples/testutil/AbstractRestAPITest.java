@@ -12,14 +12,10 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.C
 import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.CreateMoneyTransferResponse;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 

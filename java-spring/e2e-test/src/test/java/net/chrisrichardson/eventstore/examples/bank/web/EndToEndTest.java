@@ -3,7 +3,10 @@ package net.chrisrichardson.eventstore.examples.bank.web;
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.AbstractRestAPITest;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.AuthenticatedRestTemplate;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.springframework.web.client.RestTemplate;
+
+import javax.annotation.PostConstruct;
 
 public class EndToEndTest extends AbstractRestAPITest {
 
@@ -12,8 +15,20 @@ public class EndToEndTest extends AbstractRestAPITest {
         return x == null ? defaultValue : x;
     }
 
+    CustomersTestUtils customersTestUtils;
+
+    @PostConstruct
+    private void init() {
+        customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+    }
+
     public String baseUrl(String path) {
         return "http://" + getenv("SERVICE_HOST", "localhost") + ":" + 8080 + "/" + path;
+    }
+
+    @Override
+    public CustomersTestUtils getCustomersTestUtils() {
+        return customersTestUtils;
     }
 
     RestTemplate restTemplate = new RestTemplate();

@@ -19,10 +19,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.concurrent.CompletableFuture;
 
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateToAccountInfo;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.await;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
 
 /**
  * Created by Main on 10.02.2016.

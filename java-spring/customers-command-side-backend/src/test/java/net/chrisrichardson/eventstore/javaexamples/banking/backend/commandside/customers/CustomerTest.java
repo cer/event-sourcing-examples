@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;
 
 public class CustomerTest {
 
@@ -26,4 +26,6 @@ public class CustomerTest {
         customer.applyEvent(events.get(0));
         Assert.assertEquals(customerInfo, customer.getCustomerInfo());
     }
+
+
 }
