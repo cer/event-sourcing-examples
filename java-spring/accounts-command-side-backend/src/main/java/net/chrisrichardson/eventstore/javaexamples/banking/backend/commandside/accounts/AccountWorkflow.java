@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class AccountWorkflow  {
 
   @EventHandlerMethod
-  public CompletableFuture<EntityWithIdAndVersion<Account>> debitAccount(EventHandlerContext<MoneyTransferCreatedEvent> ctx) {
+  public CompletableFuture<?> debitAccount(EventHandlerContext<MoneyTransferCreatedEvent> ctx) {
     MoneyTransferCreatedEvent event = ctx.getEvent();
     BigDecimal amount = event.getDetails().getAmount();
     String transactionId = ctx.getEntityId();
