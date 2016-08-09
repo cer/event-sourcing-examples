@@ -12,6 +12,6 @@ dependencies {
 
     compile "io.eventuate.client.java:eventuate-client-java-http-stomp-spring:$eventuateClientVersion"
 
-    testCompile project(":testutil-customers")
+    testCompile project(":testutil")
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }

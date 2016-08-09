@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

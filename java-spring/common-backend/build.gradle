@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 dependencies {
-    compile project(":common-customers")
+    compile project(":common")
 
     compile "io.eventuate.client.java:eventuate-client-java-spring:$eventuateClientVersion"
 

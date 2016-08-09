@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.transactions;
 
 
 public class CreateMoneyTransferResponse {

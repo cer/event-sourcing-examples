@@ -1,8 +1,8 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.transactions;
 
-import java.math.BigDecimal;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class CreateMoneyTransferRequest {
 

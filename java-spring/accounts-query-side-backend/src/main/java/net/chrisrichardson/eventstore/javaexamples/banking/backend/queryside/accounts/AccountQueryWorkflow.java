@@ -8,6 +8,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accoun
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountDebitedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountOpenedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.MoneyTransferCreatedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

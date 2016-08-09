@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
 import java.math.BigDecimal;
 

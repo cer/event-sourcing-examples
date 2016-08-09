@@ -1,8 +1,7 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.DecimalMin;
-
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class CreateAccountRequest {

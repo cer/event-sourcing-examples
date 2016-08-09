@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts;
+package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
 
 public class CreateAccountResponse {

@@ -1,11 +1,7 @@
-package net.chrisrichardson.eventstorestore.javaexamples.testutil.customers;
+package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,14 +22,12 @@ public class CustomersTestUtils {
     }
 
     public void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
+        AuthenticatedRestTemplate art = new AuthenticatedRestTemplate(restTemplate);
         eventually(
                 new Producer<QuerySideCustomer>() {
                     @Override
                     public CompletableFuture<QuerySideCustomer> produce() {
-                        return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                                customersBaseUrl + customerId,
-                                HttpMethod.GET,
-                                QuerySideCustomer.class));
+                        return CompletableFuture.completedFuture(art.getForEntity(customersBaseUrl + customerId, QuerySideCustomer.class));
                     }
                 },
                 new Verifier<QuerySideCustomer>() {
@@ -72,6 +66,6 @@ public class CustomersTestUtils {
     }
 
     public static ToAccountInfo generateToAccountInfo() {
-        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe","");
+        return new ToAccountInfo("11111111-11111111", "New Account", "John Doe", "");
     }
 }

@@ -1,6 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;

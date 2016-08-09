@@ -1,7 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
