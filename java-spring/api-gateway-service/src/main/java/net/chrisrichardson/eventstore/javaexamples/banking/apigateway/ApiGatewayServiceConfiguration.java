@@ -1,7 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.apigateway;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.eventuate.javaclient.spring.httpstomp.EventuateHttpStompClientConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.AuthConfiguration;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -27,7 +26,7 @@ import java.util.Collections;
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-@Import({EventuateHttpStompClientConfiguration.class, AuthConfiguration.class})
+@Import({AuthConfiguration.class})
 @EnableConfigurationProperties({ApiGatewayProperties.class})
 public class ApiGatewayServiceConfiguration extends WebMvcConfigurerAdapter {
 
