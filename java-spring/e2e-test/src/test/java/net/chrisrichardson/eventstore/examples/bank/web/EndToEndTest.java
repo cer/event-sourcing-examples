@@ -28,6 +28,7 @@ import java.util.concurrent.CompletableFuture;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class EndToEndTest {
 
@@ -115,15 +116,26 @@ public class EndToEndTest {
 
     // TOOD - check state of money transfer
 
-    List<AccountTransactionInfo> transactionInfoList = restTemplate.exchange(accountsQuerySideBaseUrl("/accounts/"+fromAccountId+"/history"),
-            HttpMethod.GET,
-            new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
-            new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody();
+    eventually(
+            () -> CompletableFuture.completedFuture(restTemplate.exchange(accountsQuerySideBaseUrl("/accounts/"+fromAccountId+"/history"),
+                    HttpMethod.GET,
+                    new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
+                    new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody()),
+            transactionInfoList -> {
+              if (!(transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId()) &&
+                      ti.getFromAccountId().equals(fromAccountId) &&
+                      ti.getToAccountId().equals(toAccountId) &&
+                      ti.getAmount() == toCents(amountToTransfer).longValue()).findFirst().isPresent())) {
+                fail(String.format("%s does not contain %s %s %s",
+                        moneyTransfer.getMoneyTransferId(),
+                        fromAccount,
+                        toAccount,
+                        toCents(amountToTransfer).longValue()));
+              }
 
-    assertTrue(transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId()) &&
-            ti.getFromAccountId().equals(fromAccountId) &&
-            ti.getToAccountId().equals(toAccountId) &&
-            ti.getAmount() == toCents(amountToTransfer).longValue()).findFirst().isPresent());
+            }
+    );
+
   }
 
   @Test
@@ -163,14 +175,14 @@ public class EndToEndTest {
     return dollarAmount.multiply(new BigDecimal(100));
   }
 
-  private void assertAccountBalance(final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
+  private void assertAccountBalance(final String accountId, final BigDecimal expectedBalanceInDollars) {
     final BigDecimal inCents = toCents(expectedBalanceInDollars);
-    eventually(
+      eventually(
             new Producer<GetAccountResponse>() {
               @Override
               public CompletableFuture<GetAccountResponse> produce() {
                   return CompletableFuture.completedFuture(BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
-                          accountsQuerySideBaseUrl("/accounts/" + fromAccountId),
+                          accountsQuerySideBaseUrl("/accounts/" + accountId),
                           HttpMethod.GET,
                           GetAccountResponse.class));
               }
@@ -178,8 +190,8 @@ public class EndToEndTest {
             new Verifier<GetAccountResponse>() {
               @Override
               public void verify(GetAccountResponse accountInfo) {
-                Assert.assertEquals(fromAccountId, accountInfo.getAccountId());
-                Assert.assertEquals(inCents, accountInfo.getBalance());
+                Assert.assertEquals(accountId, accountInfo.getAccountId());
+                Assert.assertEquals(accountId, inCents, accountInfo.getBalance());
               }
             });
   }

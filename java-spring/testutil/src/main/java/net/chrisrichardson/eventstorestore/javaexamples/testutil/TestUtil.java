@@ -55,7 +55,7 @@ public class TestUtil {
   }
 
   public static <T> void eventually(final Producer<T> producer, final Verifier<T> verifier) {
-    final int n = 50;
+    final int n = 150;
     Object possibleException = Observable.timer(0, 200, TimeUnit.MILLISECONDS).flatMap(new Func1<Long, Observable<Outcome<T>>>() {
 
       @Override

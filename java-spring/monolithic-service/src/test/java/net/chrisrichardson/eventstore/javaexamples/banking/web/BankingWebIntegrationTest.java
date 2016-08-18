@@ -35,6 +35,7 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customer
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BankingWebTestConfiguration.class)
@@ -102,23 +103,31 @@ public class BankingWebIntegrationTest {
         assertAccountBalance(fromAccountId, finalFromAccountBalance);
         assertAccountBalance(toAccountId, finalToAccountBalance);
 
-        List<AccountTransactionInfo> transactionInfoList = restTemplate.exchange(baseUrl("/accounts/"+fromAccountId+"/history"),
-                HttpMethod.GET,
-                new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
-                new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody();
 
+        eventually(
+                () -> CompletableFuture.completedFuture(restTemplate.exchange(baseUrl("/accounts/"+fromAccountId+"/history"),
+                        HttpMethod.GET,
+                        new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com")),
+                        new ParameterizedTypeReference<List<AccountTransactionInfo>>() {}).getBody()),
+                transactionInfoList -> {
+                    Optional<AccountTransactionInfo> txn = transactionInfoList.stream()
+                            .filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId()))
+                            .findFirst();
 
-        Optional<AccountTransactionInfo> first = transactionInfoList.stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
+                    if (!txn.isPresent()) {
+                        fail(String.format("%s does not contain %s", transactionInfoList, moneyTransfer.getMoneyTransferId()));
+                    }
 
-        assertTrue(first.isPresent());
+                    AccountTransactionInfo ti = txn.get();
 
-        AccountTransactionInfo ti = first.get();
+                    assertEquals(fromAccountId, ti.getFromAccountId());
+                    assertEquals(toAccountId, ti.getToAccountId());
+                    assertEquals(toAccountId, ti.getToAccountId());
+                    assertEquals(fromAccountId, ti.getFromAccountId());
+                    assertEquals(toCents(amountToTransfer).longValue(), ti.getAmount());
+                }
+        );
 
-        assertEquals(fromAccountId, ti.getFromAccountId());
-        assertEquals(toAccountId, ti.getToAccountId());
-        assertEquals(toAccountId, ti.getToAccountId());
-        assertEquals(fromAccountId, ti.getFromAccountId());
-        assertEquals(toCents(amountToTransfer).longValue(), ti.getAmount());
 
     }
 
