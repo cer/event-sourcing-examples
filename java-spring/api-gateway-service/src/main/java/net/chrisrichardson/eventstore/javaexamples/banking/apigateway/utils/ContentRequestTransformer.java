@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
  */
 public class ContentRequestTransformer extends ProxyRequestTransformer {
 
-    @Override
-    public RequestBuilder transform(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, URISyntaxException, IOException {
-        RequestBuilder requestBuilder = predecessor.transform(request);
+  @Override
+  public RequestBuilder transform(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, URISyntaxException, IOException {
+    RequestBuilder requestBuilder = predecessor.transform(request);
 
-        String requestContent = request.getReader().lines().collect(Collectors.joining(""));
-        if(!requestContent.isEmpty()) {
-            StringEntity entity = new StringEntity(requestContent, ContentType.APPLICATION_JSON);
-            requestBuilder.setEntity(entity);
-        }
-
-        return requestBuilder;
+    String requestContent = request.getReader().lines().collect(Collectors.joining(""));
+    if (!requestContent.isEmpty()) {
+      StringEntity entity = new StringEntity(requestContent, ContentType.APPLICATION_JSON);
+      requestBuilder.setEntity(entity);
     }
+
+    return requestBuilder;
+  }
 }

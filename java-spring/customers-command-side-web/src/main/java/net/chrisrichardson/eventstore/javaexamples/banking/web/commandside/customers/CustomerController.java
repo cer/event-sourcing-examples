@@ -18,23 +18,23 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private CustomerService customerService;
+  private CustomerService customerService;
 
-    @Autowired
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+  @Autowired
+  public CustomerController(CustomerService customerService) {
+    this.customerService = customerService;
+  }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public CompletableFuture<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo customer) {
-        return customerService.createCustomer(customer)
-                .thenApply(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityId(), customer));
-    }
+  @RequestMapping(method = RequestMethod.POST)
+  public CompletableFuture<CustomerResponse> createCustomer(@Validated @RequestBody CustomerInfo customer) {
+    return customerService.createCustomer(customer)
+            .thenApply(entityAndEventInfo -> new CustomerResponse(entityAndEventInfo.getEntityId(), customer));
+  }
 
-    @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
-    public CompletableFuture<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
-        return customerService.addToAccount(id, request)
-                .thenApply(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.getEntityVersion().toString()));
-    }
+  @RequestMapping(value = "/{id}/toaccounts", method = RequestMethod.POST)
+  public CompletableFuture<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
+    return customerService.addToAccount(id, request)
+            .thenApply(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.getEntityVersion().toString()));
+  }
 
 }

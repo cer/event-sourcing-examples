@@ -7,20 +7,20 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAc
  */
 public class CustomerAddedToAccount extends CustomerEvent {
 
-    private ToAccountInfo toAccountInfo;
+  private ToAccountInfo toAccountInfo;
 
-    public CustomerAddedToAccount() {
-    }
+  public CustomerAddedToAccount() {
+  }
 
-    public CustomerAddedToAccount(ToAccountInfo toAccountInfo) {
-        this.toAccountInfo = toAccountInfo;
-    }
+  public CustomerAddedToAccount(ToAccountInfo toAccountInfo) {
+    this.toAccountInfo = toAccountInfo;
+  }
 
-    public ToAccountInfo getToAccountInfo() {
-        return toAccountInfo;
-    }
+  public ToAccountInfo getToAccountInfo() {
+    return toAccountInfo;
+  }
 
-    public void setToAccountInfo(ToAccountInfo toAccountInfo) {
-        this.toAccountInfo = toAccountInfo;
-    }
+  public void setToAccountInfo(ToAccountInfo toAccountInfo) {
+    this.toAccountInfo = toAccountInfo;
+  }
 }

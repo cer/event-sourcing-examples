@@ -7,5 +7,5 @@ import java.util.List;
 
 interface QuerySideCustomerRepository extends MongoRepository<QuerySideCustomer, String> {
 
-    List<QuerySideCustomer> findByEmailLike(String email);
+  List<QuerySideCustomer> findByEmailLike(String email);
 }

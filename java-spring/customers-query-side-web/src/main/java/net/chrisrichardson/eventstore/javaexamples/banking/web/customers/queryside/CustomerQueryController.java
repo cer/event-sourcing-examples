@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,32 +16,32 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class CustomerQueryController {
 
-    private CustomerQueryService customerQueryService;
+  private CustomerQueryService customerQueryService;
 
-    @Autowired
-    public CustomerQueryController(CustomerQueryService customerQueryService) {
-        this.customerQueryService = customerQueryService;
-    }
+  @Autowired
+  public CustomerQueryController(CustomerQueryService customerQueryService) {
+    this.customerQueryService = customerQueryService;
+  }
 
-    @RequestMapping(value = "/customers/{customerId}", method = RequestMethod.GET)
-    public CompletableFuture<QuerySideCustomer> getCustomer(@PathVariable String customerId) {
-        return customerQueryService.findByCustomerId(customerId);
-    }
+  @RequestMapping(value = "/customers/{customerId}", method = RequestMethod.GET)
+  public CompletableFuture<QuerySideCustomer> getCustomer(@PathVariable String customerId) {
+    return customerQueryService.findByCustomerId(customerId);
+  }
 
-    @RequestMapping(value = "/customers", method = RequestMethod.GET)
-    public CompletableFuture<CustomersQueryResponse> getCustomersByEmail(@RequestParam String email) {
-        return customerQueryService.findByEmail(email)
-                .thenApply(this::getCustomersQueryResponse);
-    }
+  @RequestMapping(value = "/customers", method = RequestMethod.GET)
+  public CompletableFuture<CustomersQueryResponse> getCustomersByEmail(@RequestParam String email) {
+    return customerQueryService.findByEmail(email)
+            .thenApply(this::getCustomersQueryResponse);
+  }
 
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "customers not found")
-    @ExceptionHandler(EmptyResultDataAccessException.class)
-    public void customersNotFound() {
+  @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "customers not found")
+  @ExceptionHandler(EmptyResultDataAccessException.class)
+  public void customersNotFound() {
 
-    }
+  }
 
-    private CustomersQueryResponse getCustomersQueryResponse(List<QuerySideCustomer> customersList) {
-        return new CustomersQueryResponse(customersList);
-    }
+  private CustomersQueryResponse getCustomersQueryResponse(List<QuerySideCustomer> customersList) {
+    return new CustomersQueryResponse(customersList);
+  }
 }

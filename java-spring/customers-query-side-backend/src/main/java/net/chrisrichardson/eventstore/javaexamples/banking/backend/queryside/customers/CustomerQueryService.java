@@ -23,7 +23,7 @@ public class CustomerQueryService {
       return CompletableFuture.completedFuture(customer);
   }
 
-  public CompletableFuture<List<QuerySideCustomer>> findByEmail(String email){
+  public CompletableFuture<List<QuerySideCustomer>> findByEmail(String email) {
     List<QuerySideCustomer> customers = querySideCustomerRepository.findByEmailLike(email);
     if (customers.isEmpty())
       return CompletableFutureUtil.failedFuture(new EmptyResultDataAccessException(1));

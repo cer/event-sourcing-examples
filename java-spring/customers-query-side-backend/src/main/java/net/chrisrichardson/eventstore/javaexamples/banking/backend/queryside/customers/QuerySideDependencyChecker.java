@@ -1,11 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
+        import org.slf4j.Logger;
+        import org.slf4j.LoggerFactory;
+        import org.springframework.data.mongodb.core.MongoTemplate;
 
-import javax.annotation.PostConstruct;
-import java.util.concurrent.TimeUnit;
+        import javax.annotation.PostConstruct;
 
 public class QuerySideDependencyChecker {
   private Logger logger = LoggerFactory.getLogger(getClass());

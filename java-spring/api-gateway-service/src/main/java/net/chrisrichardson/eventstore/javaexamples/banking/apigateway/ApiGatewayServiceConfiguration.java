@@ -30,20 +30,20 @@ import java.util.Collections;
 @EnableConfigurationProperties({ApiGatewayProperties.class})
 public class ApiGatewayServiceConfiguration extends WebMvcConfigurerAdapter {
 
-    @Bean
-    public RestTemplate restTemplate(HttpMessageConverters converters) {
+  @Bean
+  public RestTemplate restTemplate(HttpMessageConverters converters) {
 
-        // we have to define Apache HTTP client to use the PATCH verb
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(MediaType.parseMediaTypes("application/json"));
-        converter.setObjectMapper(new ObjectMapper());
+    // we have to define Apache HTTP client to use the PATCH verb
+    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    converter.setSupportedMediaTypes(MediaType.parseMediaTypes("application/json"));
+    converter.setObjectMapper(new ObjectMapper());
 
-        HttpClient httpClient = HttpClients.createDefault();
-        RestTemplate restTemplate = new RestTemplate(Collections.<HttpMessageConverter<?>>singletonList(converter));
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
+    HttpClient httpClient = HttpClients.createDefault();
+    RestTemplate restTemplate = new RestTemplate(Collections.<HttpMessageConverter<?>>singletonList(converter));
+    restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
 
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+    restTemplate.setErrorHandler(new RestTemplateErrorHandler());
 
-        return restTemplate;
-    }
+    return restTemplate;
+  }
 }

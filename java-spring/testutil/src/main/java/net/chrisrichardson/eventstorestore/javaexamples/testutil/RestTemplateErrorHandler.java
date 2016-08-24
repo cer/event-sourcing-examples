@@ -10,15 +10,15 @@ import java.io.IOException;
 
 public class RestTemplateErrorHandler implements ResponseErrorHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(RestTemplateErrorHandler.class);
+  private static final Logger log = LoggerFactory.getLogger(RestTemplateErrorHandler.class);
 
-    @Override
-    public void handleError(ClientHttpResponse response) throws IOException {
-        log.error("Response error: {} {}", response.getStatusCode(), response.getStatusText());
-    }
+  @Override
+  public void handleError(ClientHttpResponse response) throws IOException {
+    log.error("Response error: {} {}", response.getStatusCode(), response.getStatusText());
+  }
 
-    @Override
-    public boolean hasError(ClientHttpResponse response) throws IOException {
-        return RestUtil.isError(response.getStatusCode());
-    }
+  @Override
+  public boolean hasError(ClientHttpResponse response) throws IOException {
+    return RestUtil.isError(response.getStatusCode());
+  }
 }

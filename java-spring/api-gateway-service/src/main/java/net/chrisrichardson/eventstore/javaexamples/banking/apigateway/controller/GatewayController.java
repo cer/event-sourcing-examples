@@ -25,7 +25,8 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.stream.Collectors;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Created by popikyardo on 15.01.16.
@@ -33,43 +34,43 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 public class GatewayController {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+  Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private ApiGatewayProperties apiGatewayProperties;
+  @Autowired
+  private ApiGatewayProperties apiGatewayProperties;
 
-    private HttpClient httpClient;
+  private HttpClient httpClient;
 
-    @PostConstruct
-    public void init() {
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+  @PostConstruct
+  public void init() {
+    PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 
-        httpClient = HttpClients.custom()
-                .setConnectionManager(cm)
-                .build();
+    httpClient = HttpClients.custom()
+            .setConnectionManager(cm)
+            .build();
+  }
+
+  @RequestMapping(value = "/**", method = {GET, POST})
+  public String proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
+    HttpUriRequest proxiedRequest = createHttpUriRequest(request);
+    log.info("request: {}", proxiedRequest);
+    HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
+    return read(proxiedResponse.getEntity().getContent());
+  }
+
+  private HttpUriRequest createHttpUriRequest(HttpServletRequest request) throws URISyntaxException, NoSuchRequestHandlingMethodException, IOException {
+    URLRequestTransformer urlRequestTransformer = new URLRequestTransformer(apiGatewayProperties);
+    ContentRequestTransformer contentRequestTransformer = new ContentRequestTransformer();
+    HeadersRequestTransformer headersRequestTransformer = new HeadersRequestTransformer();
+    headersRequestTransformer.setPredecessor(contentRequestTransformer);
+    contentRequestTransformer.setPredecessor(urlRequestTransformer);
+
+    return headersRequestTransformer.transform(request).build();
+  }
+
+  private String read(InputStream input) throws IOException {
+    try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
+      return buffer.lines().collect(Collectors.joining("\n"));
     }
-
-    @RequestMapping(value = "/**", method = {GET, POST})
-    public String proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
-        HttpUriRequest proxiedRequest = createHttpUriRequest(request);
-        log.info("request: {}", proxiedRequest);
-        HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
-        return read(proxiedResponse.getEntity().getContent());
-    }
-
-    private HttpUriRequest createHttpUriRequest(HttpServletRequest request) throws URISyntaxException, NoSuchRequestHandlingMethodException, IOException {
-        URLRequestTransformer urlRequestTransformer = new URLRequestTransformer(apiGatewayProperties);
-        ContentRequestTransformer contentRequestTransformer = new ContentRequestTransformer();
-        HeadersRequestTransformer headersRequestTransformer = new HeadersRequestTransformer();
-        headersRequestTransformer.setPredecessor(contentRequestTransformer);
-        contentRequestTransformer.setPredecessor(urlRequestTransformer);
-
-        return headersRequestTransformer.transform(request).build();
-    }
-
-    private String read(InputStream input) throws IOException {
-        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(input))) {
-            return buffer.lines().collect(Collectors.joining("\n"));
-        }
-    }
+  }
 }

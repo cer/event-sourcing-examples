@@ -20,36 +20,36 @@ import javax.annotation.PostConstruct;
 @IntegrationTest({"server.port=0", "management.port=0"})
 public class BankingWebIntegrationTest extends AbstractRestAPITest {
 
-    @Value("${local.server.port}")
-    private int port;
+  @Value("${local.server.port}")
+  private int port;
 
-    CustomersTestUtils customersTestUtils;
+  CustomersTestUtils customersTestUtils;
 
-    @PostConstruct
-    private void init() {
-        customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
-    }
+  @PostConstruct
+  private void init() {
+    customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+  }
 
-    @Override
-    public String baseUrl(String path) {
-        return "http://localhost:" + port + "/" + path;
-    }
+  @Override
+  public String baseUrl(String path) {
+    return "http://localhost:" + port + "/" + path;
+  }
 
-    @Override
-    public CustomersTestUtils getCustomersTestUtils() {
-        return customersTestUtils;
-    }
+  @Override
+  public CustomersTestUtils getCustomersTestUtils() {
+    return customersTestUtils;
+  }
 
-    @Autowired
-    RestTemplate restTemplate;
+  @Autowired
+  RestTemplate restTemplate;
 
-    @Override
-    public AuthenticatedRestTemplate getAuthenticatedRestTemplate() {
-        return new AuthenticatedRestTemplate(restTemplate);
-    }
+  @Override
+  public AuthenticatedRestTemplate getAuthenticatedRestTemplate() {
+    return new AuthenticatedRestTemplate(restTemplate);
+  }
 
-    @Override
-    public RestTemplate getRestTemplate() {
-        return restTemplate;
-    }
+  @Override
+  public RestTemplate getRestTemplate() {
+    return restTemplate;
+  }
 }

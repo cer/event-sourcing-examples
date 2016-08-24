@@ -14,24 +14,24 @@ import java.util.List;
  */
 public class Customer extends ReflectiveMutableCommandProcessingAggregate<Customer, CustomerCommand> {
 
-    private CustomerInfo customerInfo;
+  private CustomerInfo customerInfo;
 
-    public List<Event> process(CreateCustomerCommand cmd) {
-        return EventUtil.events(new CustomerCreatedEvent(cmd.getCustomerInfo()));
-    }
+  public List<Event> process(CreateCustomerCommand cmd) {
+    return EventUtil.events(new CustomerCreatedEvent(cmd.getCustomerInfo()));
+  }
 
-    public List<Event> process(AddToAccountCommand cmd) {
-        return EventUtil.events(new CustomerAddedToAccount(cmd.getToAccountInfo()));
-    }
+  public List<Event> process(AddToAccountCommand cmd) {
+    return EventUtil.events(new CustomerAddedToAccount(cmd.getToAccountInfo()));
+  }
 
-    public void apply(CustomerCreatedEvent event) {
-        customerInfo = event.getCustomerInfo();
-    }
+  public void apply(CustomerCreatedEvent event) {
+    customerInfo = event.getCustomerInfo();
+  }
 
-    public void apply(CustomerAddedToAccount event) {
-    }
+  public void apply(CustomerAddedToAccount event) {
+  }
 
-    public CustomerInfo getCustomerInfo() {
-        return customerInfo;
-    }
+  public CustomerInfo getCustomerInfo() {
+    return customerInfo;
+  }
 }

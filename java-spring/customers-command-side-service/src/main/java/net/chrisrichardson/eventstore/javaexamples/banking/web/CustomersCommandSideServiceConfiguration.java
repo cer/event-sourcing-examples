@@ -24,6 +24,4 @@ public class CustomersCommandSideServiceConfiguration {
     HttpMessageConverter<?> additional = new MappingJackson2HttpMessageConverter();
     return new HttpMessageConverters(additional);
   }
-
-
 }

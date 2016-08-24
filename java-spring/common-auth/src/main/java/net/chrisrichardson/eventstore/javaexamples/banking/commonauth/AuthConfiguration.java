@@ -32,66 +32,66 @@ import java.security.SecureRandom;
 @EnableConfigurationProperties({AuthProperties.class})
 public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthProperties securityProperties;
+  @Autowired
+  private AuthProperties securityProperties;
 
-    @Autowired
-    private TokenAuthenticationService tokenAuthenticationService;
+  @Autowired
+  private TokenAuthenticationService tokenAuthenticationService;
 
-    @Autowired
-    CustomerAuthService customerAuthService;
+  @Autowired
+  CustomerAuthService customerAuthService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.inMemoryAuthentication();
-        auth.userDetailsService(userDetailsServiceBean());
-    }
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    //auth.inMemoryAuthentication();
+    auth.userDetailsService(userDetailsServiceBean());
+  }
 
-    @Override
-    public UserDetailsService userDetailsServiceBean() {
-        return email -> {
+  @Override
+  public UserDetailsService userDetailsServiceBean() {
+    return email -> {
 /*            QuerySideCustomer customer = customerAuthService.findByEmail(email);
             if (customer != null) {
                 return new User(email);
             } else {
                 throw new UsernameNotFoundException(String.format("could not find the customer '%s'", email));
             }*/
-            //authorize everyone with basic authentication
-            return  new User(email, "", true, true, true, true,
-                    AuthorityUtils.createAuthorityList("USER"));
+      //authorize everyone with basic authentication
+      return new User(email, "", true, true, true, true,
+              AuthorityUtils.createAuthorityList("USER"));
     };
-    }
+  }
 
-    @Bean
-    public CustomerAuthService customerAuthService(CustomerAuthRepository customerAuthRepository) {
-        return new CustomerAuthService(customerAuthRepository);
-    }
+  @Bean
+  public CustomerAuthService customerAuthService(CustomerAuthRepository customerAuthRepository) {
+    return new CustomerAuthService(customerAuthRepository);
+  }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  @Bean
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .httpBasic().and()
-                .authorizeRequests()
-                .antMatchers("/index.html", "/", "/**.js", "/**.css").permitAll()
-                .antMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
-                .antMatchers(HttpMethod.POST, "/customers", "/login").permitAll()
-                .anyRequest().authenticated().and()
-                .addFilterAfter(new StatelessAuthenticationFilter(tokenAuthenticationService), BasicAuthenticationFilter.class);
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+            .httpBasic().and()
+            .authorizeRequests()
+            .antMatchers("/index.html", "/", "/**.js", "/**.css").permitAll()
+            .antMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
+            .antMatchers(HttpMethod.POST, "/customers", "/login").permitAll()
+            .anyRequest().authenticated().and()
+            .addFilterAfter(new StatelessAuthenticationFilter(tokenAuthenticationService), BasicAuthenticationFilter.class);
+  }
 
-    @Bean
-    public TokenService tokenService() {
-        KeyBasedPersistenceTokenService res = new KeyBasedPersistenceTokenService();
-        res.setSecureRandom(new SecureRandom());
-        res.setServerSecret(securityProperties.getServerSecret());
-        res.setServerInteger(securityProperties.getServerInteger());
+  @Bean
+  public TokenService tokenService() {
+    KeyBasedPersistenceTokenService res = new KeyBasedPersistenceTokenService();
+    res.setSecureRandom(new SecureRandom());
+    res.setServerSecret(securityProperties.getServerSecret());
+    res.setServerInteger(securityProperties.getServerInteger());
 
-        return res;
-    }
+    return res;
+  }
 }

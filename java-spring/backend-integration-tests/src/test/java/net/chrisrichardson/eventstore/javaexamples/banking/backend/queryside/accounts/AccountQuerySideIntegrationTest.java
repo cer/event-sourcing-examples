@@ -26,39 +26,39 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil
 @IntegrationTest
 public class AccountQuerySideIntegrationTest {
 
-    @Autowired
-    private AccountService accountService;
+  @Autowired
+  private AccountService accountService;
 
-    @Autowired
-    private MoneyTransferService moneyTransferService;
+  @Autowired
+  private MoneyTransferService moneyTransferService;
 
-    @Autowired
-    private EventuateAggregateStore eventStore;
+  @Autowired
+  private EventuateAggregateStore eventStore;
 
-    @Autowired
-    private AccountQueryService accountQueryService;
+  @Autowired
+  private AccountQueryService accountQueryService;
 
-    @Test
-    public void shouldUpdateQuerySide() throws Exception {
+  @Test
+  public void shouldUpdateQuerySide() throws Exception {
 
-        final EntityWithIdAndVersion<Account> fromAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(150), ""));
+    final EntityWithIdAndVersion<Account> fromAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(150), ""));
 
-        final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(300), ""));
+    final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(300), ""));
 
-        final EntityWithIdAndVersion<MoneyTransfer> transaction = await(
-                moneyTransferService.transferMoney(new TransferDetails(fromAccount.getEntityId(),
-                        toAccount.getEntityId(),
-                        new BigDecimal(80))));
+    final EntityWithIdAndVersion<MoneyTransfer> transaction = await(
+            moneyTransferService.transferMoney(new TransferDetails(fromAccount.getEntityId(),
+                    toAccount.getEntityId(),
+                    new BigDecimal(80))));
 
-        eventually(
-                () -> eventStore.find(MoneyTransfer.class, transaction.getEntityId()),
-                updatedTransaction -> Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.getEntity().getState()));
+    eventually(
+            () -> eventStore.find(MoneyTransfer.class, transaction.getEntityId()),
+            updatedTransaction -> Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.getEntity().getState()));
 
-        eventually(
-                () -> accountQueryService.findByAccountId(fromAccount.getEntityId()),
-                accountInfo -> Assert.assertEquals(70 * 100, accountInfo.getBalance()));
-        eventually(
-                () -> accountQueryService.findByAccountId(toAccount.getEntityId()),
-                accountInfo -> Assert.assertEquals(380 * 100, accountInfo.getBalance()));
-    }
+    eventually(
+            () -> accountQueryService.findByAccountId(fromAccount.getEntityId()),
+            accountInfo -> Assert.assertEquals(70 * 100, accountInfo.getBalance()));
+    eventually(
+            () -> accountQueryService.findByAccountId(toAccount.getEntityId()),
+            accountInfo -> Assert.assertEquals(380 * 100, accountInfo.getBalance()));
+  }
 }

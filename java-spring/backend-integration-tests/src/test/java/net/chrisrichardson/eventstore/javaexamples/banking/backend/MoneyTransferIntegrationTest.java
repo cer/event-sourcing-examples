@@ -23,7 +23,7 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes=BankingTestConfiguration.class)
+@SpringApplicationConfiguration(classes = BankingTestConfiguration.class)
 @IntegrationTest
 public class MoneyTransferIntegrationTest {
 
@@ -35,11 +35,11 @@ public class MoneyTransferIntegrationTest {
 
   @Autowired
   private EventuateAggregateStore eventStore;
-  
+
 
   @Test
   public void shouldTransferMoney() {
-    final EntityWithIdAndVersion<Account> fromAccount= await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(150), ""));
+    final EntityWithIdAndVersion<Account> fromAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(150), ""));
 
     final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(300), ""));
 
@@ -49,22 +49,22 @@ public class MoneyTransferIntegrationTest {
                     new BigDecimal(80))));
 
 
-    eventually (
+    eventually(
             () -> eventStore.find(Account.class, fromAccount.getEntityId()),
             account -> Assert.assertEquals(new BigDecimal(70), account.getEntity().getBalance()));
 
-    eventually (
+    eventually(
             () -> eventStore.find(Account.class, toAccount.getEntityId()),
             account -> Assert.assertEquals(new BigDecimal(380), account.getEntity().getBalance()));
 
-    eventually (
+    eventually(
             () -> eventStore.find(MoneyTransfer.class, transaction.getEntityId()),
             updatedTransaction -> Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.getEntity().getState()));
   }
 
   @Test
   public void shouldFailDueToInsufficientFunds() {
-    final EntityWithIdAndVersion<Account> fromAccount= await(accountService.openAccount("00000000-00000000", "My Account",  new BigDecimal(150), ""));
+    final EntityWithIdAndVersion<Account> fromAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(150), ""));
 
     final EntityWithIdAndVersion<Account> toAccount = await(accountService.openAccount("00000000-00000000", "My Account", new BigDecimal(300), ""));
 
@@ -74,15 +74,15 @@ public class MoneyTransferIntegrationTest {
                     new BigDecimal(200))));
 
 
-    eventually (
+    eventually(
             () -> eventStore.find(MoneyTransfer.class, transaction.getEntityId()),
             updatedTransaction -> Assert.assertEquals(TransferState.FAILED_DUE_TO_INSUFFICIENT_FUNDS, updatedTransaction.getEntity().getState()));
 
-    eventually (
+    eventually(
             () -> eventStore.find(Account.class, fromAccount.getEntityId()),
             account -> Assert.assertEquals(new BigDecimal(150), account.getEntity().getBalance()));
 
-    eventually (
+    eventually(
             () -> eventStore.find(Account.class, toAccount.getEntityId()),
             account -> Assert.assertEquals(new BigDecimal(300), account.getEntity().getBalance()));
 

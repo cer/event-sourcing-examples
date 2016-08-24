@@ -32,43 +32,43 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil
 @IntegrationTest
 public class CustomerQuerySideIntegrationTest {
 
-    @Autowired
-    private CustomerService customerService;
+  @Autowired
+  private CustomerService customerService;
 
-    @Autowired
-    private CustomerQueryService customerQueryService;
+  @Autowired
+  private CustomerQueryService customerQueryService;
 
-    @Autowired
+  @Autowired
   private EventuateAggregateStore eventStore;
 
-    @Test
-    public void shouldCreateCustomerAndAddToAccount() throws Exception {
-        CustomerInfo customerInfo = generateCustomerInfo();
-        EntityWithIdAndVersion<Customer> customer = await(customerService.createCustomer(customerInfo));
+  @Test
+  public void shouldCreateCustomerAndAddToAccount() throws Exception {
+    CustomerInfo customerInfo = generateCustomerInfo();
+    EntityWithIdAndVersion<Customer> customer = await(customerService.createCustomer(customerInfo));
 
-        ToAccountInfo toAccountInfo = generateToAccountInfo();
-        EntityWithIdAndVersion<Customer> customerWithNewAccount = await(customerService.addToAccount(customer.getEntityId(), toAccountInfo));
+    ToAccountInfo toAccountInfo = generateToAccountInfo();
+    EntityWithIdAndVersion<Customer> customerWithNewAccount = await(customerService.addToAccount(customer.getEntityId(), toAccountInfo));
 
-        eventually(
-                new Producer<QuerySideCustomer>() {
-                    @Override
-                    public CompletableFuture<QuerySideCustomer> produce() {
-                        return customerQueryService.findByCustomerId(customer.getEntityId());
-                    }
-                },
-                new Verifier<QuerySideCustomer>() {
-                    @Override
-                    public void verify(QuerySideCustomer querySideCustomer) {
-                        Assert.assertEquals(customerInfo.getName(), querySideCustomer.getName());
-                        Assert.assertEquals(customerInfo.getSsn(), querySideCustomer.getSsn());
-                        Assert.assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
-                        Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
-                        Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
+    eventually(
+            new Producer<QuerySideCustomer>() {
+              @Override
+              public CompletableFuture<QuerySideCustomer> produce() {
+                return customerQueryService.findByCustomerId(customer.getEntityId());
+              }
+            },
+            new Verifier<QuerySideCustomer>() {
+              @Override
+              public void verify(QuerySideCustomer querySideCustomer) {
+                Assert.assertEquals(customerInfo.getName(), querySideCustomer.getName());
+                Assert.assertEquals(customerInfo.getSsn(), querySideCustomer.getSsn());
+                Assert.assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
+                Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
+                Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
 
-                        Assert.assertNotNull(querySideCustomer.getToAccounts());
-                        Assert.assertFalse(querySideCustomer.getToAccounts().isEmpty());
-                        Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);
-                    }
-                });
-    }
+                Assert.assertNotNull(querySideCustomer.getToAccounts());
+                Assert.assertFalse(querySideCustomer.getToAccounts().isEmpty());
+                Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);
+              }
+            });
+  }
 }

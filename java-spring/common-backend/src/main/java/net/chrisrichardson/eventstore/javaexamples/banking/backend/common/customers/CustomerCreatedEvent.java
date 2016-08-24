@@ -7,20 +7,20 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Cust
  */
 public class CustomerCreatedEvent extends CustomerEvent {
 
-    private CustomerInfo customerInfo;
+  private CustomerInfo customerInfo;
 
-    public CustomerCreatedEvent() {
-    }
+  public CustomerCreatedEvent() {
+  }
 
-    public CustomerCreatedEvent(CustomerInfo customerInfo) {
-        this.customerInfo = customerInfo;
-    }
+  public CustomerCreatedEvent(CustomerInfo customerInfo) {
+    this.customerInfo = customerInfo;
+  }
 
-    public CustomerInfo getCustomerInfo() {
-        return customerInfo;
-    }
+  public CustomerInfo getCustomerInfo() {
+    return customerInfo;
+  }
 
-    public void setCustomerInfo(CustomerInfo customerInfo) {
-        this.customerInfo = customerInfo;
-    }
+  public void setCustomerInfo(CustomerInfo customerInfo) {
+    this.customerInfo = customerInfo;
+  }
 }

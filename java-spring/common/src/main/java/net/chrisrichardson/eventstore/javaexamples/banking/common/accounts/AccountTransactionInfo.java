@@ -18,7 +18,7 @@ public class AccountTransactionInfo {
   }
 
   public AccountTransactionInfo(String transactionId, String fromAccountId, String toAccountId, long amount) {
-    this(transactionId, fromAccountId, toAccountId, amount, new Date(),  "");
+    this(transactionId, fromAccountId, toAccountId, amount, new Date(), "");
   }
 
   public AccountTransactionInfo(String transactionId, String fromAccountId, String toAccountId, long amount, Date date, String description) {

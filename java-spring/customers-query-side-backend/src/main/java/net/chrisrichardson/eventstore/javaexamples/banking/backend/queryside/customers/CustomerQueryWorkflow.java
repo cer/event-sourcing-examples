@@ -15,31 +15,31 @@ import org.slf4j.LoggerFactory;
 @EventSubscriber(id = "customerQuerySideEventHandlers")
 public class CustomerQueryWorkflow {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+  private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private CustomerInfoUpdateService customerInfoUpdateService;
+  private CustomerInfoUpdateService customerInfoUpdateService;
 
 
-    public CustomerQueryWorkflow(CustomerInfoUpdateService customerInfoUpdateService) {
-        this.customerInfoUpdateService = customerInfoUpdateService;
-    }
+  public CustomerQueryWorkflow(CustomerInfoUpdateService customerInfoUpdateService) {
+    this.customerInfoUpdateService = customerInfoUpdateService;
+  }
 
-    @EventHandlerMethod
-    public void create(DispatchedEvent<CustomerCreatedEvent> de) {
-        CustomerCreatedEvent event = de.getEvent();
-        String id = de.getEntityId();
+  @EventHandlerMethod
+  public void create(DispatchedEvent<CustomerCreatedEvent> de) {
+    CustomerCreatedEvent event = de.getEvent();
+    String id = de.getEntityId();
 
-        customerInfoUpdateService.create(id, event.getCustomerInfo());
-    }
+    customerInfoUpdateService.create(id, event.getCustomerInfo());
+  }
 
-    @EventHandlerMethod
-    public void addToAccount(DispatchedEvent<CustomerAddedToAccount> de) {
-        CustomerAddedToAccount event = de.getEvent();
-        String id = de.getEntityId();
+  @EventHandlerMethod
+  public void addToAccount(DispatchedEvent<CustomerAddedToAccount> de) {
+    CustomerAddedToAccount event = de.getEvent();
+    String id = de.getEntityId();
 
-        ToAccountInfo toAccountInfo = event.getToAccountInfo();
+    ToAccountInfo toAccountInfo = event.getToAccountInfo();
 
-        customerInfoUpdateService.addToAccount(id, toAccountInfo);
-    }
+    customerInfoUpdateService.addToAccount(id, toAccountInfo);
+  }
 
 }

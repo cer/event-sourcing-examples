@@ -1,8 +1,5 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import io.eventuate.Aggregate;
-
-
 import java.math.BigDecimal;
 
 public class AccountCreditedEvent extends AccountChangedEvent {

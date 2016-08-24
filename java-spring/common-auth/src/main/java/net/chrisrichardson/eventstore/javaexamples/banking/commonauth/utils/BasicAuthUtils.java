@@ -13,33 +13,33 @@ import java.nio.charset.Charset;
  */
 public class BasicAuthUtils {
 
-    public static HttpHeaders basicAuthHeaders(String username) {
-        return new HttpHeaders() {
-            {
-                String auth = username + ":";
-                byte[] encodedAuth = Base64.encodeBase64(
-                        auth.getBytes(Charset.forName("US-ASCII")));
-                String authHeader = "Basic " + new String(encodedAuth);
-                set("Authorization", authHeader);
-            }
-        };
+  public static HttpHeaders basicAuthHeaders(String username) {
+    return new HttpHeaders() {
+      {
+        String auth = username + ":";
+        byte[] encodedAuth = Base64.encodeBase64(
+                auth.getBytes(Charset.forName("US-ASCII")));
+        String authHeader = "Basic " + new String(encodedAuth);
+        set("Authorization", authHeader);
+      }
+    };
+  }
+
+  public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType) {
+    return doBasicAuthenticatedRequest(restTemplate, url, httpMethod, responseType, null);
+  }
+
+  public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject) {
+    HttpEntity httpEntity;
+    if (requestObject != null) {
+      httpEntity = new HttpEntity(requestObject, BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
+    } else {
+      httpEntity = new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
     }
 
-    public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType) {
-        return doBasicAuthenticatedRequest(restTemplate, url, httpMethod, responseType, null);
-    }
-
-    public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject) {
-        HttpEntity httpEntity;
-        if(requestObject!=null) {
-            httpEntity = new HttpEntity(requestObject, BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
-        } else {
-            httpEntity = new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
-        }
-
-        return restTemplate.exchange(url,
-                httpMethod,
-                httpEntity,
-                responseType).getBody();
-    }
+    return restTemplate.exchange(url,
+            httpMethod,
+            httpEntity,
+            responseType).getBody();
+  }
 }
