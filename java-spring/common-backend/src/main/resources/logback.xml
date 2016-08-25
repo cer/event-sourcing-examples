@@ -16,7 +16,10 @@
   <logger name="org.springframework" level='info'>
   </logger>
 
-  <logger name="net.chrisrichardson.eventstore.client" level='info'>
+  <logger name="net.chrisrichardson.eventstore.javaexamples.banking" level='info'>
+  </logger>
+
+  <logger name="io.eventuate" level='debug'>
   </logger>
 
 </configuration>

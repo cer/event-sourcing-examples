@@ -12,6 +12,8 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
@@ -34,7 +36,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class GatewayController {
 
-  Logger log = LoggerFactory.getLogger(this.getClass());
+  Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   private ApiGatewayProperties apiGatewayProperties;
@@ -51,11 +53,12 @@ public class GatewayController {
   }
 
   @RequestMapping(value = "/**", method = {GET, POST})
-  public String proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
+  public ResponseEntity<String> proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
     HttpUriRequest proxiedRequest = createHttpUriRequest(request);
-    log.info("request: {}", proxiedRequest);
+    logger.info("request: {}", proxiedRequest);
     HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
-    return read(proxiedResponse.getEntity().getContent());
+    logger.info("Response {}", proxiedResponse.getStatusLine().getStatusCode());
+    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
   }
 
   private HttpUriRequest createHttpUriRequest(HttpServletRequest request) throws URISyntaxException, NoSuchRequestHandlingMethodException, IOException {

@@ -1,9 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils;
 
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.*;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
@@ -32,14 +31,16 @@ public class BasicAuthUtils {
   public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject) {
     HttpEntity httpEntity;
     if (requestObject != null) {
-      httpEntity = new HttpEntity(requestObject, BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
+      httpEntity = new HttpEntity<>(requestObject, BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
     } else {
       httpEntity = new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
     }
 
-    return restTemplate.exchange(url,
+    ResponseEntity<T> responseEntity = restTemplate.exchange(url,
             httpMethod,
             httpEntity,
-            responseType).getBody();
+            responseType);
+    Assert.isTrue(HttpStatus.OK == responseEntity.getStatusCode(), "Bad response: " + responseEntity.getStatusCode());
+    return responseEntity.getBody();
   }
 }
