@@ -37,7 +37,7 @@ public class TestUtil {
 
   }
 
-  static  class Success<T> implements Outcome<T> {
+  static class Success<T> implements Outcome<T> {
 
     T value;
 
@@ -98,7 +98,7 @@ public class TestUtil {
     }).first().toBlocking().getIterator().next().first;
 
     if (possibleException != null)
-      throw new RuntimeException((Throwable)possibleException);
+      throw new RuntimeException((Throwable) possibleException);
   }
 
   private static <T> Observable<T> fromCompletableFuture(CompletableFuture<T> future) {

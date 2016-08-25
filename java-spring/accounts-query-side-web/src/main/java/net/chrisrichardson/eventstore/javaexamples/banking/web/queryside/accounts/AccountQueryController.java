@@ -4,7 +4,8 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.acc
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountQueryService;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

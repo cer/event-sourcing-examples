@@ -1,7 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
 import io.eventuate.EntityWithIdAndVersion;
-import io.eventuate.EntityWithMetadata;
 import io.eventuate.EventuateAggregateStore;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.Account;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
@@ -9,8 +8,6 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.t
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferService;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.TransferState;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.TransferDetails;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import rx.Observable;
 
 import java.math.BigDecimal;
 
@@ -60,9 +56,9 @@ public class AccountQuerySideIntegrationTest {
 
     eventually(
             () -> accountQueryService.findByAccountId(fromAccount.getEntityId()),
-            accountInfo -> Assert.assertEquals(70*100, accountInfo.getBalance()));
+            accountInfo -> Assert.assertEquals(70 * 100, accountInfo.getBalance()));
     eventually(
             () -> accountQueryService.findByAccountId(toAccount.getEntityId()),
-            accountInfo -> Assert.assertEquals(380*100, accountInfo.getBalance()));
+            accountInfo -> Assert.assertEquals(380 * 100, accountInfo.getBalance()));
   }
 }

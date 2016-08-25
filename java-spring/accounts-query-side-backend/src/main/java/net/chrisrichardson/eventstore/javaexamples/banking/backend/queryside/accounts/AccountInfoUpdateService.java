@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
 import com.mongodb.WriteResult;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,7 +14,7 @@ import java.util.Collections;
 import static net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.MoneyUtil.toIntegerRepr;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-public class AccountInfoUpdateService  {
+public class AccountInfoUpdateService {
   private Logger logger = LoggerFactory.getLogger(getClass());
 
   private AccountInfoRepository accountInfoRepository;
@@ -25,8 +26,7 @@ public class AccountInfoUpdateService  {
   }
 
 
-
-  public void create(String accountId, String customerId, String title,  BigDecimal initialBalance, String description, String version) {
+  public void create(String accountId, String customerId, String title, BigDecimal initialBalance, String description, String version) {
     try {
       accountInfoRepository.save(new AccountInfo(
               accountId,

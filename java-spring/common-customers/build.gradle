@@ -1,8 +1,0 @@
-apply plugin: 'java'
-
-dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    compile "io.eventuate.client.java:eventuate-client-java-spring:$eventuateClientVersion"
-
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-}

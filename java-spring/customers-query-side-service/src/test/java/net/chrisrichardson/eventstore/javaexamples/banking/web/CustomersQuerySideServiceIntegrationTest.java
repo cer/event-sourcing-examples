@@ -1,9 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +16,7 @@ import rx.Observable;
 
 import javax.annotation.PostConstruct;
 
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = CustomersQuerySideServiceTestConfiguration.class)

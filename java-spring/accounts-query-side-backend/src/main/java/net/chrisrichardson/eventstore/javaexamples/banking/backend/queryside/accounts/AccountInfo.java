@@ -1,5 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+
 import java.util.List;
 
 /**

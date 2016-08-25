@@ -30,35 +30,35 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Validated
 public class AuthController {
 
-    @Autowired
-    private TokenService tokenService;
+  @Autowired
+  private TokenService tokenService;
 
-    @Autowired
-    private CustomerAuthService customerAuthService;
+  @Autowired
+  private CustomerAuthService customerAuthService;
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+  private static ObjectMapper objectMapper = new ObjectMapper();
 
-    @RequestMapping(value = "/login", method = POST)
-    public ResponseEntity<QuerySideCustomer> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
-        QuerySideCustomer customer = customerAuthService.findByEmail(request.getEmail());
+  @RequestMapping(value = "/login", method = POST)
+  public ResponseEntity<QuerySideCustomer> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
+    QuerySideCustomer customer = customerAuthService.findByEmail(request.getEmail());
 
-        Token token = tokenService.allocateToken(objectMapper.writeValueAsString(new User(request.getEmail())));
-        return ResponseEntity.status(HttpStatus.OK).header("access-token", token.getKey())
-                .body(customer);
-    }
+    Token token = tokenService.allocateToken(objectMapper.writeValueAsString(new User(request.getEmail())));
+    return ResponseEntity.status(HttpStatus.OK).header("access-token", token.getKey())
+            .body(customer);
+  }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
-    public ErrorResponse customersNotFound() {
-        return new ErrorResponse("Customer not found");
-    }
+  @ResponseStatus(value = HttpStatus.NOT_FOUND)
+  @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+  public ErrorResponse customersNotFound() {
+    return new ErrorResponse("Customer not found");
+  }
 
-    @RequestMapping(value = "/user", method = GET)
-    public ResponseEntity<QuerySideCustomer> getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+  @RequestMapping(value = "/user", method = GET)
+  public ResponseEntity<QuerySideCustomer> getCurrentUser() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(HttpStatus.OK).body(customerAuthService.findByEmail(auth.getName()));
-    }
+    return ResponseEntity.status(HttpStatus.OK).body(customerAuthService.findByEmail(auth.getName()));
+  }
 
 
 }

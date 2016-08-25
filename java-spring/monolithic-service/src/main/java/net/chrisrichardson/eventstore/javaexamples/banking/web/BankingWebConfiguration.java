@@ -1,8 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
+import io.eventuate.javaclient.spring.httpstomp.EventuateHttpStompClientConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.AuthConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonswagger.CommonSwaggerConfiguration;
-import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CommandSideWebAccountsConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers.CustomersCommandSideWebConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions.CommandSideWebTransactionsConfiguration;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, EventuateJdbcEventStoreConfiguration.class, QuerySideWebConfiguration.class, CustomersQuerySideWebConfiguration.class, CustomersCommandSideWebConfiguration.class, AuthConfiguration.class, CommonSwaggerConfiguration.class})
+@Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, EventuateHttpStompClientConfiguration.class, QuerySideWebConfiguration.class, CustomersQuerySideWebConfiguration.class, CustomersCommandSideWebConfiguration.class, AuthConfiguration.class, CommonSwaggerConfiguration.class})
 @EnableAutoConfiguration
 @ComponentScan
 public class BankingWebConfiguration extends WebMvcConfigurerAdapter {

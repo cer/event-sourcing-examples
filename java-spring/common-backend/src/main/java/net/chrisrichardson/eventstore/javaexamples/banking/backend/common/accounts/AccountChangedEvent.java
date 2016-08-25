@@ -1,7 +1,5 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import io.eventuate.Aggregate;
-
 import io.eventuate.Event;
 
 import java.math.BigDecimal;

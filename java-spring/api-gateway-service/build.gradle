@@ -7,9 +7,6 @@ dependencies {
     compile "org.apache.httpcomponents:httpclient:4.5"
     compile "org.apache.httpcomponents:fluent-hc:4.5.1"
 
-    compile "io.eventuate.client.java:eventuate-client-java-spring:$eventuateClientVersion"
-    compile "io.eventuate.client.java:eventuate-client-java-http-stomp-spring:$eventuateClientVersion"
-
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
 

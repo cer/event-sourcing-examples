@@ -4,7 +4,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Cust
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils;
+import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;
 
 /**
  * Created by Main on 15.02.2016.
@@ -29,45 +29,45 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customer
 @IntegrationTest({"server.port=0", "management.port=0"})
 public class BankingAuthTest {
 
-    @Value("${local.server.port}")
-    private int port;
+  @Value("${local.server.port}")
+  private int port;
 
-    @Autowired
-    RestTemplate restTemplate;
+  @Autowired
+  RestTemplate restTemplate;
 
-    CustomersTestUtils customersTestUtils;
+  CustomersTestUtils customersTestUtils;
 
-    @PostConstruct
-    private void init() {
-        customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
-    }
+  @PostConstruct
+  private void init() {
+    customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
+  }
 
-    private String baseUrl(String path) {
-        return "http://localhost:" + port + "/" + path;
-    }
+  private String baseUrl(String path) {
+    return "http://localhost:" + port + "/" + path;
+  }
 
-    @Test
-    public void shouldCreateCustomerAndLogin() {
-        String email = uniqueEmail();
-        CustomerInfo customerInfo = generateCustomerInfo(email);
+  @Test
+  public void shouldCreateCustomerAndLogin() {
+    String email = uniqueEmail();
+    CustomerInfo customerInfo = generateCustomerInfo(email);
 
-        final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
-        final String customerId = customerResponse.getId();
+    final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+    final String customerId = customerResponse.getId();
 
-        Assert.assertNotNull(customerId);
-        Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
+    Assert.assertNotNull(customerId);
+    Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-        customersTestUtils.assertCustomerResponse(customerId, customerInfo);
+    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
-        AuthRequest authRequest = new AuthRequest(email);
+    AuthRequest authRequest = new AuthRequest(email);
 
-        final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), authRequest, QuerySideCustomer.class).getBody();
+    final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), authRequest, QuerySideCustomer.class).getBody();
 
-        customersTestUtils.assertQuerySideCustomerEqualscCustomerInfo(loginQuerySideCustomer, customerResponse.getCustomerInfo());
-    }
+    customersTestUtils.assertQuerySideCustomerEqualscCustomerInfo(loginQuerySideCustomer, customerResponse.getCustomerInfo());
+  }
 
 
-    private String uniqueEmail() {
-        return System.currentTimeMillis() + "@email.com";
-    }
+  private String uniqueEmail() {
+    return System.currentTimeMillis() + "@email.com";
+  }
 }

@@ -5,7 +5,7 @@ dependencies {
     testCompile project(":transactions-command-side-web")
     testCompile project(":accounts-query-side-web")
 
-    testCompile project(":testutil-customers")
+    testCompile project(":testutil")
     testCompile project(":common-auth")
     testCompile "junit:junit:4.11"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"

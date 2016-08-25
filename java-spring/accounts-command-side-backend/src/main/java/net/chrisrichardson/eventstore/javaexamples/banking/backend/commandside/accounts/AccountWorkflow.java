@@ -11,8 +11,8 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transa
 import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
-@EventSubscriber(id="accountEventHandlers")
-public class AccountWorkflow  {
+@EventSubscriber(id = "accountEventHandlers")
+public class AccountWorkflow {
 
   @EventHandlerMethod
   public CompletableFuture<?> debitAccount(EventHandlerContext<MoneyTransferCreatedEvent> ctx) {
@@ -22,7 +22,13 @@ public class AccountWorkflow  {
 
     String fromAccountId = event.getDetails().getFromAccountId();
 
-    return ctx.update(Account.class, fromAccountId, new DebitAccountCommand(amount, transactionId));
+    return ctx.update(Account.class, fromAccountId, new DebitAccountCommand(amount, transactionId)).handle((x, e) -> {
+              if (e != null) {
+                e.printStackTrace();
+              }
+              return x;
+            }
+    );
   }
 
   @EventHandlerMethod
@@ -32,7 +38,13 @@ public class AccountWorkflow  {
     String fromAccountId = event.getDetails().getToAccountId();
     String transactionId = ctx.getEntityId();
 
-    return ctx.update(Account.class, fromAccountId, new CreditAccountCommand(amount, transactionId));
+    return ctx.update(Account.class, fromAccountId, new CreditAccountCommand(amount, transactionId)).handle((x, e) -> {
+              if (e != null) {
+                e.printStackTrace();
+              }
+              return x;
+            }
+    );
   }
 
 }

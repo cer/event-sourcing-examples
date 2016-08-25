@@ -13,25 +13,25 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 @EnableEventHandlers
 public class QuerySideCustomerConfiguration {
-    @Bean
-    public CustomerQueryWorkflow customerQueryWorkflow(CustomerInfoUpdateService accountInfoUpdateService) {
-        return new CustomerQueryWorkflow(accountInfoUpdateService);
-    }
+  @Bean
+  public CustomerQueryWorkflow customerQueryWorkflow(CustomerInfoUpdateService accountInfoUpdateService) {
+    return new CustomerQueryWorkflow(accountInfoUpdateService);
+  }
 
-    @Bean
-    public CustomerInfoUpdateService customerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository) {
-        return new CustomerInfoUpdateService(querySideCustomerRepository);
-    }
+  @Bean
+  public CustomerInfoUpdateService customerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository) {
+    return new CustomerInfoUpdateService(querySideCustomerRepository);
+  }
 
-    @Bean
-    public CustomerQueryService customerQueryService(QuerySideCustomerRepository accountInfoRepository) {
-        return new CustomerQueryService(accountInfoRepository);
-    }
+  @Bean
+  public CustomerQueryService customerQueryService(QuerySideCustomerRepository accountInfoRepository) {
+    return new CustomerQueryService(accountInfoRepository);
+  }
 
 
-    @Bean
-    public QuerySideDependencyChecker querysideDependencyChecker(MongoTemplate mongoTemplate) {
-        return new QuerySideDependencyChecker(mongoTemplate);
-    }
+  @Bean
+  public QuerySideDependencyChecker querysideDependencyChecker(MongoTemplate mongoTemplate) {
+    return new QuerySideDependencyChecker(mongoTemplate);
+  }
 
 }

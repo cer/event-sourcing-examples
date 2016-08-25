@@ -19,10 +19,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.concurrent.CompletableFuture;
 
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateToAccountInfo;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.await;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateToAccountInfo;
 
 /**
  * Created by Main on 10.02.2016.
@@ -32,43 +32,43 @@ import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customer
 @IntegrationTest
 public class CustomerQuerySideIntegrationTest {
 
-    @Autowired
-    private CustomerService customerService;
+  @Autowired
+  private CustomerService customerService;
 
-    @Autowired
-    private CustomerQueryService customerQueryService;
+  @Autowired
+  private CustomerQueryService customerQueryService;
 
-    @Autowired
+  @Autowired
   private EventuateAggregateStore eventStore;
 
-    @Test
-    public void shouldCreateCustomerAndAddToAccount() throws Exception {
-        CustomerInfo customerInfo = generateCustomerInfo();
-        EntityWithIdAndVersion<Customer> customer = await(customerService.createCustomer(customerInfo));
+  @Test
+  public void shouldCreateCustomerAndAddToAccount() throws Exception {
+    CustomerInfo customerInfo = generateCustomerInfo();
+    EntityWithIdAndVersion<Customer> customer = await(customerService.createCustomer(customerInfo));
 
-        ToAccountInfo toAccountInfo = generateToAccountInfo();
-        EntityWithIdAndVersion<Customer> customerWithNewAccount = await(customerService.addToAccount(customer.getEntityId(), toAccountInfo));
+    ToAccountInfo toAccountInfo = generateToAccountInfo();
+    EntityWithIdAndVersion<Customer> customerWithNewAccount = await(customerService.addToAccount(customer.getEntityId(), toAccountInfo));
 
-        eventually(
-                new Producer<QuerySideCustomer>() {
-                    @Override
-                    public CompletableFuture<QuerySideCustomer> produce() {
-                        return customerQueryService.findByCustomerId(customer.getEntityId());
-                    }
-                },
-                new Verifier<QuerySideCustomer>() {
-                    @Override
-                    public void verify(QuerySideCustomer querySideCustomer) {
-                        Assert.assertEquals(customerInfo.getName(), querySideCustomer.getName());
-                        Assert.assertEquals(customerInfo.getSsn(), querySideCustomer.getSsn());
-                        Assert.assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
-                        Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
-                        Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
+    eventually(
+            new Producer<QuerySideCustomer>() {
+              @Override
+              public CompletableFuture<QuerySideCustomer> produce() {
+                return customerQueryService.findByCustomerId(customer.getEntityId());
+              }
+            },
+            new Verifier<QuerySideCustomer>() {
+              @Override
+              public void verify(QuerySideCustomer querySideCustomer) {
+                Assert.assertEquals(customerInfo.getName(), querySideCustomer.getName());
+                Assert.assertEquals(customerInfo.getSsn(), querySideCustomer.getSsn());
+                Assert.assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
+                Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
+                Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
 
-                        Assert.assertNotNull(querySideCustomer.getToAccounts());
-                        Assert.assertFalse(querySideCustomer.getToAccounts().isEmpty());
-                        Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);
-                    }
-                });
-    }
+                Assert.assertNotNull(querySideCustomer.getToAccounts());
+                Assert.assertFalse(querySideCustomer.getToAccounts().isEmpty());
+                Assert.assertEquals(querySideCustomer.getToAccounts().get("11111111-11111111"), toAccountInfo);
+              }
+            });
+  }
 }

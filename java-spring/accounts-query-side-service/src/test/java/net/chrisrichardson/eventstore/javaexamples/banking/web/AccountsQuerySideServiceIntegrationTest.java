@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

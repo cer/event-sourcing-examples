@@ -8,22 +8,24 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static net.chrisrichardson.eventstorestore.javaexamples.testutil.customers.CustomersTestUtils.generateCustomerInfo;
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;
 
 public class CustomerTest {
 
-    @Test
-    public void testSomething() {
-        Customer customer = new Customer();
+  @Test
+  public void testSomething() {
+    Customer customer = new Customer();
 
-        CustomerInfo customerInfo = generateCustomerInfo();
+    CustomerInfo customerInfo = generateCustomerInfo();
 
-        List<Event> events = customer.process(new CreateCustomerCommand(customerInfo));
+    List<Event> events = customer.process(new CreateCustomerCommand(customerInfo));
 
-        Assert.assertEquals(1, events.size());
-        Assert.assertEquals(CustomerCreatedEvent.class, events.get(0).getClass());
+    Assert.assertEquals(1, events.size());
+    Assert.assertEquals(CustomerCreatedEvent.class, events.get(0).getClass());
 
-        customer.applyEvent(events.get(0));
-        Assert.assertEquals(customerInfo, customer.getCustomerInfo());
-    }
+    customer.applyEvent(events.get(0));
+    Assert.assertEquals(customerInfo, customer.getCustomerInfo());
+  }
+
+
 }

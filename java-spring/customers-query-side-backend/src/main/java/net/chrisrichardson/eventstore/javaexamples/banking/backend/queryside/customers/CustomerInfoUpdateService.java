@@ -13,36 +13,36 @@ import java.util.Collections;
  */
 public class CustomerInfoUpdateService {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+  private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private QuerySideCustomerRepository accountInfoRepository;
+  private QuerySideCustomerRepository accountInfoRepository;
 
-    public CustomerInfoUpdateService(QuerySideCustomerRepository accountInfoRepository) {
-        this.accountInfoRepository = accountInfoRepository;
+  public CustomerInfoUpdateService(QuerySideCustomerRepository accountInfoRepository) {
+    this.accountInfoRepository = accountInfoRepository;
+  }
+
+  public void create(String id, CustomerInfo customerInfo) {
+    try {
+      accountInfoRepository.save(new QuerySideCustomer(id,
+                      customerInfo.getName(),
+                      customerInfo.getEmail(),
+                      customerInfo.getSsn(),
+                      customerInfo.getPhoneNumber(),
+                      customerInfo.getAddress(),
+                      Collections.<String, ToAccountInfo>emptyMap()
+              )
+      );
+      logger.info("Saved in mongo");
+    } catch (Throwable t) {
+      logger.error("Error during saving: ", t);
+      throw new RuntimeException(t);
     }
+  }
 
-    public void create(String id, CustomerInfo customerInfo) {
-        try {
-            accountInfoRepository.save(new QuerySideCustomer(id,
-                            customerInfo.getName(),
-                            customerInfo.getEmail(),
-                            customerInfo.getSsn(),
-                            customerInfo.getPhoneNumber(),
-                            customerInfo.getAddress(),
-                            Collections.<String, ToAccountInfo>emptyMap()
-                    )
-            );
-            logger.info("Saved in mongo");
-        } catch (Throwable t) {
-            logger.error("Error during saving: ", t);
-            throw new RuntimeException(t);
-        }
-    }
-
-    public void addToAccount(String id, ToAccountInfo accountInfo) {
-        QuerySideCustomer customer = accountInfoRepository.findOne(id);
-        customer.getToAccounts().put(accountInfo.getId(), accountInfo);
-        accountInfoRepository.save(customer);
-    }
+  public void addToAccount(String id, ToAccountInfo accountInfo) {
+    QuerySideCustomer customer = accountInfoRepository.findOne(id);
+    customer.getToAccounts().put(accountInfo.getId(), accountInfo);
+    accountInfoRepository.save(customer);
+  }
 
 }

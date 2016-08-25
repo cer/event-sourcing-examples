@@ -7,13 +7,13 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAc
  */
 public class AddToAccountCommand implements CustomerCommand {
 
-    private ToAccountInfo toAccountInfo;
+  private ToAccountInfo toAccountInfo;
 
-    public AddToAccountCommand(ToAccountInfo toAccountInfo) {
-        this.toAccountInfo = toAccountInfo;
-    }
+  public AddToAccountCommand(ToAccountInfo toAccountInfo) {
+    this.toAccountInfo = toAccountInfo;
+  }
 
-    public ToAccountInfo getToAccountInfo() {
-        return toAccountInfo;
-    }
+  public ToAccountInfo getToAccountInfo() {
+    return toAccountInfo;
+  }
 }

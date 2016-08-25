@@ -9,20 +9,20 @@ import java.util.List;
  */
 public class CustomersQueryResponse {
 
-    private List<QuerySideCustomer> customers;
+  private List<QuerySideCustomer> customers;
 
-    public CustomersQueryResponse() {
-    }
+  public CustomersQueryResponse() {
+  }
 
-    public CustomersQueryResponse(List<QuerySideCustomer> customers) {
-        this.customers = customers;
-    }
+  public CustomersQueryResponse(List<QuerySideCustomer> customers) {
+    this.customers = customers;
+  }
 
-    public List<QuerySideCustomer> getCustomers() {
-        return customers;
-    }
+  public List<QuerySideCustomer> getCustomers() {
+    return customers;
+  }
 
-    public void setCustomers(List<QuerySideCustomer> customers) {
-        this.customers = customers;
-    }
+  public void setCustomers(List<QuerySideCustomer> customers) {
+    this.customers = customers;
+  }
 }
