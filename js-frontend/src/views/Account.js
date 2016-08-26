@@ -216,7 +216,7 @@ export class Account extends React.Component {
 
         <Row>
           <Col xs={12}>
-            <h3>Account History:</h3>
+            <h3>Transfer History:</h3>
           </Col>
         </Row>
         <TransfersTable { ...this.props.transfers } />

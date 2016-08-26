@@ -16,6 +16,7 @@ export class TransfersTable extends React.Component {
     if (loading) {
       return (<h2><Spinner ref="spinner" loaded={false} /> Loading..</h2>);
     }
+
     if (Object.keys(errors).length) {
       return (<div className="text-danger">Errors..</div>);
     }
@@ -33,8 +34,8 @@ export class TransfersTable extends React.Component {
       <td><AccountInfo accountId={ fromAccountId } /></td>
       <td><AccountInfo accountId={ toAccountId } /></td>
       <td><Money amount={ amount } /></td>
-      <td>{ description || 'N/a'}</td>
-      <td>{ status || 'N/a' }</td>
+      <td>{ description || '[No description]'}</td>
+      <td>{ status || '&mdash;' }</td>
     </tr>)) : (<tr>
       <td colSpan={6}>No transfers for this account just yet.</td>
     </tr>);
@@ -45,8 +46,8 @@ export class TransfersTable extends React.Component {
         <thead>
         <tr>
           <th>Date</th>
-          <th>What</th>
-          <th>Counter Account</th>
+          <th>Transfer Out</th>
+          <th>Transfer In</th>
           <th>Amount</th>
           <th>Description</th>
           <th>Status</th>
