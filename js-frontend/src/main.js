@@ -5,7 +5,8 @@ import { batchedSubscribe } from 'redux-batched-subscribe'
 
 import * as navigation from './actions/navigation'
 import actors from './actors'
-import rootReducer from './reducers'
+import rootReducer from './reducers';
+import { blocked } from './utils/blockedExecution';
 
 
 // Add middleware to allow our action creators to return functions and arrays
@@ -25,18 +26,11 @@ const store = createStoreWithBatching(rootReducer)
 
 // Handle changes to our store with a list of actor functions, but ensure
 // that the actor sequence cannot be started by a dispatch from an actor
-let acting = false
-store.subscribe(function() {
-  if (!acting) {
-    acting = true
-
-    for (let actor of actors) {
-      actor(store.getState(), store.dispatch)
-    }
-
-    acting = false
+store.subscribe(blocked(() => {
+  for (let actor of actors) {
+    actor(store.getState(), store.dispatch)
   }
-})
+}));
 
 // Dispatch navigation events when the URL's hash changes, and when the
 // application loads
