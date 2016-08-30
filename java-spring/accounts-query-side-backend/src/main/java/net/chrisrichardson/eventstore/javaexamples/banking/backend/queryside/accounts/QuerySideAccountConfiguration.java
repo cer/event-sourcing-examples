@@ -18,8 +18,8 @@ public class QuerySideAccountConfiguration {
   }
 
   @Bean
-  public AccountInfoUpdateService accountInfoUpdateService(AccountInfoRepository accountInfoRepository, MongoTemplate mongoTemplate) {
-    return new AccountInfoUpdateService(accountInfoRepository, mongoTemplate);
+  public AccountInfoUpdateService accountInfoUpdateService(MongoTemplate mongoTemplate) {
+    return new AccountInfoUpdateService(mongoTemplate);
   }
 
   @Bean

@@ -6,11 +6,24 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOCKER_COMPOSE="docker-compose -p event-sourcing-examples"
 
+if [ "$1" = "-f" ] ; then
+  shift;
+  DOCKER_COMPOSE="$DOCKER_COMPOSE -f ${1?}"
+  shift
+fi
+
 if [ "$1" = "--use-existing" ] ; then
   shift;
 else
   ${DOCKER_COMPOSE?} stop
   ${DOCKER_COMPOSE?} rm -v --force
+fi
+
+NO_RM=false
+
+if [ "$1" = "--no-rm" ] ; then
+  NO_RM=true
+  shift
 fi
 
 ${DOCKER_COMPOSE?} up -d mongodb
@@ -47,5 +60,7 @@ set -e
 
 ./gradlew -a $* :e2e-test:cleanTest :e2e-test:test -P ignoreE2EFailures=false
 
-${DOCKER_COMPOSE?} stop
-${DOCKER_COMPOSE?} rm -v --force
+if [ $NO_RM = false ] ; then
+  ${DOCKER_COMPOSE?} stop
+  ${DOCKER_COMPOSE?} rm -v --force
+fi
