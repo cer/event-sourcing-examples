@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -30,6 +31,12 @@ public class BankingWebConfiguration extends WebMvcConfigurerAdapter {
   public HttpMessageConverters customConverters() {
     HttpMessageConverter<?> additional = new MappingJackson2HttpMessageConverter();
     return new HttpMessageConverters(additional);
+  }
+
+  @Bean
+  public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+    System.setProperty("vertx.disableFileCPResolving", "true");
+    return new PropertySourcesPlaceholderConfigurer();
   }
 
   @Override
