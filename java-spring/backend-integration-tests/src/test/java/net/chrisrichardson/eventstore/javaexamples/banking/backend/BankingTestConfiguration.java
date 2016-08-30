@@ -5,9 +5,11 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.a
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 @Configuration
 @Import({AccountConfiguration.class, MoneyTransferConfiguration.class, EventuateJdbcEventStoreConfiguration.class})
+@EnableAutoConfiguration
 public class BankingTestConfiguration {
 
 }

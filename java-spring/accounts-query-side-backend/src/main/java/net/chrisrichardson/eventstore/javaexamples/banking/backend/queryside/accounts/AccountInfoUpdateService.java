@@ -47,7 +47,7 @@ public class AccountInfoUpdateService {
 
 
   public void addTransaction(String eventId, String fromAccountId, AccountTransactionInfo ti) {
-    mongoTemplate.updateMulti(new Query(where("id").is(fromAccountId).and("version").lt(eventId)),
+    mongoTemplate.updateMulti(new Query(where("id").is(fromAccountId)), /* wrong  .and("version").lt(eventId) */
             new Update().
                     push("transactions", ti).
                     set("version", eventId),
