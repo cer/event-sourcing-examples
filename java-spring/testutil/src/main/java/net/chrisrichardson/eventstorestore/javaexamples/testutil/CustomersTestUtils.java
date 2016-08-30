@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.CompletableFuture;
 
+import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.awaitSuccessfulRequest;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
 /**
