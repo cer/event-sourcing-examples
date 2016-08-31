@@ -27,7 +27,6 @@ import java.util.List;
 @Configuration
 @Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, EventuateJdbcEventStoreConfiguration.class, QuerySideWebConfiguration.class, CustomersQuerySideWebConfiguration.class, CustomersCommandSideWebConfiguration.class, AuthConfiguration.class, CommonSwaggerConfiguration.class})
 @EnableAutoConfiguration
-@ComponentScan
 public class BankingWebTestConfiguration extends WebMvcConfigurerAdapter {
 
   @Bean

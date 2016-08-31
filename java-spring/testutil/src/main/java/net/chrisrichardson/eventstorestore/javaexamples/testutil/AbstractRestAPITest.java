@@ -51,6 +51,12 @@ public abstract class AbstractRestAPITest {
     Assert.assertNotNull(fromAccountId);
     Assert.assertNotNull(toAccountId);
 
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     assertAccountBalance(fromAccountId, initialFromAccountBalance);
     assertAccountBalance(toAccountId, initialToAccountBalance);
 
@@ -97,6 +103,12 @@ public abstract class AbstractRestAPITest {
 
     Assert.assertNotNull(customerId);
     assertEquals(customerInfo, customerResponse.getCustomerInfo());
+
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
     getCustomersTestUtils().assertCustomerResponse(customerId, customerInfo);
 

@@ -2,7 +2,10 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.ac
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by cer on 11/21/14.

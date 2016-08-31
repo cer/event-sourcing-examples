@@ -2,6 +2,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Date;
 
@@ -20,6 +21,12 @@ public class AccountTransactionInfo {
   public AccountTransactionInfo(String transactionId, String fromAccountId, String toAccountId, long amount) {
     this(transactionId, fromAccountId, toAccountId, amount, new Date(), "");
   }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
+
 
   public AccountTransactionInfo(String transactionId, String fromAccountId, String toAccountId, long amount, Date date, String description) {
     this.transactionId = transactionId;

@@ -1,0 +1,129 @@
+apigateway:
+  image: java:openjdk-8u91-jdk
+  working_dir: /app
+  volumes:
+    - ./api-gateway-service/build/libs:/app
+  command: java -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transactions.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
+  ports:
+    - "8080:8080"
+  links:
+    - accountscommandside
+    - transactionscommandside
+    - accountsqueryside
+    - customerscommandside
+    - customersqueryside
+    - mongodb
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+
+accountscommandside:
+  image: java:openjdk-8u91-jdk
+  working_dir: /app
+  volumes:
+    - ./accounts-command-side-service/build/libs:/app
+  command: java -jar /app/accounts-command-side-service.jar
+  ports:
+    - "8085:8080"
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+
+transactionscommandside:
+  image: java:openjdk-8u91-jdk
+  working_dir: /app
+  volumes:
+    - ./transactions-command-side-service/build/libs:/app
+  command: java -jar /app/transactions-command-side-service.jar
+  ports:
+    - "8082:8080"
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+
+
+accountsqueryside:
+  image: java:openjdk-8u91-jdk
+  working_dir: /app
+  volumes:
+    - ./accounts-query-side-service/build/libs:/app
+  command: java -jar /app/accounts-query-side-service.jar
+  ports:
+    - "8081:8080"
+  links:
+    - mongodb
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+
+customerscommandside:
+  image: java:openjdk-8u91-jdk
+  working_dir: /app
+  volumes:
+    - ./customers-command-side-service/build/libs:/app
+  command: java -jar /app/customers-command-side-service.jar
+  ports:
+    - "8083:8080"
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+
+customersqueryside:
+  image: java:openjdk-8u91-jdk
+  working_dir: /app
+  volumes:
+    - ./customers-query-side-service/build/libs:/app
+  command: java -jar /app/customers-query-side-service.jar
+  ports:
+    - "8084:8080"
+  links:
+    - mongodb
+  environment:
+    SPRING_DATASOURCE_URL:
+    SPRING_DATASOURCE_USERNAME:
+    SPRING_DATASOURCE_PASSWORD:
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
+    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+
+mongodb:
+  image: mongo:3.0.4
+  hostname: mongodb
+  command: mongod --smallfiles
+  ports:
+    - "27017:27017"

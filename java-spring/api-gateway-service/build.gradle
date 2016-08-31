@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'spring-boot'
+apply plugin: EventuateDependencyPlugin
 
 dependencies {
     compile project(":common-auth-web")
@@ -14,7 +15,7 @@ dependencies {
 }
 
 task copyWebStatic(type: Copy) {
-    from "../../prebuilt-web-client"
+    from "../../js-frontend/build"
     into "build/resources/main/static"
 }
 

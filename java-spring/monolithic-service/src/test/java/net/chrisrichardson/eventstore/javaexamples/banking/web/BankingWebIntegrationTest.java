@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.AbstractRestAPITest;
+
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.AuthenticatedRestTemplate;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.junit.runner.RunWith;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
-
 import javax.annotation.PostConstruct;
 
 @RunWith(SpringJUnit4ClassRunner.class)

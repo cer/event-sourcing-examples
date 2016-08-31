@@ -1,5 +1,7 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
@@ -11,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Supplier;
 
 public class TestUtil {
 
@@ -18,6 +21,18 @@ public class TestUtil {
     try {
       return o.get(1, TimeUnit.SECONDS);
     } catch (InterruptedException | TimeoutException | ExecutionException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static <T> T awaitSuccessfulRequest(Supplier<ResponseEntity<T>> func, Func1<T, Boolean> predicate) {
+    try {
+      return Observable.interval(400, TimeUnit.MILLISECONDS)
+              .take(50)
+              .map(x -> func.get())
+              .filter(re -> re.getStatusCode().equals(HttpStatus.OK) && re.getBody() != null && predicate.call(re.getBody()))
+              .toBlocking().first().getBody();
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -55,7 +70,7 @@ public class TestUtil {
   }
 
   public static <T> void eventually(final Producer<T> producer, final Verifier<T> verifier) {
-    final int n = 50;
+    final int n = 150;
     Object possibleException = Observable.timer(0, 200, TimeUnit.MILLISECONDS).flatMap(new Func1<Long, Observable<Outcome<T>>>() {
 
       @Override

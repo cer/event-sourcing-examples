@@ -2,6 +2,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
+import org.apache.tomcat.jni.Thread;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,12 @@ public class CustomersQuerySideServiceIntegrationTest {
 
     final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
+
+    try {
+      java.lang.Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
 
     customersTestUtils.assertCustomerResponse(customerId, customerInfo);
   }
