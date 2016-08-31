@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.ac
 import com.mongodb.WriteResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -35,6 +36,9 @@ public class AccountInfoUpdateService  {
                       .set("version", version),
               AccountInfo.class);
       logger.info("Saved in mongo");
+
+    } catch (DuplicateKeyException t) {
+      logger.warn("When saving ", t);
     } catch (Throwable t) {
       logger.error("Error during saving: ", t);
       throw new RuntimeException(t);

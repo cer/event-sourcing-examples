@@ -93,4 +93,20 @@ public class AccountInfoUpdateServiceTest {
     assertEquals(ti, accountInfo.getTransactions().get(0));
   }
 
+  @Test
+  public void shouldHandleDuplicateSaveAccountInfo() throws ExecutionException, InterruptedException {
+    IdGenerator x = new IdGeneratorImpl();
+    String accountId = x.genId().asString();
+    String customerId = x.genId().asString();
+    String version = x.genId().asString();
+
+    String title = "Checking account";
+    BigDecimal initialBalance = new BigDecimal("1345");
+    String description = "Some account";
+
+    accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
+    accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
+
+
+  }
 }

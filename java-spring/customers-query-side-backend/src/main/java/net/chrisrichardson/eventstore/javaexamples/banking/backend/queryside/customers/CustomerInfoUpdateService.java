@@ -5,6 +5,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Quer
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Collections;
 
@@ -15,15 +16,15 @@ public class CustomerInfoUpdateService {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private QuerySideCustomerRepository accountInfoRepository;
+    private QuerySideCustomerRepository querySideCustomerRepository;
 
-    public CustomerInfoUpdateService(QuerySideCustomerRepository accountInfoRepository) {
-        this.accountInfoRepository = accountInfoRepository;
+    public CustomerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository) {
+        this.querySideCustomerRepository = querySideCustomerRepository;
     }
 
     public void create(String id, CustomerInfo customerInfo) {
         try {
-            accountInfoRepository.save(new QuerySideCustomer(id,
+            querySideCustomerRepository.save(new QuerySideCustomer(id,
                             customerInfo.getName(),
                             customerInfo.getEmail(),
                             customerInfo.getSsn(),
@@ -33,6 +34,8 @@ public class CustomerInfoUpdateService {
                     )
             );
             logger.info("Saved in mongo");
+        } catch (DuplicateKeyException t) {
+            logger.warn("When saving ", t);
         } catch (Throwable t) {
             logger.error("Error during saving: ", t);
             throw new RuntimeException(t);
@@ -40,9 +43,9 @@ public class CustomerInfoUpdateService {
     }
 
     public void addToAccount(String id, ToAccountInfo accountInfo) {
-        QuerySideCustomer customer = accountInfoRepository.findOne(id);
+        QuerySideCustomer customer = querySideCustomerRepository.findOne(id);
         customer.getToAccounts().put(accountInfo.getId(), accountInfo);
-        accountInfoRepository.save(customer);
+        querySideCustomerRepository.save(customer);
     }
 
 }
