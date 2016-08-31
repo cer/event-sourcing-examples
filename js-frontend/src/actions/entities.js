@@ -5,6 +5,7 @@ import T from '../constants/ACTION_TYPES';
 import { makeActionCreator } from '../utils/actions';
 import * as api from '../utils/api';
 import { authenticate } from './authenticate';
+import root from '../utils/root';
 
 export const entityRequested = makeActionCreator(T.ENTITIES.REQUESTED, 'id');
 export const entityReceived = makeActionCreator(T.ENTITIES.RECEIVED, 'id', 'entity');
@@ -44,18 +45,47 @@ export function accountsList(userId) {
   };
 }
 
+function readUntilChanged(initialData, customerId) {
+  const initialDataFlat = root['JSON'].stringify(initialData);
+  debugger;
+  return new Promise((rs, rj) => {
+    setTimeout(() => {
+      api.apiRetrieveAccounts(customerId)
+        .then(data => {
+          debugger;
+          if (initialDataFlat == root['JSON'].stringify(data)) {
+            return readUntilChanged.call(this, data, customerId).then(rs, rj); // Promise
+          }
+          rs(data);
+        })
+        .catch(rj)
+    }, 500);
+  })
+}
+
 export function accountCreate(customerId, payload) {
   return dispatch => {
     dispatch(accountCreateStart());
     return api.apiCreateAccount(customerId, payload)
-      .then(({ accountId }) => {
-        dispatch(accountCreateComplete({
-          id: accountId,
-          ...payload
-        }));
-        // dispatch(entityReceived(accountId, payload));
-        dispatch(authenticate(true));
-        return accountId;
+      .then(data => {
+        if (data.accountId) {
+          const { accountId } = data;
+          dispatch(accountCreateComplete({
+            id: accountId,
+            ...payload
+          }));
+          // dispatch(entityReceived(accountId, payload));
+          dispatch(authenticate(true));
+          return accountId;
+        } else {
+          return readUntilChanged(data, customerId)
+            .then(() => {
+              dispatch(accountCreateComplete({
+                id: ''
+              }));
+              dispatch(authenticate(true));
+            });
+        }
       })
       .catch(err => {
         debugger;

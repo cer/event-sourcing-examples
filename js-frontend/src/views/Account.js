@@ -275,7 +275,8 @@ export class Account extends React.Component {
           <Col sm={2}>
             <br/>
             <Button bsStyle="primary"
-                    onClick={this.initiateTransfer.bind(this)}>Transfer</Button>
+                    disabled={transferDisabled}
+                    onClick={!transferDisabled && this.initiateTransfer.bind(this)}>Transfer</Button>
           </Col>
         </Row>
 

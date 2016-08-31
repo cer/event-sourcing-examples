@@ -4,8 +4,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { initialize } from "./app";
-
-
 /**
  * Fire-up React Router.
  */

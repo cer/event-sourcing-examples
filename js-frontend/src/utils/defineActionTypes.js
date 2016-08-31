@@ -3,16 +3,16 @@ import invariant from 'invariant'
 export const TODO_DEFINE = Symbol('Define property');
 
 export const defineActionType = (obj) => {
-  const result = Object.entries(obj).reduce((memo, [namespace, value]) => {
+  const result = Object.keys(obj).reduce((memo, namespace) => {
+    const value = obj[namespace];
     let types = [];
     const namespaceTypes = {};
 
     if (typeof value == 'string') {
       types = value.trim().split(/\s+/);
     } else {
-      types = Object.entries(value)
-        .filter(([key, needDefinition]) => needDefinition === TODO_DEFINE)
-        .map(([key]) => key);
+      types = Object.keys(value)
+        .filter((key) => value[key] === TODO_DEFINE);
     }
 
     invariant(
