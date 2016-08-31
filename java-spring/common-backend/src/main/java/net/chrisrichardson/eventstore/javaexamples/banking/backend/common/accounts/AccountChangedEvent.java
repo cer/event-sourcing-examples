@@ -1,16 +1,14 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import net.chrisrichardson.eventstore.Aggregate;
-import net.chrisrichardson.eventstore.EntityIdentifier;
-import net.chrisrichardson.eventstore.Event;
+import io.eventuate.Event;
 
 import java.math.BigDecimal;
 
 public class AccountChangedEvent implements Event {
   protected BigDecimal amount;
-  protected EntityIdentifier transactionId;
+  protected String transactionId;
 
-  public AccountChangedEvent(BigDecimal amount, EntityIdentifier transactionId) {
+  public AccountChangedEvent(BigDecimal amount, String transactionId) {
     this.amount = amount;
     this.transactionId = transactionId;
   }
@@ -18,7 +16,7 @@ public class AccountChangedEvent implements Event {
   public AccountChangedEvent() {
   }
 
-  public EntityIdentifier getTransactionId() {
+  public String getTransactionId() {
     return transactionId;
   }
 

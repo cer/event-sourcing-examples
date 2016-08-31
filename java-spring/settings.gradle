@@ -1,28 +1,35 @@
 include 'testutil'
-include 'common-web'
+include 'common'
+include 'common-backend'
+include 'common-auth'
+include 'common-auth-web'
 include 'common-swagger'
 
-include 'common-backend'
-
 include 'accounts-command-side-backend'
-include 'transactions-command-side-backend'
 include 'accounts-command-side-web'
-include 'transactions-command-side-web'
-
+include 'accounts-command-side-service'
 
 include 'accounts-query-side-backend'
 include 'accounts-query-side-web'
+include 'accounts-query-side-service'
 
-include 'backend-integration-tests'
+include 'transactions-command-side-backend'
+include 'transactions-command-side-web'
+include 'transactions-command-side-service'
+
+include 'customers-command-side-backend'
+include 'customers-command-side-web'
+include 'customers-command-side-service'
+
+include 'customers-query-side-backend'
+include 'customers-query-side-web'
+include 'customers-query-side-service'
+
+include 'api-gateway-service'
 
 include 'monolithic-service'
 
-include 'accounts-command-side-service'
-include 'accounts-query-side-service'
-include 'transactions-command-side-service'
-
+include 'backend-integration-tests'
 include 'e2e-test'
 
 rootProject.name = 'java-spring-event-sourcing-example'
-
-

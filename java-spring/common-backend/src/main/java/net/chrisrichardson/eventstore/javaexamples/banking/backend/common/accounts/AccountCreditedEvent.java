@@ -1,8 +1,5 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import net.chrisrichardson.eventstore.Aggregate;
-import net.chrisrichardson.eventstore.EntityIdentifier;
-
 import java.math.BigDecimal;
 
 public class AccountCreditedEvent extends AccountChangedEvent {
@@ -10,7 +7,7 @@ public class AccountCreditedEvent extends AccountChangedEvent {
   private AccountCreditedEvent() {
   }
 
-  public AccountCreditedEvent(BigDecimal amount, EntityIdentifier transactionId) {
+  public AccountCreditedEvent(BigDecimal amount, String transactionId) {
     super(amount, transactionId);
   }
 

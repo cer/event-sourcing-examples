@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts.GetAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +13,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;
-import rx.Observable;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
 
@@ -51,8 +51,8 @@ public class AccountsQuerySideServiceIntegrationTest {
     eventually(
             new Producer<GetAccountResponse>() {
               @Override
-              public Observable<GetAccountResponse> produce() {
-                return Observable.just(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
+              public CompletableFuture<GetAccountResponse> produce() {
+                return CompletableFuture.completedFuture(restTemplate.getForEntity(baseUrl("/accounts/" + fromAccountId), GetAccountResponse.class).getBody());
               }
             },
             new Verifier<GetAccountResponse>() {

@@ -5,9 +5,11 @@ dependencies {
     testCompile project(":accounts-command-side-backend")
     testCompile project(":transactions-command-side-backend")
     testCompile project(":accounts-query-side-backend")
+    testCompile project(":customers-command-side-backend")
+    testCompile project(":customers-query-side-backend")
     testCompile project(":testutil")
     testCompile "junit:junit:4.11"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
-    testCompile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
+    testCompile "io.eventuate.client.java:eventuate-client-java-jdbc:$eventuateClientVersion"
 
 }

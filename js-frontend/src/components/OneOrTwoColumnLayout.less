@@ -1,0 +1,24 @@
+.app-OneOrTwoColumnLayout {
+  position: relative;
+  height: 100%;
+  z-index: 1;
+
+  &-left {
+    position: absolute;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &-right {
+    position: absolute;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+  }
+  &-right-open {
+    border-left: 1px solid black;
+  }
+}

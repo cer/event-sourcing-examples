@@ -1,13 +1,16 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import rx.Observable;
+
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/accounts")
@@ -21,8 +24,8 @@ public class AccountController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public Observable<CreateAccountResponse> createAccount(@Validated @RequestBody CreateAccountRequest request) {
-    return accountService.openAccount(request.getInitialBalance())
-            .map(entityAndEventInfo -> new CreateAccountResponse(entityAndEventInfo.getEntityIdentifier().getId()));
+  public CompletableFuture<CreateAccountResponse> createAccount(@Validated @RequestBody CreateAccountRequest request) {
+    return accountService.openAccount(request.getCustomerId(), request.getTitle(), request.getInitialBalance(), request.getDescription())
+    .thenApply(entityAndEventInfo -> new CreateAccountResponse(entityAndEventInfo.getEntityId()));
   }
 }

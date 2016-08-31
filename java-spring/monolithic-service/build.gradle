@@ -6,17 +6,26 @@ dependencies {
     compile project(":accounts-query-side-web")
     compile project(":accounts-command-side-web")
     compile project(":transactions-command-side-web")
+    compile project(":customers-command-side-web")
+    compile project(":customers-query-side-web")
+    compile project(":common-auth-web")
+    compile project(":common-swagger")
 
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-actuator"
 
-    compile "net.chrisrichardson.eventstore.client:eventstore-jdbc_2.10:$eventStoreClientVersion"
     compile project(":common-swagger")
+    compile "io.eventuate.client.java:eventuate-client-java-http-stomp-spring:$eventuateClientVersion"
 
     testCompile project(":testutil")
     testCompile "org.springframework.boot:spring-boot-starter-test"
-
+    testCompile "io.eventuate.client.java:eventuate-client-java-jdbc:$eventuateClientVersion"
 }
 
+task copyWebStatic(type: Copy) {
+    from "../../prebuilt-web-client"
+    into "build/resources/main/static"
+}
 
-
+jar.dependsOn(copyWebStatic)
+bootRun.dependsOn(copyWebStatic)

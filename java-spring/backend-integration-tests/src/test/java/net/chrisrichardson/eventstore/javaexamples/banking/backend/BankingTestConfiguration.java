@@ -1,14 +1,15 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend;
 
+import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountConfiguration;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferConfiguration;
-import net.chrisrichardson.eventstore.jdbc.config.JdbcEventStoreConfiguration;
-import net.chrisrichardson.utils.config.MetricRegistryConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 @Configuration
-@Import({AccountConfiguration.class, MoneyTransferConfiguration.class, JdbcEventStoreConfiguration.class})
+@Import({AccountConfiguration.class, MoneyTransferConfiguration.class, EventuateJdbcEventStoreConfiguration.class})
+@EnableAutoConfiguration
 public class BankingTestConfiguration {
 
 }

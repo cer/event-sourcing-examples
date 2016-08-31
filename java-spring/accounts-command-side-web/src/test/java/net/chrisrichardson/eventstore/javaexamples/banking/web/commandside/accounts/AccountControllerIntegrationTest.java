@@ -37,7 +37,7 @@ public class AccountControllerIntegrationTest {
   public void shouldCreateAccount() throws Exception {
     mockMvc.perform(post("/accounts")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"initialBalance\" : 500}")
+            .content("{\"customerId\" : \"00000000-00000000\", \"initialBalance\" : 500}")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
   }

@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions;
 
-import net.chrisrichardson.eventstore.Command;
+import io.eventuate.Command;
 
 interface MoneyTransferCommand extends Command {
 }

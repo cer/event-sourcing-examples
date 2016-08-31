@@ -1,7 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountRequest;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.accounts.CreateAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,11 +37,13 @@ public class AccountsCommandSideServiceIntegrationTest {
     BigDecimal initialFromAccountBalance = new BigDecimal(500);
     BigDecimal initialToAccountBalance = new BigDecimal(100);
     BigDecimal amountToTransfer = new BigDecimal(150);
+    String customerId = "00000000-00000000";
+    String title = "My Account";
 
-    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialFromAccountBalance), CreateAccountResponse.class).getBody();
+    final CreateAccountResponse fromAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(customerId, title, "", initialFromAccountBalance), CreateAccountResponse.class).getBody();
     final String fromAccountId = fromAccount.getAccountId();
 
-    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(initialToAccountBalance), CreateAccountResponse.class).getBody();
+    CreateAccountResponse toAccount = restTemplate.postForEntity(baseUrl("/accounts"), new CreateAccountRequest(customerId, title, "", initialToAccountBalance), CreateAccountResponse.class).getBody();
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);

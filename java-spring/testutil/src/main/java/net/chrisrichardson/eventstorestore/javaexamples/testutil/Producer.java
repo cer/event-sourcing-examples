@@ -1,7 +1,7 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
-import rx.Observable;
+import java.util.concurrent.CompletableFuture;
 
 public interface Producer<T> {
-  public Observable<T> produce();
+  public CompletableFuture<T> produce();
 }

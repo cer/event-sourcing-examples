@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(":common-auth-web")
+
+    compile "org.apache.httpcomponents:httpclient:4.5"
+    compile "org.apache.httpcomponents:fluent-hc:4.5.1"
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+
+    testCompile "junit:junit:4.11"
+}
+
+task copyWebStatic(type: Copy) {
+    from "../../prebuilt-web-client"
+    into "build/resources/main/static"
+}
+
+jar.dependsOn(copyWebStatic)

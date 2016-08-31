@@ -1,17 +1,14 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions;
 
-import net.chrisrichardson.eventstore.EventStore;
-import net.chrisrichardson.eventstore.repository.AggregateRepository;
-import net.chrisrichardson.eventstore.subscriptions.*;
-import net.chrisrichardson.eventstore.subscriptions.config.EventStoreSubscriptionsConfiguration;
+import io.eventuate.AggregateRepository;
+import io.eventuate.EventuateAggregateStore;
+import io.eventuate.javaclient.spring.EnableEventHandlers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import net.chrisrichardson.eventstore.javaapi.consumer.EnableJavaEventHandlers;
 
 @Configuration
-@Import(EventStoreSubscriptionsConfiguration.class)
-@EnableJavaEventHandlers
+@EnableEventHandlers
 public class MoneyTransferConfiguration {
 
   @Bean
@@ -25,7 +22,7 @@ public class MoneyTransferConfiguration {
   }
 
   @Bean
-  public AggregateRepository<MoneyTransfer, MoneyTransferCommand> moneyTransferRepository(EventStore eventStore) {
+  public AggregateRepository<MoneyTransfer, MoneyTransferCommand> moneyTransferRepository(EventuateAggregateStore eventStore) {
     return new AggregateRepository<MoneyTransfer, MoneyTransferCommand>(MoneyTransfer.class, eventStore);
   }
 

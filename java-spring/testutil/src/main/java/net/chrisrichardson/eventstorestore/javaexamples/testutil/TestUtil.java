@@ -1,16 +1,25 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.internal.operators.OnSubscribeRefCount;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class TestUtil {
 
-  public static <T> T await(Observable<T> o) {
-    return o.single().timeout(1, TimeUnit.SECONDS).toBlocking().getIterator().next();
+  public static <T> T await(CompletableFuture<T> o) {
+    try {
+      return o.get(1, TimeUnit.SECONDS);
+    } catch (InterruptedException | TimeoutException | ExecutionException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 
@@ -28,7 +37,7 @@ public class TestUtil {
 
   }
 
-  static  class Success<T> implements Outcome<T> {
+  static class Success<T> implements Outcome<T> {
 
     T value;
 
@@ -47,12 +56,12 @@ public class TestUtil {
 
   public static <T> void eventually(final Producer<T> producer, final Verifier<T> verifier) {
     final int n = 50;
-    Object possibleException = Observable.timer(0, 100, TimeUnit.MILLISECONDS).flatMap(new Func1<Long, Observable<Outcome<T>>>() {
+    Object possibleException = Observable.timer(0, 200, TimeUnit.MILLISECONDS).flatMap(new Func1<Long, Observable<Outcome<T>>>() {
 
       @Override
       public Observable<Outcome<T>> call(Long aLong) {
         try {
-          return producer.produce().map(new Func1<T, Outcome<T>>() {
+          return fromCompletableFuture(producer.produce()).map(new Func1<T, Outcome<T>>() {
             @Override
             public Outcome<T> call(T t) {
               return new Success<T>(t);
@@ -89,7 +98,24 @@ public class TestUtil {
     }).first().toBlocking().getIterator().next().first;
 
     if (possibleException != null)
-      throw new RuntimeException((Throwable)possibleException);
+      throw new RuntimeException((Throwable) possibleException);
+  }
+
+  private static <T> Observable<T> fromCompletableFuture(CompletableFuture<T> future) {
+    return Observable.create(new Observable.OnSubscribe<T>() {
+      @Override
+      public void call(Subscriber<? super T> subscriber) {
+        future.handle((result, throwable) -> {
+          if (throwable != null)
+            subscriber.onError(throwable);
+          else {
+            subscriber.onNext(result);
+            subscriber.onCompleted();
+          }
+          return null;
+        });
+      }
+    });
   }
 
 }

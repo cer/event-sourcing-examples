@@ -1,15 +1,19 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.transactions;
 
-import net.chrisrichardson.eventstore.EntityIdentifier;
+
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferService;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.TransferDetails;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.CreateMoneyTransferRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.CreateMoneyTransferResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import rx.Observable;
+
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/transfers")
@@ -23,13 +27,15 @@ public class MoneyTransferController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public Observable<CreateMoneyTransferResponse> createMoneyTransfer(@Validated @RequestBody CreateMoneyTransferRequest request) {
+  public CompletableFuture<CreateMoneyTransferResponse> createMoneyTransfer(@Validated @RequestBody CreateMoneyTransferRequest request) {
     TransferDetails transferDetails = new TransferDetails(
-            new EntityIdentifier(request.getFromAccountId()),
-            new EntityIdentifier(request.getToAccountId()),
-            request.getAmount());
+            request.getFromAccountId(),
+            request.getToAccountId(),
+            request.getAmount(),
+            new Date(),
+            request.getDescription());
     return moneyTransferService.transferMoney(transferDetails)
-            .map(entityAndEventInfo -> new CreateMoneyTransferResponse(entityAndEventInfo.getEntityIdentifier().getId()));
+            .thenApply(entityAndEventInfo -> new CreateMoneyTransferResponse(entityAndEventInfo.getEntityIdAndVersion().getEntityId()));
   }
 
 }
