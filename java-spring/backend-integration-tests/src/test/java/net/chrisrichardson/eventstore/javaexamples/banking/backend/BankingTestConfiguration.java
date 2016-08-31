@@ -6,6 +6,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.t
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 @Configuration
 @Import({AccountConfiguration.class, MoneyTransferConfiguration.class, EventuateJdbcEventStoreConfiguration.class})

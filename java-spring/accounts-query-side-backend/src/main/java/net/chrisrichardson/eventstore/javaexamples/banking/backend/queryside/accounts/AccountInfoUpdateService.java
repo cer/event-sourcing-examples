@@ -17,35 +17,40 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class AccountInfoUpdateService {
   private Logger logger = LoggerFactory.getLogger(getClass());
 
+  private AccountInfoRepository accountInfoRepository;
   private MongoTemplate mongoTemplate;
 
-  public AccountInfoUpdateService(MongoTemplate mongoTemplate) {
+  public AccountInfoUpdateService(AccountInfoRepository accountInfoRepository, MongoTemplate mongoTemplate) {
+    this.accountInfoRepository = accountInfoRepository;
     this.mongoTemplate = mongoTemplate;
   }
 
 
   public void create(String accountId, String customerId, String title, BigDecimal initialBalance, String description, String version) {
     try {
-      WriteResult x = mongoTemplate.upsert(new Query(where("id").is(accountId).and("version").exists(false)),
-              new Update()
-                      .set("customerId", customerId)
-                      .set("title", title)
-                      .set("description", description)
-                      .set("balance", toIntegerRepr(initialBalance))
-                      .set("version", version),
-              AccountInfo.class);
+      accountInfoRepository.save(new AccountInfo(
+              accountId,
+              customerId,
+              title,
+              description,
+              toIntegerRepr(initialBalance),
+              Collections.<AccountChangeInfo>emptyList(),
+              Collections.<AccountTransactionInfo>emptyList(),
+              version));
       logger.info("Saved in mongo");
     } catch (Throwable t) {
+      logger.error("Error during saving: ");
       logger.error("Error during saving: ", t);
       throw new RuntimeException(t);
     }
   }
 
 
-  public void addTransaction(String eventId, String accountId, AccountTransactionInfo ti) {
-    mongoTemplate.upsert(new Query(where("id").is(accountId)),
+  public void addTransaction(String eventId, String fromAccountId, AccountTransactionInfo ti) {
+    mongoTemplate.updateMulti(new Query(where("id").is(fromAccountId)), /* wrong  .and("version").lt(eventId) */
             new Update().
-                    set("transactions." + eventId, ti),
+                    push("transactions", ti).
+                    set("version", eventId),
             AccountInfo.class);
   }
 

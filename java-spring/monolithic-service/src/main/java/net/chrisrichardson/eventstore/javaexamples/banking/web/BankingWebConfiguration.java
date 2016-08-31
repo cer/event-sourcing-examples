@@ -23,7 +23,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @Import({CommandSideWebAccountsConfiguration.class, CommandSideWebTransactionsConfiguration.class, EventuateHttpStompClientConfiguration.class, QuerySideWebConfiguration.class, CustomersQuerySideWebConfiguration.class, CustomersCommandSideWebConfiguration.class, AuthConfiguration.class, CommonSwaggerConfiguration.class})
 @EnableAutoConfiguration
-@ComponentScan
 public class BankingWebConfiguration extends WebMvcConfigurerAdapter {
 
 

@@ -18,13 +18,13 @@ public class AccountInfo {
   private String description;
   private long balance;
   private List<AccountChangeInfo> changes;
-  private Map<String, AccountTransactionInfo> transactions;
+  private List<AccountTransactionInfo> transactions;
   private String version;
 
   private AccountInfo() {
   }
 
-  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, Map<String, AccountTransactionInfo> transactions, String version) {
+  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, List<AccountTransactionInfo> transactions, String version) {
 
     this.id = id;
     this.customerId = customerId;
@@ -57,11 +57,11 @@ public class AccountInfo {
   }
 
   public List<AccountChangeInfo> getChanges() {
-    return changes == null ? Collections.EMPTY_LIST : changes;
+    return changes;
   }
 
   public List<AccountTransactionInfo> getTransactions() {
-    return transactions == null ? Collections.EMPTY_LIST : new ArrayList<>(transactions.values());
+    return transactions;
   }
 
   public String getVersion() {
