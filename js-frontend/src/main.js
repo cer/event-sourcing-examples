@@ -37,5 +37,5 @@ store.subscribe(blocked(() => {
 function onHashChange() {
   store.dispatch(navigation.complete())
 }
-window.addEventListener('hashchange', onHashChange, false)
-onHashChange()
+window.addEventListener('hashchange', onHashChange, false);
+onHashChange();

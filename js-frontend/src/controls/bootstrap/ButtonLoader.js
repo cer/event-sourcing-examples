@@ -40,7 +40,7 @@ class ButtonLoader extends React.Component {
         ? this.props.spinColorDark
         : this.props.spinColorLight;
 
-      icon = <Spinner ref="spinner" {...this.props.spinConfig} color={spinColor} loaded={false} />;
+      icon = <Spinner {...this.props.spinConfig} color={spinColor} loaded={false} />;
     } else {
       icon = this.props.icon;
     }

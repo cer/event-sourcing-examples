@@ -12,17 +12,9 @@ import createLogger from 'redux-logger';
 import { Route, IndexRoute, Link, IndexLink } from "react-router";
 import { ReduxRouter} from "redux-router";
 
-//import { Router, IndexRoute, Route, browserHistory } from 'react-router';
-//import { syncHistory, routeReducer } from 'react-router-redux';
-
-//import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
-//import { authStateReducer } from "redux-auth";
-//import authStateReducer from './reducers/auth';
-//import appStateReducer from './reducers/data';
 import mainReducer from './reducers';
 
 import { configure as reduxAuthConfigure } from './actions/configure';
-//import { AuthGlobals } from "redux-auth/bootstrap-theme";
 
 import { createHistory, createHashHistory, createMemoryHistory } from "history";
 import { pushState, routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
@@ -41,11 +33,9 @@ import SignUp from "./views/SignUp";
 
 class App extends React.Component {
   render() {
-    return (
-      <Container>
+    return (<Container>
         {this.props.children}
-      </Container>
-    );
+      </Container>);
   }
 }
 

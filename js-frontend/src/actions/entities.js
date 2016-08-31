@@ -217,20 +217,20 @@ export const makeTransfer = (accountId, payload) => {
   };
 };
 
-export const getTransfersRequested = makeActionCreator(T.TRANSFERS.LIST_START);
-export const getTransfersComplete = makeActionCreator(T.TRANSFERS.LIST_COMPLETE, 'payload');
-export const getTransfersError = makeActionCreator(T.TRANSFERS.LIST_ERROR, 'error');
+export const getTransfersRequested = makeActionCreator(T.TRANSFERS.LIST_START, 'id');
+export const getTransfersComplete = makeActionCreator(T.TRANSFERS.LIST_COMPLETE, 'id', 'payload');
+export const getTransfersError = makeActionCreator(T.TRANSFERS.LIST_ERROR, 'id', 'error');
 
 export const getTransfers = (accountId) => {
   return dispatch => {
-    dispatch(getTransfersRequested());
+    dispatch(getTransfersRequested(accountId));
     return api.apiRetrieveTransfers(accountId)
       .then(data => {
-        dispatch(getTransfersComplete(data));
+        dispatch(getTransfersComplete(accountId, data));
         return data;
       })
       .catch(err => {
-        dispatch(getTransfersError(err));
+        dispatch(getTransfersError(accountId, err));
         return err;
       });
   };

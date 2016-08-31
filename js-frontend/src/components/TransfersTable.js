@@ -11,17 +11,23 @@ import AccountInfo from './AccountInfo';
 
 export class TransfersTable extends React.Component {
   render() {
-    const { loading, data, errors } = this.props;
-
-    if (loading) {
-      return (<h2><Spinner ref="spinner" loaded={false} /> Loading..</h2>);
+    const { transfers, forAccount } = this.props;
+    const { loading, data, errors } = transfers || {};
+    
+    if (!transfers || loading) {
+      return (<h2><Spinner loaded={false} /> Loading..</h2>);
     }
 
     if (Object.keys(errors).length) {
       return (<div className="text-danger">Errors..</div>);
     }
 
-    const transfers = data.length ? data.map(({
+    const currentAccountId = forAccount;
+    const transfersMarkup = data.length ?
+      data
+        .filter(({ toAccountId, fromAccountId}) => ((fromAccountId === currentAccountId) || (toAccountId === currentAccountId)))
+        .sort((a, b) => (-(a.date - b.date)))
+        .map(({
       amount,
       fromAccountId,
       toAccountId,
@@ -29,32 +35,43 @@ export class TransfersTable extends React.Component {
       description = '',
       date = null,
       status = ''
-    }, idx) => (<tr key={idx}>
-      <td><TimeAgo date={date} /></td>
-      <td><AccountInfo accountId={ fromAccountId } /></td>
-      <td><AccountInfo accountId={ toAccountId } /></td>
-      <td><Money amount={ amount } /></td>
-      <td>{ description || '[No description]'}</td>
-      <td>{ status || '&mdash;' }</td>
-    </tr>)) : (<tr>
-      <td colSpan={6}>No transfers for this account just yet.</td>
-    </tr>);
+    }) => {
 
+      const isOriginating = fromAccountId == currentAccountId;
+      const directionMarkup = isOriginating ? 'Debit' : 'Credit';
+      const counterAccountMarkup = isOriginating ?
+        <AccountInfo accountId={ toAccountId } /> :
+        <AccountInfo accountId={ fromAccountId } />;
+
+      const transferTimestamp = new Date(date);
+      const timeAgoTitle = transferTimestamp.toLocaleDateString() + ' ' + transferTimestamp.toLocaleTimeString();
+
+      return (<tr>
+        <td><TimeAgo date={date} title={ timeAgoTitle } /></td>
+        <td>{ directionMarkup }</td>
+        <td>{ counterAccountMarkup }</td>
+        <td><Money amount={ amount } /></td>
+        <td>{ description || '—' }</td>
+        <td>{ status || '—' }</td>
+      </tr>);
+    }) : (<tr>
+        <td colSpan={6}>No transfers for this account just yet.</td>
+      </tr>);
 
     return (
       <BS.Table striped bordered condensed hover>
         <thead>
         <tr>
           <th>Date</th>
-          <th>Transfer Out</th>
-          <th>Transfer In</th>
+          <th>Type</th>
+          <th>Other Account</th>
           <th>Amount</th>
           <th>Description</th>
           <th>Status</th>
         </tr>
         </thead>
         <tbody>
-        { transfers }
+        { transfersMarkup }
         </tbody>
       </BS.Table>
     );

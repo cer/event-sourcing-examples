@@ -4,8 +4,9 @@
 import React from "react";
 import { connect } from 'react-redux';
 import Spinner from "react-loader";
-import * as BS  from "react-bootstrap";
+// import * as BS  from "react-bootstrap";
 import * as A from '../actions/entities';
+import { Route, IndexRoute, Link, IndexLink } from "react-router";
 
 
 // import { Money } from '../components/Money';
@@ -32,12 +33,12 @@ export class AccountInfo extends React.Component {
     const account = entities[accountId];
 
     if (!account) {
-      return (<div>{ accountId } <Spinner ref="spinner" loaded={false} /></div>)
+      return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)
     }
 
     const { title } = account;
 
-    return (<div>{ title } </div>);
+    return (<Link to={ `/account/${accountId}` }>{ title }</Link>);
   }
 }
 

@@ -13,23 +13,30 @@ const pkg = require('./package.json');
 
 const parts = require('./config/webpackConfigParts');
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+
 const ENTRIES = Object.keys(pkg.dependencies);
-const CSS_ENTIRES = ['bootstrap-horizon'];
+const CSS_ENTIRES = [
+  //'bootstrap-horizon'
+];
 
 const JS_ENTRIES = ENTRIES.filter(p => CSS_ENTIRES.indexOf(p) < 0);
 
 const PATHS = {
   app: path.join(__dirname, 'src'),
-  appEntry: path.join(__dirname, 'src', 'index.js'),
+  appEntry: path.join(__dirname, 'src', 'client.js'),
   style: [
-    path.join(__dirname, 'node_modules', 'bootstrap-horizon'),
-    path.join(__dirname, 'node_modules', 'rc-slider/assets'),
-    path.join(__dirname, 'src', 'style.css')
+    // path.join(__dirname, 'node_modules', 'bootstrap-horizon'),
+    // path.join(__dirname, 'node_modules', 'rc-slider/assets'),
+    path.join(__dirname, 'node_modules/react-select/dist/react-select.css'),
+    path.join(__dirname, 'src', 'main.css')
   ],
   styleLess: [
-    path.join(__dirname, 'node_modules', 'bootstrap-horizon'),
-    path.join(__dirname, 'node_modules/rc-slider/assets/index.css'),
-    path.join(__dirname, 'src', 'style.less')
+    // path.join(__dirname, 'node_modules', 'bootstrap-horizon'),
+    // path.join(__dirname, 'node_modules/rc-slider/assets/index.css'),
+    path.join(__dirname, 'node_modules/react-select/dist/react-select.css'),
+    path.join(__dirname, 'src', 'main.less')
   ],
   build: path.join(__dirname, 'build')
 };
@@ -84,11 +91,10 @@ const common = {
       // Required
       inject: false,
       template: './public/index.ejs',
-      //template: 'node_modules/html-webpack-template/index.ejs',
 
       // Optional
-      title: 'ES IOT Lighting',
-      description: 'ES IOT Lighting App',
+      title: 'Money Transfer App',
+      description: 'ES Money Transfer App',
       appMountId: 'root',
       // baseHref: 'http://example.com/awesome',
       // devServer: 3001,
@@ -142,7 +148,7 @@ const config = (() => {
       return merge(
         common,
         {
-          devtool: 'eval-source-map'
+          devtool: 'source-map'
         },
         parts.useJSON(),
         parts.useJQuery(),
@@ -163,109 +169,4 @@ const config = (() => {
 
 })();
 
-// module.exports = validate(config);
-
-
-
-
-//import ExtractTextPlugin from "extract-text-webpack-plugin";
-
-
-export default (DEBUG, PATH, PORT=3000) => ({
-  entry: (DEBUG ? [
-    `webpack-dev-server/client?http://localhost:${PORT}`,
-  ] : []).concat([
-    './src/main.less',
-    'babel-polyfill',
-    './src/client'
-  ]),
-
-  output: {
-    path: path.resolve(__dirname, PATH, "generated"),
-    filename: DEBUG ? "main.js" : "main-[hash].js",
-    publicPath: "/generated/"
-  },
-
-  cache: DEBUG,
-  debug: DEBUG,
-
-  // For options, see http://webpack.github.io/docs/configuration.html#devtool
-  //devtool: DEBUG && "eval",
-  devtool: DEBUG && "cheap-module-eval-source-map",
-
-  module: {
-    loaders: [
-      // Load ES6/JSX
-      { test: /\.jsx?$/,
-        include: [
-          path.resolve(__dirname, "src")
-          //,
-          //path.resolve(__dirname, "node_modules/redux-auth/src/views/bootstrap")
-        ],
-        loader: "babel-loader",
-        query: {
-          plugins: ['transform-runtime'],
-          presets: ['es2015', 'react', 'stage-0']
-        }
-      },
-
-      //json
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-
-      // Load styles
-      { test: /\.less$/,
-        loader: DEBUG
-          ? "style!css!autoprefixer!less"
-          : ExtractTextPlugin.extract("style-loader", "css-loader!autoprefixer-loader!less-loader")
-      },
-
-      // Load images
-      { test: /\.jpg/, loader: "url-loader?limit=10000&mimetype=image/jpg" },
-      { test: /\.gif/, loader: "url-loader?limit=10000&mimetype=image/gif" },
-      { test: /\.png/, loader: "url-loader?limit=10000&mimetype=image/png" },
-      { test: /\.svg/, loader: "url-loader?limit=10000&mimetype=image/svg" },
-
-      // Load fonts
-      { test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
-    ]
-  },
-
-  plugins: DEBUG
-    ? [
-    //new
-  ]
-    : [
-      new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'}),
-      new ExtractTextPlugin("style.css", {allChunks: false}),
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        compressor: {screw_ie8: true, keep_fnames: true, warnings: false},
-        mangle: {screw_ie8: true, keep_fnames: true}
-      }),
-      new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.AggressiveMergingPlugin()
-    ],
-
-  resolveLoader: {
-    root: path.join(__dirname, "node_modules")
-  },
-
-  resolve: {
-    root: path.join(__dirname, "node_modules"),
-
-    modulesDirectories: ['node_modules'],
-
-    alias: {
-      environment: DEBUG
-        ? path.resolve(__dirname, 'config', 'environments', 'development.js')
-        : path.resolve(__dirname, 'config', 'environments', 'production.js')
-    },
-
-    // Allow to omit extensions when requiring these files
-    extensions: ["", ".js", ".jsx"]
-  }
-});
+module.exports = validate(config);

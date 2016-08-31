@@ -2,7 +2,7 @@
  * Created by andrew on 8/17/16.
  */
 
-export const blocked = (fn) => {
+export const blocked = (fn, useCb) => {
   let isBlocked = false;
   return (...args) => {
     if (isBlocked) {
@@ -10,8 +10,13 @@ export const blocked = (fn) => {
     }
     //noinspection JSUnusedAssignment
     isBlocked = true;
-    const result = fn(...args);
-    isBlocked = false;
+    const cb = () => {
+      isBlocked = false;
+    };
+    const result = useCb ? fn(...(args.concat([cb]))) : fn(...args);
+    if (!useCb) {
+      cb();
+    }
     return result;
   };
 };

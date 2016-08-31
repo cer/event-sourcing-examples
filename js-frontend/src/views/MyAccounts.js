@@ -52,10 +52,14 @@ class MyAccounts extends React.Component {
     this.props.dispatch(A.accountCreate(customerId, payload))
       .then((accountId) => {
         this.close();
-        return this.props.dispatch(A.fetchOwnAccounts(customerId));
+        // return new Promise((rs, rj) => {
+          setTimeout(() => {
+            this.props.dispatch(A.fetchOwnAccounts(customerId)); //.then(rs, rj);
+          }, 1000);
+        // });
       })
       .catch(err => {
-        debugger;
+        // debugger;
         this.props.dispatch(A.accountCreateError(err));
       });
   }
@@ -74,10 +78,14 @@ class MyAccounts extends React.Component {
     this.props.dispatch(A.accountRefCreate(customerId, payload))
       .then(() => {
         this.close();
-        return this.props.dispatch(A.fetchOwnAccounts(customerId));
+        return new Promise((rs, rj) => {
+          setTimeout(() => {
+            this.props.dispatch(A.fetchOwnAccounts(customerId)).then(rs, rj);
+          }, 1000);
+        })
       })
       .catch(err => {
-        debugger;
+        // debugger;
         this.props.dispatch(A.accountRefCreateError(err));
       });
   }

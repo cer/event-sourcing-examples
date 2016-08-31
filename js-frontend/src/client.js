@@ -9,7 +9,7 @@ import { initialize } from "./app";
 /**
  * Fire-up React Router.
  */
-const reactRoot = window.document.getElementById("react-app");
+const reactRoot = window.document.getElementById("root");
 initialize().then(({ provider }) => {
   ReactDOM.render(provider, reactRoot);
 });

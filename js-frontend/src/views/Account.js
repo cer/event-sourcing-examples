@@ -7,8 +7,8 @@ import { connect } from "react-redux";
 
 import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 import * as BS  from "react-bootstrap";
-import Select from "react-select";
 import Spinner from "react-loader";
+import Select from "react-select";
 import Input from "../controls/bootstrap/Input";
 import { Money, moneyText } from '../components/Money';
 import { TransfersTable } from '../components/TransfersTable';
@@ -21,32 +21,92 @@ import * as Modals from './modals';
 import * as A from '../actions/entities';
 import read from '../utils/readProp';
 
+import { blocked } from '../utils/blockedExecution';
 
 
 const resetModals = {
-  showAccountModal: false
+  showAccountModal: false,
+  unsaved: false
 };
 
 export class Account extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = { ...resetModals };
+
+    const ensureTransfers = this.ensureTransfers.bind(this);
+    const ensureAccounts = this.ensureAccounts.bind(this);
+
+    this.ensureTransfers = blocked(ensureTransfers, true);
+    this.ensureAccounts = blocked(ensureAccounts, true);
   }
 
-  loadAccountInfo() {
+  ensureTransfers(props, cb) {
+    const forceFetch = !cb;
+    if (forceFetch) {
+      cb = props;
+      props = this.props;
+    }
+
+    const { dispatch, params, transfers } = props;
+
+    if (!forceFetch && !params) {
+      return cb();
+    }
+
+    const { accountId } = params;
+    if (!forceFetch && (!accountId || transfers[accountId])) {
+      return cb();
+    }
+
+    dispatch(A.getTransfers(accountId)).then(cb, cb);
+  }
+
+  ensureAccounts(props, cb) {
+    const forceFetch = !cb;
+    if (forceFetch) {
+      cb = props;
+      props = this.props;
+    }
+
+    const { dispatch, params, data } = props;
+
+    if (!forceFetch && (!params || !data || !data.accounts)) {
+      return cb();
+    }
+
+    const { accountId } = params;
+
+    if (!forceFetch && data.accounts.own && data.accounts.own.length && data.entities[accountId]) {
+      return cb();
+    }
+
+    if (!forceFetch && (!props.auth || !props.auth.user || !props.auth.user.attributes)) {
+      return cb();
+    }
+
     const {
       id: customerId
-    } = this.props.auth.user.attributes;
-    this.props.dispatch(A.fetchOwnAccounts(customerId));
+    } = props.auth.user.attributes;
 
-    const { dispatch, params } = this.props;
-    const { accountId } = params;
-    dispatch(A.fetchAccount(accountId));
-    dispatch(A.getTransfers(accountId));
+    Promise.all([
+      dispatch(A.fetchOwnAccounts(customerId)),
+      dispatch(A.fetchAccount(accountId)),
+    ]).then(cb, cb);
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   return (nextProps.params.accountId !== this.props.params.accountId) || (nextProps.app !== this.props.app);
+  // }
+
   componentWillMount() {
-    this.loadAccountInfo();
+    this.ensureAccounts(this.props);
+    this.ensureTransfers(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.ensureAccounts(nextProps);
+    this.ensureTransfers(nextProps);
   }
 
   createAccountModal() {
@@ -56,7 +116,7 @@ export class Account extends React.Component {
   }
 
   createAccountModalConfirmed() {
-    debugger;
+    // debugger;
   }
 
 
@@ -69,17 +129,20 @@ export class Account extends React.Component {
   handleInput(key, value) {
     this.props.dispatch(A.makeTransferFormUpdate(key, value));
   }
+
   initiateTransfer(){
     const { dispatch, params, transfer } = this.props;
     const { accountId } = params;
     dispatch(A.makeTransfer(accountId, transfer.form ))
-      .then(() => {
-        setTimeout(() => {
-          this.loadAccountInfo();
-        }, 500);
-      });
+      .then(() => new Promise((rs) => {
+          setTimeout(() => {
+            this.ensureAccounts();
+            this.ensureTransfers();
+            rs();
+          }, 1500);
+        })
+      );
   }
-
 
   render () {
 
@@ -91,15 +154,17 @@ export class Account extends React.Component {
 
     const  account = entities[accountId];
 
+    const spinnerResult = (<h2 key="0">Loading..</h2>);
+
     if (loading) {
-      return (<h2><Spinner ref="spinner" loaded={false} /> Loading..</h2>);
+      return spinnerResult;
     }
 
     if (!account) {
       if (errors.length) {
         return (<h2>Error loading specified account</h2>);
       } else {
-        return (<h2><Spinner ref="spinner" loaded={false} /> Loading..</h2>);
+        return spinnerResult;
       }
     }
 
@@ -126,13 +191,13 @@ export class Account extends React.Component {
 
     const { title: titleRaw, description: descriptionRaw, balance } = account;
 
-    const title = titleRaw || '[No title]';
-    const description = descriptionRaw || '[No description]';
+    const title = titleRaw || '—';
+    const description = descriptionRaw || '—';
 
     const transferDisabled = this.props.transfer.loading;
 
     return (
-      <div>
+      <div key={accountId}>
         <PageHeader>
           Account
           <Nav pullRight={true}>
@@ -219,7 +284,8 @@ export class Account extends React.Component {
             <h3>Transfer History:</h3>
           </Col>
         </Row>
-        <TransfersTable { ...this.props.transfers } />
+
+        <TransfersTable forAccount={accountId} transfers={ this.props.transfers[accountId] } />
 
         <Modals.NewAccountModal show={showAccountModal}
                                 action={this.createAccountModalConfirmed.bind(this)}
@@ -235,11 +301,14 @@ export class Account extends React.Component {
 }
 
 export default connect(({
-  app
+  app,
+  router
   }) => ({
+    app,
   auth: app.auth,
   data: app.data,
   transfers: app.data.transfers,
   ui: app.ui.account,
-  transfer: app.ui.transfersMake
+  transfer: app.ui.transfersMake,
+  router
 }))(Account);
