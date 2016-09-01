@@ -4,6 +4,7 @@ import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import io.eventuate.javaclient.spring.jdbc.IdGenerator;
 import io.eventuate.javaclient.spring.jdbc.IdGeneratorImpl;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class AccountInfoUpdateServiceTest {
 
     accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
 
-    AccountInfo accountInfo = accountQueryService.findByAccountId(accountId).get();
+    AccountInfo accountInfo = accountQueryService.findByAccountId(accountId);
 
     assertEquals(accountId, accountInfo.getId());
     assertEquals(customerId, accountInfo.getCustomerId());
@@ -76,7 +77,7 @@ public class AccountInfoUpdateServiceTest {
     accountInfoUpdateService.updateBalance(accountId, changeId, 500,
             change);
 
-    accountInfo = accountQueryService.findByAccountId(accountId).get();
+    accountInfo = accountQueryService.findByAccountId(accountId);
     assertEquals(initialBalance.add(new BigDecimal(5)).longValue() * 100, accountInfo.getBalance());
     assertFalse(accountInfo.getChanges().isEmpty());
 
@@ -88,10 +89,26 @@ public class AccountInfoUpdateServiceTest {
 
     accountInfoUpdateService.addTransaction(eventId, accountId, ti);
 
-    accountInfo = accountQueryService.findByAccountId(accountId).get();
+    accountInfo = accountQueryService.findByAccountId(accountId);
     assertFalse(accountInfo.getTransactions().isEmpty());
 
     assertEquals(ti, accountInfo.getTransactions().get(0));
   }
 
+  @Test
+  public void shouldHandleDuplicateSaveAccountInfo() throws ExecutionException, InterruptedException {
+    IdGenerator x = new IdGeneratorImpl();
+    String accountId = x.genId().asString();
+    String customerId = x.genId().asString();
+    String version = x.genId().asString();
+
+    String title = "Checking account";
+    BigDecimal initialBalance = new BigDecimal("1345");
+    String description = "Some account";
+
+    accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
+    accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
+
+
+  }
 }

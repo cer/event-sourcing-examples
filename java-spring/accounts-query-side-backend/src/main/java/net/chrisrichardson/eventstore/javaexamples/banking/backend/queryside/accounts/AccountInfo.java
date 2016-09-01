@@ -1,11 +1,9 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by cer on 11/21/14.
@@ -20,11 +18,16 @@ public class AccountInfo {
   private List<AccountChangeInfo> changes;
   private List<AccountTransactionInfo> transactions;
   private String version;
+  private Date date;
 
   private AccountInfo() {
   }
 
   public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, List<AccountTransactionInfo> transactions, String version) {
+    this(id, customerId, title, description, balance, changes, transactions, version, new Date());
+  }
+
+  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, List<AccountTransactionInfo> transactions, String version, Date date) {
 
     this.id = id;
     this.customerId = customerId;
@@ -34,6 +37,7 @@ public class AccountInfo {
     this.changes = changes;
     this.transactions = transactions;
     this.version = version;
+    this.date = date;
   }
 
   public String getId() {
@@ -66,5 +70,9 @@ public class AccountInfo {
 
   public String getVersion() {
     return version;
+  }
+
+  public Date getDate() {
+    return date;
   }
 }

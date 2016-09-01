@@ -3,12 +3,14 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.ac
 import io.eventuate.DispatchedEvent;
 import io.eventuate.EventHandlerMethod;
 import io.eventuate.EventSubscriber;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountChangedEvent;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountDebitedEvent;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountOpenedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.CreditRecordedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.DebitRecordedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.FailedDebitRecordedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.MoneyTransferCreatedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,12 +65,28 @@ public class AccountQueryWorkflow {
 
   @EventHandlerMethod
   public void recordDebit(DispatchedEvent<AccountDebitedEvent> de) {
+    String accountId = de.getEntityId();
+    String transactionId = de.getEvent().getTransactionId();
+
+    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.DEBITED);
     saveChange(de, -1);
   }
 
   @EventHandlerMethod
   public void recordCredit(DispatchedEvent<AccountCreditedEvent> de) {
+    String accountId = de.getEntityId();
+    String transactionId = de.getEvent().getTransactionId();
+
+    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.COMPLETED);
     saveChange(de, +1);
+  }
+
+  @EventHandlerMethod
+  public void recordFailed(DispatchedEvent<AccountDebitFailedDueToInsufficientFundsEvent> de) {
+    String accountId = de.getEntityId();
+    String transactionId = de.getEvent().getTransactionId();
+
+    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.FAILED_DUE_TO_INSUFFICIENT_FUNDS);
   }
 
   public <T extends AccountChangedEvent> void saveChange(DispatchedEvent<T> de, int delta) {

@@ -1,6 +1,5 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils.BasicAuthUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
