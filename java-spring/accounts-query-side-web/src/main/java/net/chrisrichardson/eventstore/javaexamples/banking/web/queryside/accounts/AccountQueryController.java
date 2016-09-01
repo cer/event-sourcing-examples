@@ -1,19 +1,18 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountInfo;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountQueryService;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,35 +26,21 @@ public class AccountQueryController {
   }
 
   @RequestMapping(value = "/accounts/{accountId}", method = RequestMethod.GET)
-  public ResponseEntity<GetAccountResponse> get(@PathVariable String accountId) {
-    AccountInfo accountInfo = accountInfoQueryService.findByAccountId(accountId);
-    return ResponseEntity.ok().body(new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription()));
+  public CompletableFuture<GetAccountResponse> get(@PathVariable String accountId) {
+    return accountInfoQueryService.findByAccountId(accountId)
+            .thenApply(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription()));
   }
 
-  @RequestMapping(value = "/customers/{customerId}/accounts", method = RequestMethod.GET)
-  public ResponseEntity<GetAccountsResponse> getAccountsForCustomer(@PathVariable("customerId") String customerId) {
-    return ResponseEntity.ok().body(
-            new GetAccountsResponse(
-                    accountInfoQueryService.findByCustomerId(customerId)
-                            .stream()
-                            .map(accountInfo -> new GetAccountResponse(
-                                    accountInfo.getId(),
-                                    new BigDecimal(accountInfo.getBalance()),
-                                    accountInfo.getTitle(),
-                                    accountInfo.getDescription()))
-                            .collect(Collectors.toList())
-            )
-    );
+  @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+  public CompletableFuture<List<GetAccountResponse>> getAccountsForCustomer(@RequestParam("customerId") String customerId) {
+    return accountInfoQueryService.findByCustomerId(customerId)
+            .thenApply(accountInfoList -> accountInfoList.stream().map(accountInfo -> new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription())).collect(Collectors.toList()));
   }
 
   @RequestMapping(value = "/accounts/{accountId}/history", method = RequestMethod.GET)
-  public ResponseEntity<AccountHistoryResponse> getTransactionsHistory(@PathVariable String accountId) {
-    AccountInfo accountInfo = accountInfoQueryService.findByAccountId(accountId);
-    List<AccountHistoryEntry> historyEntries = new ArrayList<>();
-    historyEntries.add(new AccountOpenInfo(accountInfo.getDate(), AccountHistoryEntry.EntryType.account));
-    accountInfo.getTransactions().forEach(historyEntries::add);
-
-    return ResponseEntity.ok().body(new AccountHistoryResponse(historyEntries));
+  public CompletableFuture<List<AccountTransactionInfo>> getTransactionsHistory(@PathVariable String accountId) {
+    return accountInfoQueryService.findByAccountId(accountId)
+            .thenApply(AccountInfo::getTransactions);
   }
 
   @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="account not found")

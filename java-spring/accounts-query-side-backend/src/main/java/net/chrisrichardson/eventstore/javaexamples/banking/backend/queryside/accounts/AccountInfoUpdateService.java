@@ -1,12 +1,9 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
 import com.mongodb.WriteResult;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -41,9 +38,6 @@ public class AccountInfoUpdateService {
               Collections.<AccountTransactionInfo>emptyList(),
               version));
       logger.info("Saved in mongo");
-
-    } catch (DuplicateKeyException t) {
-      logger.warn("When saving ", t);
     } catch (Throwable t) {
       logger.error("Error during saving: ");
       logger.error("Error during saving: ", t);
@@ -70,13 +64,5 @@ public class AccountInfoUpdateService {
             AccountInfo.class);
   }
 
-  public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
-    AccountInfo account = accountInfoRepository.findOne(accountId);
-    if (account != null) {
-      account.getTransactions().stream().filter(ati -> ati.getTransactionId().equals(transactionId)).forEach(ati ->  ati.setStatus(status));
-      accountInfoRepository.save(account);
-    }
-
-  }
 
 }

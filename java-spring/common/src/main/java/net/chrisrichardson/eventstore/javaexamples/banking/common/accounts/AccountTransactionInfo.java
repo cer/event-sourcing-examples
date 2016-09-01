@@ -1,20 +1,19 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Date;
 
-public class AccountTransactionInfo extends AccountHistoryEntry{
+public class AccountTransactionInfo {
 
   private String transactionId;
   private String fromAccountId;
   private String toAccountId;
   private long amount;
+  private Date date;
   private String description;
-  private TransferState status = TransferState.INITIAL;
 
   public AccountTransactionInfo() {
   }
@@ -36,7 +35,6 @@ public class AccountTransactionInfo extends AccountHistoryEntry{
     this.amount = amount;
     this.date = date;
     this.description = description;
-    this.entryType = EntryType.transaction;
   }
 
   public String getTransactionId() {
@@ -71,20 +69,20 @@ public class AccountTransactionInfo extends AccountHistoryEntry{
     this.amount = amount;
   }
 
+  public Date getDate() {
+    return date;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
   public String getDescription() {
     return description;
   }
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public TransferState getStatus() {
-    return status;
-  }
-
-  public void setStatus(TransferState status) {
-    this.status = status;
   }
 
   @Override

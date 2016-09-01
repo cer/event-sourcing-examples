@@ -1,6 +1,9 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
@@ -48,6 +51,12 @@ public abstract class AbstractRestAPITest {
     Assert.assertNotNull(fromAccountId);
     Assert.assertNotNull(toAccountId);
 
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     assertAccountBalance(fromAccountId, initialFromAccountBalance);
     assertAccountBalance(toAccountId, initialToAccountBalance);
 
@@ -59,21 +68,21 @@ public abstract class AbstractRestAPITest {
     assertAccountBalance(toAccountId, finalToAccountBalance);
 
     eventually(
-            new Producer<AccountHistoryResponse>() {
+            new Producer<AccountTransactionInfo[]>() {
               @Override
-              public CompletableFuture<AccountHistoryResponse> produce() {
+              public CompletableFuture<AccountTransactionInfo[]> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts/" + fromAccountId + "/history"),
-                        AccountHistoryResponse.class));
+                        AccountTransactionInfo[].class));
               }
             },
-            new Verifier<AccountHistoryResponse>() {
+            new Verifier<AccountTransactionInfo[]>() {
               @Override
-              public void verify(AccountHistoryResponse accountHistoryResponse) {
-                Optional<AccountHistoryEntry> first = accountHistoryResponse.getTransactionsHistory().stream().filter( ahe -> ahe.getEntryType() == AccountHistoryEntry.EntryType.transaction && ((AccountTransactionInfo)ahe).getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
+              public void verify(AccountTransactionInfo[] transactionInfos) {
+                Optional<AccountTransactionInfo> first = Arrays.asList(transactionInfos).stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
 
                 assertTrue(first.isPresent());
 
-                AccountTransactionInfo ti = (AccountTransactionInfo)first.get();
+                AccountTransactionInfo ti = first.get();
 
                 assertEquals(fromAccountId, ti.getFromAccountId());
                 assertEquals(toAccountId, ti.getToAccountId());
@@ -95,6 +104,12 @@ public abstract class AbstractRestAPITest {
     Assert.assertNotNull(customerId);
     assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     getCustomersTestUtils().assertCustomerResponse(customerId, customerInfo);
 
     final CreateAccountResponse account = getAuthenticatedRestTemplate().postForEntity(baseUrl("/accounts"),
@@ -108,17 +123,17 @@ public abstract class AbstractRestAPITest {
     assertAccountBalance(accountId, initialFromAccountBalance);
 
     eventually(
-            new Producer<GetAccountsResponse>() {
+            new Producer<GetAccountResponse[]>() {
               @Override
-              public CompletableFuture<GetAccountsResponse> produce() {
-                return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customer/"+customerId+"/accounts"),
-                        GetAccountsResponse.class));
+              public CompletableFuture<GetAccountResponse[]> produce() {
+                return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts?customerId=" + customerId),
+                        GetAccountResponse[].class));
               }
             },
-            new Verifier<GetAccountsResponse>() {
+            new Verifier<GetAccountResponse[]>() {
               @Override
-              public void verify(GetAccountsResponse accountResponses) {
-                assertTrue(accountResponses.getAccounts().stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst().isPresent());
+              public void verify(GetAccountResponse[] accountResponses) {
+                assertTrue(Arrays.asList(accountResponses).stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst().isPresent());
               }
             });
   }
