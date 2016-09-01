@@ -108,17 +108,17 @@ public abstract class AbstractRestAPITest {
     assertAccountBalance(accountId, initialFromAccountBalance);
 
     eventually(
-            new Producer<GetAccountResponse[]>() {
+            new Producer<GetAccountsResponse>() {
               @Override
-              public CompletableFuture<GetAccountResponse[]> produce() {
+              public CompletableFuture<GetAccountsResponse> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts?customerId=" + customerId),
-                        GetAccountResponse[].class));
+                        GetAccountsResponse.class));
               }
             },
-            new Verifier<GetAccountResponse[]>() {
+            new Verifier<GetAccountsResponse>() {
               @Override
-              public void verify(GetAccountResponse[] accountResponses) {
-                assertTrue(Arrays.asList(accountResponses).stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst().isPresent());
+              public void verify(GetAccountsResponse accountResponses) {
+                assertTrue(accountResponses.getAccounts().stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst().isPresent());
               }
             });
   }

@@ -55,7 +55,7 @@ public class AccountInfoUpdateServiceTest {
 
     accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
 
-    AccountInfo accountInfo = accountQueryService.findByAccountId(accountId).get();
+    AccountInfo accountInfo = accountQueryService.findByAccountId(accountId);
 
     assertEquals(accountId, accountInfo.getId());
     assertEquals(customerId, accountInfo.getCustomerId());
@@ -77,7 +77,7 @@ public class AccountInfoUpdateServiceTest {
     accountInfoUpdateService.updateBalance(accountId, changeId, 500,
             change);
 
-    accountInfo = accountQueryService.findByAccountId(accountId).get();
+    accountInfo = accountQueryService.findByAccountId(accountId);
     assertEquals(initialBalance.add(new BigDecimal(5)).longValue() * 100, accountInfo.getBalance());
     assertFalse(accountInfo.getChanges().isEmpty());
 
@@ -89,7 +89,7 @@ public class AccountInfoUpdateServiceTest {
 
     accountInfoUpdateService.addTransaction(eventId, accountId, ti);
 
-    accountInfo = accountQueryService.findByAccountId(accountId).get();
+    accountInfo = accountQueryService.findByAccountId(accountId);
     assertFalse(accountInfo.getTransactions().isEmpty());
 
     assertEquals(ti, accountInfo.getTransactions().get(0));

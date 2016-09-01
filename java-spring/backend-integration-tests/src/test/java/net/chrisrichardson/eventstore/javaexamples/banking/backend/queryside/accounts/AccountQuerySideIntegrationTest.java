@@ -17,6 +17,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.await;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
@@ -55,10 +56,10 @@ public class AccountQuerySideIntegrationTest {
             updatedTransaction -> Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.getEntity().getState()));
 
     eventually(
-            () -> accountQueryService.findByAccountId(fromAccount.getEntityId()),
+            () -> CompletableFuture.completedFuture(accountQueryService.findByAccountId(fromAccount.getEntityId())),
             accountInfo -> Assert.assertEquals(70 * 100, accountInfo.getBalance()));
     eventually(
-            () -> accountQueryService.findByAccountId(toAccount.getEntityId()),
+            () -> CompletableFuture.completedFuture(accountQueryService.findByAccountId(toAccount.getEntityId())),
             accountInfo -> Assert.assertEquals(380 * 100, accountInfo.getBalance()));
   }
 }
