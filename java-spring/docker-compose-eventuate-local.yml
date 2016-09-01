@@ -3,7 +3,7 @@ apigateway:
   working_dir: /app
   volumes:
     - ./api-gateway-service/build/libs:/app
-  command: java -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transfers.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
+  command: java -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transactions.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
   ports:
     - "8080:8080"
   links:

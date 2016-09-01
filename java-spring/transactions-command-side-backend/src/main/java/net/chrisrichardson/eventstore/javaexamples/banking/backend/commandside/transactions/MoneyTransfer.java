@@ -4,7 +4,6 @@ import io.eventuate.Event;
 import io.eventuate.EventUtil;
 import io.eventuate.ReflectiveMutableCommandProcessingAggregate;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.*;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 
 import java.util.List;
 

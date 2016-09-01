@@ -6,7 +6,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.a
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransfer;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferService;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.TransferState;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.TransferDetails;
 import org.junit.Assert;
 import org.junit.Test;

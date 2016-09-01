@@ -6,7 +6,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.a
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransfer;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferService;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.TransferState;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.TransferDetails;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.util.concurrent.CompletableFuture;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.await;
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.TestUtil.eventually;
@@ -56,10 +55,10 @@ public class AccountQuerySideIntegrationTest {
             updatedTransaction -> Assert.assertEquals(TransferState.COMPLETED, updatedTransaction.getEntity().getState()));
 
     eventually(
-            () -> CompletableFuture.completedFuture(accountQueryService.findByAccountId(fromAccount.getEntityId())),
+            () -> accountQueryService.findByAccountId(fromAccount.getEntityId()),
             accountInfo -> Assert.assertEquals(70 * 100, accountInfo.getBalance()));
     eventually(
-            () -> CompletableFuture.completedFuture(accountQueryService.findByAccountId(toAccount.getEntityId())),
+            () -> accountQueryService.findByAccountId(toAccount.getEntityId()),
             accountInfo -> Assert.assertEquals(380 * 100, accountInfo.getBalance()));
   }
 }
