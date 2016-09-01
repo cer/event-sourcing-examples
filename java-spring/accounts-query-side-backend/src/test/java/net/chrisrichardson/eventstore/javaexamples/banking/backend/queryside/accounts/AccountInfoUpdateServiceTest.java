@@ -4,6 +4,7 @@ import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import io.eventuate.javaclient.spring.jdbc.IdGenerator;
 import io.eventuate.javaclient.spring.jdbc.IdGeneratorImpl;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;

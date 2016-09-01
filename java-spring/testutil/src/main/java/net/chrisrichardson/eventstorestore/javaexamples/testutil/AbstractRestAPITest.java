@@ -1,9 +1,6 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountRequest;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
@@ -62,17 +59,17 @@ public abstract class AbstractRestAPITest {
     assertAccountBalance(toAccountId, finalToAccountBalance);
 
     eventually(
-            new Producer<AccountTransactionInfo[]>() {
+            new Producer<AccountHistoryResponse>() {
               @Override
-              public CompletableFuture<AccountTransactionInfo[]> produce() {
+              public CompletableFuture<AccountHistoryResponse> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts/" + fromAccountId + "/history"),
-                        AccountTransactionInfo[].class));
+                        AccountHistoryResponse.class));
               }
             },
-            new Verifier<AccountTransactionInfo[]>() {
+            new Verifier<AccountHistoryResponse>() {
               @Override
-              public void verify(AccountTransactionInfo[] transactionInfos) {
-                Optional<AccountTransactionInfo> first = Arrays.asList(transactionInfos).stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
+              public void verify(AccountHistoryResponse accountHistoryResponse) {
+                Optional<AccountTransactionInfo> first = accountHistoryResponse.getTransactionsHistory().stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
 
                 assertTrue(first.isPresent());
 

@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
 import com.mongodb.WriteResult;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

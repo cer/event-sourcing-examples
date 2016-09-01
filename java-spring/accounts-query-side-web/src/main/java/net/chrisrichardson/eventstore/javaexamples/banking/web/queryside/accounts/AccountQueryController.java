@@ -4,6 +4,8 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.acc
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountNotFoundException;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountQueryService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountHistoryEntry;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountHistoryResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.GetAccountResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class AccountQueryController {
@@ -38,9 +41,14 @@ public class AccountQueryController {
   }
 
   @RequestMapping(value = "/accounts/{accountId}/history", method = RequestMethod.GET)
-  public CompletableFuture<List<AccountTransactionInfo>> getTransactionsHistory(@PathVariable String accountId) {
-    return accountInfoQueryService.findByAccountId(accountId)
-            .thenApply(AccountInfo::getTransactions);
+  public CompletableFuture<AccountHistoryResponse> getTransactionsHistory(@PathVariable String accountId) {
+    CompletableFuture<AccountHistoryResponse> res = accountInfoQueryService.findByAccountId(accountId)
+            .thenApply(accountInfo -> new AccountHistoryResponse(new AccountHistoryEntry(accountInfo.getDate()),
+                            accountInfo.getTransactions(),
+                            accountInfo.getChanges())
+            );
+
+    return res;
   }
 
   @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="account not found")
