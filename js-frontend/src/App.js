@@ -5,47 +5,29 @@
 import React from "react";
 import { createStore, compose, applyMiddleware, combineReducers} from "redux";
 import { Provider, connect} from "react-redux";
-
 import thunk from "redux-thunk";
 import createLogger from 'redux-logger';
-
 import { Route, IndexRoute, Link, IndexLink } from "react-router";
 import { ReduxRouter} from "redux-router";
-
-//import { Router, IndexRoute, Route, browserHistory } from 'react-router';
-//import { syncHistory, routeReducer } from 'react-router-redux';
-
-//import { configure as reduxAuthConfigure, authStateReducer } from "redux-auth";
-//import { authStateReducer } from "redux-auth";
-//import authStateReducer from './reducers/auth';
-//import appStateReducer from './reducers/data';
-import mainReducer from './reducers';
-
-import { configure as reduxAuthConfigure } from './actions/configure';
-//import { AuthGlobals } from "redux-auth/bootstrap-theme";
-
 import { createHistory, createHashHistory, createMemoryHistory } from "history";
 import { pushState, routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
 import { reduxReactRouter as serverRouter } from "redux-router/server";
 
-import { requireAuthentication } from './components/AuthComponent';
+import mainReducer from './reducers';
 
-//import demoButtons from "./reducers/request-test-buttons";
-//import demoUi from "./reducers/demo-ui";
+import { configure as reduxAuthConfigure } from './actions/configure';
+import { requireAuthentication } from './components/AuthComponent';
 import Container from "./components/partials/Container";
 import MyAccounts from "./views/MyAccounts";
 import Account from "./views/Account";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
-//import GlobalComponents from "./views/partials/GlobalComponents";
 
 class App extends React.Component {
   render() {
-    return (
-      <Container>
+    return (<Container>
         {this.props.children}
-      </Container>
-    );
+      </Container>);
   }
 }
 

@@ -11,11 +11,6 @@ import HeaderLinks from '../HeaderLinks';
 
 //const SignOutButton = () => (<div>SignOutButton!</div>);
 
-
-//if (!global.__SERVER__ && !global.__TEST__) {
-//  require("../../styles/main.scss");
-//}
-
 class Container extends React.Component {
   static propTypes = {
     children: PropTypes.node
