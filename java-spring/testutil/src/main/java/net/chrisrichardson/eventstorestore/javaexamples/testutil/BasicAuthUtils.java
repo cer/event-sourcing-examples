@@ -1,4 +1,4 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.utils;
+package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.*;
