@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountInfo;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountNotFoundException;
@@ -11,10 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 public class AccountQueryController {
@@ -51,9 +51,11 @@ public class AccountQueryController {
   @RequestMapping(value = "/accounts/{accountId}/history", method = RequestMethod.GET)
   public ResponseEntity<AccountHistoryResponse> getTransactionsHistory(@PathVariable String accountId) {
     AccountInfo accountInfo = accountInfoQueryService.findByAccountId(accountId);
-    return ResponseEntity.ok().body(new AccountHistoryResponse(new AccountHistoryEntry(accountInfo.getDate()),
-                            accountInfo.getTransactions(),
-                            accountInfo.getChanges()));
+    List<AccountHistoryEntry> historyEntries = new ArrayList<>();
+    historyEntries.add(new AccountOpenInfo(accountInfo.getDate(), AccountHistoryEntry.EntryType.account));
+    accountInfo.getTransactions().forEach(historyEntries::add);
+
+    return ResponseEntity.ok().body(new AccountHistoryResponse(historyEntries));
   }
 
   @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="account not found")

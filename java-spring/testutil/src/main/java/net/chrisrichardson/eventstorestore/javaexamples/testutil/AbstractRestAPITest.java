@@ -69,11 +69,11 @@ public abstract class AbstractRestAPITest {
             new Verifier<AccountHistoryResponse>() {
               @Override
               public void verify(AccountHistoryResponse accountHistoryResponse) {
-                Optional<AccountTransactionInfo> first = accountHistoryResponse.getTransactionsHistory().stream().filter(ti -> ti.getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
+                Optional<AccountHistoryEntry> first = accountHistoryResponse.getTransactionsHistory().stream().filter( ahe -> ahe.getEntryType() == AccountHistoryEntry.EntryType.transaction && ((AccountTransactionInfo)ahe).getTransactionId().equals(moneyTransfer.getMoneyTransferId())).findFirst();
 
                 assertTrue(first.isPresent());
 
-                AccountTransactionInfo ti = first.get();
+                AccountTransactionInfo ti = (AccountTransactionInfo)first.get();
 
                 assertEquals(fromAccountId, ti.getFromAccountId());
                 assertEquals(toAccountId, ti.getToAccountId());
@@ -111,7 +111,7 @@ public abstract class AbstractRestAPITest {
             new Producer<GetAccountsResponse>() {
               @Override
               public CompletableFuture<GetAccountsResponse> produce() {
-                return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts?customerId=" + customerId),
+                return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customer/"+customerId+"/accounts"),
                         GetAccountsResponse.class));
               }
             },

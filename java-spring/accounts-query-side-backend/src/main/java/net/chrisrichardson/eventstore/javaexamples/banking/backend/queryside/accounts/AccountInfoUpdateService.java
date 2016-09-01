@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.ac
 import com.mongodb.WriteResult;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -69,5 +70,13 @@ public class AccountInfoUpdateService {
             AccountInfo.class);
   }
 
+  public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
+    AccountInfo account = accountInfoRepository.findOne(accountId);
+    if (account != null) {
+      account.getTransactions().stream().filter(ati -> ati.getTransactionId().equals(transactionId)).forEach(ati ->  ati.setStatus(status));
+      accountInfoRepository.save(account);
+    }
+
+  }
 
 }
