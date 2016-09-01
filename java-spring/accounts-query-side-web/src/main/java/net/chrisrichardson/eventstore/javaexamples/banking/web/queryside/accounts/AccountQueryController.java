@@ -32,7 +32,7 @@ public class AccountQueryController {
     return ResponseEntity.ok().body(new GetAccountResponse(accountInfo.getId(), new BigDecimal(accountInfo.getBalance()), accountInfo.getTitle(), accountInfo.getDescription()));
   }
 
-  @RequestMapping(value = "/customer/{customerId}/accounts", method = RequestMethod.GET)
+  @RequestMapping(value = "/customers/{customerId}/accounts", method = RequestMethod.GET)
   public ResponseEntity<GetAccountsResponse> getAccountsForCustomer(@PathVariable("customerId") String customerId) {
     return ResponseEntity.ok().body(
             new GetAccountsResponse(
