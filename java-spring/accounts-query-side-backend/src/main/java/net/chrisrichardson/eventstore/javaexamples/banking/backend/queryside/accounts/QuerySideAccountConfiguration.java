@@ -27,8 +27,6 @@ public class QuerySideAccountConfiguration {
     return new AccountQueryService(accountInfoRepository);
   }
 
-
-
   @Bean
   public QuerySideDependencyChecker querysideDependencyChecker(MongoTemplate mongoTemplate) {
     return new QuerySideDependencyChecker(mongoTemplate);

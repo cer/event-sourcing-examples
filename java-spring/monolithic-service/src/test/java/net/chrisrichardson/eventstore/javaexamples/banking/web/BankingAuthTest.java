@@ -57,6 +57,12 @@ public class BankingAuthTest {
     Assert.assertNotNull(customerId);
     Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
+    try {
+      Thread.sleep(10000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
     AuthRequest authRequest = new AuthRequest(email);

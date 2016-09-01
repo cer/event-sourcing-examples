@@ -3,6 +3,8 @@
  */
 
 import * as C from "./constants";
+import root from './root';
+
 import fetch from "./fetch";
 
 import parseEndpointConfig from "./parseEndpointConfig";
@@ -19,9 +21,6 @@ import {
   persistData,
   destroySession
 } from "./sessionStorage";
-
-// can't use "window" with node app
-var root = Function("return this")() || (42, eval)("this");
 
 const defaultSettings = {
   //proxyIf:            function() { return false; },
