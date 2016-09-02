@@ -111,7 +111,7 @@ public abstract class AbstractRestAPITest {
             new Producer<GetAccountsResponse>() {
               @Override
               public CompletableFuture<GetAccountsResponse> produce() {
-                return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customer/"+customerId+"/accounts"),
+                return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customers/"+customerId+"/accounts"),
                         GetAccountsResponse.class));
               }
             },

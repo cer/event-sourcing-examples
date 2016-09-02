@@ -6,6 +6,7 @@ import io.eventuate.javaclient.spring.jdbc.IdGeneratorImpl;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
@@ -108,7 +107,42 @@ public class AccountInfoUpdateServiceTest {
 
     accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
     accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
+  }
 
+  @Test
+  public void shouldUpdateTransactionStatus() {
+    IdGenerator x = new IdGeneratorImpl();
+    String accountId = x.genId().asString();
+    String customerId = x.genId().asString();
+    String version = x.genId().asString();
 
+    String title = "Checking account";
+    BigDecimal initialBalance = new BigDecimal("1345");
+    String description = "Some account";
+
+    accountInfoUpdateService.create(accountId, customerId, title, initialBalance, description, version);
+
+    String transactionId = x.genId().asString();
+
+    AccountTransactionInfo transactionInfo = new AccountTransactionInfo();
+    transactionInfo.setStatus(TransferState.INITIAL);
+
+    accountInfoUpdateService.addTransaction(transactionId, accountId, transactionInfo);
+
+    AccountInfo accountInfo = accountQueryService.findByAccountId(accountId);
+    assertEquals(accountId, accountInfo.getId());
+    assertFalse(accountInfo.getTransactions().isEmpty());
+    assertEquals(1, accountInfo.getTransactions().size());
+
+    assertEquals(TransferState.INITIAL, accountInfo.getTransactions().get(0).getStatus());
+
+    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.COMPLETED);
+
+    accountInfo = accountQueryService.findByAccountId(accountId);
+    assertEquals(accountId, accountInfo.getId());
+    assertFalse(accountInfo.getTransactions().isEmpty());
+    assertEquals(1, accountInfo.getTransactions().size());
+
+    assertEquals(TransferState.COMPLETED, accountInfo.getTransactions().get(0).getStatus());
   }
 }

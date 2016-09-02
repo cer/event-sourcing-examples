@@ -31,32 +31,29 @@ public class AccountInfoUpdateService {
 
   public void create(String accountId, String customerId, String title, BigDecimal initialBalance, String description, String version) {
     try {
-      accountInfoRepository.save(new AccountInfo(
-              accountId,
-              customerId,
-              title,
-              description,
-              toIntegerRepr(initialBalance),
-              Collections.<AccountChangeInfo>emptyList(),
-              Collections.<AccountTransactionInfo>emptyList(),
-              version));
+      WriteResult x = mongoTemplate.upsert(new Query(where("id").is(accountId).and("version").exists(false)),
+              new Update()
+                      .set("customerId", customerId)
+                      .set("title", title)
+                      .set("description", description)
+                      .set("balance", toIntegerRepr(initialBalance))
+                      .set("version", version),
+              AccountInfo.class);
       logger.info("Saved in mongo");
 
     } catch (DuplicateKeyException t) {
       logger.warn("When saving ", t);
     } catch (Throwable t) {
-      logger.error("Error during saving: ");
       logger.error("Error during saving: ", t);
       throw new RuntimeException(t);
     }
   }
 
 
-  public void addTransaction(String eventId, String fromAccountId, AccountTransactionInfo ti) {
-    mongoTemplate.updateMulti(new Query(where("id").is(fromAccountId)), /* wrong  .and("version").lt(eventId) */
+  public void addTransaction(String eventId, String accountId, AccountTransactionInfo ti) {
+    mongoTemplate.upsert(new Query(where("id").is(accountId)),
             new Update().
-                    push("transactions", ti).
-                    set("version", eventId),
+                    set("transactions." + eventId, ti),
             AccountInfo.class);
   }
 
@@ -71,12 +68,10 @@ public class AccountInfoUpdateService {
   }
 
   public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
-    AccountInfo account = accountInfoRepository.findOne(accountId);
-    if (account != null) {
-      account.getTransactions().stream().filter(ati -> ati.getTransactionId().equals(transactionId)).forEach(ati ->  ati.setStatus(status));
-      accountInfoRepository.save(account);
-    }
-
+    mongoTemplate.upsert(new Query(where("id").is(accountId)),
+            new Update().
+                    set("transactions." + transactionId +".status", status),
+            AccountInfo.class);
   }
 
 }
