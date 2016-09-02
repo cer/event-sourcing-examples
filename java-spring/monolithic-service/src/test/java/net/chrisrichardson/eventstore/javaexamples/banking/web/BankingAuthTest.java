@@ -43,7 +43,7 @@ public class BankingAuthTest {
   }
 
   private String baseUrl(String path) {
-    return "http://localhost:" + port + "/" + path;
+    return "http://localhost:" + port + "/api" + path;
   }
 
   @Test

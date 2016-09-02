@@ -28,6 +28,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController
 @Validated
+@RequestMapping("/api")
 public class AuthController {
 
   @Autowired

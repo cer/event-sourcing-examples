@@ -32,7 +32,7 @@ public class BankingWebIntegrationTest extends AbstractRestAPITest {
 
   @Override
   public String baseUrl(String path) {
-    return "http://localhost:" + port + "/" + path;
+    return "http://localhost:" + port + "/api" + path;
   }
 
   @Override

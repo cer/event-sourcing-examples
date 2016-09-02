@@ -18,7 +18,7 @@ public class EndToEndTest extends AbstractRestAPITest {
   CustomersTestUtils customersTestUtils = new CustomersTestUtils(restTemplate, baseUrl("/customers/"));
 
   public String baseUrl(String path) {
-    return "http://" + getenv("SERVICE_HOST", "localhost") + ":" + 8080 + "/" + path;
+    return "http://" + getenv("SERVICE_HOST", "localhost") + ":" + 8080 + "/api" + path;
   }
 
   @Override

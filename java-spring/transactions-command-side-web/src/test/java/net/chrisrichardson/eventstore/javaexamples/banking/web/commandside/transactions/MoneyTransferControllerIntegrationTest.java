@@ -36,7 +36,7 @@ public class MoneyTransferControllerIntegrationTest {
 
   @Test
   public void shouldCreateAccount() throws Exception {
-    mockMvc.perform(post("/transfers")
+    mockMvc.perform(post("/api/transfers")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"fromAccountId\" : \"fromAccountId\", \"toAccountId\" : \"toAccountId\", \"amount\" : \"500\"}")
             .accept(MediaType.APPLICATION_JSON))
@@ -45,7 +45,7 @@ public class MoneyTransferControllerIntegrationTest {
 
   @Test
   public void shouldRejectBadRequest() throws Exception {
-    mockMvc.perform(post("/transfers")
+    mockMvc.perform(post("/api/transfers")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"fromAccountId\" : \"fromAccountIdXXXXXX\"}, {\"toAccountId\" : \"toAccountId\"}, {\"amount\" : \"500\"}")
             .accept(MediaType.APPLICATION_JSON))

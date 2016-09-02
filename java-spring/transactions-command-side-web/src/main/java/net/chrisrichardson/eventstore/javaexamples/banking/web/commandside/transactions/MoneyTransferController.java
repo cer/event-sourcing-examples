@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/transfers")
+@RequestMapping("/api/transfers")
 public class MoneyTransferController {
 
   private final MoneyTransferService moneyTransferService;
