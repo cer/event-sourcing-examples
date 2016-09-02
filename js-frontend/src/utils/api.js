@@ -108,7 +108,7 @@ export function apiMakeTransfer(fromAccountId, {
 
 export function apiRetrieveAccounts(customerId) {
 
-  return fetch(`${getAccountsUrl()}?${makeQuery({ customerId })}`, {
+  return fetch(`${getCustomersUrl()}/${customerId}/accounts`, {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"

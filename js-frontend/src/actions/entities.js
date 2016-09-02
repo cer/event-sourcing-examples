@@ -123,7 +123,7 @@ export function fetchOwnAccounts(customerId) {
     //dispatch(accountsListRequested());
     return api.apiRetrieveAccounts(customerId)
       .then(data => {
-        dispatch(accountsListReceived(data));
+        dispatch(accountsListReceived(data.accounts));
       });
   };
 }

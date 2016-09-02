@@ -12,6 +12,9 @@ const nodeInitialState = {
 };
 
 export const entities = (state = {...initialState}, action) => {
+  if (typeof action.length !== 'undefined') {
+    debugger;
+  }
   switch(action.type) {
     case T.ENTITIES.REQUESTED: {
       const { id } = action;
