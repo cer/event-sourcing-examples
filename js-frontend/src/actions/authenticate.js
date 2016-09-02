@@ -4,15 +4,6 @@
 import T from '../constants/ACTION_TYPES';
 
 import {
-  getCurrentSettings,
-  setCurrentSettings,
-  getInitialEndpointKey,
-  setDefaultEndpointKey,
-  setCurrentEndpoint,
-  setCurrentEndpointKey,
-  retrieveData,
-  persistData,
-  destroySession,
   persistUserData,
   retrieveUserData,
   retrieveHeaders

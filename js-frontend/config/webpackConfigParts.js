@@ -21,21 +21,24 @@ exports.devServer = function(options) {
       host: options.host, // Defaults to `localhost`
       port: options.port, // Defaults to 8080
       proxy: {
-        '/user*' : {
-          target: 'http://localhost:8080'
-        },
-        '/login' : {
-          target: 'http://localhost:8080'
-        },
-        '/customers*' : {
-          target: 'http://localhost:8080'
-        },
-        '/accounts*' : {
-          target: 'http://localhost:8080'
-        },
-        '/transfers*' : {
+        '/api*' : {
           target: 'http://localhost:8080'
         }
+        // '/user*' : {
+        //   target: 'http://localhost:8080'
+        // },
+        // '/login' : {
+        //   target: 'http://localhost:8080'
+        // },
+        // '/customers*' : {
+        //   target: 'http://localhost:8080'
+        // },
+        // '/accounts*' : {
+        //   target: 'http://localhost:8080'
+        // },
+        // '/transfers*' : {
+        //   target: 'http://localhost:8080'
+        // }
       }
     },
     watchOptions: {

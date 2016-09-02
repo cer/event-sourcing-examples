@@ -15,7 +15,7 @@ import { reduxReactRouter as serverRouter } from "redux-router/server";
 
 import mainReducer from './reducers';
 
-import { configure as reduxAuthConfigure } from './actions/configure';
+import { configure as endpointsConfig } from './actions/configure';
 import { requireAuthentication } from './components/AuthComponent';
 import Container from "./components/partials/Container";
 import MyAccounts from "./views/MyAccounts";
@@ -64,15 +64,15 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
   /**
    * The React Router 1.0 routes for both the server and the client.
    */
-  return store.dispatch(reduxAuthConfigure([
+  return store.dispatch(endpointsConfig([
     {
       default: {
         //apiUrl: '/',
-        emailSignInPath: '/login',
-        customersPath: '/customers',
-        currentUserPath: '/user',
-        accountsPath: '/accounts',
-        transfersPath: '/transfers'
+        emailSignInPath: '/api/login',
+        customersPath: '/api/customers',
+        currentUserPath: '/api/user',
+        accountsPath: '/api/accounts',
+        transfersPath: '/api/transfers'
       }
     }
   ], {

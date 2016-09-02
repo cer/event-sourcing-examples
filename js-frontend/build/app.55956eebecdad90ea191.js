@@ -185,11 +185,11 @@ webpackJsonp([0,3],{
 	  return store.dispatch((0, _configure.configure)([{
 	    default: {
 	      //apiUrl: '/',
-	      emailSignInPath: '/login',
-	      customersPath: '/customers',
-	      currentUserPath: '/user',
-	      accountsPath: '/accounts',
-	      transfersPath: '/transfers'
+	      emailSignInPath: '/api/login',
+	      customersPath: '/api/customers',
+	      currentUserPath: '/api/user',
+	      accountsPath: '/api/accounts',
+	      transfersPath: '/api/transfers'
 	    }
 	  }], {
 	    cookies: cookies,
@@ -1403,6 +1403,9 @@ webpackJsonp([0,3],{
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? _extends({}, initialState) : arguments[0];
 	  var action = arguments[1];
 	
+	  if (typeof action.length !== 'undefined') {
+	    debugger;
+	  }
 	  switch (action.type) {
 	    case _ACTION_TYPES2.default.ENTITIES.REQUESTED:
 	      {
@@ -2419,7 +2422,7 @@ webpackJsonp([0,3],{
 	
 	function apiRetrieveAccounts(customerId) {
 	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '?' + makeQuery({ customerId: customerId }), {
+	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/accounts', {
 	    headers: {
 	      "Accept": "application/json",
 	      "Content-Type": "application/json"
@@ -2799,7 +2802,7 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    //dispatch(accountsListRequested());
 	    return api.apiRetrieveAccounts(customerId).then(function (data) {
-	      dispatch(accountsListReceived(data));
+	      dispatch(accountsListReceived(data.accounts));
 	    });
 	  };
 	}
@@ -7287,4 +7290,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.3a9a7c962cfa5ee06c64.js.map
+//# sourceMappingURL=app.55956eebecdad90ea191.js.map
