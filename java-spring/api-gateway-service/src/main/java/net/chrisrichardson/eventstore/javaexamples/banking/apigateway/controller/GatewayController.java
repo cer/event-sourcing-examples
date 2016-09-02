@@ -56,7 +56,7 @@ public class GatewayController {
             .build();
   }
 
-  @RequestMapping(value = "/api/**", method = {GET, POST})
+  @RequestMapping(value = "*/api/**", method = {GET, POST})
   public ResponseEntity<String> proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
     HttpUriRequest proxiedRequest = createHttpUriRequest(request);
     logger.info("request: {}", proxiedRequest);
