@@ -64,7 +64,13 @@ public class GatewayController {
     logger.info("request: {}", proxiedRequest);
     HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
     logger.info("Response {}", proxiedResponse.getStatusLine().getStatusCode());
-    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
+    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), processHeaders(proxiedResponse.getAllHeaders()), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
+  }
+
+  private HttpHeaders processHeaders(Header[] headers) {
+    HttpHeaders result = new HttpHeaders();
+    Stream.of(headers).filter(h -> h.getName().equalsIgnoreCase("Content-Type")).forEach( h ->  result.set(h.getName(), h.getValue()));
+    return result;
   }
 
   private HttpUriRequest createHttpUriRequest(HttpServletRequest request) throws URISyntaxException, NoSuchRequestHandlingMethodException, IOException {
