@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
@@ -57,12 +58,13 @@ public class GatewayController {
   }
 
   @RequestMapping(value = "/api/**", method = {GET, POST})
-  public ResponseEntity<String> proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
+  @ResponseBody
+  public String proxyRequest(HttpServletRequest request) throws NoSuchRequestHandlingMethodException, IOException, URISyntaxException {
     HttpUriRequest proxiedRequest = createHttpUriRequest(request);
     logger.info("request: {}", proxiedRequest);
     HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
     logger.info("Response {}", proxiedResponse.getStatusLine().getStatusCode());
-    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), processHeaders(proxiedResponse.getAllHeaders()), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
+    return read(proxiedResponse.getEntity().getContent());
   }
 
   private HttpHeaders processHeaders(Header[] headers) {
