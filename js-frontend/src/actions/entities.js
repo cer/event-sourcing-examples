@@ -256,7 +256,7 @@ export const getTransfers = (accountId) => {
     dispatch(getTransfersRequested(accountId));
     return api.apiRetrieveTransfers(accountId)
       .then(data => {
-        dispatch(getTransfersComplete(accountId, data));
+        dispatch(getTransfersComplete(accountId, data.transactionsHistory));
         return data;
       })
       .catch(err => {

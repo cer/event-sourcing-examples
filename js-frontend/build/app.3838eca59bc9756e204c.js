@@ -2936,7 +2936,7 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    dispatch(getTransfersRequested(accountId));
 	    return api.apiRetrieveTransfers(accountId).then(function (data) {
-	      dispatch(getTransfersComplete(accountId, data));
+	      dispatch(getTransfersComplete(accountId, data.transactionsHistory));
 	      return data;
 	    }).catch(function (err) {
 	      dispatch(getTransfersError(accountId, err));
@@ -7290,4 +7290,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.55956eebecdad90ea191.js.map
+//# sourceMappingURL=app.3838eca59bc9756e204c.js.map
