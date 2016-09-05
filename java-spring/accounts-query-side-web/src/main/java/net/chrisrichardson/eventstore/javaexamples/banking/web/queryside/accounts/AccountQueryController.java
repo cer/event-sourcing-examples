@@ -1,6 +1,5 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.queryside.accounts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountInfo;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.AccountNotFoundException;

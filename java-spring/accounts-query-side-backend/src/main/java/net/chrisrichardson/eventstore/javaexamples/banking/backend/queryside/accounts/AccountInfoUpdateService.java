@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Date;
 
 import static net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.MoneyUtil.toIntegerRepr;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -37,6 +38,7 @@ public class AccountInfoUpdateService {
                       .set("title", title)
                       .set("description", description)
                       .set("balance", toIntegerRepr(initialBalance))
+                      .set("date", new Date())
                       .set("version", version),
               AccountInfo.class);
       logger.info("Saved in mongo");
@@ -50,10 +52,10 @@ public class AccountInfoUpdateService {
   }
 
 
-  public void addTransaction(String eventId, String accountId, AccountTransactionInfo ti) {
+  public void addTransaction(String accountId, AccountTransactionInfo ti) {
     mongoTemplate.upsert(new Query(where("id").is(accountId)),
             new Update().
-                    set("transactions." + eventId, ti),
+                    set("transactions." + ti.getTransactionId(), ti),
             AccountInfo.class);
   }
 
@@ -68,6 +70,8 @@ public class AccountInfoUpdateService {
   }
 
   public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
+
+
     mongoTemplate.upsert(new Query(where("id").is(accountId)),
             new Update().
                     set("transactions." + transactionId +".status", status),

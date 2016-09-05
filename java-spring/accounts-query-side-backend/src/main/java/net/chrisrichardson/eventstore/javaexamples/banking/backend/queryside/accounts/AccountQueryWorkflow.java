@@ -59,8 +59,8 @@ public class AccountQueryWorkflow {
             de.getEvent().getDetails().getDate(),
             de.getEvent().getDetails().getDescription());
 
-    accountInfoUpdateService.addTransaction(eventId, fromAccountId, ti);
-    accountInfoUpdateService.addTransaction(eventId, toAccountId, ti);
+    accountInfoUpdateService.addTransaction(fromAccountId, ti);
+    accountInfoUpdateService.addTransaction(toAccountId, ti);
   }
 
   @EventHandlerMethod

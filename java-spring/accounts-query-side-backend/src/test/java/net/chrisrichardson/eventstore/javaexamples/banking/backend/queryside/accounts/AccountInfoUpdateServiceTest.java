@@ -86,7 +86,7 @@ public class AccountInfoUpdateServiceTest {
 
     AccountTransactionInfo ti = new AccountTransactionInfo(transactionId, accountId, accountId, 5, new Date(), "A transfer");
 
-    accountInfoUpdateService.addTransaction(eventId, accountId, ti);
+    accountInfoUpdateService.addTransaction(accountId, ti);
 
     accountInfo = accountQueryService.findByAccountId(accountId);
     assertFalse(accountInfo.getTransactions().isEmpty());
@@ -125,9 +125,10 @@ public class AccountInfoUpdateServiceTest {
     String transactionId = x.genId().asString();
 
     AccountTransactionInfo transactionInfo = new AccountTransactionInfo();
+    transactionInfo.setTransactionId(transactionId);
     transactionInfo.setStatus(TransferState.INITIAL);
 
-    accountInfoUpdateService.addTransaction(transactionId, accountId, transactionInfo);
+    accountInfoUpdateService.addTransaction(accountId, transactionInfo);
 
     AccountInfo accountInfo = accountQueryService.findByAccountId(accountId);
     assertEquals(accountId, accountInfo.getId());
