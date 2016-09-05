@@ -22,7 +22,7 @@ dependencies {
 }
 
 task copyWebStatic(type: Copy) {
-    from "../../prebuilt-web-client"
+    from "../../js-frontend/build"
     into "build/resources/main/static"
 }
 
