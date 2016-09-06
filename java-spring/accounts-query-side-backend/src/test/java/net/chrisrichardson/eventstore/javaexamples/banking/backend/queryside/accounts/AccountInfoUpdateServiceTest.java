@@ -61,7 +61,7 @@ public class AccountInfoUpdateServiceTest {
     assertEquals(title, accountInfo.getTitle());
     assertEquals(description, accountInfo.getDescription());
     assertEquals(initialBalance.longValue() * 100, accountInfo.getBalance());
-    assertTrue(accountInfo.getChanges().isEmpty());
+    assertEquals(1, accountInfo.getChanges().size());
     assertTrue(accountInfo.getTransactions().isEmpty());
     assertEquals(version, accountInfo.getVersion());
 
@@ -80,7 +80,7 @@ public class AccountInfoUpdateServiceTest {
     assertEquals(initialBalance.add(new BigDecimal(5)).longValue() * 100, accountInfo.getBalance());
     assertFalse(accountInfo.getChanges().isEmpty());
 
-    assertEquals(change, accountInfo.getChanges().get(0));
+    assertEquals(change, accountInfo.getChanges().get(1));
 
     String eventId = x.genId().asString();
 

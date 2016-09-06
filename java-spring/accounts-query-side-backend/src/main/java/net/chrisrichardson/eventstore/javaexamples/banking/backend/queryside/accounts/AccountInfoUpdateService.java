@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Date;
 
 import static net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.MoneyUtil.toIntegerRepr;
@@ -32,12 +31,15 @@ public class AccountInfoUpdateService {
 
   public void create(String accountId, String customerId, String title, BigDecimal initialBalance, String description, String version) {
     try {
+      AccountChangeInfo ci = new AccountChangeInfo();
+      ci.setAmount(toIntegerRepr(initialBalance));
       WriteResult x = mongoTemplate.upsert(new Query(where("id").is(accountId).and("version").exists(false)),
               new Update()
                       .set("customerId", customerId)
                       .set("title", title)
                       .set("description", description)
                       .set("balance", toIntegerRepr(initialBalance))
+                      .push("changes", ci)
                       .set("date", new Date())
                       .set("version", version),
               AccountInfo.class);
@@ -70,12 +72,9 @@ public class AccountInfoUpdateService {
   }
 
   public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
-
-
-    mongoTemplate.upsert(new Query(where("id").is(accountId)),
-            new Update().
-                    set("transactions." + transactionId +".status", status),
-            AccountInfo.class);
+      mongoTemplate.upsert(new Query(where("id").is(accountId)),
+              new Update().
+                      set("transferStates." + transactionId, status),
+              AccountInfo.class);
   }
-
 }

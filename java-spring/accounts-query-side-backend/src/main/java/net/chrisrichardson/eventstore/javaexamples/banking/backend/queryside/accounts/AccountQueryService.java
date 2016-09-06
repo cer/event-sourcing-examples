@@ -15,6 +15,8 @@ public class AccountQueryService {
     if (account == null)
       throw new AccountNotFoundException(accountId);
     else
+      if(account.getTransferStates()!=null)
+        account.getTransactions().stream().forEach(ati -> ati.setStatus(account.getTransferStates().get(ati.getTransactionId())));
       return account;
   }
 
