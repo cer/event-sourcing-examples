@@ -25,36 +25,67 @@ export class TransfersTable extends React.Component {
     const currentAccountId = forAccount;
     const transfersMarkup = data.length ?
       data
-        .filter(({ toAccountId, fromAccountId}) => ((fromAccountId === currentAccountId) || (toAccountId === currentAccountId)))
+        .sort((a, b) => ((a.date - b.date)))
+        .filter(({ entryType, toAccountId, fromAccountId}) => ((entryType !=='transaction') || (fromAccountId === currentAccountId) || (toAccountId === currentAccountId)))
+        .reduce(({
+          items, balance
+        }, v) => {
+          if (v.entryType == 'account') {
+            balance = v.initialBalance;
+          } else if (v.entryType == 'transaction') {
+            const isOriginating = v.fromAccountId == currentAccountId;
+            balance += (isOriginating ? -1 : 1) * v.amount;
+          }
+          v.balance = balance;
+          items.push(v);
+          return { items, balance };
+        }, {
+          items: [],
+          balance: 0
+        }).items
         .sort((a, b) => (-(a.date - b.date)))
         .map(({
-      amount,
-      fromAccountId,
-      toAccountId,
-      transactionId,
-      description = '',
-      date = null,
-      status = ''
-    }) => {
+          entryType,
+          amount,
+          fromAccountId,
+          toAccountId,
+          transactionId,
+          description = '—',
+          date = null,
+          status = '—',
+          balance,
+          initialBalance = null
+        }) => {
 
-      const isOriginating = fromAccountId == currentAccountId;
-      const directionMarkup = isOriginating ? 'Debit' : 'Credit';
-      const counterAccountMarkup = isOriginating ?
-        <AccountInfo accountId={ toAccountId } /> :
-        <AccountInfo accountId={ fromAccountId } />;
+          const transferTimestamp = new Date(date);
+          const timeAgoTitle = transferTimestamp.toLocaleDateString() + ' ' + transferTimestamp.toLocaleTimeString();
 
-      const transferTimestamp = new Date(date);
-      const timeAgoTitle = transferTimestamp.toLocaleDateString() + ' ' + transferTimestamp.toLocaleTimeString();
+          if (entryType == 'account') {
+            return (<tr>
+              <td><TimeAgo date={date} title={ timeAgoTitle } /></td>
+              <td colSpan="3">Account created</td>
+              <td><Money amount={ initialBalance } /></td>
+              <td></td>
+              <td>{ status || '—' }</td>
+            </tr>);
+          }
 
-      return (<tr>
-        <td><TimeAgo date={date} title={ timeAgoTitle } /></td>
-        <td>{ directionMarkup }</td>
-        <td>{ counterAccountMarkup }</td>
-        <td><Money amount={ amount } /></td>
-        <td>{ description || '—' }</td>
-        <td>{ status || '—' }</td>
-      </tr>);
-    }) : (<tr>
+          const isOriginating = fromAccountId == currentAccountId;
+          const directionMarkup = isOriginating ? 'Debit' : 'Credit';
+          const counterAccountMarkup = isOriginating ?
+            <AccountInfo accountId={ toAccountId } /> :
+            <AccountInfo accountId={ fromAccountId } />;
+
+          return (<tr>
+            <td><TimeAgo date={date} title={ timeAgoTitle } /></td>
+            <td>{ directionMarkup }</td>
+            <td>{ counterAccountMarkup }</td>
+            <td><Money amount={ amount } /></td>
+            <td><Money amount={ balance } /></td>
+            <td>{ description || '—' }</td>
+            <td>{ status || '—' }</td>
+          </tr>);
+        }) : (<tr>
         <td colSpan={6}>No transfers for this account just yet.</td>
       </tr>);
 
@@ -66,6 +97,7 @@ export class TransfersTable extends React.Component {
           <th>Type</th>
           <th>Other Account</th>
           <th>Amount</th>
+          <th>Balance</th>
           <th>Description</th>
           <th>Status</th>
         </tr>

@@ -1,34 +1,40 @@
 /**
  * Created by andrew on 26/02/16.
  */
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import * as C from "./constants";
-
 import root from './root';
-//import "babel-polyfill";
-
 
 // stateful variables that persist throughout session
-root.authState = {
+const authState = {
   currentSettings:    {},
   currentEndpoint:    {},
   defaultEndpointKey: 'default'
 };
 
+const memoryStorage = {};
+
+function clean(obj) {
+  Object.keys(obj).forEach(k => {
+    delete obj[k];
+  });
+  return obj;
+}
+
 export function setCurrentSettings (s) {
-  root.authState.currentSettings = s;
+  authState.currentSettings = s;
 }
 
 export function getCurrentSettings () {
-  return root.authState.currentSettings;
+  return authState.currentSettings;
 }
 
 export function setCurrentEndpoint (e) {
-  root.authState.currentEndpoint = e;
+  authState.currentEndpoint = e;
 }
 
 export function getCurrentEndpoint () {
-  return root.authState.currentEndpoint;
+  return authState.currentEndpoint;
 }
 
 /**
@@ -57,23 +63,20 @@ export function getDefaultEndpointKey () {
 
 // reset stateful variables
 export function resetConfig () {
-  root.authState = root.authState || {};
-  root.authState.currentSettings    = {};
-  root.authState.currentEndpoint    = {};
+  clean(authState);
+  authState.currentSettings    = {};
+  authState.currentEndpoint    = {};
   destroySession();
 }
 
 
 export function destroySession () {
-  var sessionKeys = [
+
+  ([
     C.SAVED_CREDS_KEY,
     C.SAVED_CONFIG_KEY,
     C.SAVED_USER_INFO
-  ];
-
-  for (var key in sessionKeys) {
-    key = sessionKeys[key];
-
+  ]).forEach(key => {
     // kill all local storage keys
     if (root.localStorage) {
       root.localStorage.removeItem(key);
@@ -81,9 +84,11 @@ export function destroySession () {
 
     // remove from base path in case config is not specified
     Cookies.remove(key, {
-      path: root.authState.currentSettings.cookiePath || "/"
+      path: authState.currentSettings.cookiePath || "/"
     });
-  }
+  });
+
+  clean(memoryStorage);
 }
 
 function unescapeQuotes (val) {
@@ -146,19 +151,19 @@ export function getTransfersUrl () {
  */
 export function getApiUrl(key) {
   let configKey = getSessionEndpointKey(key);
-  return root.authState.currentEndpoint[configKey].apiUrl;
+  return rauthState.currentEndpoint[configKey].apiUrl;
 }
 
 export function getTokenFormat() {
-  return root.authState.currentSettings.tokenFormat;
+  return authState.currentSettings.tokenFormat;
 }
 
-export function persistUserData(user) {
-  persistData(C.SAVED_USER_INFO, user);
-}
+export const persistUserData = (user) => {
+  memoryStorage[C.SAVED_USER_INFO] = user;
+};
 
-export function retrieveUserData() {
-  return retrieveData(C.SAVED_USER_INFO);
+export const retrieveUserData = () =>{
+  return memoryStorage[C.SAVED_USER_INFO];
 }
 
 export function retrieveHeaders() {
@@ -168,24 +173,24 @@ export function retrieveHeaders() {
 export function persistData (key, val) {
   val = root.JSON.stringify(val);
 
-  switch (root.authState.currentSettings.storage) {
+  switch (authState.currentSettings.storage) {
     case "localStorage":
       root.localStorage.setItem(key, val);
       break;
 
     default:
       Cookies.set(key, val, {
-        expires: root.authState.currentSettings.cookieExpiry,
-        path:    root.authState.currentSettings.cookiePath
+        expires: authState.currentSettings.cookieExpiry,
+        path:    authState.currentSettings.cookiePath
       });
       break;
   }
 }
 
 export function retrieveData (key) {
-  var val = null;
+  let val = null;
 
-  switch (root.authState.currentSettings.storage) {
+  switch (authState.currentSettings.storage) {
 
     case "localStorage":
       val = root.localStorage && root.localStorage.getItem(key);
