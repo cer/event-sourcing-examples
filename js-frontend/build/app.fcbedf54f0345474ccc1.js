@@ -101,7 +101,7 @@ webpackJsonp([0,3],{
 	
 	var _MyAccounts2 = _interopRequireDefault(_MyAccounts);
 	
-	var _Account = __webpack_require__(602);
+	var _Account = __webpack_require__(603);
 	
 	var _Account2 = _interopRequireDefault(_Account);
 	
@@ -3922,11 +3922,15 @@ webpackJsonp([0,3],{
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _modals = __webpack_require__(591);
+	var _AccountInfo = __webpack_require__(591);
+	
+	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
+	
+	var _modals = __webpack_require__(594);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
-	var _IndexPanel = __webpack_require__(600);
+	var _IndexPanel = __webpack_require__(601);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
@@ -3938,7 +3942,7 @@ webpackJsonp([0,3],{
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _Money = __webpack_require__(601);
+	var _Money = __webpack_require__(602);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -4135,11 +4139,7 @@ webpackJsonp([0,3],{
 	          _react2.default.createElement(
 	            "td",
 	            { key: 0 },
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: "/account/" + accountId },
-	              title
-	            ),
+	            _react2.default.createElement(_AccountInfo2.default, { accountId: accountId }),
 	            description ? [_react2.default.createElement("br", null), _react2.default.createElement(
 	              "span",
 	              null,
@@ -4175,11 +4175,7 @@ webpackJsonp([0,3],{
 	          _react2.default.createElement(
 	            "td",
 	            { key: 0 },
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: "/account/" + id },
-	              title
-	            ),
+	            _react2.default.createElement(_AccountInfo2.default, { accountId: id }),
 	            description ? [_react2.default.createElement("br", null), _react2.default.createElement(
 	              "span",
 	              null,
@@ -4396,13 +4392,152 @@ webpackJsonp([0,3],{
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.AccountInfo = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(170);
+	
+	var _reactLoader = __webpack_require__(592);
+	
+	var _reactLoader2 = _interopRequireDefault(_reactLoader);
+	
+	var _reactBootstrap = __webpack_require__(336);
+	
+	var BS = _interopRequireWildcard(_reactBootstrap);
+	
+	var _entities = __webpack_require__(326);
+	
+	var A = _interopRequireWildcard(_entities);
+	
+	var _readProp = __webpack_require__(334);
+	
+	var _readProp2 = _interopRequireDefault(_readProp);
+	
+	var _reactRouter = __webpack_require__(183);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 3/22/16.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	
+	var AccountInfo = exports.AccountInfo = function (_React$Component) {
+	  _inherits(AccountInfo, _React$Component);
+	
+	  function AccountInfo() {
+	    _classCallCheck(this, AccountInfo);
+	
+	    return _possibleConstructorReturn(this, (AccountInfo.__proto__ || Object.getPrototypeOf(AccountInfo)).apply(this, arguments));
+	  }
+	
+	  _createClass(AccountInfo, [{
+	    key: "componentWillMount",
+	    value: function componentWillMount() {
+	      this.ensureData(this.props);
+	    }
+	  }, {
+	    key: "componentWillReceiveProps",
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.ensureData(nextProps);
+	    }
+	  }, {
+	    key: "ensureData",
+	    value: function ensureData(_ref) {
+	      var dispatch = _ref.dispatch;
+	      var entities = _ref.entities;
+	      var accountId = _ref.accountId;
+	
+	      if (entities[accountId]) {
+	        return;
+	      }
+	      dispatch(A.fetchAccount(accountId));
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _props = this.props;
+	      var entities = _props.entities;
+	      var accountId = _props.accountId;
+	      var customerId = _props.customerId;
+	
+	
+	      var account = entities[accountId];
+	
+	      if (!account || !accountId) {
+	        return _react2.default.createElement(
+	          "div",
+	          { title: "" + accountId },
+	          accountId,
+	          " ",
+	          _react2.default.createElement(_reactLoader2.default, { loaded: false })
+	        );
+	        // {/*return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)*/}
+	      }
+	
+	      var title = account.title;
+	      var owner = account.owner;
+	
+	
+	      if (typeof owner !== 'undefined' && customerId !== owner) {
+	        return _react2.default.createElement(
+	          BS.Button,
+	          { bsStyle: "link", disabled: true, title: "" + accountId, style: { padding: '0 0' } },
+	          title
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: "/account/" + accountId },
+	          title
+	        );
+	      }
+	    }
+	  }]);
+	
+	  return AccountInfo;
+	}(_react2.default.Component);
+	
+	exports.default = (0, _reactRedux.connect)(function (_ref2) {
+	  var app = _ref2.app;
+	  return {
+	    entities: app.data.entities,
+	    customerId: (0, _readProp2.default)(app, 'auth.user.isSignedIn', false) ? (0, _readProp2.default)(app, 'auth.user.attributes.id', null) : null
+	  };
+	})(AccountInfo);
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AccountInfo.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+
+/***/ 594:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
-	var _Add3rdPartyAccountModal = __webpack_require__(592);
+	var _Add3rdPartyAccountModal = __webpack_require__(595);
 	
 	Object.defineProperty(exports, 'Add3rdPartyAccountModal', {
 	  enumerable: true,
@@ -4411,7 +4546,7 @@ webpackJsonp([0,3],{
 	  }
 	});
 	
-	var _NewAccountModal = __webpack_require__(598);
+	var _NewAccountModal = __webpack_require__(599);
 	
 	Object.defineProperty(exports, 'NewAccountModal', {
 	  enumerable: true,
@@ -4420,7 +4555,7 @@ webpackJsonp([0,3],{
 	  }
 	});
 	
-	var _RemoveAccountModal = __webpack_require__(599);
+	var _RemoveAccountModal = __webpack_require__(600);
 	
 	Object.defineProperty(exports, 'RemoveAccountBookmarkModal', {
 	  enumerable: true,
@@ -4435,7 +4570,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 592:
+/***/ 595:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4459,15 +4594,15 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(596);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _Input = __webpack_require__(596);
+	var _Input = __webpack_require__(597);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _AuxErrorLabel = __webpack_require__(597);
+	var _AuxErrorLabel = __webpack_require__(598);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
@@ -4729,7 +4864,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 593:
+/***/ 596:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4750,7 +4885,7 @@ webpackJsonp([0,3],{
 	
 	var _reactBootstrap = __webpack_require__(336);
 	
-	var _reactLoader = __webpack_require__(594);
+	var _reactLoader = __webpack_require__(592);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -4857,7 +4992,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 596:
+/***/ 597:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4969,7 +5104,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 597:
+/***/ 598:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5068,7 +5203,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 598:
+/***/ 599:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5094,11 +5229,11 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(596);
+	var _Input = __webpack_require__(597);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(596);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
@@ -5291,7 +5426,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 599:
+/***/ 600:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5446,7 +5581,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 600:
+/***/ 601:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5514,7 +5649,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 601:
+/***/ 602:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5574,7 +5709,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 602:
+/***/ 603:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5600,7 +5735,7 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactLoader = __webpack_require__(594);
+	var _reactLoader = __webpack_require__(592);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -5608,21 +5743,21 @@ webpackJsonp([0,3],{
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _Input = __webpack_require__(596);
+	var _Input = __webpack_require__(597);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _Money = __webpack_require__(601);
+	var _Money = __webpack_require__(602);
 	
-	var _TransfersTable = __webpack_require__(603);
+	var _TransfersTable = __webpack_require__(604);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _IndexPanel = __webpack_require__(600);
+	var _IndexPanel = __webpack_require__(601);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _modals = __webpack_require__(591);
+	var _modals = __webpack_require__(594);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
@@ -6075,7 +6210,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 603:
+/***/ 604:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6093,7 +6228,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactLoader = __webpack_require__(594);
+	var _reactLoader = __webpack_require__(592);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -6101,13 +6236,13 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactTimeago = __webpack_require__(604);
+	var _reactTimeago = __webpack_require__(605);
 	
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 	
-	var _Money = __webpack_require__(601);
+	var _Money = __webpack_require__(602);
 	
-	var _AccountInfo = __webpack_require__(605);
+	var _AccountInfo = __webpack_require__(591);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
@@ -6363,129 +6498,6 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 605:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.AccountInfo = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(170);
-	
-	var _reactLoader = __webpack_require__(594);
-	
-	var _reactLoader2 = _interopRequireDefault(_reactLoader);
-	
-	var _entities = __webpack_require__(326);
-	
-	var A = _interopRequireWildcard(_entities);
-	
-	var _reactRouter = __webpack_require__(183);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 3/22/16.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	// import * as BS  from "react-bootstrap";
-	
-	
-	// import { Money } from '../components/Money';
-	
-	var AccountInfo = exports.AccountInfo = function (_React$Component) {
-	  _inherits(AccountInfo, _React$Component);
-	
-	  function AccountInfo() {
-	    _classCallCheck(this, AccountInfo);
-	
-	    return _possibleConstructorReturn(this, (AccountInfo.__proto__ || Object.getPrototypeOf(AccountInfo)).apply(this, arguments));
-	  }
-	
-	  _createClass(AccountInfo, [{
-	    key: "componentWillMount",
-	    value: function componentWillMount() {
-	      this.ensureData(this.props);
-	    }
-	  }, {
-	    key: "componentWillReceiveProps",
-	    value: function componentWillReceiveProps(nextProps) {
-	      this.ensureData(nextProps);
-	    }
-	  }, {
-	    key: "ensureData",
-	    value: function ensureData(_ref) {
-	      var dispatch = _ref.dispatch;
-	      var entities = _ref.entities;
-	      var accountId = _ref.accountId;
-	
-	      if (entities[accountId]) {
-	        return;
-	      }
-	      dispatch(A.fetchAccount(accountId));
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var _props = this.props;
-	      var entities = _props.entities;
-	      var accountId = _props.accountId;
-	
-	
-	      var account = entities[accountId];
-	
-	      if (!account) {
-	        return _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: "/account/" + accountId },
-	          accountId,
-	          " ",
-	          _react2.default.createElement(_reactLoader2.default, { loaded: false })
-	        );
-	      }
-	
-	      var title = account.title;
-	
-	
-	      return _react2.default.createElement(
-	        _reactRouter.Link,
-	        { to: "/account/" + accountId },
-	        title
-	      );
-	    }
-	  }]);
-	
-	  return AccountInfo;
-	}(_react2.default.Component);
-	
-	exports.default = (0, _reactRedux.connect)(function (_ref2) {
-	  var app = _ref2.app;
-	  return {
-	    entities: app.data.entities
-	  };
-	})(AccountInfo);
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AccountInfo.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-
-/***/ },
-
 /***/ 606:
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6687,15 +6699,15 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(596);
+	var _Input = __webpack_require__(597);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(596);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _AuxErrorLabel = __webpack_require__(597);
+	var _AuxErrorLabel = __webpack_require__(598);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
@@ -7035,15 +7047,15 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Input = __webpack_require__(596);
+	var _Input = __webpack_require__(597);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(596);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _IndexPanel = __webpack_require__(600);
+	var _IndexPanel = __webpack_require__(601);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
@@ -7365,4 +7377,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.d91662ee734b40065ff3.js.map
+//# sourceMappingURL=app.fcbedf54f0345474ccc1.js.map

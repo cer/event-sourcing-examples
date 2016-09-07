@@ -8,6 +8,7 @@ import { Link, IndexLink} from "react-router";
 import { connect } from "react-redux";
 //import * as DefaultTheme from "redux-auth";
 import Select from "react-select";
+import AccountInfo from '../components/AccountInfo';
 import * as Modals from './modals';
 import IndexPanel from "./../components/partials/IndexPanel";
 
@@ -164,7 +165,7 @@ class MyAccounts extends React.Component {
       accountId, balance, description = '', title
       }, idx) => (
       <tr key={`own_${idx}`}>
-        <td key={0}><Link to={`/account/${accountId}`}>{ title }</Link>{
+        <td key={0}><AccountInfo accountId={accountId} />{
           (description) ? [
             (<br />),
             <span>{ description }</span>
@@ -182,7 +183,7 @@ class MyAccounts extends React.Component {
       id
       }, idx) => (
       <tr key={`ref_${idx}`}>
-        <td key={0}><Link to={`/account/${id}`}>{ title }</Link>{
+        <td key={0}><AccountInfo accountId={id} />{
           (description) ? [
             (<br />),
             <span>{ description }</span>

@@ -4,12 +4,10 @@
 import React from "react";
 import { connect } from 'react-redux';
 import Spinner from "react-loader";
-// import * as BS  from "react-bootstrap";
+import * as BS  from "react-bootstrap";
 import * as A from '../actions/entities';
+import read from '../utils/readProp';
 import { Route, IndexRoute, Link, IndexLink } from "react-router";
-
-
-// import { Money } from '../components/Money';
 
 export class AccountInfo extends React.Component {
   componentWillMount() {
@@ -28,20 +26,26 @@ export class AccountInfo extends React.Component {
   }
 
   render() {
-    const { entities, accountId } = this.props;
+    const { entities, accountId, customerId } = this.props;
 
     const account = entities[accountId];
 
-    if (!account) {
-      return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)
+    if (!account || !accountId) {
+      return (<div title={ `${accountId}` }>{ accountId } <Spinner loaded={false} /></div>);
+      // {/*return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)*/}
     }
 
-    const { title } = account;
+    const { title, owner } = account;
 
-    return (<Link to={ `/account/${accountId}` }>{ title }</Link>);
+    if ((typeof owner !== 'undefined') && (customerId !== owner)) {
+      return (<BS.Button bsStyle="link" disabled title={ `${accountId}` } style={{ padding: '0 0' }}>{ title }</BS.Button>);
+    } else {
+      return (<Link to={ `/account/${accountId}` }>{ title }</Link>);
+    }
   }
 }
 
 export default connect(({ app }) => ({
-  entities: app.data.entities
+  entities: app.data.entities,
+  customerId: read(app, 'auth.user.isSignedIn', false) ? read(app, 'auth.user.attributes.id', null): null,
 }))(AccountInfo);
