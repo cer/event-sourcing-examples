@@ -210,8 +210,8 @@ export const createRefAccountLookup = customerId => {
   return dispatch => {
     dispatch(createRefAccountLookupStart());
     return api.apiRetrieveAccounts(customerId)
-      .then(data => {
-        const arr = data.map(({ accountId, title }) => ({
+      .then(({ accounts }) => {
+        const arr = accounts.map(({ accountId, title }) => ({
           value: accountId,
           label: title
         }));
@@ -226,7 +226,7 @@ export const createRefAccountLookup = customerId => {
 };
 
 
-export const makeTransferRequested = makeActionCreator(T.TRANSFERS.MAKE_START, 'payload');
+export const makeTransferRequested = makeActionCreator(T.TRANSFERS.MAKE_START);
 export const makeTransferComplete = makeActionCreator(T.TRANSFERS.MAKE_COMPLETE, 'payload');
 export const makeTransferError = makeActionCreator(T.TRANSFERS.MAKE_ERROR, 'error');
 export const makeTransferFormUpdate = makeActionCreator(T.TRANSFERS.MAKE_FORM_UPDATE, 'key', 'value');
