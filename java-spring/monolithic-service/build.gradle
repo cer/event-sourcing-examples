@@ -15,6 +15,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-actuator"
 
     compile "io.eventuate.client.java:eventuate-client-java-http-stomp-spring:$eventuateClientVersion"
+    compile project(":common-swagger")
 
     testCompile project(":testutil")
     testCompile "org.springframework.boot:spring-boot-starter-test"

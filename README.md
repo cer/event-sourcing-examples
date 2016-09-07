@@ -1,7 +1,7 @@
 #Event-Sourcing+CQRS example application
 
 This example application is the money transfer application described in my talk [Building and deploying microservices with event sourcing, CQRS and Docker](http://plainoldobjects.com/presentations/building-and-deploying-microservices-with-event-sourcing-cqrs-and-docker/).
-This talk describe a way of architecting highly scalable and available applications that is based on microservices, polyglot persistence,
+This talk describes a way of architecting highly scalable and available applications that is based on microservices, polyglot persistence,
 event sourcing (ES) and command query responsibility segregation (CQRS).
 Applications consist of loosely coupled components that communicate using events.
 These components can be deployed either as separate services or packaged as a monolithic application for simplified development and testing.
@@ -94,9 +94,12 @@ First, you need to tell the query side code how to connect to MongoDB:
 ```
 
 [Docker Compose](https://docs.docker.com/compose/) is a great way to run MongoDB.
-You can run the `docker-compose up -d mongodb` to run MongoDB.
+You can run the `docker-compose up -d mongodb` to run MongoDB and then set `SPRING_DATA_MONGODB_URI` as follows:
+```
+  export SPRING_DATA_MONGODB_URI=mongodb://$(docker-machine ip default)/yourdb
+```
 
-Second, some of the tests in accounts-command-side-service, transactions-command-side-service, accounts-query-side-service and e2e-test need you need to set some environment variables that tell them how to connect to the Event Store server.
+Second, some of the tests in accounts-command-side-service, transactions-command-side-service, accounts-query-side-service and e2e-test require you to set some environment variables that tell them how to connect to the Event Store server.
 But don't worry.
 The build is configured to ignore failures for those projects.
 
@@ -116,6 +119,15 @@ Simply use this command:
 ```
 java -jar monolithic-service/build/libs/monolithic-service.jar
 ```
+
+This will start the service running on port 8080 (you can change using the --server.port=9999 option).
+
+Once the service has started you can open the Swagger UI: http://localhost:8080/swagger-ui.html.
+You can then:
+
+1. Create two accounts (save the account ids)
+2. Create a money transfer
+3. View the updated account balances
 
 ## Running the microservices
 
