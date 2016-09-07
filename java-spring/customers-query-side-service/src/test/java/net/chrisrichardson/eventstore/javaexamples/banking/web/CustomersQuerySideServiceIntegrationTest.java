@@ -1,9 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
-import org.apache.tomcat.jni.Thread;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
-import rx.Observable;
 
 import javax.annotation.PostConstruct;
 
@@ -29,7 +27,7 @@ public class CustomersQuerySideServiceIntegrationTest {
   private int port;
 
   private String baseUrl(String path) {
-    return "http://localhost:" + port + "/" + path;
+    return "http://localhost:" + port + "/api" + path;
   }
 
   @Autowired
@@ -50,12 +48,6 @@ public class CustomersQuerySideServiceIntegrationTest {
 
     final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
-
-    try {
-      java.lang.Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
     customersTestUtils.assertCustomerResponse(customerId, customerInfo);
   }

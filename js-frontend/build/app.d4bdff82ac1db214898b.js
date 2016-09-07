@@ -185,11 +185,11 @@ webpackJsonp([0,3],{
 	  return store.dispatch((0, _configure.configure)([{
 	    default: {
 	      //apiUrl: '/',
-	      emailSignInPath: '/login',
-	      customersPath: '/customers',
-	      currentUserPath: '/user',
-	      accountsPath: '/accounts',
-	      transfersPath: '/transfers'
+	      emailSignInPath: '/api/login',
+	      customersPath: '/api/customers',
+	      currentUserPath: '/api/user',
+	      accountsPath: '/api/accounts',
+	      transfersPath: '/api/transfers'
 	    }
 	  }], {
 	    cookies: cookies,
@@ -1403,6 +1403,9 @@ webpackJsonp([0,3],{
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? _extends({}, initialState) : arguments[0];
 	  var action = arguments[1];
 	
+	  if (typeof action.length !== 'undefined') {
+	    debugger;
+	  }
 	  switch (action.type) {
 	    case _ACTION_TYPES2.default.ENTITIES.REQUESTED:
 	      {
@@ -1829,7 +1832,7 @@ webpackJsonp([0,3],{
 	
 	var _authenticate = __webpack_require__(316);
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
 	var _clientSettings = __webpack_require__(327);
 	
@@ -1839,7 +1842,7 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _root = __webpack_require__(319);
+	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
@@ -1919,35 +1922,32 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.authenticateStart = authenticateStart;
-	exports.authenticateComplete = authenticateComplete;
-	exports.authenticateError = authenticateError;
+	exports.authenticateError = exports.authenticateComplete = exports.authenticateStart = undefined;
 	exports.authenticate = authenticate;
 	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _actions = __webpack_require__(317);
 	
-	var _api = __webpack_require__(320);
+	var _sessionStorage = __webpack_require__(318);
 	
-	var _entities = __webpack_require__(325);
+	var U = _interopRequireWildcard(_sessionStorage);
+	
+	var _api = __webpack_require__(321);
+	
+	var _entities = __webpack_require__(326);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/**
-	 * Created by andrew on 26/02/16.
-	 */
-	function authenticateStart() {
-	  return { type: _ACTION_TYPES2.default.AUTH.AUTHENTICATE_START };
-	}
-	function authenticateComplete(user) {
-	  return { type: _ACTION_TYPES2.default.AUTH.AUTHENTICATE_COMPLETE, user: user };
-	}
-	function authenticateError(errors) {
-	  return { type: _ACTION_TYPES2.default.AUTH.AUTHENTICATE_ERROR, errors: errors };
-	}
+	var authenticateStart = exports.authenticateStart = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.AUTHENTICATE_START); /**
+	                                                                                                                                      * Created by andrew on 26/02/16.
+	                                                                                                                                      */
+	var authenticateComplete = exports.authenticateComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.AUTHENTICATE_COMPLETE, 'user');
+	var authenticateError = exports.authenticateError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.AUTHENTICATE_ERROR, 'errors');
 	
 	function authenticate(forceReread) {
 	  return function (dispatch) {
@@ -1956,25 +1956,24 @@ webpackJsonp([0,3],{
 	
 	    var savedUserPromise = new Promise(function (rs, rj) {
 	
-	      var currentHeaders = (0, _sessionStorage.retrieveHeaders)();
+	      var currentHeaders = U.retrieveHeaders();
 	      var accessToken = currentHeaders["access-token"];
 	
 	      if (!accessToken) {
 	        return rj({ reason: 'no token' });
 	      }
 	
-	      var savedUser = (0, _sessionStorage.retrieveUserData)();
+	      var savedUser = U.retrieveUserData();
 	
 	      if (savedUser && !forceReread) {
 	        return rs(savedUser);
 	      }
 	
 	      return (0, _api.apiGetCurrentUser)().then(function (userData) {
-	        (0, _sessionStorage.persistUserData)(userData);
+	        U.persistUserData(userData);
 	        dispatch((0, _entities.entityReceived)(userData.id, userData));
 	        rs(userData);
 	      }, function (err) {
-	        debugger;
 	        rj(err);
 	      });
 	    });
@@ -2011,6 +2010,43 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.makeActionCreator = makeActionCreator;
+	/**
+	 * Created by andrew on 15/03/16.
+	 */
+	function makeActionCreator(type) {
+	  for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	    argNames[_key - 1] = arguments[_key];
+	  }
+	
+	  return function () {
+	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	      args[_key2] = arguments[_key2];
+	    }
+	
+	    var action = { type: type };
+	    argNames.forEach(function (arg, index) {
+	      action[argNames[index]] = args[index];
+	    });
+	    return action;
+	  };
+	}
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "actions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+
+/***/ 318:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.retrieveUserData = exports.persistUserData = undefined;
 	exports.setCurrentSettings = setCurrentSettings;
 	exports.getCurrentSettings = getCurrentSettings;
 	exports.setCurrentEndpoint = setCurrentEndpoint;
@@ -2033,13 +2069,11 @@ webpackJsonp([0,3],{
 	exports.getTransfersUrl = getTransfersUrl;
 	exports.getApiUrl = getApiUrl;
 	exports.getTokenFormat = getTokenFormat;
-	exports.persistUserData = persistUserData;
-	exports.retrieveUserData = retrieveUserData;
 	exports.retrieveHeaders = retrieveHeaders;
 	exports.persistData = persistData;
 	exports.retrieveData = retrieveData;
 	
-	var _jsCookie = __webpack_require__(318);
+	var _jsCookie = __webpack_require__(319);
 	
 	var _jsCookie2 = _interopRequireDefault(_jsCookie);
 	
@@ -2047,7 +2081,7 @@ webpackJsonp([0,3],{
 	
 	var C = _interopRequireWildcard(_constants);
 	
-	var _root = __webpack_require__(319);
+	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
@@ -2055,31 +2089,39 @@ webpackJsonp([0,3],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import "babel-polyfill";
-	
-	
 	// stateful variables that persist throughout session
-	_root2.default.authState = {
+	var authState = {
 	  currentSettings: {},
 	  currentEndpoint: {},
 	  defaultEndpointKey: 'default'
 	}; /**
 	    * Created by andrew on 26/02/16.
 	    */
+	
+	
+	var memoryStorage = {};
+	
+	function clean(obj) {
+	  Object.keys(obj).forEach(function (k) {
+	    delete obj[k];
+	  });
+	  return obj;
+	}
+	
 	function setCurrentSettings(s) {
-	  _root2.default.authState.currentSettings = s;
+	  authState.currentSettings = s;
 	}
 	
 	function getCurrentSettings() {
-	  return _root2.default.authState.currentSettings;
+	  return authState.currentSettings;
 	}
 	
 	function setCurrentEndpoint(e) {
-	  _root2.default.authState.currentEndpoint = e;
+	  authState.currentEndpoint = e;
 	}
 	
 	function getCurrentEndpoint() {
-	  return _root2.default.authState.currentEndpoint;
+	  return authState.currentEndpoint;
 	}
 	
 	/**
@@ -2108,18 +2150,15 @@ webpackJsonp([0,3],{
 	
 	// reset stateful variables
 	function resetConfig() {
-	  _root2.default.authState = _root2.default.authState || {};
-	  _root2.default.authState.currentSettings = {};
-	  _root2.default.authState.currentEndpoint = {};
+	  clean(authState);
+	  authState.currentSettings = {};
+	  authState.currentEndpoint = {};
 	  destroySession();
 	}
 	
 	function destroySession() {
-	  var sessionKeys = [C.SAVED_CREDS_KEY, C.SAVED_CONFIG_KEY, C.SAVED_USER_INFO];
 	
-	  for (var key in sessionKeys) {
-	    key = sessionKeys[key];
-	
+	  [C.SAVED_CREDS_KEY, C.SAVED_CONFIG_KEY, C.SAVED_USER_INFO].forEach(function (key) {
 	    // kill all local storage keys
 	    if (_root2.default.localStorage) {
 	      _root2.default.localStorage.removeItem(key);
@@ -2127,9 +2166,11 @@ webpackJsonp([0,3],{
 	
 	    // remove from base path in case config is not specified
 	    _jsCookie2.default.remove(key, {
-	      path: _root2.default.authState.currentSettings.cookiePath || "/"
+	      path: authState.currentSettings.cookiePath || "/"
 	    });
-	  }
+	  });
+	
+	  clean(memoryStorage);
 	}
 	
 	function unescapeQuotes(val) {
@@ -2158,7 +2199,7 @@ webpackJsonp([0,3],{
 	//}
 	
 	function getEmailSignInUrl() {
-	  return "" + getSessionEndpoint().emailSignInPath;
+	  return '' + getSessionEndpoint().emailSignInPath;
 	}
 	
 	function getEmailSignUpUrl() {
@@ -2166,19 +2207,19 @@ webpackJsonp([0,3],{
 	}
 	
 	function getCurrentUserUrl() {
-	  return "" + getSessionEndpoint().currentUserPath;
+	  return '' + getSessionEndpoint().currentUserPath;
 	}
 	
 	function getAccountsUrl() {
-	  return "" + getSessionEndpoint().accountsPath;
+	  return '' + getSessionEndpoint().accountsPath;
 	}
 	
 	function getCustomersUrl() {
-	  return "" + getSessionEndpoint().customersPath;
+	  return '' + getSessionEndpoint().customersPath;
 	}
 	
 	function getTransfersUrl() {
-	  return "" + getSessionEndpoint().transfersPath;
+	  return '' + getSessionEndpoint().transfersPath;
 	}
 	
 	/**
@@ -2188,20 +2229,20 @@ webpackJsonp([0,3],{
 	 */
 	function getApiUrl(key) {
 	  var configKey = getSessionEndpointKey(key);
-	  return _root2.default.authState.currentEndpoint[configKey].apiUrl;
+	  return rauthState.currentEndpoint[configKey].apiUrl;
 	}
 	
 	function getTokenFormat() {
-	  return _root2.default.authState.currentSettings.tokenFormat;
+	  return authState.currentSettings.tokenFormat;
 	}
 	
-	function persistUserData(user) {
-	  persistData(C.SAVED_USER_INFO, user);
-	}
+	var persistUserData = exports.persistUserData = function persistUserData(user) {
+	  memoryStorage[C.SAVED_USER_INFO] = user;
+	};
 	
-	function retrieveUserData() {
-	  return retrieveData(C.SAVED_USER_INFO);
-	}
+	var retrieveUserData = exports.retrieveUserData = function retrieveUserData() {
+	  return memoryStorage[C.SAVED_USER_INFO];
+	};
 	
 	function retrieveHeaders() {
 	  return retrieveData(C.SAVED_CREDS_KEY) || {};
@@ -2210,15 +2251,15 @@ webpackJsonp([0,3],{
 	function persistData(key, val) {
 	  val = _root2.default.JSON.stringify(val);
 	
-	  switch (_root2.default.authState.currentSettings.storage) {
+	  switch (authState.currentSettings.storage) {
 	    case "localStorage":
 	      _root2.default.localStorage.setItem(key, val);
 	      break;
 	
 	    default:
 	      _jsCookie2.default.set(key, val, {
-	        expires: _root2.default.authState.currentSettings.cookieExpiry,
-	        path: _root2.default.authState.currentSettings.cookiePath
+	        expires: authState.currentSettings.cookieExpiry,
+	        path: authState.currentSettings.cookiePath
 	      });
 	      break;
 	  }
@@ -2227,7 +2268,7 @@ webpackJsonp([0,3],{
 	function retrieveData(key) {
 	  var val = null;
 	
-	  switch (_root2.default.authState.currentSettings.storage) {
+	  switch (authState.currentSettings.storage) {
 	
 	    case "localStorage":
 	      val = _root2.default.localStorage && _root2.default.localStorage.getItem(key);
@@ -2253,7 +2294,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 319:
+/***/ 320:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2274,7 +2315,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 320:
+/***/ 321:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2297,17 +2338,17 @@ webpackJsonp([0,3],{
 	exports.apiRetrieveUsers = apiRetrieveUsers;
 	exports.apiRetrieveUser = apiRetrieveUser;
 	
-	var _fetch = __webpack_require__(321);
+	var _fetch = __webpack_require__(322);
 	
 	var _fetch2 = _interopRequireDefault(_fetch);
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
-	var _root = __webpack_require__(319);
+	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _handleFetchResponse = __webpack_require__(324);
+	var _handleFetchResponse = __webpack_require__(325);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -2419,7 +2460,7 @@ webpackJsonp([0,3],{
 	
 	function apiRetrieveAccounts(customerId) {
 	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '?' + makeQuery({ customerId: customerId }), {
+	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/accounts', {
 	    headers: {
 	      "Accept": "application/json",
 	      "Content-Type": "application/json"
@@ -2487,7 +2528,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 321:
+/***/ 322:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2519,7 +2560,7 @@ webpackJsonp([0,3],{
 	  });
 	};
 	
-	var _isomorphicFetch = __webpack_require__(322);
+	var _isomorphicFetch = __webpack_require__(323);
 	
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
@@ -2527,7 +2568,7 @@ webpackJsonp([0,3],{
 	
 	var C = _interopRequireWildcard(_constants);
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -2591,7 +2632,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 324:
+/***/ 325:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2649,7 +2690,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 325:
+/***/ 326:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2678,15 +2719,15 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _actions = __webpack_require__(326);
+	var _actions = __webpack_require__(317);
 	
-	var _api = __webpack_require__(320);
+	var _api = __webpack_require__(321);
 	
 	var api = _interopRequireWildcard(_api);
 	
 	var _authenticate = __webpack_require__(316);
 	
-	var _root = __webpack_require__(319);
+	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
@@ -2799,7 +2840,7 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    //dispatch(accountsListRequested());
 	    return api.apiRetrieveAccounts(customerId).then(function (data) {
-	      dispatch(accountsListReceived(data));
+	      dispatch(accountsListReceived(data.accounts));
 	    });
 	  };
 	}
@@ -2933,7 +2974,7 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    dispatch(getTransfersRequested(accountId));
 	    return api.apiRetrieveTransfers(accountId).then(function (data) {
-	      dispatch(getTransfersComplete(accountId, data));
+	      dispatch(getTransfersComplete(accountId, data.transactionsHistory));
 	      return data;
 	    }).catch(function (err) {
 	      dispatch(getTransfersError(accountId, err));
@@ -2943,42 +2984,6 @@ webpackJsonp([0,3],{
 	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "entities.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-
-/***/ },
-
-/***/ 326:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.makeActionCreator = makeActionCreator;
-	/**
-	 * Created by andrew on 15/03/16.
-	 */
-	function makeActionCreator(type) {
-	  for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	    argNames[_key - 1] = arguments[_key];
-	  }
-	
-	  return function () {
-	    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-	      args[_key2] = arguments[_key2];
-	    }
-	
-	    var action = { type: type };
-	    argNames.forEach(function (arg, index) {
-	      action[argNames[index]] = args[index];
-	    });
-	    return action;
-	  };
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "actions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
@@ -3003,11 +3008,11 @@ webpackJsonp([0,3],{
 	
 	var C = _interopRequireWildcard(_constants);
 	
-	var _root = __webpack_require__(319);
+	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _fetch = __webpack_require__(321);
+	var _fetch = __webpack_require__(322);
 	
 	var _fetch2 = _interopRequireDefault(_fetch);
 	
@@ -3017,7 +3022,7 @@ webpackJsonp([0,3],{
 	
 	var _configure = __webpack_require__(314);
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -3836,15 +3841,15 @@ webpackJsonp([0,3],{
 	exports.signOutComplete = signOutComplete;
 	exports.signOut = signOut;
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var _configure = __webpack_require__(314);
 	
-	var _handleFetchResponse = __webpack_require__(324);
+	var _handleFetchResponse = __webpack_require__(325);
 	
-	var _fetch = __webpack_require__(321);
+	var _fetch = __webpack_require__(322);
 	
 	var _fetch2 = _interopRequireDefault(_fetch);
 	
@@ -3852,7 +3857,7 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _root = __webpack_require__(319);
+	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
@@ -3923,7 +3928,7 @@ webpackJsonp([0,3],{
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var A = _interopRequireWildcard(_entities);
 	
@@ -4476,7 +4481,7 @@ webpackJsonp([0,3],{
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var A = _interopRequireWildcard(_entities);
 	
@@ -5101,7 +5106,7 @@ webpackJsonp([0,3],{
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5619,7 +5624,7 @@ webpackJsonp([0,3],{
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var A = _interopRequireWildcard(_entities);
 	
@@ -6158,31 +6163,82 @@ webpackJsonp([0,3],{
 	      }
 	
 	      var currentAccountId = forAccount;
-	      var transfersMarkup = data.length ? data.filter(function (_ref2) {
+	      var transfersMarkup = data.length ? data.sort(function (a, b) {
+	        return a.date - b.date;
+	      }).filter(function (_ref2) {
+	        var entryType = _ref2.entryType;
 	        var toAccountId = _ref2.toAccountId;
 	        var fromAccountId = _ref2.fromAccountId;
-	        return fromAccountId === currentAccountId || toAccountId === currentAccountId;
-	      }).sort(function (a, b) {
-	        return -(a.date - b.date);
-	      }).map(function (_ref3) {
-	        var amount = _ref3.amount;
-	        var fromAccountId = _ref3.fromAccountId;
-	        var toAccountId = _ref3.toAccountId;
-	        var transactionId = _ref3.transactionId;
-	        var _ref3$description = _ref3.description;
-	        var description = _ref3$description === undefined ? '' : _ref3$description;
-	        var _ref3$date = _ref3.date;
-	        var date = _ref3$date === undefined ? null : _ref3$date;
-	        var _ref3$status = _ref3.status;
-	        var status = _ref3$status === undefined ? '' : _ref3$status;
+	        return entryType !== 'transaction' || fromAccountId === currentAccountId || toAccountId === currentAccountId;
+	      }).reduce(function (_ref3, v) {
+	        var items = _ref3.items;
+	        var balance = _ref3.balance;
 	
+	        if (v.entryType == 'account') {
+	          balance = v.initialBalance;
+	        } else if (v.entryType == 'transaction') {
+	          var isOriginating = v.fromAccountId == currentAccountId;
+	          balance += (isOriginating ? -1 : 1) * v.amount;
+	        }
+	        v.balance = balance;
+	        items.push(v);
+	        return { items: items, balance: balance };
+	      }, {
+	        items: [],
+	        balance: 0
+	      }).items.sort(function (a, b) {
+	        return -(a.date - b.date);
+	      }).map(function (_ref4) {
+	        var entryType = _ref4.entryType;
+	        var amount = _ref4.amount;
+	        var fromAccountId = _ref4.fromAccountId;
+	        var toAccountId = _ref4.toAccountId;
+	        var transactionId = _ref4.transactionId;
+	        var _ref4$description = _ref4.description;
+	        var description = _ref4$description === undefined ? '—' : _ref4$description;
+	        var _ref4$date = _ref4.date;
+	        var date = _ref4$date === undefined ? null : _ref4$date;
+	        var _ref4$status = _ref4.status;
+	        var status = _ref4$status === undefined ? '—' : _ref4$status;
+	        var balance = _ref4.balance;
+	        var _ref4$initialBalance = _ref4.initialBalance;
+	        var initialBalance = _ref4$initialBalance === undefined ? null : _ref4$initialBalance;
+	
+	
+	        var transferTimestamp = new Date(date);
+	        var timeAgoTitle = transferTimestamp.toLocaleDateString() + ' ' + transferTimestamp.toLocaleTimeString();
+	
+	        if (entryType == 'account') {
+	          return _react2.default.createElement(
+	            "tr",
+	            null,
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              _react2.default.createElement(_reactTimeago2.default, { date: date, title: timeAgoTitle })
+	            ),
+	            _react2.default.createElement(
+	              "td",
+	              { colSpan: "3" },
+	              "Account created"
+	            ),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              _react2.default.createElement(_Money.Money, { amount: initialBalance })
+	            ),
+	            _react2.default.createElement("td", null),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              status || '—'
+	            )
+	          );
+	        }
 	
 	        var isOriginating = fromAccountId == currentAccountId;
 	        var directionMarkup = isOriginating ? 'Debit' : 'Credit';
 	        var counterAccountMarkup = isOriginating ? _react2.default.createElement(_AccountInfo2.default, { accountId: toAccountId }) : _react2.default.createElement(_AccountInfo2.default, { accountId: fromAccountId });
-	
-	        var transferTimestamp = new Date(date);
-	        var timeAgoTitle = transferTimestamp.toLocaleDateString() + ' ' + transferTimestamp.toLocaleTimeString();
 	
 	        return _react2.default.createElement(
 	          "tr",
@@ -6206,6 +6262,11 @@ webpackJsonp([0,3],{
 	            "td",
 	            null,
 	            _react2.default.createElement(_Money.Money, { amount: amount })
+	          ),
+	          _react2.default.createElement(
+	            "td",
+	            null,
+	            _react2.default.createElement(_Money.Money, { amount: balance })
 	          ),
 	          _react2.default.createElement(
 	            "td",
@@ -6260,6 +6321,11 @@ webpackJsonp([0,3],{
 	            _react2.default.createElement(
 	              "th",
 	              null,
+	              "Balance"
+	            ),
+	            _react2.default.createElement(
+	              "th",
+	              null,
 	              "Description"
 	            ),
 	            _react2.default.createElement(
@@ -6309,7 +6375,7 @@ webpackJsonp([0,3],{
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var A = _interopRequireWildcard(_entities);
 	
@@ -6763,15 +6829,15 @@ webpackJsonp([0,3],{
 	exports.emailSignInError = exports.emailSignInComplete = exports.emailSignInStart = exports.emailSignInFormUpdate = undefined;
 	exports.emailSignIn = emailSignIn;
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var _configure = __webpack_require__(314);
 	
-	var _api = __webpack_require__(320);
+	var _api = __webpack_require__(321);
 	
-	var _actions = __webpack_require__(326);
+	var _actions = __webpack_require__(317);
 	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
@@ -7227,13 +7293,13 @@ webpackJsonp([0,3],{
 	exports.emailSignUpError = emailSignUpError;
 	exports.emailSignUp = emailSignUp;
 	
-	var _sessionStorage = __webpack_require__(317);
+	var _sessionStorage = __webpack_require__(318);
 	
-	var _entities = __webpack_require__(325);
+	var _entities = __webpack_require__(326);
 	
 	var _configure = __webpack_require__(314);
 	
-	var _api = __webpack_require__(320);
+	var _api = __webpack_require__(321);
 	
 	var _signIn = __webpack_require__(609);
 	
@@ -7287,4 +7353,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.3a9a7c962cfa5ee06c64.js.map
+//# sourceMappingURL=app.d4bdff82ac1db214898b.js.map

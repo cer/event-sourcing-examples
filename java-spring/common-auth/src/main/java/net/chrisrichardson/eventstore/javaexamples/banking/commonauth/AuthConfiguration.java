@@ -80,7 +80,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/index.html", "/", "/**.js", "/**.css").permitAll()
             .antMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
-            .antMatchers(HttpMethod.POST, "/customers", "/login").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/customers", "/api/login").permitAll()
             .anyRequest().authenticated().and()
             .addFilterAfter(new StatelessAuthenticationFilter(tokenAuthenticationService), BasicAuthenticationFilter.class);
   }

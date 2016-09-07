@@ -1,9 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
-import io.eventuate.CompletableFutureUtil;
-
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class AccountQueryService {
 
@@ -13,15 +10,17 @@ public class AccountQueryService {
     this.accountInfoRepository = accountInfoRepository;
   }
 
-  public CompletableFuture<AccountInfo> findByAccountId(String accountId) {
+  public AccountInfo findByAccountId(String accountId) {
     AccountInfo account = accountInfoRepository.findOne(accountId);
     if (account == null)
-      return CompletableFutureUtil.failedFuture(new AccountNotFoundException(accountId));
+      throw new AccountNotFoundException(accountId);
     else
-      return CompletableFuture.completedFuture(account);
+      if(account.getTransferStates()!=null)
+        account.getTransactions().stream().forEach(ati -> ati.setStatus(account.getTransferStates().get(ati.getTransactionId())));
+      return account;
   }
 
-  public CompletableFuture<List<AccountInfo>> findByCustomerId(String customerId) {
-      return CompletableFuture.completedFuture(accountInfoRepository.findByCustomerId(customerId));
+  public List<AccountInfo> findByCustomerId(String customerId) {
+      return accountInfoRepository.findByCustomerId(customerId);
   }
 }

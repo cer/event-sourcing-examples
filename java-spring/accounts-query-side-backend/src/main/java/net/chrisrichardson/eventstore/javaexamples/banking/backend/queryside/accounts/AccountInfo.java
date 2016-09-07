@@ -1,11 +1,10 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by cer on 11/21/14.
@@ -18,13 +17,19 @@ public class AccountInfo {
   private String description;
   private long balance;
   private List<AccountChangeInfo> changes;
-  private List<AccountTransactionInfo> transactions;
+  private Map<String, AccountTransactionInfo> transactions;
+  private Map<String, TransferState> transferStates;
   private String version;
+  private Date date;
 
   private AccountInfo() {
   }
 
-  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, List<AccountTransactionInfo> transactions, String version) {
+  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, Map<String, AccountTransactionInfo> transactions, String version) {
+    this(id, customerId, title, description, balance, changes, transactions, version, new Date());
+  }
+
+  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, Map<String, AccountTransactionInfo> transactions, String version, Date date) {
 
     this.id = id;
     this.customerId = customerId;
@@ -34,6 +39,7 @@ public class AccountInfo {
     this.changes = changes;
     this.transactions = transactions;
     this.version = version;
+    this.date = date;
   }
 
   public String getId() {
@@ -57,14 +63,26 @@ public class AccountInfo {
   }
 
   public List<AccountChangeInfo> getChanges() {
-    return changes;
+    return changes == null ? Collections.EMPTY_LIST : changes;
   }
 
   public List<AccountTransactionInfo> getTransactions() {
-    return transactions;
+    return transactions == null ? Collections.EMPTY_LIST : new ArrayList<>(transactions.values());
   }
 
   public String getVersion() {
     return version;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public Map<String, TransferState> getTransferStates() {
+    return transferStates;
+  }
+
+  public void setTransferStates(Map<String, TransferState> transferStates) {
+    this.transferStates = transferStates;
   }
 }

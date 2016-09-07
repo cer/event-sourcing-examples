@@ -35,7 +35,7 @@ public class AccountControllerIntegrationTest {
 
   @Test
   public void shouldCreateAccount() throws Exception {
-    mockMvc.perform(post("/accounts")
+    mockMvc.perform(post("/api/accounts")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"customerId\" : \"00000000-00000000\", \"initialBalance\" : 500}")
             .accept(MediaType.APPLICATION_JSON))
@@ -44,7 +44,7 @@ public class AccountControllerIntegrationTest {
 
   @Test
   public void shouldRejectBadRequest() throws Exception {
-    mockMvc.perform(post("/accounts")
+    mockMvc.perform(post("/api/accounts")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"initialBalanceXXX\" : 500}")
             .accept(MediaType.APPLICATION_JSON))

@@ -5,6 +5,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Quer
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.Collections;
 
@@ -13,36 +14,38 @@ import java.util.Collections;
  */
 public class CustomerInfoUpdateService {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-  private QuerySideCustomerRepository accountInfoRepository;
+    private QuerySideCustomerRepository querySideCustomerRepository;
 
-  public CustomerInfoUpdateService(QuerySideCustomerRepository accountInfoRepository) {
-    this.accountInfoRepository = accountInfoRepository;
-  }
-
-  public void create(String id, CustomerInfo customerInfo) {
-    try {
-      accountInfoRepository.save(new QuerySideCustomer(id,
-                      customerInfo.getName(),
-                      customerInfo.getEmail(),
-                      customerInfo.getSsn(),
-                      customerInfo.getPhoneNumber(),
-                      customerInfo.getAddress(),
-                      Collections.<String, ToAccountInfo>emptyMap()
-              )
-      );
-      logger.info("Saved in mongo");
-    } catch (Throwable t) {
-      logger.error("Error during saving: ", t);
-      throw new RuntimeException(t);
+    public CustomerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository) {
+        this.querySideCustomerRepository = querySideCustomerRepository;
     }
-  }
 
-  public void addToAccount(String id, ToAccountInfo accountInfo) {
-    QuerySideCustomer customer = accountInfoRepository.findOne(id);
-    customer.getToAccounts().put(accountInfo.getId(), accountInfo);
-    accountInfoRepository.save(customer);
-  }
+    public void create(String id, CustomerInfo customerInfo) {
+        try {
+            querySideCustomerRepository.save(new QuerySideCustomer(id,
+                            customerInfo.getName(),
+                            customerInfo.getEmail(),
+                            customerInfo.getSsn(),
+                            customerInfo.getPhoneNumber(),
+                            customerInfo.getAddress(),
+                            Collections.<String, ToAccountInfo>emptyMap()
+                    )
+            );
+            logger.info("Saved in mongo");
+        } catch (DuplicateKeyException t) {
+            logger.warn("When saving ", t);
+        } catch (Throwable t) {
+            logger.error("Error during saving: ", t);
+            throw new RuntimeException(t);
+        }
+    }
+
+    public void addToAccount(String id, ToAccountInfo accountInfo) {
+        QuerySideCustomer customer = querySideCustomerRepository.findOne(id);
+        customer.getToAccounts().put(accountInfo.getId(), accountInfo);
+        querySideCustomerRepository.save(customer);
+    }
 
 }

@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
  * Created by popikyardo on 03.02.16.
  */
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 public class CustomerController {
 
   private CustomerService customerService;
