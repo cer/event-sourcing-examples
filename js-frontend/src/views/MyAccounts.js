@@ -55,7 +55,7 @@ class MyAccounts extends React.Component {
         // return new Promise((rs, rj) => {
           setTimeout(() => {
             this.props.dispatch(A.fetchOwnAccounts(customerId)); //.then(rs, rj);
-          }, 1000);
+          }, 1500);
         // });
       })
       .catch(err => {
@@ -81,7 +81,7 @@ class MyAccounts extends React.Component {
         return new Promise((rs, rj) => {
           setTimeout(() => {
             this.props.dispatch(A.fetchOwnAccounts(customerId)).then(rs, rj);
-          }, 1000);
+          }, 1500);
         })
       })
       .catch(err => {

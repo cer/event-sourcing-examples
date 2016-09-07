@@ -2928,10 +2928,12 @@ webpackJsonp([0,3],{
 	var createRefAccountLookup = exports.createRefAccountLookup = function createRefAccountLookup(customerId) {
 	  return function (dispatch) {
 	    dispatch(createRefAccountLookupStart());
-	    return api.apiRetrieveAccounts(customerId).then(function (data) {
-	      var arr = data.map(function (_ref3) {
-	        var accountId = _ref3.accountId;
-	        var title = _ref3.title;
+	    return api.apiRetrieveAccounts(customerId).then(function (_ref3) {
+	      var accounts = _ref3.accounts;
+	
+	      var arr = accounts.map(function (_ref4) {
+	        var accountId = _ref4.accountId;
+	        var title = _ref4.title;
 	        return {
 	          value: accountId,
 	          label: title
@@ -2946,7 +2948,7 @@ webpackJsonp([0,3],{
 	  };
 	};
 	
-	var makeTransferRequested = exports.makeTransferRequested = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.TRANSFERS.MAKE_START, 'payload');
+	var makeTransferRequested = exports.makeTransferRequested = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.TRANSFERS.MAKE_START);
 	var makeTransferComplete = exports.makeTransferComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.TRANSFERS.MAKE_COMPLETE, 'payload');
 	var makeTransferError = exports.makeTransferError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.TRANSFERS.MAKE_ERROR, 'error');
 	var makeTransferFormUpdate = exports.makeTransferFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.TRANSFERS.MAKE_FORM_UPDATE, 'key', 'value');
@@ -4004,7 +4006,7 @@ webpackJsonp([0,3],{
 	        // return new Promise((rs, rj) => {
 	        setTimeout(function () {
 	          _this2.props.dispatch(A.fetchOwnAccounts(customerId)); //.then(rs, rj);
-	        }, 1000);
+	        }, 1500);
 	        // });
 	      }).catch(function (err) {
 	        // debugger;
@@ -4031,7 +4033,7 @@ webpackJsonp([0,3],{
 	        return new Promise(function (rs, rj) {
 	          setTimeout(function () {
 	            _this3.props.dispatch(A.fetchOwnAccounts(customerId)).then(rs, rj);
-	          }, 1000);
+	          }, 1500);
 	        });
 	      }).catch(function (err) {
 	        // debugger;
@@ -6132,17 +6134,47 @@ webpackJsonp([0,3],{
 	  }
 	
 	  _createClass(TransfersTable, [{
+	    key: "preprocessItems",
+	    value: function preprocessItems(input, currentAccountId) {
+	      return input.sort(function (a, b) {
+	        return a.date - b.date;
+	      }).filter(function (_ref) {
+	        var entryType = _ref.entryType;
+	        var toAccountId = _ref.toAccountId;
+	        var fromAccountId = _ref.fromAccountId;
+	        return entryType !== 'transaction' || fromAccountId === currentAccountId || toAccountId === currentAccountId;
+	      }).reduce(function (_ref2, v) {
+	        var items = _ref2.items;
+	        var balance = _ref2.balance;
+	
+	        if (v.entryType == 'account') {
+	          balance = v.initialBalance;
+	        } else if (v.entryType == 'transaction') {
+	          var isOriginating = v.fromAccountId == currentAccountId;
+	          balance += (isOriginating ? -1 : 1) * v.amount;
+	        }
+	        v.balance = balance;
+	        items.push(v);
+	        return { items: items, balance: balance };
+	      }, {
+	        items: [],
+	        balance: 0
+	      }).items.sort(function (a, b) {
+	        return -(a.date - b.date);
+	      });
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      var _props = this.props;
 	      var transfers = _props.transfers;
 	      var forAccount = _props.forAccount;
 	
-	      var _ref = transfers || {};
+	      var _ref3 = transfers || {};
 	
-	      var loading = _ref.loading;
-	      var data = _ref.data;
-	      var errors = _ref.errors;
+	      var loading = _ref3.loading;
+	      var data = _ref3.data;
+	      var errors = _ref3.errors;
 	
 	
 	      if (!transfers || loading) {
@@ -6163,32 +6195,8 @@ webpackJsonp([0,3],{
 	      }
 	
 	      var currentAccountId = forAccount;
-	      var transfersMarkup = data.length ? data.sort(function (a, b) {
-	        return a.date - b.date;
-	      }).filter(function (_ref2) {
-	        var entryType = _ref2.entryType;
-	        var toAccountId = _ref2.toAccountId;
-	        var fromAccountId = _ref2.fromAccountId;
-	        return entryType !== 'transaction' || fromAccountId === currentAccountId || toAccountId === currentAccountId;
-	      }).reduce(function (_ref3, v) {
-	        var items = _ref3.items;
-	        var balance = _ref3.balance;
 	
-	        if (v.entryType == 'account') {
-	          balance = v.initialBalance;
-	        } else if (v.entryType == 'transaction') {
-	          var isOriginating = v.fromAccountId == currentAccountId;
-	          balance += (isOriginating ? -1 : 1) * v.amount;
-	        }
-	        v.balance = balance;
-	        items.push(v);
-	        return { items: items, balance: balance };
-	      }, {
-	        items: [],
-	        balance: 0
-	      }).items.sort(function (a, b) {
-	        return -(a.date - b.date);
-	      }).map(function (_ref4) {
+	      var transfersMarkup = data.length ? this.preprocessItems(data, currentAccountId).map(function (_ref4) {
 	        var entryType = _ref4.entryType;
 	        var amount = _ref4.amount;
 	        var fromAccountId = _ref4.fromAccountId;
@@ -6227,7 +6235,11 @@ webpackJsonp([0,3],{
 	              null,
 	              _react2.default.createElement(_Money.Money, { amount: initialBalance })
 	            ),
-	            _react2.default.createElement("td", null),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              description
+	            ),
 	            _react2.default.createElement(
 	              "td",
 	              null,
@@ -6242,7 +6254,7 @@ webpackJsonp([0,3],{
 	
 	        return _react2.default.createElement(
 	          "tr",
-	          null,
+	          { key: transactionId },
 	          _react2.default.createElement(
 	            "td",
 	            null,
@@ -7353,4 +7365,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.d4bdff82ac1db214898b.js.map
+//# sourceMappingURL=app.d91662ee734b40065ff3.js.map

@@ -10,6 +10,30 @@ import { Money } from './Money';
 import AccountInfo from './AccountInfo';
 
 export class TransfersTable extends React.Component {
+
+  preprocessItems(input, currentAccountId) {
+    return input
+      .sort((a, b) => ((a.date - b.date)))
+      .filter(({ entryType, toAccountId, fromAccountId}) => ((entryType !=='transaction') || (fromAccountId === currentAccountId) || (toAccountId === currentAccountId)))
+      .reduce(({
+        items, balance
+      }, v) => {
+        if (v.entryType == 'account') {
+          balance = v.initialBalance;
+        } else if (v.entryType == 'transaction') {
+          const isOriginating = v.fromAccountId == currentAccountId;
+          balance += (isOriginating ? -1 : 1) * v.amount;
+        }
+        v.balance = balance;
+        items.push(v);
+        return { items, balance };
+      }, {
+        items: [],
+        balance: 0
+      }).items
+      .sort((a, b) => (-(a.date - b.date)))
+  }
+
   render() {
     const { transfers, forAccount } = this.props;
     const { loading, data, errors } = transfers || {};
@@ -23,27 +47,9 @@ export class TransfersTable extends React.Component {
     }
 
     const currentAccountId = forAccount;
+
     const transfersMarkup = data.length ?
-      data
-        .sort((a, b) => ((a.date - b.date)))
-        .filter(({ entryType, toAccountId, fromAccountId}) => ((entryType !=='transaction') || (fromAccountId === currentAccountId) || (toAccountId === currentAccountId)))
-        .reduce(({
-          items, balance
-        }, v) => {
-          if (v.entryType == 'account') {
-            balance = v.initialBalance;
-          } else if (v.entryType == 'transaction') {
-            const isOriginating = v.fromAccountId == currentAccountId;
-            balance += (isOriginating ? -1 : 1) * v.amount;
-          }
-          v.balance = balance;
-          items.push(v);
-          return { items, balance };
-        }, {
-          items: [],
-          balance: 0
-        }).items
-        .sort((a, b) => (-(a.date - b.date)))
+      this.preprocessItems(data, currentAccountId)
         .map(({
           entryType,
           amount,
@@ -65,7 +71,7 @@ export class TransfersTable extends React.Component {
               <td><TimeAgo date={date} title={ timeAgoTitle } /></td>
               <td colSpan="3">Account created</td>
               <td><Money amount={ initialBalance } /></td>
-              <td></td>
+              <td>{ description }</td>
               <td>{ status || '—' }</td>
             </tr>);
           }
@@ -76,7 +82,7 @@ export class TransfersTable extends React.Component {
             <AccountInfo accountId={ toAccountId } /> :
             <AccountInfo accountId={ fromAccountId } />;
 
-          return (<tr>
+          return (<tr key={ transactionId }>
             <td><TimeAgo date={date} title={ timeAgoTitle } /></td>
             <td>{ directionMarkup }</td>
             <td>{ counterAccountMarkup }</td>
