@@ -1,14 +1,19 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+
 import java.util.Map;
 
 /**
  * Created by Main on 05.02.2016.
  */
 public class QuerySideCustomer {
+
   private String id;
   private Name name;
+  @Indexed(unique=true)
   private String email;
+  private String password;
   private String ssn;
   private String phoneNumber;
   private Address address;
@@ -17,10 +22,11 @@ public class QuerySideCustomer {
   public QuerySideCustomer() {
   }
 
-  public QuerySideCustomer(String id, Name name, String email, String ssn, String phoneNumber, Address address, Map<String, ToAccountInfo> toAccounts) {
+  public QuerySideCustomer(String id, Name name, String email, String password, String ssn, String phoneNumber, Address address, Map<String, ToAccountInfo> toAccounts) {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.password = password;
     this.ssn = ssn;
     this.phoneNumber = phoneNumber;
     this.address = address;
@@ -49,6 +55,14 @@ public class QuerySideCustomer {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public String getSsn() {

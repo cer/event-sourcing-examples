@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.filter.StatelessAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,6 +19,7 @@ import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.security.SecureRandom;
@@ -50,15 +52,13 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   public UserDetailsService userDetailsServiceBean() {
     return email -> {
-/*            QuerySideCustomer customer = customerAuthService.findByEmail(email);
-            if (customer != null) {
-                return new User(email);
-            } else {
-                throw new UsernameNotFoundException(String.format("could not find the customer '%s'", email));
-            }*/
-      //authorize everyone with basic authentication
-      return new User(email, "", true, true, true, true,
-              AuthorityUtils.createAuthorityList("USER"));
+      QuerySideCustomer customer = customerAuthService.findByEmail(email);
+      if (customer != null) {
+        return new User(email, customer.getPassword(), true, true, true, true,
+                AuthorityUtils.createAuthorityList("USER"));
+      } else {
+        throw new UsernameNotFoundException(String.format("could not find the customer '%s'", email));
+      }
     };
   }
 

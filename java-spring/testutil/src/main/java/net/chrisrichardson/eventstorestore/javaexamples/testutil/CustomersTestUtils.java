@@ -55,6 +55,7 @@ public class CustomersTestUtils {
     return new CustomerInfo(
             new Name("John", "Doe"),
             email,
+            "simple_password",
             "000-00-0000",
             "1-111-111-1111",
             new Address("street 1",
