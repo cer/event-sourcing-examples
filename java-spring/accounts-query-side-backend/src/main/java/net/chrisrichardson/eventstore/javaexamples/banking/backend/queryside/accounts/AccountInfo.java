@@ -18,7 +18,6 @@ public class AccountInfo {
   private long balance;
   private List<AccountChangeInfo> changes;
   private Map<String, AccountTransactionInfo> transactions;
-  private Map<String, TransferState> transferStates;
   private String version;
   private Date date;
 
@@ -76,13 +75,5 @@ public class AccountInfo {
 
   public Date getDate() {
     return date;
-  }
-
-  public Map<String, TransferState> getTransferStates() {
-    return transferStates;
-  }
-
-  public void setTransferStates(Map<String, TransferState> transferStates) {
-    this.transferStates = transferStates;
   }
 }

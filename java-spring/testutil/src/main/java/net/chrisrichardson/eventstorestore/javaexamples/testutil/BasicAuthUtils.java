@@ -12,10 +12,10 @@ import java.nio.charset.Charset;
  */
 public class BasicAuthUtils {
 
-  public static HttpHeaders basicAuthHeaders(String username) {
+  public static HttpHeaders basicAuthHeaders(String username, String password) {
     return new HttpHeaders() {
       {
-        String auth = username + ":";
+        String auth = username + ":" + password;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(Charset.forName("US-ASCII")));
         String authHeader = "Basic " + new String(encodedAuth);
@@ -24,16 +24,16 @@ public class BasicAuthUtils {
     };
   }
 
-  public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType) {
-    return doBasicAuthenticatedRequest(restTemplate, url, httpMethod, responseType, null);
+  public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, String email, String password) {
+    return doBasicAuthenticatedRequest(restTemplate, url, httpMethod, responseType, null, email, password);
   }
 
-  public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject) {
+  public static <T> T doBasicAuthenticatedRequest(RestTemplate restTemplate, String url, HttpMethod httpMethod, Class<T> responseType, Object requestObject, String email, String password) {
     HttpEntity httpEntity;
     if (requestObject != null) {
-      httpEntity = new HttpEntity<>(requestObject, BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
+      httpEntity = new HttpEntity<>(requestObject, BasicAuthUtils.basicAuthHeaders(email, password));
     } else {
-      httpEntity = new HttpEntity(BasicAuthUtils.basicAuthHeaders("test_user@mail.com"));
+      httpEntity = new HttpEntity(BasicAuthUtils.basicAuthHeaders(email, password));
     }
 
     ResponseEntity<T> responseEntity = restTemplate.exchange(url,

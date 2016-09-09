@@ -8,4 +8,6 @@ import java.util.List;
 interface CustomerAuthRepository extends MongoRepository<QuerySideCustomer, String> {
 
   List<QuerySideCustomer> findByEmail(String email);
+
+  List<QuerySideCustomer> findByEmailAndPassword(String email, String password);
 }
