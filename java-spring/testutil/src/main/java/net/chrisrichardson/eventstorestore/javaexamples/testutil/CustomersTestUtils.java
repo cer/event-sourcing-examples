@@ -21,13 +21,13 @@ public class CustomersTestUtils {
     this.customersBaseUrl = customersBaseUrl;
   }
 
-  public void assertCustomerResponse(final String customerId, final CustomerInfo customerInfo) {
+  public void assertCustomerResponse(final String customerId, final String email, final String password, final CustomerInfo customerInfo) {
     AuthenticatedRestTemplate art = new AuthenticatedRestTemplate(restTemplate);
     eventually(
             new Producer<QuerySideCustomer>() {
               @Override
               public CompletableFuture<QuerySideCustomer> produce() {
-                return CompletableFuture.completedFuture(art.getForEntity(customersBaseUrl + customerId, QuerySideCustomer.class));
+                return CompletableFuture.completedFuture(art.getForEntity(customersBaseUrl + customerId, QuerySideCustomer.class, email, password));
               }
             },
             new Verifier<QuerySideCustomer>() {
