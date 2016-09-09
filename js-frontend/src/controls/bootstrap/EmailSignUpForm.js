@@ -81,6 +81,28 @@ class EmailSignUpForm extends React.Component {
                  onChange={this.handleInput.bind(this, "email")}
           />
 
+          <Input type="password"
+                 className="password-sign-in-email"
+                 label="Password"
+                 placeholder="Password"
+                 name="password"
+                 disabled={disabled}
+                 value={read(this.props.auth, 'signUp.form.password', '')}
+                 errors={read(this.props.auth, 'signUp.errors.password', [])}
+                 onChange={this.handleInput.bind(this, "password")}
+                 />
+
+          <Input type="password"
+                 className="password-sign-in-email"
+                 label="Confirm password"
+                 placeholder="Confirm password"
+                 name="password-confirm"
+                 disabled={disabled}
+                 value={read(this.props.auth, 'signUp.form.passwordConfirm', '')}
+                 errors={read(this.props.auth, 'signUp.errors.passwordConfirm', [])}
+                 onChange={this.handleInput.bind(this, "passwordConfirm")}
+                 />
+
 
         </IndexPanel>
 

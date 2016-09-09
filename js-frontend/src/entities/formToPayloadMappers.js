@@ -3,6 +3,7 @@
  */
 export const customerInfoMap = ({
   ssn,
+  password,
   address1,
   address2,
   city, //: "Moscow"
@@ -17,6 +18,7 @@ export const customerInfoMap = ({
     "firstName": fname,
     "lastName": lname
   },
+  password,
   email,
   ssn,
   "phoneNumber": phoneNumber,

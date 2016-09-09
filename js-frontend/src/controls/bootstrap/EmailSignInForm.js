@@ -90,6 +90,17 @@ class EmailSignInForm extends React.Component {
                onChange={this.handleInput.bind(this, "email")}
           {...this.props.inputProps.email} />
 
+        <Input type="password"
+               className="password-sign-in-email"
+               label="Password"
+               placeholder="Password"
+               name="password"
+               disabled={disabled}
+               value={read(this.props.auth, 'signIn.form.password', '')}
+               errors={read(this.props.auth, 'signIn.errors.password', [])}
+               onChange={this.handleInput.bind(this, "password")}
+          {...this.props.inputProps.password} />
+
         <ButtonLoader loading={read(this.props.auth, 'signIn.loading', false)}
                       type="submit"
                       icon={<BS.Glyphicon glyph="log-in" />}

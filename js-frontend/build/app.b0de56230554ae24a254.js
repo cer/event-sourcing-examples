@@ -6794,6 +6794,16 @@ webpackJsonp([0,3],{
 	            errors: (0, _readProp2.default)(this.props.auth, 'signIn.errors.email', []),
 	            onChange: this.handleInput.bind(this, "email")
 	          }, this.props.inputProps.email)),
+	          _react2.default.createElement(_Input2.default, _extends({ type: "password",
+	            className: "password-sign-in-email",
+	            label: "Password",
+	            placeholder: "Password",
+	            name: "password",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signIn.form.password', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signIn.errors.password', []),
+	            onChange: this.handleInput.bind(this, "password")
+	          }, this.props.inputProps.password)),
 	          _react2.default.createElement(
 	            _ButtonLoader2.default,
 	            _extends({ loading: (0, _readProp2.default)(this.props.auth, 'signIn.loading', false),
@@ -7036,7 +7046,7 @@ webpackJsonp([0,3],{
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	       value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -7087,168 +7097,188 @@ webpackJsonp([0,3],{
 	
 	
 	var EmailSignUpForm = function (_React$Component) {
-	  _inherits(EmailSignUpForm, _React$Component);
+	       _inherits(EmailSignUpForm, _React$Component);
 	
-	  function EmailSignUpForm() {
-	    _classCallCheck(this, EmailSignUpForm);
+	       function EmailSignUpForm() {
+	              _classCallCheck(this, EmailSignUpForm);
 	
-	    return _possibleConstructorReturn(this, (EmailSignUpForm.__proto__ || Object.getPrototypeOf(EmailSignUpForm)).apply(this, arguments));
-	  }
+	              return _possibleConstructorReturn(this, (EmailSignUpForm.__proto__ || Object.getPrototypeOf(EmailSignUpForm)).apply(this, arguments));
+	       }
 	
-	  _createClass(EmailSignUpForm, [{
-	    key: "getEndpoint",
-	    value: function getEndpoint() {
-	      return this.props.endpoint || this.props.auth.getIn(["configure", "currentEndpointKey"]) || this.props.auth.getIn(["configure", "defaultEndpointKey"]);
-	    }
-	  }, {
-	    key: "handleInput",
-	    value: function handleInput(key, val) {
-	      this.props.dispatch((0, _signUp.emailSignUpFormUpdate)(key, val));
-	    }
-	  }, {
-	    key: "handleSubmit",
-	    value: function handleSubmit(event) {
-	      event.preventDefault();
+	       _createClass(EmailSignUpForm, [{
+	              key: "getEndpoint",
+	              value: function getEndpoint() {
+	                     return this.props.endpoint || this.props.auth.getIn(["configure", "currentEndpointKey"]) || this.props.auth.getIn(["configure", "defaultEndpointKey"]);
+	              }
+	       }, {
+	              key: "handleInput",
+	              value: function handleInput(key, val) {
+	                     this.props.dispatch((0, _signUp.emailSignUpFormUpdate)(key, val));
+	              }
+	       }, {
+	              key: "handleSubmit",
+	              value: function handleSubmit(event) {
+	                     event.preventDefault();
 	
-	      var formData = _extends({}, this.props.auth.signUp.form);
-	      this.props.dispatch((0, _signUp.emailSignUp)((0, _formToPayloadMappers.customerInfoMap)(formData)));
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
+	                     var formData = _extends({}, this.props.auth.signUp.form);
+	                     this.props.dispatch((0, _signUp.emailSignUp)((0, _formToPayloadMappers.customerInfoMap)(formData)));
+	              }
+	       }, {
+	              key: "render",
+	              value: function render() {
 	
-	      var disabled = this.props.auth.user.isSignedIn || this.props.auth.signUp.loading;
+	                     var disabled = this.props.auth.user.isSignedIn || this.props.auth.signUp.loading;
 	
-	      return _react2.default.createElement(
-	        "form",
-	        { className: "redux-auth email-sign-up-form clearfix",
-	          onSubmit: this.handleSubmit.bind(this) },
-	        _react2.default.createElement(
-	          _IndexPanel2.default,
-	          { header: "basic" },
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "First name",
-	            placeholder: "First name",
-	            className: "email-sign-up-email",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.fname', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.fname', []),
-	            onChange: this.handleInput.bind(this, "fname")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "Last name",
-	            placeholder: "Last name",
-	            className: "email-sign-up-email",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.lname', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.lname', []),
-	            onChange: this.handleInput.bind(this, "lname")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "Email",
-	            placeholder: "Email",
-	            className: "email-sign-up-email",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.email', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.email', []),
-	            onChange: this.handleInput.bind(this, "email")
-	          })
-	        ),
-	        _react2.default.createElement(
-	          _IndexPanel2.default,
-	          { header: "advanced" },
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "SSN",
-	            placeholder: "SSN",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.ssn', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.ssn', []),
-	            onChange: this.handleInput.bind(this, "ssn")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "Phone",
-	            placeholder: "Phone",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.phoneNumber', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.phoneNumber', []),
-	            onChange: this.handleInput.bind(this, "phoneNumber")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "Address 1",
-	            placeholder: "Address 1",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address1', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address1', []),
-	            onChange: this.handleInput.bind(this, "address1")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "Address 2",
-	            placeholder: "Address 2",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address2', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address2', []),
-	            onChange: this.handleInput.bind(this, "address2")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "City",
-	            placeholder: "City",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.city', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.city', {}),
-	            onChange: this.handleInput.bind(this, "city")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "State",
-	            placeholder: "State",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.state', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.state', []),
-	            onChange: this.handleInput.bind(this, "state")
-	          }),
-	          _react2.default.createElement(_Input2.default, { type: "text",
-	            label: "ZIP",
-	            placeholder: "ZIP",
-	            className: "email-sign-up-email",
-	            bsSize: "small",
-	            disabled: disabled,
-	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.zip', ''),
-	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.zip', []),
-	            onChange: this.handleInput.bind(this, "zip")
-	          })
-	        ),
-	        _react2.default.createElement(
-	          _ButtonLoader2.default,
-	          { loading: (0, _readProp2.default)(this.props.auth, 'signUp.loading', false),
-	            type: "submit",
-	            className: "email-sign-up-submit pull-right",
-	            icon: _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: "send" }),
-	            disabled: disabled,
-	            onClick: this.handleSubmit.bind(this)
-	          },
-	          "Sign Up"
-	        )
-	      );
-	    }
-	  }]);
+	                     return _react2.default.createElement(
+	                            "form",
+	                            { className: "redux-auth email-sign-up-form clearfix",
+	                                   onSubmit: this.handleSubmit.bind(this) },
+	                            _react2.default.createElement(
+	                                   _IndexPanel2.default,
+	                                   { header: "basic" },
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "First name",
+	                                          placeholder: "First name",
+	                                          className: "email-sign-up-email",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.fname', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.fname', []),
+	                                          onChange: this.handleInput.bind(this, "fname")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "Last name",
+	                                          placeholder: "Last name",
+	                                          className: "email-sign-up-email",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.lname', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.lname', []),
+	                                          onChange: this.handleInput.bind(this, "lname")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "Email",
+	                                          placeholder: "Email",
+	                                          className: "email-sign-up-email",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.email', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.email', []),
+	                                          onChange: this.handleInput.bind(this, "email")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "password",
+	                                          className: "password-sign-in-email",
+	                                          label: "Password",
+	                                          placeholder: "Password",
+	                                          name: "password",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.password', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.password', []),
+	                                          onChange: this.handleInput.bind(this, "password")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "password",
+	                                          className: "password-sign-in-email",
+	                                          label: "Confirm password",
+	                                          placeholder: "Confirm password",
+	                                          name: "password-confirm",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.passwordConfirm', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.passwordConfirm', []),
+	                                          onChange: this.handleInput.bind(this, "passwordConfirm")
+	                                   })
+	                            ),
+	                            _react2.default.createElement(
+	                                   _IndexPanel2.default,
+	                                   { header: "advanced" },
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "SSN",
+	                                          placeholder: "SSN",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.ssn', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.ssn', []),
+	                                          onChange: this.handleInput.bind(this, "ssn")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "Phone",
+	                                          placeholder: "Phone",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.phoneNumber', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.phoneNumber', []),
+	                                          onChange: this.handleInput.bind(this, "phoneNumber")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "Address 1",
+	                                          placeholder: "Address 1",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address1', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address1', []),
+	                                          onChange: this.handleInput.bind(this, "address1")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "Address 2",
+	                                          placeholder: "Address 2",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address2', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address2', []),
+	                                          onChange: this.handleInput.bind(this, "address2")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "City",
+	                                          placeholder: "City",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.city', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.city', {}),
+	                                          onChange: this.handleInput.bind(this, "city")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "State",
+	                                          placeholder: "State",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.state', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.state', []),
+	                                          onChange: this.handleInput.bind(this, "state")
+	                                   }),
+	                                   _react2.default.createElement(_Input2.default, { type: "text",
+	                                          label: "ZIP",
+	                                          placeholder: "ZIP",
+	                                          className: "email-sign-up-email",
+	                                          bsSize: "small",
+	                                          disabled: disabled,
+	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.zip', ''),
+	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.zip', []),
+	                                          onChange: this.handleInput.bind(this, "zip")
+	                                   })
+	                            ),
+	                            _react2.default.createElement(
+	                                   _ButtonLoader2.default,
+	                                   { loading: (0, _readProp2.default)(this.props.auth, 'signUp.loading', false),
+	                                          type: "submit",
+	                                          className: "email-sign-up-submit pull-right",
+	                                          icon: _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: "send" }),
+	                                          disabled: disabled,
+	                                          onClick: this.handleSubmit.bind(this)
+	                                   },
+	                                   "Sign Up"
+	                            )
+	                     );
+	              }
+	       }]);
 	
-	  return EmailSignUpForm;
+	       return EmailSignUpForm;
 	}(_react2.default.Component);
 	
 	exports.default = (0, _reactRedux.connect)(function (_ref) {
-	  var app = _ref.app;
-	  return { auth: app.auth };
+	       var app = _ref.app;
+	       return { auth: app.auth };
 	})(EmailSignUpForm);
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "EmailSignUpForm.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
@@ -7270,6 +7300,7 @@ webpackJsonp([0,3],{
 	 */
 	var customerInfoMap = exports.customerInfoMap = function customerInfoMap(_ref) {
 	  var ssn = _ref.ssn;
+	  var password = _ref.password;
 	  var address1 = _ref.address1;
 	  var address2 = _ref.address2;
 	  var city = _ref.city;
@@ -7284,6 +7315,7 @@ webpackJsonp([0,3],{
 	      "firstName": fname,
 	      "lastName": lname
 	    },
+	    password: password,
 	    email: email,
 	    ssn: ssn,
 	    "phoneNumber": phoneNumber,
@@ -7377,4 +7409,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.fcbedf54f0345474ccc1.js.map
+//# sourceMappingURL=app.b0de56230554ae24a254.js.map
