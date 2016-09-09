@@ -47,7 +47,7 @@ public abstract class AbstractRestAPITest {
     final String fromAccountId = fromAccount.getAccountId();
 
     CreateAccountResponse toAccount = getAuthenticatedRestTemplate().postForEntity(baseUrl("/accounts"),
-            new CreateAccountRequest("00000000-00000000", "My 2 Account", "", initialToAccountBalance),
+            new CreateAccountRequest(customerId, "My 2 Account", "", initialToAccountBalance),
             CreateAccountResponse.class, email, password);
 
     String toAccountId = toAccount.getAccountId();
