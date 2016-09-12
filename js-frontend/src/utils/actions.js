@@ -3,10 +3,9 @@
  */
 export function makeActionCreator(type, ...argNames) {
   return function(...args) {
-    const action = { type };
-    argNames.forEach((arg, index) => {
-      action[argNames[index]] = args[index]
-    });
-    return action;
+    return argNames.reduce((action, arg, index) => {
+      action[arg] = args[index];
+      return action;
+    }, { type });
   };
 }

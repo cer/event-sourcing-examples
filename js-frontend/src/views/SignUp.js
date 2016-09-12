@@ -34,14 +34,10 @@ export class SignUp extends React.Component {
 
   render () {
     return (
-      <div>
-        <PageHeader>
-          Register
-        </PageHeader>
-        <BS.Well>
-          <EmailSignUpForm />
-        </BS.Well>
-      </div>
+      <BS.Well>
+        <BS.PageHeader>Register</BS.PageHeader>
+        <EmailSignUpForm />
+      </BS.Well>
     );
 
   }

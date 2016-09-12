@@ -2,30 +2,18 @@
  * Created by andrew on 15/02/16.
  */
 import React, {PropTypes} from "react";
-//import auth from "redux-auth";
+import { connect } from "react-redux";
+import { Glyphicon } from "react-bootstrap";
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
-//import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
 import IndexPanel from "./../../components/partials/IndexPanel";
+import AuxErrorLabel from './AuxErrorLabel';
 import { customerInfoMap } from '../../entities/formToPayloadMappers';
-
 import read from '../../utils/readProp';
-
-import { Glyphicon } from "react-bootstrap";
-import { connect } from "react-redux";
-
-import {emailSignUpFormUpdate, emailSignUp} from '../../actions/signUp';
+import { emailSignUpFormUpdate, emailSignUp } from '../../actions/signUp';
 
 
 class EmailSignUpForm extends React.Component {
-
-  getEndpoint () {
-    return (
-      this.props.endpoint ||
-      this.props.auth.getIn(["configure", "currentEndpointKey"]) ||
-      this.props.auth.getIn(["configure", "defaultEndpointKey"])
-    );
-  }
 
   handleInput (key, val) {
     this.props.dispatch(emailSignUpFormUpdate(key, val));
@@ -34,7 +22,7 @@ class EmailSignUpForm extends React.Component {
   handleSubmit (event) {
     event.preventDefault();
 
-    let formData = { ...this.props.auth.signUp.form };
+    const formData = read(this.props.auth, 'signUp.form');
     this.props.dispatch(emailSignUp(customerInfoMap(formData)));
   }
 
@@ -45,9 +33,20 @@ class EmailSignUpForm extends React.Component {
       this.props.auth.signUp.loading
     );
 
+    const formErrors = read(this.props.auth, 'signUp.errors.errors', '');
+
     return (
       <form className='redux-auth email-sign-up-form clearfix'
             onSubmit={this.handleSubmit.bind(this)}>
+
+        <div className="form-group" style={{
+          display: formErrors ? 'block' : 'none'
+        }}>
+          <AuxErrorLabel
+            label="Form:"
+            errors={ formErrors.length ? [ formErrors ] : [] }
+          />
+        </div>
 
         <IndexPanel header="basic">
 

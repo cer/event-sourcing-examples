@@ -2,27 +2,23 @@
  * Created by andrew on 12/02/16.
  */
 import React from "react";
-//import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
 
 import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 import * as BS  from "react-bootstrap";
-import Spinner from "react-loader";
+// import Spinner from "react-loader";
 import Select from "react-select";
 import Input from "../controls/bootstrap/Input";
 import { Money, moneyText } from '../components/Money';
 import { TransfersTable } from '../components/TransfersTable';
 
-import { Link, IndexLink} from "react-router";
-
+import { Link, IndexLink } from "react-router";
 
 import IndexPanel from "./../components/partials/IndexPanel";
 import * as Modals from './modals';
 import * as A from '../actions/entities';
 import read from '../utils/readProp';
-
 import { blocked } from '../utils/blockedExecution';
-
 
 const resetModals = {
   showAccountModal: false,
@@ -162,7 +158,10 @@ export class Account extends React.Component {
 
     if (!account) {
       if (errors.length) {
-        return (<h2>Error loading specified account</h2>);
+        return (<div>
+          <h2>Error loading specified account</h2>
+          <div>Return <Link to="/">Home</Link> to pick another</div>
+        </div>);
       } else {
         return spinnerResult;
       }

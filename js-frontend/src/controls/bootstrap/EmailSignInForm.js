@@ -24,24 +24,7 @@ import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
  {...this.props.inputProps.password} />
   */
 
-class EmailSignInForm extends React.Component {
-
-  static propTypes = {
-    endpoint: PropTypes.string,
-    inputProps: PropTypes.shape({
-      email: PropTypes.object,
-      password: PropTypes.object,
-      submit: PropTypes.object
-    })
-  };
-
-  static defaultProps = {
-    inputProps: {
-      email: {},
-      password: {},
-      submit: {}
-    }
-  };
+export class EmailSignInForm extends React.Component {
 
   handleInput (key, val) {
     this.props.dispatch(emailSignInFormUpdate(key, val));
@@ -49,7 +32,8 @@ class EmailSignInForm extends React.Component {
 
   handleSubmit (event) {
     event.preventDefault();
-    let formData = { ...this.props.auth.signIn.form };
+
+    const formData = read(this.props.auth, 'signIn.form');
     this.props.dispatch(emailSignIn(formData));
   }
 
@@ -62,9 +46,7 @@ class EmailSignInForm extends React.Component {
     );
 
       //const error = read(this.props.auth, 'signIn.errors.email', null);
-      //debugger;
       const formErrors = read(this.props.auth, 'signIn.errors.errors', '');
-
 
       return (
       <form className='redux-auth email-sign-in-form clearfix'
@@ -75,7 +57,7 @@ class EmailSignInForm extends React.Component {
             }}>
           <AuxErrorLabel
             label="Form:"
-            errors={formErrors.length ? [formErrors] : [] }
+            errors={ formErrors.length ? [ formErrors ] : [] }
           />
         </div>
 
@@ -119,4 +101,21 @@ class EmailSignInForm extends React.Component {
   }
 }
 
-export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);
+EmailSignInForm.propTypes = {
+  endpoint: PropTypes.string,
+  inputProps: PropTypes.shape({
+    email: PropTypes.object,
+    password: PropTypes.object,
+    submit: PropTypes.object
+  })
+};
+
+EmailSignInForm.defaultProps = {
+  inputProps: {
+    email: {},
+    password: {},
+    submit: {}
+  }
+};
+
+// export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);

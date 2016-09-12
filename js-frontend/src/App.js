@@ -8,6 +8,7 @@ import { Provider, connect} from "react-redux";
 import thunk from "redux-thunk";
 import createLogger from 'redux-logger';
 import { Route, IndexRoute, Link, IndexLink } from "react-router";
+import { RouterContext } from 'react-router';
 import { ReduxRouter} from "redux-router";
 import { createHistory, createHashHistory, createMemoryHistory } from "history";
 import { pushState, routerStateReducer, reduxReactRouter as clientRouter} from "redux-router";
@@ -16,6 +17,7 @@ import { reduxReactRouter as serverRouter } from "redux-router/server";
 import mainReducer from './reducers';
 
 import { configure as endpointsConfig } from './actions/configure';
+import { visitLocation } from './actions/navigate';
 import { requireAuthentication } from './components/AuthComponent';
 import Container from "./components/partials/Container";
 import MyAccounts from "./views/MyAccounts";
@@ -25,7 +27,8 @@ import SignUp from "./views/SignUp";
 
 class App extends React.Component {
   render() {
-    return (<Container>
+    return (
+      <Container>
         {this.props.children}
       </Container>);
   }
@@ -38,12 +41,19 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     router: routerStateReducer
   });
 
+  let dispatch = null;
+
+  const onEnter = (nextState) => {
+    const { location } = nextState;
+    dispatch && dispatch(visitLocation(location));
+  };
+
   const routes = (
-    <Route path="/" component={App}>
-      <IndexRoute component={requireAuthentication(MyAccounts)} />
-      <Route path="signin" component={SignIn} />
-      <Route path="register" component={SignUp} />
-      <Route path="account/:accountId" component={requireAuthentication(Account)} />
+    <Route path="/" component={ App }>
+      <IndexRoute component={ requireAuthentication(MyAccounts) } />
+      <Route path="signin" component={ SignIn } onEnter={ onEnter } />
+      <Route path="register" component={ SignUp }  />
+      <Route path="account/:accountId" component={ requireAuthentication(Account) } />
     </Route>
   );
 
@@ -60,6 +70,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     })
   )(createStore)(reducer);
 
+  dispatch = store.dispatch;
 
   /**
    * The React Router 1.0 routes for both the server and the client.
@@ -85,13 +96,11 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     },
     handleLoginResponse: function(resp) {
       debugger;
-
       return resp.data;
     },
 
     handleAccountUpdateResponse: function(resp) {
       debugger;
-
       return resp.data;
     },
 

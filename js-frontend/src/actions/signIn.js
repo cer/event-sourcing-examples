@@ -1,23 +1,11 @@
 /**
  * Created by andrew on 26/02/16.
  */
-import {
-  setCurrentEndpointKey,
-  getCurrentEndpointKey,
-  persistUserData
-} from "../utils/sessionStorage";
-
-import { entityReceived } from './entities';
-import { storeCurrentEndpointKey } from "./configure";
-//import { parseResponse } from "../utils/handleFetchResponse";
-//import fetch from "../utils/fetch";
-
-import { apiSignIn } from '../utils/api';
-import { makeActionCreator } from '../utils/actions';
-
 import T from '../constants/ACTION_TYPES';
-
-//import root from '../utils/root';
+import { makeActionCreator } from '../utils/actions';
+import { persistUserData } from "../utils/sessionStorage";
+import { entityReceived } from './entities';
+import { apiSignIn } from '../utils/api';
 
 export const emailSignInFormUpdate = makeActionCreator(T.AUTH.SIGN_IN_FORM_UPDATE, 'key', 'value');
 export const emailSignInStart = makeActionCreator(T.AUTH.SIGN_IN_START);

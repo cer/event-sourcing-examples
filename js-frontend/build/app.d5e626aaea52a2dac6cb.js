@@ -91,25 +91,27 @@ webpackJsonp([0,3],{
 	
 	var _configure = __webpack_require__(314);
 	
-	var _AuthComponent = __webpack_require__(333);
+	var _navigate = __webpack_require__(329);
 	
-	var _Container = __webpack_require__(335);
+	var _AuthComponent = __webpack_require__(330);
+	
+	var _Container = __webpack_require__(332);
 	
 	var _Container2 = _interopRequireDefault(_Container);
 	
-	var _MyAccounts = __webpack_require__(584);
+	var _MyAccounts = __webpack_require__(581);
 	
 	var _MyAccounts2 = _interopRequireDefault(_MyAccounts);
 	
-	var _Account = __webpack_require__(603);
+	var _Account = __webpack_require__(600);
 	
 	var _Account2 = _interopRequireDefault(_Account);
 	
-	var _SignIn = __webpack_require__(607);
+	var _SignIn = __webpack_require__(604);
 	
 	var _SignIn2 = _interopRequireDefault(_SignIn);
 	
-	var _SignUp = __webpack_require__(610);
+	var _SignUp = __webpack_require__(607);
 	
 	var _SignUp2 = _interopRequireDefault(_SignUp);
 	
@@ -160,11 +162,19 @@ webpackJsonp([0,3],{
 	    router: _reduxRouter.routerStateReducer
 	  });
 	
+	  var dispatch = null;
+	
+	  var onEnter = function onEnter(nextState) {
+	    var location = nextState.location;
+	
+	    dispatch && dispatch((0, _navigate.visitLocation)(location));
+	  };
+	
 	  var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: "/", component: App },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: (0, _AuthComponent.requireAuthentication)(_MyAccounts2.default) }),
-	    _react2.default.createElement(_reactRouter.Route, { path: "signin", component: _SignIn2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: "signin", component: _SignIn2.default, onEnter: onEnter }),
 	    _react2.default.createElement(_reactRouter.Route, { path: "register", component: _SignUp2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: "account/:accountId", component: (0, _AuthComponent.requireAuthentication)(_Account2.default) })
 	  );
@@ -178,6 +188,8 @@ webpackJsonp([0,3],{
 	    routes: routes,
 	    createHistory: createHistoryMethod
 	  }))(_redux.createStore)(reducer);
+	
+	  dispatch = store.dispatch;
 	
 	  /**
 	   * The React Router 1.0 routes for both the server and the client.
@@ -201,13 +213,11 @@ webpackJsonp([0,3],{
 	    },
 	    handleLoginResponse: function handleLoginResponse(resp) {
 	      debugger;
-	
 	      return resp.data;
 	    },
 	
 	    handleAccountUpdateResponse: function handleAccountUpdateResponse(resp) {
 	      debugger;
-	
 	      return resp.data;
 	    },
 	
@@ -558,6 +568,10 @@ webpackJsonp([0,3],{
 	var _defineActionTypes = __webpack_require__(296);
 	
 	exports.default = (0, _defineActionTypes.defineActionType)({
+	
+	  LOCATION: {
+	    ENTER: _defineActionTypes.TODO_DEFINE
+	  },
 	  /*
 	   * View model
 	   */
@@ -963,7 +977,30 @@ webpackJsonp([0,3],{
 	/**
 	 * Created by andrew on 25/02/16.
 	 */
-	var signInReducer = exports.signInReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_IN_START, _ACTION_TYPES2.default.AUTH.SIGN_IN_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE]);
+	var internalSignInReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_IN_START, _ACTION_TYPES2.default.AUTH.SIGN_IN_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE]);
+	
+	var signInReducer = exports.signInReducer = function signInReducer(state, action) {
+	  switch (action.type) {
+	    case _ACTION_TYPES2.default.LOCATION.ENTER:
+	      {
+	        var location = action.location;
+	        var pathname = location.pathname;
+	
+	        if (pathname == '/signin') {
+	          return internalSignInReducer(state, {
+	            type: _ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR,
+	            error: null
+	          });
+	        }
+	        return state;
+	      }
+	
+	    default:
+	      {
+	        return internalSignInReducer(state, action);
+	      }
+	  }
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "signin.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -1826,42 +1863,14 @@ webpackJsonp([0,3],{
 	exports.storeCurrentEndpointKey = storeCurrentEndpointKey;
 	exports.configure = configure;
 	
-	var _constants = __webpack_require__(315);
-	
-	var C = _interopRequireWildcard(_constants);
-	
-	var _authenticate = __webpack_require__(316);
-	
-	var _sessionStorage = __webpack_require__(318);
+	var _authenticate = __webpack_require__(315);
 	
 	var _clientSettings = __webpack_require__(327);
-	
-	var _parseUrl = __webpack_require__(329);
-	
-	var _parseUrl2 = _interopRequireDefault(_parseUrl);
-	
-	var _reduxRouter = __webpack_require__(246);
-	
-	var _root = __webpack_require__(320);
-	
-	var _root2 = _interopRequireDefault(_root);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	var SET_ENDPOINT_KEYS = exports.SET_ENDPOINT_KEYS = "SET_ENDPOINT_KEYS";
-	
-	//import {
-	//  showFirstTimeLoginSuccessModal,
-	//  showFirstTimeLoginErrorModal,
-	//  showPasswordResetSuccessModal,
-	//  showPasswordResetErrorModal
-	//} from "./ui";
 	
 	/**
 	 * Created by andrew on 26/02/16.
 	 */
+	var SET_ENDPOINT_KEYS = exports.SET_ENDPOINT_KEYS = "SET_ENDPOINT_KEYS";
 	var STORE_CURRENT_ENDPOINT_KEY = exports.STORE_CURRENT_ENDPOINT_KEY = "STORE_CURRENT_ENDPOINT_KEY";
 	
 	function setEndpointKeys(endpoints, currentEndpointKey, defaultEndpointKey) {
@@ -1894,29 +1903,6 @@ webpackJsonp([0,3],{
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/**
-	 * Created by andrew on 26/02/16.
-	 */
-	var INITIAL_CONFIG_KEY = exports.INITIAL_CONFIG_KEY = "default";
-	var DEFAULT_CONFIG_KEY = exports.DEFAULT_CONFIG_KEY = "defaultConfigKey";
-	var SAVED_CONFIG_KEY = exports.SAVED_CONFIG_KEY = "currentConfigName";
-	var SAVED_CREDS_KEY = exports.SAVED_CREDS_KEY = "authHeaders";
-	var SAVED_USER_INFO = exports.SAVED_USER_INFO = "user-info";
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "constants.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-
-/***/ },
-
-/***/ 316:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -1929,9 +1915,9 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _actions = __webpack_require__(317);
+	var _actions = __webpack_require__(316);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	var U = _interopRequireWildcard(_sessionStorage);
 	
@@ -2000,7 +1986,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 317:
+/***/ 316:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2024,11 +2010,10 @@ webpackJsonp([0,3],{
 	      args[_key2] = arguments[_key2];
 	    }
 	
-	    var action = { type: type };
-	    argNames.forEach(function (arg, index) {
-	      action[argNames[index]] = args[index];
-	    });
-	    return action;
+	    return argNames.reduce(function (action, arg, index) {
+	      action[arg] = args[index];
+	      return action;
+	    }, { type: type });
 	  };
 	}
 	
@@ -2036,7 +2021,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 318:
+/***/ 317:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2073,11 +2058,11 @@ webpackJsonp([0,3],{
 	exports.persistData = persistData;
 	exports.retrieveData = retrieveData;
 	
-	var _jsCookie = __webpack_require__(319);
+	var _jsCookie = __webpack_require__(318);
 	
 	var _jsCookie2 = _interopRequireDefault(_jsCookie);
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
@@ -2294,6 +2279,29 @@ webpackJsonp([0,3],{
 
 /***/ },
 
+/***/ 319:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * Created by andrew on 26/02/16.
+	 */
+	var INITIAL_CONFIG_KEY = exports.INITIAL_CONFIG_KEY = "default";
+	var DEFAULT_CONFIG_KEY = exports.DEFAULT_CONFIG_KEY = "defaultConfigKey";
+	var SAVED_CONFIG_KEY = exports.SAVED_CONFIG_KEY = "currentConfigName";
+	var SAVED_CREDS_KEY = exports.SAVED_CREDS_KEY = "authHeaders";
+	var SAVED_USER_INFO = exports.SAVED_USER_INFO = "user-info";
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "constants.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+
 /***/ 320:
 /***/ function(module, exports, __webpack_require__) {
 
@@ -2342,7 +2350,7 @@ webpackJsonp([0,3],{
 	
 	var _fetch2 = _interopRequireDefault(_fetch);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	var _root = __webpack_require__(320);
 	
@@ -2564,11 +2572,11 @@ webpackJsonp([0,3],{
 	
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -2719,13 +2727,13 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _actions = __webpack_require__(317);
+	var _actions = __webpack_require__(316);
 	
 	var _api = __webpack_require__(321);
 	
 	var api = _interopRequireWildcard(_api);
 	
-	var _authenticate = __webpack_require__(316);
+	var _authenticate = __webpack_require__(315);
 	
 	var _root = __webpack_require__(320);
 	
@@ -3006,7 +3014,7 @@ webpackJsonp([0,3],{
 	
 	exports.applyConfig = applyConfig;
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
@@ -3024,7 +3032,7 @@ webpackJsonp([0,3],{
 	
 	var _configure = __webpack_require__(314);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -3154,7 +3162,7 @@ webpackJsonp([0,3],{
 	
 	exports.default = parseEndpointConfig;
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
@@ -3229,166 +3237,31 @@ webpackJsonp([0,3],{
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.visitLocation = undefined;
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-	                                                                                                                                                                                                                                                                   * Created by andrew on 26/02/16.
-	                                                                                                                                                                                                                                                                   */
+	var _ACTION_TYPES = __webpack_require__(295);
 	
+	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	exports.normalizeTokenKeys = normalizeTokenKeys;
-	exports.getAllParams = getAllParams;
-	exports.default = getRedirectInfo;
-	
-	var _querystring = __webpack_require__(330);
-	
-	var _querystring2 = _interopRequireDefault(_querystring);
+	var _actions = __webpack_require__(316);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function normalizeTokenKeys(params) {
-	  // normalize keys
-	  if (params.token) {
-	    params["access-token"] = params.token;
-	    delete params.token;
-	  }
-	  if (params.auth_token) {
-	    params["access-token"] = params.auth_token;
-	    delete params.auth_token;
-	  }
-	  if (params.client_id) {
-	    params.client = params.client_id;
-	    delete params.client_id;
-	  }
-	  if (params.config) {
-	    params.endpointKey = params.config;
-	    delete params.config;
-	  }
+	/**
+	 * Created by andrew on 26/02/16.
+	 */
+	var visitLocation = exports.visitLocation = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.LOCATION.ENTER, 'location');
 	
-	  return params;
-	};
-	
-	var getAnchorSearch = function getAnchorSearch(location) {
-	  var rawAnchor = location.hash || "",
-	      arr = rawAnchor.split("?");
-	  return arr.length > 1 ? arr[1] : null;
-	};
-	
-	var getSearchQs = function getSearchQs(location) {
-	  var rawQs = location.search || "",
-	      qs = rawQs.replace("?", ""),
-	      qsObj = qs ? _querystring2.default.parse(qs) : {};
-	
-	  return qsObj;
-	};
-	
-	var getAnchorQs = function getAnchorQs(location) {
-	  var anchorQs = getAnchorSearch(location),
-	      anchorQsObj = anchorQs ? _querystring2.default.parse(anchorQs) : {};
-	
-	  return anchorQsObj;
-	};
-	
-	var stripKeys = function stripKeys(obj, keys) {
-	  for (var q in keys) {
-	    delete obj[keys[q]];
-	  }
-	
-	  return obj;
-	};
-	
-	function getAllParams(location) {
-	  return _extends({}, getAnchorQs(location), getSearchQs(location));
-	};
-	
-	var buildCredentials = function buildCredentials(location, keys) {
-	  var params = getAllParams(location);
-	  var authHeaders = {};
-	
-	  var _iteratorNormalCompletion = true;
-	  var _didIteratorError = false;
-	  var _iteratorError = undefined;
-	
-	  try {
-	    for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	      var key = _step.value;
-	
-	      authHeaders[key] = params[key];
-	    }
-	  } catch (err) {
-	    _didIteratorError = true;
-	    _iteratorError = err;
-	  } finally {
-	    try {
-	      if (!_iteratorNormalCompletion && _iterator.return) {
-	        _iterator.return();
-	      }
-	    } finally {
-	      if (_didIteratorError) {
-	        throw _iteratorError;
-	      }
-	    }
-	  }
-	
-	  return normalizeTokenKeys(authHeaders);
-	};
-	
-	// this method is tricky. we want to reconstruct the current URL with the
-	// following conditions:
-	// 1. search contains none of the supplied keys
-	// 2. anchor search (i.e. `#/?key=val`) contains none of the supplied keys
-	// 3. all of the keys NOT supplied are presevered in their original form
-	// 4. url protocol, host, and path are preserved
-	var getLocationWithoutParams = function getLocationWithoutParams(currentLocation, keys) {
-	  // strip all values from both actual and anchor search params
-	  var newSearch = _querystring2.default.stringify(stripKeys(getSearchQs(currentLocation), keys)),
-	      newAnchorQs = _querystring2.default.stringify(stripKeys(getAnchorQs(currentLocation), keys)),
-	      newAnchor = (currentLocation.hash || "").split("?")[0];
-	
-	  if (newSearch) {
-	    newSearch = "?" + newSearch;
-	  }
-	
-	  if (newAnchorQs) {
-	    newAnchor += "?" + newAnchorQs;
-	  }
-	
-	  if (newAnchor && !newAnchor.match(/^#/)) {
-	    newAnchor = "#/" + newAnchor;
-	  }
-	
-	  // reconstruct location with stripped auth keys
-	  var newLocation = currentLocation.pathname + newSearch + newAnchor;
-	
-	  return newLocation;
-	};
-	
-	function getRedirectInfo(currentLocation) {
-	  if (!currentLocation) {
-	    return {};
-	  } else {
-	    var authKeys = ["access-token", "token", "auth_token", "config", "client", "client_id", "expiry", "uid", "reset_password", "account_confirmation_success"];
-	
-	    var authRedirectHeaders = buildCredentials(currentLocation, authKeys);
-	    var authRedirectPath = getLocationWithoutParams(currentLocation, authKeys);
-	
-	    if (authRedirectPath !== currentLocation) {
-	      return { authRedirectHeaders: authRedirectHeaders, authRedirectPath: authRedirectPath };
-	    } else {
-	      return {};
-	    }
-	  }
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "parseUrl.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "navigate.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
-/***/ 333:
+/***/ 330:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3411,7 +3284,7 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -3495,7 +3368,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 334:
+/***/ 331:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3544,7 +3417,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 335:
+/***/ 332:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3561,11 +3434,11 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
-	var _reactRouterBootstrap = __webpack_require__(579);
+	var _reactRouterBootstrap = __webpack_require__(576);
 	
-	var _HeaderLinks = __webpack_require__(582);
+	var _HeaderLinks = __webpack_require__(579);
 	
 	var _HeaderLinks2 = _interopRequireDefault(_HeaderLinks);
 	
@@ -3695,7 +3568,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 582:
+/***/ 579:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3715,19 +3588,19 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactRouterBootstrap = __webpack_require__(579);
+	var _reactRouterBootstrap = __webpack_require__(576);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _signOut2 = __webpack_require__(583);
+	var _signOut2 = __webpack_require__(580);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -3829,7 +3702,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 583:
+/***/ 580:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3843,7 +3716,7 @@ webpackJsonp([0,3],{
 	exports.signOutComplete = signOutComplete;
 	exports.signOut = signOut;
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	var _entities = __webpack_require__(326);
 	
@@ -3891,7 +3764,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 584:
+/***/ 581:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3910,7 +3783,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
@@ -3918,19 +3791,19 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(585);
+	var _reactSelect = __webpack_require__(582);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _AccountInfo = __webpack_require__(591);
+	var _AccountInfo = __webpack_require__(588);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
-	var _modals = __webpack_require__(594);
+	var _modals = __webpack_require__(591);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
-	var _IndexPanel = __webpack_require__(601);
+	var _IndexPanel = __webpack_require__(598);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
@@ -3938,11 +3811,11 @@ webpackJsonp([0,3],{
 	
 	var A = _interopRequireWildcard(_entities);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _Money = __webpack_require__(602);
+	var _Money = __webpack_require__(599);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -4387,7 +4260,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 591:
+/***/ 588:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4407,11 +4280,11 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactLoader = __webpack_require__(592);
+	var _reactLoader = __webpack_require__(589);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
@@ -4419,7 +4292,7 @@ webpackJsonp([0,3],{
 	
 	var A = _interopRequireWildcard(_entities);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -4526,7 +4399,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 594:
+/***/ 591:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4537,7 +4410,7 @@ webpackJsonp([0,3],{
 	  value: true
 	});
 	
-	var _Add3rdPartyAccountModal = __webpack_require__(595);
+	var _Add3rdPartyAccountModal = __webpack_require__(592);
 	
 	Object.defineProperty(exports, 'Add3rdPartyAccountModal', {
 	  enumerable: true,
@@ -4546,7 +4419,7 @@ webpackJsonp([0,3],{
 	  }
 	});
 	
-	var _NewAccountModal = __webpack_require__(599);
+	var _NewAccountModal = __webpack_require__(596);
 	
 	Object.defineProperty(exports, 'NewAccountModal', {
 	  enumerable: true,
@@ -4555,7 +4428,7 @@ webpackJsonp([0,3],{
 	  }
 	});
 	
-	var _RemoveAccountModal = __webpack_require__(600);
+	var _RemoveAccountModal = __webpack_require__(597);
 	
 	Object.defineProperty(exports, 'RemoveAccountBookmarkModal', {
 	  enumerable: true,
@@ -4570,7 +4443,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 595:
+/***/ 592:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4590,23 +4463,23 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(593);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(594);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _AuxErrorLabel = __webpack_require__(598);
+	var _AuxErrorLabel = __webpack_require__(595);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -4614,7 +4487,7 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(585);
+	var _reactSelect = __webpack_require__(582);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
@@ -4800,7 +4673,7 @@ webpackJsonp([0,3],{
 	                options: (0, _readProp2.default)(this.props.data, 'accountsLookup.options', []),
 	                onChange: this.handleInput.bind(this, 'account') }),
 	              _react2.default.createElement(_AuxErrorLabel2.default, {
-	                label: "Owner:",
+	                label: "Account:",
 	                errors: (0, _readProp2.default)(this.props.data, 'errors.account', [])
 	              })
 	            ),
@@ -4864,7 +4737,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 596:
+/***/ 593:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4883,9 +4756,9 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
-	var _reactLoader = __webpack_require__(592);
+	var _reactLoader = __webpack_require__(589);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -4992,7 +4865,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 597:
+/***/ 594:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5011,7 +4884,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5104,7 +4977,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 598:
+/***/ 595:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5121,7 +4994,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5203,7 +5076,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 599:
+/***/ 596:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5225,21 +5098,21 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(594);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(593);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -5426,7 +5299,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 600:
+/***/ 597:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5444,7 +5317,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
@@ -5452,7 +5325,7 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(585);
+	var _reactSelect = __webpack_require__(582);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
@@ -5581,7 +5454,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 601:
+/***/ 598:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5598,7 +5471,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5649,7 +5522,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 602:
+/***/ 599:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5709,7 +5582,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 603:
+/***/ 600:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5731,33 +5604,29 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactLoader = __webpack_require__(592);
-	
-	var _reactLoader2 = _interopRequireDefault(_reactLoader);
-	
-	var _reactSelect = __webpack_require__(585);
+	var _reactSelect = __webpack_require__(582);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(594);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _Money = __webpack_require__(602);
+	var _Money = __webpack_require__(599);
 	
-	var _TransfersTable = __webpack_require__(604);
+	var _TransfersTable = __webpack_require__(601);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _IndexPanel = __webpack_require__(601);
+	var _IndexPanel = __webpack_require__(598);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _modals = __webpack_require__(594);
+	var _modals = __webpack_require__(591);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
@@ -5765,11 +5634,11 @@ webpackJsonp([0,3],{
 	
 	var A = _interopRequireWildcard(_entities);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _blockedExecution = __webpack_require__(606);
+	var _blockedExecution = __webpack_require__(603);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5783,7 +5652,7 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 12/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
-	//import { PageHeader } from "react-bootstrap";
+	// import Spinner from "react-loader";
 	
 	
 	var resetModals = {
@@ -5966,9 +5835,24 @@ webpackJsonp([0,3],{
 	      if (!account) {
 	        if (errors.length) {
 	          return _react2.default.createElement(
-	            "h2",
+	            "div",
 	            null,
-	            "Error loading specified account"
+	            _react2.default.createElement(
+	              "h2",
+	              null,
+	              "Error loading specified account"
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              null,
+	              "Return ",
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: "/" },
+	                "Home"
+	              ),
+	              " to pick another"
+	            )
 	          );
 	        } else {
 	          return spinnerResult;
@@ -6210,7 +6094,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 604:
+/***/ 601:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6228,21 +6112,21 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactLoader = __webpack_require__(592);
+	var _reactLoader = __webpack_require__(589);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactTimeago = __webpack_require__(605);
+	var _reactTimeago = __webpack_require__(602);
 	
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 	
-	var _Money = __webpack_require__(602);
+	var _Money = __webpack_require__(599);
 	
-	var _AccountInfo = __webpack_require__(591);
+	var _AccountInfo = __webpack_require__(588);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
@@ -6498,7 +6382,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 606:
+/***/ 603:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6542,7 +6426,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 607:
+/***/ 604:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6560,7 +6444,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
@@ -6568,9 +6452,11 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _EmailSignInForm = __webpack_require__(608);
+	var _EmailSignInForm = __webpack_require__(605);
 	
-	var _EmailSignInForm2 = _interopRequireDefault(_EmailSignInForm);
+	var _readProp = __webpack_require__(331);
+	
+	var _readProp2 = _interopRequireDefault(_readProp);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -6585,18 +6471,6 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
 	
-	//import ButtonLoader from "./ButtonLoader";
-	
-	//import ButtonLoader from "../controls/bootstrap/ButtonLoader";
-	
-	
-	//export {bootstrap, materialUi} from "./views";
-	
-	
-	// bootstrap theme
-	//import { EmailSignInForm } from "redux-auth/bootstrap-theme";
-	
-	
 	var SignIn = exports.SignIn = function (_React$Component) {
 	  _inherits(SignIn, _React$Component);
 	
@@ -6609,8 +6483,13 @@ webpackJsonp([0,3],{
 	  _createClass(SignIn, [{
 	    key: "checkRedirect",
 	    value: function checkRedirect(props) {
-	      if (props.auth.user.isSignedIn) {
-	        props.dispatch((0, _reduxRouter.pushState)(null, props.location.query.next));
+	
+	      var isSignedIn = (0, _readProp2.default)(props.auth, 'user.isSignedIn');
+	      if (isSignedIn) {
+	
+	        var nextLocation = (0, _readProp2.default)(props.location, 'query.next');
+	        props.dispatch((0, _reduxRouter.pushState)(null, nextLocation));
+	
 	        //// redirect to login and add next param so we can redirect again after login
 	        //const redirectAfterLogin = this.props.location.pathname;
 	        //this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
@@ -6629,16 +6508,6 @@ webpackJsonp([0,3],{
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var signInProps = {
-	        inputProps: {
-	          password: {
-	            className: 'hide hidden',
-	            style: { display: 'none' },
-	            value: null,
-	            disabled: true
-	          }
-	        }
-	      };
 	
 	      return _react2.default.createElement(
 	        BS.Well,
@@ -6648,7 +6517,7 @@ webpackJsonp([0,3],{
 	          null,
 	          "Sign In"
 	        ),
-	        _react2.default.createElement(_EmailSignInForm2.default, this.props)
+	        _react2.default.createElement(_EmailSignInForm.EmailSignInForm, this.props)
 	      );
 	    }
 	  }]);
@@ -6670,7 +6539,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 608:
+/***/ 605:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6680,6 +6549,7 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.EmailSignInForm = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -6691,27 +6561,27 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(594);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(593);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _AuxErrorLabel = __webpack_require__(598);
+	var _AuxErrorLabel = __webpack_require__(595);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
-	var _signIn = __webpack_require__(609);
+	var _signIn = __webpack_require__(606);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -6738,7 +6608,7 @@ webpackJsonp([0,3],{
 	 {...this.props.inputProps.password} />
 	  */
 	
-	var EmailSignInForm = function (_React$Component) {
+	var EmailSignInForm = exports.EmailSignInForm = function (_React$Component) {
 	  _inherits(EmailSignInForm, _React$Component);
 	
 	  function EmailSignInForm() {
@@ -6756,7 +6626,8 @@ webpackJsonp([0,3],{
 	    key: "handleSubmit",
 	    value: function handleSubmit(event) {
 	      event.preventDefault();
-	      var formData = _extends({}, this.props.auth.signIn.form);
+	
+	      var formData = (0, _readProp2.default)(this.props.auth, 'signIn.form');
 	      this.props.dispatch((0, _signIn.emailSignIn)(formData));
 	    }
 	  }, {
@@ -6767,7 +6638,6 @@ webpackJsonp([0,3],{
 	        var disabled = this.props.auth.user.isSignedIn || this.props.auth.signIn.loading;
 	
 	        //const error = read(this.props.auth, 'signIn.errors.email', null);
-	        //debugger;
 	        var formErrors = (0, _readProp2.default)(this.props.auth, 'signIn.errors.errors', '');
 	
 	        return _react2.default.createElement(
@@ -6834,6 +6704,7 @@ webpackJsonp([0,3],{
 	    submit: _react.PropTypes.object
 	  })
 	};
+	
 	EmailSignInForm.defaultProps = {
 	  inputProps: {
 	    email: {},
@@ -6841,21 +6712,19 @@ webpackJsonp([0,3],{
 	    submit: {}
 	  }
 	};
-	exports.default = (0, _reactRedux.connect)(function (_ref) {
-	  var app = _ref.app;
-	  return { auth: app.auth };
-	})(EmailSignInForm);
+	
+	// export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "EmailSignInForm.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
-/***/ 609:
+/***/ 606:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -6863,31 +6732,23 @@ webpackJsonp([0,3],{
 	exports.emailSignInError = exports.emailSignInComplete = exports.emailSignInStart = exports.emailSignInFormUpdate = undefined;
 	exports.emailSignIn = emailSignIn;
 	
-	var _sessionStorage = __webpack_require__(318);
-	
-	var _entities = __webpack_require__(326);
-	
-	var _configure = __webpack_require__(314);
-	
-	var _api = __webpack_require__(321);
-	
-	var _actions = __webpack_require__(317);
-	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
+	var _actions = __webpack_require__(316);
+	
+	var _sessionStorage = __webpack_require__(317);
+	
+	var _entities = __webpack_require__(326);
+	
+	var _api = __webpack_require__(321);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import root from '../utils/root';
-	
-	/**
-	 * Created by andrew on 26/02/16.
-	 */
-	var emailSignInFormUpdate = exports.emailSignInFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE, 'key', 'value');
-	//import { parseResponse } from "../utils/handleFetchResponse";
-	//import fetch from "../utils/fetch";
-	
+	var emailSignInFormUpdate = exports.emailSignInFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE, 'key', 'value'); /**
+	                                                                                                                                                               * Created by andrew on 26/02/16.
+	                                                                                                                                                               */
 	var emailSignInStart = exports.emailSignInStart = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_START);
 	var emailSignInComplete = exports.emailSignInComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_COMPLETE, 'user');
 	var emailSignInError = exports.emailSignInError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR, 'error');
@@ -6921,7 +6782,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 610:
+/***/ 607:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6943,17 +6804,17 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(333);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _EmailSignUpForm = __webpack_require__(611);
+	var _EmailSignUpForm = __webpack_require__(608);
 	
 	var _EmailSignUpForm2 = _interopRequireDefault(_EmailSignUpForm);
 	
@@ -7007,18 +6868,14 @@ webpackJsonp([0,3],{
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
+	        BS.Well,
 	        null,
 	        _react2.default.createElement(
-	          _reactBootstrap.PageHeader,
+	          BS.PageHeader,
 	          null,
 	          "Register"
 	        ),
-	        _react2.default.createElement(
-	          BS.Well,
-	          null,
-	          _react2.default.createElement(_EmailSignUpForm2.default, null)
-	        )
+	        _react2.default.createElement(_EmailSignUpForm2.default, null)
 	      );
 	    }
 	  }]);
@@ -7038,7 +6895,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 611:
+/***/ 608:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -7046,10 +6903,8 @@ webpackJsonp([0,3],{
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	       value: true
+	  value: true
 	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -7057,29 +6912,33 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Input = __webpack_require__(597);
+	var _reactRedux = __webpack_require__(170);
+	
+	var _reactBootstrap = __webpack_require__(333);
+	
+	var _Input = __webpack_require__(594);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(593);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _IndexPanel = __webpack_require__(601);
+	var _IndexPanel = __webpack_require__(598);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _formToPayloadMappers = __webpack_require__(612);
+	var _AuxErrorLabel = __webpack_require__(595);
 	
-	var _readProp = __webpack_require__(334);
+	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
+	
+	var _formToPayloadMappers = __webpack_require__(609);
+	
+	var _readProp = __webpack_require__(331);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _reactBootstrap = __webpack_require__(336);
-	
-	var _reactRedux = __webpack_require__(170);
-	
-	var _signUp = __webpack_require__(613);
+	var _signUp = __webpack_require__(610);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -7091,201 +6950,204 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 15/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
-	//import auth from "redux-auth";
-	
-	//import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
-	
 	
 	var EmailSignUpForm = function (_React$Component) {
-	       _inherits(EmailSignUpForm, _React$Component);
+	  _inherits(EmailSignUpForm, _React$Component);
 	
-	       function EmailSignUpForm() {
-	              _classCallCheck(this, EmailSignUpForm);
+	  function EmailSignUpForm() {
+	    _classCallCheck(this, EmailSignUpForm);
 	
-	              return _possibleConstructorReturn(this, (EmailSignUpForm.__proto__ || Object.getPrototypeOf(EmailSignUpForm)).apply(this, arguments));
-	       }
+	    return _possibleConstructorReturn(this, (EmailSignUpForm.__proto__ || Object.getPrototypeOf(EmailSignUpForm)).apply(this, arguments));
+	  }
 	
-	       _createClass(EmailSignUpForm, [{
-	              key: "getEndpoint",
-	              value: function getEndpoint() {
-	                     return this.props.endpoint || this.props.auth.getIn(["configure", "currentEndpointKey"]) || this.props.auth.getIn(["configure", "defaultEndpointKey"]);
-	              }
-	       }, {
-	              key: "handleInput",
-	              value: function handleInput(key, val) {
-	                     this.props.dispatch((0, _signUp.emailSignUpFormUpdate)(key, val));
-	              }
-	       }, {
-	              key: "handleSubmit",
-	              value: function handleSubmit(event) {
-	                     event.preventDefault();
+	  _createClass(EmailSignUpForm, [{
+	    key: "handleInput",
+	    value: function handleInput(key, val) {
+	      this.props.dispatch((0, _signUp.emailSignUpFormUpdate)(key, val));
+	    }
+	  }, {
+	    key: "handleSubmit",
+	    value: function handleSubmit(event) {
+	      event.preventDefault();
 	
-	                     var formData = _extends({}, this.props.auth.signUp.form);
-	                     this.props.dispatch((0, _signUp.emailSignUp)((0, _formToPayloadMappers.customerInfoMap)(formData)));
-	              }
-	       }, {
-	              key: "render",
-	              value: function render() {
+	      var formData = (0, _readProp2.default)(this.props.auth, 'signUp.form');
+	      this.props.dispatch((0, _signUp.emailSignUp)((0, _formToPayloadMappers.customerInfoMap)(formData)));
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
 	
-	                     var disabled = this.props.auth.user.isSignedIn || this.props.auth.signUp.loading;
+	      var disabled = this.props.auth.user.isSignedIn || this.props.auth.signUp.loading;
 	
-	                     return _react2.default.createElement(
-	                            "form",
-	                            { className: "redux-auth email-sign-up-form clearfix",
-	                                   onSubmit: this.handleSubmit.bind(this) },
-	                            _react2.default.createElement(
-	                                   _IndexPanel2.default,
-	                                   { header: "basic" },
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "First name",
-	                                          placeholder: "First name",
-	                                          className: "email-sign-up-email",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.fname', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.fname', []),
-	                                          onChange: this.handleInput.bind(this, "fname")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "Last name",
-	                                          placeholder: "Last name",
-	                                          className: "email-sign-up-email",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.lname', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.lname', []),
-	                                          onChange: this.handleInput.bind(this, "lname")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "Email",
-	                                          placeholder: "Email",
-	                                          className: "email-sign-up-email",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.email', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.email', []),
-	                                          onChange: this.handleInput.bind(this, "email")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "password",
-	                                          className: "password-sign-in-email",
-	                                          label: "Password",
-	                                          placeholder: "Password",
-	                                          name: "password",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.password', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.password', []),
-	                                          onChange: this.handleInput.bind(this, "password")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "password",
-	                                          className: "password-sign-in-email",
-	                                          label: "Confirm password",
-	                                          placeholder: "Confirm password",
-	                                          name: "password-confirm",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.passwordConfirm', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.passwordConfirm', []),
-	                                          onChange: this.handleInput.bind(this, "passwordConfirm")
-	                                   })
-	                            ),
-	                            _react2.default.createElement(
-	                                   _IndexPanel2.default,
-	                                   { header: "advanced" },
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "SSN",
-	                                          placeholder: "SSN",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.ssn', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.ssn', []),
-	                                          onChange: this.handleInput.bind(this, "ssn")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "Phone",
-	                                          placeholder: "Phone",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.phoneNumber', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.phoneNumber', []),
-	                                          onChange: this.handleInput.bind(this, "phoneNumber")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "Address 1",
-	                                          placeholder: "Address 1",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address1', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address1', []),
-	                                          onChange: this.handleInput.bind(this, "address1")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "Address 2",
-	                                          placeholder: "Address 2",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address2', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address2', []),
-	                                          onChange: this.handleInput.bind(this, "address2")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "City",
-	                                          placeholder: "City",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.city', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.city', {}),
-	                                          onChange: this.handleInput.bind(this, "city")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "State",
-	                                          placeholder: "State",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.state', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.state', []),
-	                                          onChange: this.handleInput.bind(this, "state")
-	                                   }),
-	                                   _react2.default.createElement(_Input2.default, { type: "text",
-	                                          label: "ZIP",
-	                                          placeholder: "ZIP",
-	                                          className: "email-sign-up-email",
-	                                          bsSize: "small",
-	                                          disabled: disabled,
-	                                          value: (0, _readProp2.default)(this.props.auth, 'signUp.form.zip', ''),
-	                                          errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.zip', []),
-	                                          onChange: this.handleInput.bind(this, "zip")
-	                                   })
-	                            ),
-	                            _react2.default.createElement(
-	                                   _ButtonLoader2.default,
-	                                   { loading: (0, _readProp2.default)(this.props.auth, 'signUp.loading', false),
-	                                          type: "submit",
-	                                          className: "email-sign-up-submit pull-right",
-	                                          icon: _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: "send" }),
-	                                          disabled: disabled,
-	                                          onClick: this.handleSubmit.bind(this)
-	                                   },
-	                                   "Sign Up"
-	                            )
-	                     );
-	              }
-	       }]);
+	      var formErrors = (0, _readProp2.default)(this.props.auth, 'signUp.errors.errors', '');
 	
-	       return EmailSignUpForm;
+	      return _react2.default.createElement(
+	        "form",
+	        { className: "redux-auth email-sign-up-form clearfix",
+	          onSubmit: this.handleSubmit.bind(this) },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "form-group", style: {
+	              display: formErrors ? 'block' : 'none'
+	            } },
+	          _react2.default.createElement(_AuxErrorLabel2.default, {
+	            label: "Form:",
+	            errors: formErrors.length ? [formErrors] : []
+	          })
+	        ),
+	        _react2.default.createElement(
+	          _IndexPanel2.default,
+	          { header: "basic" },
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "First name",
+	            placeholder: "First name",
+	            className: "email-sign-up-email",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.fname', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.fname', []),
+	            onChange: this.handleInput.bind(this, "fname")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "Last name",
+	            placeholder: "Last name",
+	            className: "email-sign-up-email",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.lname', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.lname', []),
+	            onChange: this.handleInput.bind(this, "lname")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "Email",
+	            placeholder: "Email",
+	            className: "email-sign-up-email",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.email', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.email', []),
+	            onChange: this.handleInput.bind(this, "email")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "password",
+	            className: "password-sign-in-email",
+	            label: "Password",
+	            placeholder: "Password",
+	            name: "password",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.password', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.password', []),
+	            onChange: this.handleInput.bind(this, "password")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "password",
+	            className: "password-sign-in-email",
+	            label: "Confirm password",
+	            placeholder: "Confirm password",
+	            name: "password-confirm",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.passwordConfirm', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.passwordConfirm', []),
+	            onChange: this.handleInput.bind(this, "passwordConfirm")
+	          })
+	        ),
+	        _react2.default.createElement(
+	          _IndexPanel2.default,
+	          { header: "advanced" },
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "SSN",
+	            placeholder: "SSN",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.ssn', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.ssn', []),
+	            onChange: this.handleInput.bind(this, "ssn")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "Phone",
+	            placeholder: "Phone",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.phoneNumber', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.phoneNumber', []),
+	            onChange: this.handleInput.bind(this, "phoneNumber")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "Address 1",
+	            placeholder: "Address 1",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address1', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address1', []),
+	            onChange: this.handleInput.bind(this, "address1")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "Address 2",
+	            placeholder: "Address 2",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.address2', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.address2', []),
+	            onChange: this.handleInput.bind(this, "address2")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "City",
+	            placeholder: "City",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.city', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.city', {}),
+	            onChange: this.handleInput.bind(this, "city")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "State",
+	            placeholder: "State",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.state', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.state', []),
+	            onChange: this.handleInput.bind(this, "state")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "text",
+	            label: "ZIP",
+	            placeholder: "ZIP",
+	            className: "email-sign-up-email",
+	            bsSize: "small",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.zip', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.zip', []),
+	            onChange: this.handleInput.bind(this, "zip")
+	          })
+	        ),
+	        _react2.default.createElement(
+	          _ButtonLoader2.default,
+	          { loading: (0, _readProp2.default)(this.props.auth, 'signUp.loading', false),
+	            type: "submit",
+	            className: "email-sign-up-submit pull-right",
+	            icon: _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: "send" }),
+	            disabled: disabled,
+	            onClick: this.handleSubmit.bind(this)
+	          },
+	          "Sign Up"
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return EmailSignUpForm;
 	}(_react2.default.Component);
 	
 	exports.default = (0, _reactRedux.connect)(function (_ref) {
-	       var app = _ref.app;
-	       return { auth: app.auth };
+	  var app = _ref.app;
+	  return { auth: app.auth };
 	})(EmailSignUpForm);
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "EmailSignUpForm.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
-/***/ 612:
+/***/ 609:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -7333,31 +7195,18 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 613:
+/***/ 610:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.emailSignUpFormUpdate = emailSignUpFormUpdate;
-	exports.emailSignUpStart = emailSignUpStart;
-	exports.emailSignUpComplete = emailSignUpComplete;
-	exports.emailSignUpError = emailSignUpError;
+	exports.emailSignUpError = exports.emailSignUpComplete = exports.emailSignUpStart = exports.emailSignUpFormUpdate = undefined;
 	exports.emailSignUp = emailSignUp;
-	
-	var _sessionStorage = __webpack_require__(318);
-	
-	var _entities = __webpack_require__(326);
-	
-	var _configure = __webpack_require__(314);
-	
-	var _api = __webpack_require__(321);
-	
-	var _signIn = __webpack_require__(609);
 	
 	var _reduxRouter = __webpack_require__(246);
 	
@@ -7365,25 +7214,20 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
+	var _actions = __webpack_require__(316);
+	
+	var _api = __webpack_require__(321);
+	
+	var _signIn = __webpack_require__(606);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import { parseResponse } from "../utils/handleFetchResponse";
-	function emailSignUpFormUpdate(key, value) {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE, key: key, value: value };
-	} /**
-	   * Created by andrew on 11/03/16.
-	   */
-	function emailSignUpStart() {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_START };
-	}
-	
-	function emailSignUpComplete(user) {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, user: user };
-	}
-	
-	function emailSignUpError(errors) {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, errors: errors };
-	}
+	var emailSignUpFormUpdate = exports.emailSignUpFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE, 'key', 'value'); /**
+	                                                                                                                                                               * Created by andrew on 11/03/16.
+	                                                                                                                                                               */
+	var emailSignUpStart = exports.emailSignUpStart = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_START);
+	var emailSignUpComplete = exports.emailSignUpComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, 'user');
+	var emailSignUpError = exports.emailSignUpError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, 'error');
 	
 	function emailSignUp(body) {
 	  return function (dispatch) {
@@ -7399,7 +7243,10 @@ webpackJsonp([0,3],{
 	      dispatch((0, _reduxRouter.push)('/signin'));
 	    }).catch(function (_ref2) {
 	      var errors = _ref2.errors;
-	      return dispatch(emailSignUpError(errors));
+	
+	      dispatch(emailSignUpError({
+	        errors: errors
+	      }));
 	    });
 	  };
 	}
@@ -7409,4 +7256,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.b0de56230554ae24a254.js.map
+//# sourceMappingURL=app.d5e626aaea52a2dac6cb.js.map
