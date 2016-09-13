@@ -175,7 +175,7 @@ webpackJsonp([0,3],{
 	    { path: "/", component: App },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: (0, _AuthComponent.requireAuthentication)(_MyAccounts2.default) }),
 	    _react2.default.createElement(_reactRouter.Route, { path: "signin", component: _SignIn2.default, onEnter: onEnter }),
-	    _react2.default.createElement(_reactRouter.Route, { path: "register", component: _SignUp2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: "register", component: _SignUp2.default, onEnter: onEnter }),
 	    _react2.default.createElement(_reactRouter.Route, { path: "account/:accountId", component: (0, _AuthComponent.requireAuthentication)(_Account2.default) })
 	  );
 	
@@ -1101,7 +1101,7 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.signUpReducer = undefined;
+	exports.signUpReducer = exports.internalSignUpReducer = undefined;
 	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
@@ -1116,7 +1116,30 @@ webpackJsonp([0,3],{
 	/**
 	 * Created by andrew on 25/02/16.
 	 */
-	var signUpReducer = exports.signUpReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_UP_START, _ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE]);
+	var internalSignUpReducer = exports.internalSignUpReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_UP_START, _ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE]);
+	
+	var signUpReducer = exports.signUpReducer = function signUpReducer(state, action) {
+	  switch (action.type) {
+	    case _ACTION_TYPES2.default.LOCATION.ENTER:
+	      {
+	        var location = action.location;
+	        var pathname = location.pathname;
+	
+	        if (pathname == '/register') {
+	          return internalSignUpReducer(state, {
+	            type: _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR,
+	            error: null
+	          });
+	        }
+	        return state;
+	      }
+	
+	    default:
+	      {
+	        return internalSignUpReducer(state, action);
+	      }
+	  }
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "signup.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -6168,7 +6191,7 @@ webpackJsonp([0,3],{
 	
 	        if (v.entryType == 'account') {
 	          balance = v.initialBalance;
-	        } else if (v.entryType == 'transaction') {
+	        } else if (v.entryType == 'transaction' && v.status !== 'FAILED_DUE_TO_INSUFFICIENT_FUNDS') {
 	          var isOriginating = v.fromAccountId == currentAccountId;
 	          balance += (isOriginating ? -1 : 1) * v.amount;
 	        }
@@ -6583,6 +6606,8 @@ webpackJsonp([0,3],{
 	
 	var _signIn = __webpack_require__(606);
 	
+	var AS = _interopRequireWildcard(_signIn);
+	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -6596,17 +6621,26 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
 	
-	/*
-	 <Input type="password"
-	 label="Password"
-	 className="email-sign-in-password"
-	 placeholder="Password"
-	 disabled={disabled}
-	 value={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form", "password"])}
-	 errors={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "errors", "password"])}
-	 onChange={this.handleInput.bind(this, "password")}
-	 {...this.props.inputProps.password} />
-	  */
+	var formValidation = function formValidation(payload) {
+	  return ['email', 'password'].reduce(function (memo, prop) {
+	    var result = [];
+	    var value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
+	
+	    switch (prop) {
+	      case 'email':
+	      case 'password':
+	        if (/^$/.test(value)) {
+	          result.push('required');
+	        }
+	    }
+	
+	    if (result.length) {
+	      memo[prop] = result;
+	      memo.hasErrors = true;
+	    }
+	    return memo;
+	  }, {});
+	};
 	
 	var EmailSignInForm = exports.EmailSignInForm = function (_React$Component) {
 	  _inherits(EmailSignInForm, _React$Component);
@@ -6620,7 +6654,7 @@ webpackJsonp([0,3],{
 	  _createClass(EmailSignInForm, [{
 	    key: "handleInput",
 	    value: function handleInput(key, val) {
-	      this.props.dispatch((0, _signIn.emailSignInFormUpdate)(key, val));
+	      this.props.dispatch(AS.emailSignInFormUpdate(key, val));
 	    }
 	  }, {
 	    key: "handleSubmit",
@@ -6628,7 +6662,14 @@ webpackJsonp([0,3],{
 	      event.preventDefault();
 	
 	      var formData = (0, _readProp2.default)(this.props.auth, 'signIn.form');
-	      this.props.dispatch((0, _signIn.emailSignIn)(formData));
+	
+	      var validationErrors = formValidation(formData);
+	      if (validationErrors.hasErrors) {
+	        this.props.dispatch(AS.emailSignInError(validationErrors));
+	        return;
+	      }
+	
+	      this.props.dispatch(AS.emailSignIn(formData));
 	    }
 	  }, {
 	    key: "render",
@@ -6940,6 +6981,10 @@ webpackJsonp([0,3],{
 	
 	var _signUp = __webpack_require__(610);
 	
+	var AS = _interopRequireWildcard(_signUp);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -6950,6 +6995,38 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 15/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
+	
+	var formValidation = function formValidation(payload) {
+	  return ['fname', 'lname', 'email', 'password', 'passwordConfirm', 'ssn', 'phoneNumber', 'address1', 'address2', 'city', 'state', 'zip'].reduce(function (memo, prop) {
+	    var result = [];
+	    var value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
+	
+	    switch (prop) {
+	      case 'fname':
+	      case 'lname':
+	      case 'email':
+	      case 'ssn':
+	      case 'password':
+	      case 'passwordConfirm':
+	        if (/^$/.test(value)) {
+	          result.push('required');
+	        }
+	    }
+	
+	    switch (prop) {
+	      case 'passwordConfirm':
+	        if (value != payload['password']) {
+	          result.push('need to be equal to password');
+	        }
+	    }
+	
+	    if (result.length) {
+	      memo[prop] = result;
+	      memo.hasErrors = true;
+	    }
+	    return memo;
+	  }, {});
+	};
 	
 	var EmailSignUpForm = function (_React$Component) {
 	  _inherits(EmailSignUpForm, _React$Component);
@@ -6963,7 +7040,7 @@ webpackJsonp([0,3],{
 	  _createClass(EmailSignUpForm, [{
 	    key: "handleInput",
 	    value: function handleInput(key, val) {
-	      this.props.dispatch((0, _signUp.emailSignUpFormUpdate)(key, val));
+	      this.props.dispatch(AS.emailSignUpFormUpdate(key, val));
 	    }
 	  }, {
 	    key: "handleSubmit",
@@ -6971,7 +7048,13 @@ webpackJsonp([0,3],{
 	      event.preventDefault();
 	
 	      var formData = (0, _readProp2.default)(this.props.auth, 'signUp.form');
-	      this.props.dispatch((0, _signUp.emailSignUp)((0, _formToPayloadMappers.customerInfoMap)(formData)));
+	      var validationErrors = formValidation(formData);
+	      if (validationErrors.hasErrors) {
+	        this.props.dispatch(AS.emailSignUpError(validationErrors));
+	        return;
+	      }
+	
+	      this.props.dispatch(AS.emailSignUp((0, _formToPayloadMappers.customerInfoMap)(formData)));
 	    }
 	  }, {
 	    key: "render",
@@ -7256,4 +7339,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.d5e626aaea52a2dac6cb.js.map
+//# sourceMappingURL=app.4d33d25a9b5872086180.js.map

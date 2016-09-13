@@ -10,31 +10,48 @@ import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
 import AuxErrorLabel from './AuxErrorLabel';
 
-import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
+import * as AS from "../../actions/signIn";
 
-/*
- <Input type="password"
- label="Password"
- className="email-sign-in-password"
- placeholder="Password"
- disabled={disabled}
- value={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form", "password"])}
- errors={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "errors", "password"])}
- onChange={this.handleInput.bind(this, "password")}
- {...this.props.inputProps.password} />
-  */
+const formValidation = (payload) => [
+  'email',
+  'password'
+].reduce((memo, prop) => {
+  let result = [];
+  const value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
+
+  switch (prop) {
+    case 'email':
+    case 'password':
+      if (/^$/.test(value)) {
+        result.push('required');
+      }
+  }
+
+  if (result.length) {
+    memo[prop] = result;
+    memo.hasErrors = true;
+  }
+  return memo;
+}, {});
 
 export class EmailSignInForm extends React.Component {
 
   handleInput (key, val) {
-    this.props.dispatch(emailSignInFormUpdate(key, val));
+    this.props.dispatch(AS.emailSignInFormUpdate(key, val));
   }
 
   handleSubmit (event) {
     event.preventDefault();
 
     const formData = read(this.props.auth, 'signIn.form');
-    this.props.dispatch(emailSignIn(formData));
+
+    const validationErrors = formValidation(formData);
+    if (validationErrors.hasErrors) {
+      this.props.dispatch(AS.emailSignInError(validationErrors));
+      return;
+    }
+
+    this.props.dispatch(AS.emailSignIn(formData));
   }
 
   render () {

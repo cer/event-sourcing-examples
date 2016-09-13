@@ -10,20 +10,69 @@ import IndexPanel from "./../../components/partials/IndexPanel";
 import AuxErrorLabel from './AuxErrorLabel';
 import { customerInfoMap } from '../../entities/formToPayloadMappers';
 import read from '../../utils/readProp';
-import { emailSignUpFormUpdate, emailSignUp } from '../../actions/signUp';
+import * as AS from '../../actions/signUp';
+
+const formValidation = (payload) => [
+  'fname',
+  'lname',
+  'email',
+  'password',
+  'passwordConfirm',
+  'ssn',
+  'phoneNumber',
+  'address1',
+  'address2',
+  'city',
+  'state',
+  'zip'
+].reduce((memo, prop) => {
+  let result = [];
+  const value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
+
+  switch (prop) {
+    case 'fname':
+    case 'lname':
+    case 'email':
+    case 'ssn':
+    case 'password':
+    case 'passwordConfirm':
+      if (/^$/.test(value)) {
+        result.push('required');
+      }
+  }
+
+  switch (prop) {
+    case 'passwordConfirm':
+      if (value != payload['password']) {
+        result.push('need to be equal to password');
+      }
+  }
+
+  if (result.length) {
+    memo[prop] = result;
+    memo.hasErrors = true;
+  }
+  return memo;
+}, {});
 
 
 class EmailSignUpForm extends React.Component {
 
   handleInput (key, val) {
-    this.props.dispatch(emailSignUpFormUpdate(key, val));
+    this.props.dispatch(AS.emailSignUpFormUpdate(key, val));
   }
 
   handleSubmit (event) {
     event.preventDefault();
 
     const formData = read(this.props.auth, 'signUp.form');
-    this.props.dispatch(emailSignUp(customerInfoMap(formData)));
+    const validationErrors = formValidation(formData);
+    if (validationErrors.hasErrors) {
+      this.props.dispatch(AS.emailSignUpError(validationErrors));
+      return;
+    }
+
+    this.props.dispatch(AS.emailSignUp(customerInfoMap(formData)));
   }
 
   render () {

@@ -52,7 +52,7 @@ export function initialize({cookies, isServer, currentLocation, userAgent} = {})
     <Route path="/" component={ App }>
       <IndexRoute component={ requireAuthentication(MyAccounts) } />
       <Route path="signin" component={ SignIn } onEnter={ onEnter } />
-      <Route path="register" component={ SignUp }  />
+      <Route path="register" component={ SignUp } onEnter={ onEnter } />
       <Route path="account/:accountId" component={ requireAuthentication(Account) } />
     </Route>
   );
