@@ -9,6 +9,7 @@ dependencies {
     testCompile project(":common-auth")
     testCompile "junit:junit:4.11"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile "org.jsoup:jsoup:1.9.2"
 }
 
 test {
