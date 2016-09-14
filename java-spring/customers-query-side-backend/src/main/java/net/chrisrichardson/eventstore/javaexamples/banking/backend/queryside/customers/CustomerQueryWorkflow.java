@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.cu
 import io.eventuate.DispatchedEvent;
 import io.eventuate.EventHandlerMethod;
 import io.eventuate.EventSubscriber;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAccountDeleted;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAddedToAccount;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerCreatedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
@@ -42,4 +43,11 @@ public class CustomerQueryWorkflow {
     customerInfoUpdateService.addToAccount(id, toAccountInfo);
   }
 
+  @EventHandlerMethod
+  public void deleteToAccounts(DispatchedEvent<CustomerAccountDeleted> de) {
+    CustomerAccountDeleted event = de.getEvent();
+    String accountId = event.getAccountId();
+
+    customerInfoUpdateService.deleteFromToAccount(accountId);
+  }
 }

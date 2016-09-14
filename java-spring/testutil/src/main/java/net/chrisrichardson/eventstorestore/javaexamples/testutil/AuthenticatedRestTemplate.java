@@ -26,4 +26,12 @@ public class AuthenticatedRestTemplate {
             requestObject
     );
   }
+
+  public <T> T deleteEntity(String url, Class<T> clazz) {
+    return BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
+            url,
+            HttpMethod.DELETE,
+            clazz
+    );
+  }
 }

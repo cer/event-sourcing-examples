@@ -1,6 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.DeleteAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.AddToAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
@@ -35,6 +37,12 @@ public class CustomerController {
   public CompletableFuture<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
     return customerService.addToAccount(id, request)
             .thenApply(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.getEntityVersion().toString()));
+  }
+
+  @RequestMapping(value = "/{customerId}/accounts/{accountId}", method = RequestMethod.DELETE)
+  public CompletableFuture<DeleteAccountResponse> deleteAccount(@PathVariable String customerId, @PathVariable String accountId) {
+    return customerService.deleteAccount(customerId, accountId)
+            .thenApply(entityAndEventInfo -> new DeleteAccountResponse(accountId));
   }
 
 }

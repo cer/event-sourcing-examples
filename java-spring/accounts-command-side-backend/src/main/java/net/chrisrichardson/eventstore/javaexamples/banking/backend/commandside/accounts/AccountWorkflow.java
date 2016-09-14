@@ -5,6 +5,7 @@ import io.eventuate.EntityWithIdAndVersion;
 import io.eventuate.EventHandlerContext;
 import io.eventuate.EventHandlerMethod;
 import io.eventuate.EventSubscriber;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAccountDeleted;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.DebitRecordedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.MoneyTransferCreatedEvent;
 
@@ -22,13 +23,7 @@ public class AccountWorkflow {
 
     String fromAccountId = event.getDetails().getFromAccountId();
 
-    return ctx.update(Account.class, fromAccountId, new DebitAccountCommand(amount, transactionId)).handle((x, e) -> {
-              if (e != null) {
-                e.printStackTrace();
-              }
-              return x;
-            }
-    );
+    return ctx.update(Account.class, fromAccountId, new DebitAccountCommand(amount, transactionId));
   }
 
   @EventHandlerMethod
@@ -38,13 +33,14 @@ public class AccountWorkflow {
     String fromAccountId = event.getDetails().getToAccountId();
     String transactionId = ctx.getEntityId();
 
-    return ctx.update(Account.class, fromAccountId, new CreditAccountCommand(amount, transactionId)).handle((x, e) -> {
-              if (e != null) {
-                e.printStackTrace();
-              }
-              return x;
-            }
-    );
+    return ctx.update(Account.class, fromAccountId, new CreditAccountCommand(amount, transactionId));
   }
 
+  @EventHandlerMethod
+  public CompletableFuture<EntityWithIdAndVersion<Account>> deleteAccount(EventHandlerContext<CustomerAccountDeleted> ctx) {
+    CustomerAccountDeleted event = ctx.getEvent();
+    String accountId = event.getAccountId();
+
+    return ctx.update(Account.class, accountId, new DeleteAccountCommand());
+  }
 }

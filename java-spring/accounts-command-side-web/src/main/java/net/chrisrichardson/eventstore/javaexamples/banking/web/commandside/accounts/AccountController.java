@@ -5,10 +5,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.Creat
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 
