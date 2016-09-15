@@ -133,14 +133,14 @@ public abstract class AbstractRestAPITest {
             });
 
     final DeleteAccountResponse deleteAccountResponse = getAuthenticatedRestTemplate().deleteEntity(baseUrl("/customers/"+customerId+"/accounts/"+accountId),
-            DeleteAccountResponse.class);
+            DeleteAccountResponse.class, email, password);
 
     eventually(
             new Producer<GetAccountsResponse>() {
               @Override
               public CompletableFuture<GetAccountsResponse> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customers/"+customerId+"/accounts"),
-                        GetAccountsResponse.class));
+                        GetAccountsResponse.class, email, password));
               }
             },
             new Verifier<GetAccountsResponse>() {

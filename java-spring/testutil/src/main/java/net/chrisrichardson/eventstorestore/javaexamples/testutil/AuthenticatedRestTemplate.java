@@ -31,11 +31,13 @@ public class AuthenticatedRestTemplate {
     );
   }
 
-  public <T> T deleteEntity(String url, Class<T> clazz) {
+  public <T> T deleteEntity(String url, Class<T> clazz, String email, String password) {
     return BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
             url,
             HttpMethod.DELETE,
-            clazz
+            clazz,
+            email,
+            password
     );
   }
 }

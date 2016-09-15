@@ -19,51 +19,53 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 public class CustomerInfoUpdateService {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+  private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private QuerySideCustomerRepository querySideCustomerRepository;
-    private MongoTemplate mongoTemplate;
+  private QuerySideCustomerRepository querySideCustomerRepository;
+  private MongoTemplate mongoTemplate;
 
-    public CustomerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository, MongoTemplate mongoTemplate) {
-        this.querySideCustomerRepository = querySideCustomerRepository;
-        this.mongoTemplate = mongoTemplate;
+  public CustomerInfoUpdateService(QuerySideCustomerRepository querySideCustomerRepository, MongoTemplate mongoTemplate) {
+    this.querySideCustomerRepository = querySideCustomerRepository;
+    this.mongoTemplate = mongoTemplate;
+  }
+
+  public void create(String id, CustomerInfo customerInfo) {
+    try {
+      querySideCustomerRepository.save(new QuerySideCustomer(id,
+                      customerInfo.getName(),
+                      customerInfo.getEmail(),
+                      customerInfo.getPassword(),
+                      customerInfo.getSsn(),
+                      customerInfo.getPhoneNumber(),
+                      customerInfo.getAddress(),
+                      Collections.<String, ToAccountInfo>emptyMap()
+              )
+      );
+      logger.info("Saved in mongo");
+    } catch (DuplicateKeyException t) {
+      logger.warn("When saving ", t);
+    } catch (Throwable t) {
+      logger.error("Error during saving: ", t);
+      throw new RuntimeException(t);
     }
+  }
 
-    public void create(String id, CustomerInfo customerInfo) {
-        try {
-            querySideCustomerRepository.save(new QuerySideCustomer(id,
-                            customerInfo.getName(),
-                            customerInfo.getEmail(),
-                            customerInfo.getPassword(),
-                            customerInfo.getSsn(),
-                            customerInfo.getPhoneNumber(),
-                            customerInfo.getAddress(),
-                            Collections.<String, ToAccountInfo>emptyMap()
-                    )
-            );
-            logger.info("Saved in mongo");
-        } catch (DuplicateKeyException t) {
-            logger.warn("When saving ", t);
-        } catch (Throwable t) {
-            logger.error("Error during saving: ", t);
-            throw new RuntimeException(t);
-        }
+  public void addToAccount(String id, ToAccountInfo accountInfo) {
+    QuerySideCustomer customer = querySideCustomerRepository.findOne(id);
+    if (customer != null) {
+      customer.getToAccounts().put(accountInfo.getId(), accountInfo);
+      querySideCustomerRepository.save(customer);
     }
+  }
 
-    public void addToAccount(String id, ToAccountInfo accountInfo) {
-        QuerySideCustomer customer = querySideCustomerRepository.findOne(id);
-        customer.getToAccounts().put(accountInfo.getId(), accountInfo);
-        querySideCustomerRepository.save(customer);
-    }
-
-    public void deleteFromToAccount(String accountId) {
-        mongoTemplate.find(new Query(where("toAccounts."+accountId).exists(true)),
-                QuerySideCustomer.class).stream()
-                .forEach(querySideCustomer ->
+  public void deleteFromToAccount(String accountId) {
+    mongoTemplate.find(new Query(where("toAccounts." + accountId).exists(true)),
+            QuerySideCustomer.class).stream()
+            .forEach(querySideCustomer ->
                     mongoTemplate.upsert(new Query(where("id").is(querySideCustomer.getId())),
                             new Update().
-                                    unset("toAccounts."+accountId),
+                                    unset("toAccounts." + accountId),
                             QuerySideCustomer.class)
-                );
-    }
+            );
+  }
 }
