@@ -3851,9 +3851,8 @@ webpackJsonp([0,3],{
 	    value: function create3rdPartyAccountModalConfirmed(payload) {
 	      var _this3 = this;
 	
-	      var _props$auth$user$attr = this.props.auth.user.attributes;
-	      var customerId = _props$auth$user$attr.id;
-	      var dispatch = _props$auth$user$attr.dispatch;
+	      var customerId = this.props.auth.user.attributes.id;
+	      var dispatch = this.props.dispatch;
 	
 	
 	      dispatch(A.accountRefCreate(customerId, payload)).then(function () {
@@ -5341,7 +5340,7 @@ webpackJsonp([0,3],{
 	      var entityId = id || accountId;
 	
 	      var title = titleRaw || '—';
-	      var balance = isNaN(balanceRaw) ? '—' : (balanceRaw > 0 && balanceRaw < 1 ? '$0' : '$') + Number(balanceRaw).toFixed(2);
+	      var balance = isNaN(balanceRaw) ? '—' : (balanceRaw > 0 && balanceRaw < 1 ? '$0' : '$') + Number(balanceRaw / 100).toFixed(2);
 	      var description = descriptionRaw || '—';
 	
 	      return _react2.default.createElement(
@@ -7272,4 +7271,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.0f8c47485a49f44c2404.js.map
+//# sourceMappingURL=app.8e59f50dbdb226f8542e.js.map

@@ -70,9 +70,12 @@ class MyAccounts extends React.Component {
 
   create3rdPartyAccountModalConfirmed(payload) {
     const {
-      id: customerId,
-      dispatch
+      id: customerId
     } = this.props.auth.user.attributes;
+
+    const {
+      dispatch
+    } = this.props;
 
     dispatch(A.accountRefCreate(customerId, payload))
       .then(() => {
