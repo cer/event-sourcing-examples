@@ -41,7 +41,7 @@ export class RemoveAccountBookmarkModal extends React.Component {
     const entityId = id || accountId;
 
     const title = titleRaw || '—';
-    const balance = isNaN(balanceRaw) ? '—' : ((balanceRaw > 0 && balanceRaw < 1) ? '$0' : '$') + Number(balanceRaw).toFixed(2);
+    const balance = isNaN(balanceRaw) ? '—' : ((balanceRaw > 0 && balanceRaw < 1) ? '$0' : '$') + Number(balanceRaw / 100).toFixed(2);
     const description = descriptionRaw || '—';
 
     return (<Modal show={this.props.show} onHide={this.props.onHide} key={0}>
