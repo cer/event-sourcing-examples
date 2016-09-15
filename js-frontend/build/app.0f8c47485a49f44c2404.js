@@ -2356,18 +2356,12 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.apiSignIn = apiSignIn;
-	exports.apiSignUp = apiSignUp;
-	exports.apiGetCurrentUser = apiGetCurrentUser;
-	exports.apiCreateAccount = apiCreateAccount;
-	exports.apiCreateRefAccount = apiCreateRefAccount;
-	exports.apiMakeTransfer = apiMakeTransfer;
-	exports.apiRetrieveAccounts = apiRetrieveAccounts;
-	exports.apiRetrieveTransfers = apiRetrieveTransfers;
-	exports.apiRetrieveAccount = apiRetrieveAccount;
-	exports.apiDeleteAccount = apiDeleteAccount;
-	exports.apiRetrieveUsers = apiRetrieveUsers;
-	exports.apiRetrieveUser = apiRetrieveUser;
+	exports.apiRetrieveUsers = exports.apiDeleteAccount = exports.apiRetrieveAccount = exports.apiRetrieveTransfers = exports.apiRetrieveAccounts = exports.apiMakeTransfer = exports.apiCreateRefAccount = exports.apiCreateAccount = exports.apiGetCurrentUser = exports.apiSignUp = exports.apiSignIn = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+	                                                                                                                                                                                                                                                                   * Created by andrew on 12/03/16.
+	                                                                                                                                                                                                                                                                   */
+	
 	
 	var _fetch = __webpack_require__(322);
 	
@@ -2383,177 +2377,111 @@ webpackJsonp([0,3],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/**
-	 * Created by andrew on 12/03/16.
-	 */
+	var fetch = function fetch() {
+	  return _fetch2.default.apply(undefined, arguments).then(_handleFetchResponse.parseResponse);
+	};
+	
 	function makeQuery(params) {
 	  return Object.keys(params).map(function (key) {
 	    return [encodeURIComponent(key), encodeURIComponent(params[key])].join('=');
 	  }).join('&');
 	}
 	
-	function apiSignIn(body) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getEmailSignInUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
-	    body: _root2.default.JSON.stringify(body)
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var JSON_HEADERS = {
+	  headers: {
+	    "Accept": "application/json",
+	    "Content-Type": "application/json"
+	  }
+	};
 	
-	function apiSignUp(body) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getEmailSignUpUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
-	    body: _root2.default.JSON.stringify(body)
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiGetCurrentUser() {
-	  return (0, _fetch2.default)((0, _sessionStorage.getCurrentUserUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
+	var METHODS = {
+	  DELETE: _extends({}, JSON_HEADERS, {
+	    method: "delete"
+	  }),
+	  GET: _extends({}, JSON_HEADERS, {
 	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }),
+	  POST: _extends({}, JSON_HEADERS, {
+	    method: "post"
+	  })
+	};
 	
-	function apiCreateAccount(customerId, _ref) {
+	var apiSignIn = exports.apiSignIn = function apiSignIn(body) {
+	  return fetch((0, _sessionStorage.getEmailSignInUrl)(), _extends({}, METHODS.POST, {
+	    body: _root2.default.JSON.stringify(body)
+	  }));
+	};
+	
+	var apiSignUp = exports.apiSignUp = function apiSignUp(body) {
+	  return fetch((0, _sessionStorage.getEmailSignUpUrl)(), _extends({}, METHODS.POST, {
+	    body: _root2.default.JSON.stringify(body)
+	  }));
+	};
+	
+	var apiGetCurrentUser = exports.apiGetCurrentUser = function apiGetCurrentUser() {
+	  return fetch((0, _sessionStorage.getCurrentUserUrl)(), _extends({}, METHODS.GET));
+	};
+	
+	var apiCreateAccount = exports.apiCreateAccount = function apiCreateAccount(customerId, _ref) {
 	  var title = _ref.title;
 	  var initialBalance = _ref.balance;
 	  var description = _ref.description;
-	
-	  //{
-	  //"accountId": "0000015377cf131b-a250093f26850000"
-	  //}
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
+	  return fetch((0, _sessionStorage.getAccountsUrl)(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      customerId: customerId,
 	      title: title,
 	      initialBalance: initialBalance,
 	      description: description })
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }));
+	};
 	
-	function apiCreateRefAccount(customerId, _ref2) {
+	var apiCreateRefAccount = exports.apiCreateRefAccount = function apiCreateRefAccount(customerId, _ref2) {
 	  var owner = _ref2.owner;
 	  var accountId = _ref2.account;
 	  var title = _ref2.title;
 	  var description = _ref2.description;
-	
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/toaccounts', {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
+	  return fetch((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/toaccounts', _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      owner: owner,
 	      id: accountId,
 	      title: title,
 	      description: description })
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }));
+	};
 	
-	function apiMakeTransfer(fromAccountId, _ref3) {
+	var apiMakeTransfer = exports.apiMakeTransfer = function apiMakeTransfer(fromAccountId, _ref3) {
 	  var account = _ref3.account;
 	  var amount = _ref3.amount;
 	  var description = _ref3.description;
-	
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getTransfersUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
+	  return fetch((0, _sessionStorage.getTransfersUrl)(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      "amount": amount,
 	      "fromAccountId": fromAccountId,
 	      "toAccountId": account,
 	      description: description
 	    })
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }));
+	};
 	
-	function apiRetrieveAccounts(customerId) {
+	var apiRetrieveAccounts = exports.apiRetrieveAccounts = function apiRetrieveAccounts(customerId) {
+	  return fetch((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/accounts', _extends({}, METHODS.GET));
+	};
 	
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/accounts', {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiRetrieveTransfers = exports.apiRetrieveTransfers = function apiRetrieveTransfers(accountId) {
+	  return fetch((0, _sessionStorage.getAccountsUrl)() + '/' + accountId + '/history', _extends({}, METHODS.GET));
+	};
 	
-	function apiRetrieveTransfers(accountId) {
+	var apiRetrieveAccount = exports.apiRetrieveAccount = function apiRetrieveAccount(accountId) {
+	  return fetch((0, _sessionStorage.getAccountsUrl)() + '/' + accountId, _extends({}, METHODS.GET));
+	};
 	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '/' + accountId + '/history', {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiDeleteAccount = exports.apiDeleteAccount = function apiDeleteAccount(customerId, accountId) {
+	  return fetch((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/accounts/' + accountId, _extends({}, METHODS.DELETE));
+	};
 	
-	function apiRetrieveAccount(accountId) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '/' + accountId, {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiDeleteAccount(accountId) {
-	  return Promise.reject({
-	    message: '\'Delete Account\' is not implemented.'
-	  });
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '/' + accountId, {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "delete"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiRetrieveUsers(email) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '?' + makeQuery({ email: email }), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiRetrieveUser(customerId) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId, {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiRetrieveUsers = exports.apiRetrieveUsers = function apiRetrieveUsers(email) {
+	  return fetch((0, _sessionStorage.getCustomersUrl)() + '?' + makeQuery({ email: email }), _extends({}, METHODS.GET));
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "api.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -2789,11 +2717,14 @@ webpackJsonp([0,3],{
 	var accountComplete = exports.accountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE, 'payload');
 	var accountError = exports.accountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR, 'error');
 	
-	function accountsList(userId) {
+	function accountsList(customerId) {
 	  return function (dispatch) {
 	    dispatch(accountsListRequested());
-	    return api.apiRetrieveAccounts(userId).then(function (list) {
-	      dispatch(accountsListReceived(list));
+	    return api.apiRetrieveAccounts(customerId).then(function (_ref) {
+	      var _ref$accounts = _ref.accounts;
+	      var accounts = _ref$accounts === undefined ? [] : _ref$accounts;
+	
+	      dispatch(accountsListReceived(accounts));
 	    }).catch(function (err) {
 	      dispatch(accountsListError(err));
 	      return Promise.resolve({ error: err });
@@ -2851,8 +2782,8 @@ webpackJsonp([0,3],{
 	function accountRefCreate(customerId, payload) {
 	  return function (dispatch) {
 	    dispatch(accountRefCreateStart());
-	    return api.apiCreateRefAccount(customerId, payload).then(function (_ref) {
-	      var id = _ref.id;
+	    return api.apiCreateRefAccount(customerId, payload).then(function (_ref2) {
+	      var id = _ref2.id;
 	
 	      dispatch(accountRefCreateComplete(_extends({}, payload, {
 	        id: id
@@ -2894,10 +2825,9 @@ webpackJsonp([0,3],{
 	function deleteAccount(customerId, accountId) {
 	  return function (dispatch) {
 	    dispatch(deleteAccountRequested());
-	    return api.apiDeleteAccount(accountId).then(function (data) {
-	      //debugger;
-	      dispatch(deleteAccountComplete());
-	      return Promise.resolve('ok');
+	    return api.apiDeleteAccount(customerId, accountId).then(function (data) {
+	      dispatch(deleteAccountComplete(data));
+	      return Promise.resolve(data);
 	    }).catch(function (err) {
 	      dispatch(deleteAccountError());
 	      return Promise.reject(err);
@@ -2927,10 +2857,10 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    dispatch(createRefOwnerLookupStart(lookup));
 	    return api.apiRetrieveUsers(lookup).then(function (data) {
-	      var _ref2 = data || {};
+	      var _ref3 = data || {};
 	
-	      var _ref2$customers = _ref2.customers;
-	      var customers = _ref2$customers === undefined ? [] : _ref2$customers;
+	      var _ref3$customers = _ref3.customers;
+	      var customers = _ref3$customers === undefined ? [] : _ref3$customers;
 	
 	
 	      var arr = customers.map(function (c) {
@@ -2958,13 +2888,13 @@ webpackJsonp([0,3],{
 	
 	var createRefAccountLookup = exports.createRefAccountLookup = function createRefAccountLookup(customerId) {
 	  return function (dispatch) {
-	    dispatch(createRefAccountLookupStart());
-	    return api.apiRetrieveAccounts(customerId).then(function (_ref3) {
-	      var accounts = _ref3.accounts;
+	    dispatch(createRefAccountLookupStart(customerId));
+	    return api.apiRetrieveAccounts(customerId).then(function (_ref4) {
+	      var accounts = _ref4.accounts;
 	
-	      var arr = accounts.map(function (_ref4) {
-	        var accountId = _ref4.accountId;
-	        var title = _ref4.title;
+	      var arr = accounts.map(function (_ref5) {
+	        var accountId = _ref5.accountId;
+	        var title = _ref5.title;
 	        return {
 	          value: accountId,
 	          label: title
@@ -3810,19 +3740,13 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactRouter = __webpack_require__(183);
-	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(582);
-	
-	var _reactSelect2 = _interopRequireDefault(_reactSelect);
-	
-	var _AccountInfo = __webpack_require__(588);
+	var _AccountInfo = __webpack_require__(582);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
-	var _modals = __webpack_require__(591);
+	var _modals = __webpack_require__(585);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
@@ -3833,6 +3757,10 @@ webpackJsonp([0,3],{
 	var _entities = __webpack_require__(326);
 	
 	var A = _interopRequireWildcard(_entities);
+	
+	var _authenticate = __webpack_require__(315);
+	
+	var AU = _interopRequireWildcard(_authenticate);
 	
 	var _readProp = __webpack_require__(331);
 	
@@ -3851,8 +3779,6 @@ webpackJsonp([0,3],{
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 17/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	//import * as DefaultTheme from "redux-auth";
 	
 	
 	var resetModals = {
@@ -3925,14 +3851,16 @@ webpackJsonp([0,3],{
 	    value: function create3rdPartyAccountModalConfirmed(payload) {
 	      var _this3 = this;
 	
-	      var customerId = this.props.auth.user.attributes.id;
+	      var _props$auth$user$attr = this.props.auth.user.attributes;
+	      var customerId = _props$auth$user$attr.id;
+	      var dispatch = _props$auth$user$attr.dispatch;
 	
 	
-	      this.props.dispatch(A.accountRefCreate(customerId, payload)).then(function () {
+	      dispatch(A.accountRefCreate(customerId, payload)).then(function () {
 	        _this3.close();
 	        return new Promise(function (rs, rj) {
 	          setTimeout(function () {
-	            _this3.props.dispatch(A.fetchOwnAccounts(customerId)).then(rs, rj);
+	            Promise.all([dispatch(AU.authenticate(true)), dispatch(A.fetchOwnAccounts(customerId))]).then(rs, rj);
 	          }, 1500);
 	        });
 	      }).catch(function (err) {
@@ -3954,12 +3882,17 @@ webpackJsonp([0,3],{
 	    value: function remove3rdPartyAccountModalConfirmed(accountId) {
 	      var _this4 = this;
 	
-	      var customerId = this.props.customerId;
+	      var _props = this.props;
+	      var customerId = _props.customerId;
+	      var dispatch = _props.dispatch;
 	
-	      this.props.dispatch(A.deleteAccount(customerId, accountId)).then(function () {
+	      dispatch(A.deleteAccount(customerId, accountId)).then(function () {
 	        _this4.close();
+	        setTimeout(function () {
+	          return Promise.all([dispatch(AU.authenticate(true)), dispatch(A.fetchOwnAccounts(customerId))]);
+	        }, 1500);
 	      }, function (err) {
-	        _this4.props.dispatch(A.errorMessageTimedOut(err && err.message || err));
+	        dispatch(A.errorMessageTimedOut(err && err.message || err));
 	        _this4.close();
 	      });
 	    }
@@ -4283,7 +4216,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 588:
+/***/ 582:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4303,7 +4236,7 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactLoader = __webpack_require__(589);
+	var _reactLoader = __webpack_require__(583);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -4422,7 +4355,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 591:
+/***/ 585:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4433,7 +4366,7 @@ webpackJsonp([0,3],{
 	  value: true
 	});
 	
-	var _Add3rdPartyAccountModal = __webpack_require__(592);
+	var _Add3rdPartyAccountModal = __webpack_require__(586);
 	
 	Object.defineProperty(exports, 'Add3rdPartyAccountModal', {
 	  enumerable: true,
@@ -4466,7 +4399,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 592:
+/***/ 586:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4490,15 +4423,15 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(587);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _Input = __webpack_require__(594);
+	var _Input = __webpack_require__(588);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _AuxErrorLabel = __webpack_require__(595);
+	var _AuxErrorLabel = __webpack_require__(589);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
@@ -4510,7 +4443,7 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(582);
+	var _reactSelect = __webpack_require__(590);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
@@ -4760,7 +4693,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 593:
+/***/ 587:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4781,7 +4714,7 @@ webpackJsonp([0,3],{
 	
 	var _reactBootstrap = __webpack_require__(333);
 	
-	var _reactLoader = __webpack_require__(589);
+	var _reactLoader = __webpack_require__(583);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -4888,7 +4821,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 594:
+/***/ 588:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5000,7 +4933,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 595:
+/***/ 589:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5125,11 +5058,11 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(594);
+	var _Input = __webpack_require__(588);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(587);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
@@ -5348,7 +5281,7 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(582);
+	var _reactSelect = __webpack_require__(590);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
@@ -5407,9 +5340,9 @@ webpackJsonp([0,3],{
 	
 	      var entityId = id || accountId;
 	
-	      var title = titleRaw || '[No title]';
-	      var balance = (balanceRaw > 0 && balanceRaw < 1 ? '$0' : '$') + Number(balanceRaw).toFixed(2);
-	      var description = descriptionRaw || '[No description]';
+	      var title = titleRaw || '—';
+	      var balance = isNaN(balanceRaw) ? '—' : (balanceRaw > 0 && balanceRaw < 1 ? '$0' : '$') + Number(balanceRaw).toFixed(2);
+	      var description = descriptionRaw || '—';
 	
 	      return _react2.default.createElement(
 	        _reactBootstrap.Modal,
@@ -5631,11 +5564,11 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactSelect = __webpack_require__(582);
+	var _reactSelect = __webpack_require__(590);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _Input = __webpack_require__(594);
+	var _Input = __webpack_require__(588);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
@@ -5649,7 +5582,7 @@ webpackJsonp([0,3],{
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _modals = __webpack_require__(591);
+	var _modals = __webpack_require__(585);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
@@ -6135,7 +6068,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactLoader = __webpack_require__(589);
+	var _reactLoader = __webpack_require__(583);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -6149,7 +6082,7 @@ webpackJsonp([0,3],{
 	
 	var _Money = __webpack_require__(599);
 	
-	var _AccountInfo = __webpack_require__(588);
+	var _AccountInfo = __webpack_require__(582);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
@@ -6592,15 +6525,15 @@ webpackJsonp([0,3],{
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(594);
+	var _Input = __webpack_require__(588);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(587);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _AuxErrorLabel = __webpack_require__(595);
+	var _AuxErrorLabel = __webpack_require__(589);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
@@ -6957,11 +6890,11 @@ webpackJsonp([0,3],{
 	
 	var _reactBootstrap = __webpack_require__(333);
 	
-	var _Input = __webpack_require__(594);
+	var _Input = __webpack_require__(588);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(593);
+	var _ButtonLoader = __webpack_require__(587);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
@@ -6969,7 +6902,7 @@ webpackJsonp([0,3],{
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _AuxErrorLabel = __webpack_require__(595);
+	var _AuxErrorLabel = __webpack_require__(589);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
@@ -7339,4 +7272,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.4d33d25a9b5872086180.js.map
+//# sourceMappingURL=app.0f8c47485a49f44c2404.js.map
