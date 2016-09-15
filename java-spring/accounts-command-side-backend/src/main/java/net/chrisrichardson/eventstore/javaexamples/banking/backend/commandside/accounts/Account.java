@@ -7,6 +7,7 @@ import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accoun
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account extends ReflectiveMutableCommandProcessingAggregate<Account, AccountCommand> {
@@ -19,7 +20,7 @@ public class Account extends ReflectiveMutableCommandProcessingAggregate<Account
   }
 
   public List<Event> process(DeleteAccountCommand cmd) {
-    return EventUtil.events(new AccountDeletedEvent());
+    return EventUtil.events(new AccountDeletedEvent(new Date()));
   }
 
   public List<Event> process(DebitAccountCommand cmd) {
