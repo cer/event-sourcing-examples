@@ -13,6 +13,8 @@ public class CustomerInfo {
   @NotNull
   protected String email;
   @NotNull
+  protected String password;
+  @NotNull
   protected String ssn;
   @NotNull
   protected String phoneNumber;
@@ -21,9 +23,10 @@ public class CustomerInfo {
   public CustomerInfo() {
   }
 
-  public CustomerInfo(Name name, String email, String ssn, String phoneNumber, Address address) {
+  public CustomerInfo(Name name, String email, String password, String ssn, String phoneNumber, Address address) {
     this.name = name;
     this.email = email;
+    this.password = password;
     this.ssn = ssn;
     this.phoneNumber = phoneNumber;
     this.address = address;
@@ -35,6 +38,10 @@ public class CustomerInfo {
 
   public String getEmail() {
     return email;
+  }
+
+  public String getPassword() {
+    return password;
   }
 
   public String getSsn() {

@@ -2,40 +2,77 @@
  * Created by andrew on 15/02/16.
  */
 import React, {PropTypes} from "react";
-//import auth from "redux-auth";
+import { connect } from "react-redux";
+import { Glyphicon } from "react-bootstrap";
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
-//import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
 import IndexPanel from "./../../components/partials/IndexPanel";
+import AuxErrorLabel from './AuxErrorLabel';
 import { customerInfoMap } from '../../entities/formToPayloadMappers';
-
 import read from '../../utils/readProp';
+import * as AS from '../../actions/signUp';
 
-import { Glyphicon } from "react-bootstrap";
-import { connect } from "react-redux";
+const formValidation = (payload) => [
+  'fname',
+  'lname',
+  'email',
+  'password',
+  'passwordConfirm',
+  'ssn',
+  'phoneNumber',
+  'address1',
+  'address2',
+  'city',
+  'state',
+  'zip'
+].reduce((memo, prop) => {
+  let result = [];
+  const value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
 
-import {emailSignUpFormUpdate, emailSignUp} from '../../actions/signUp';
+  switch (prop) {
+    case 'fname':
+    case 'lname':
+    case 'email':
+    case 'ssn':
+    case 'password':
+    case 'passwordConfirm':
+      if (/^$/.test(value)) {
+        result.push('required');
+      }
+  }
+
+  switch (prop) {
+    case 'passwordConfirm':
+      if (value != payload['password']) {
+        result.push('need to be equal to password');
+      }
+  }
+
+  if (result.length) {
+    memo[prop] = result;
+    memo.hasErrors = true;
+  }
+  return memo;
+}, {});
 
 
 class EmailSignUpForm extends React.Component {
 
-  getEndpoint () {
-    return (
-      this.props.endpoint ||
-      this.props.auth.getIn(["configure", "currentEndpointKey"]) ||
-      this.props.auth.getIn(["configure", "defaultEndpointKey"])
-    );
-  }
-
   handleInput (key, val) {
-    this.props.dispatch(emailSignUpFormUpdate(key, val));
+    this.props.dispatch(AS.emailSignUpFormUpdate(key, val));
   }
 
   handleSubmit (event) {
     event.preventDefault();
 
-    let formData = { ...this.props.auth.signUp.form };
-    this.props.dispatch(emailSignUp(customerInfoMap(formData)));
+    const formData = read(this.props.auth, 'signUp.form');
+    const validationErrors = formValidation(formData);
+    if (validationErrors.hasErrors) {
+      this.props.dispatch(AS.emailSignUpError(validationErrors));
+      return;
+    }
+
+    this.props.dispatch(AS.emailSignUp(customerInfoMap(formData)));
   }
 
   render () {
@@ -45,9 +82,20 @@ class EmailSignUpForm extends React.Component {
       this.props.auth.signUp.loading
     );
 
+    const formErrors = read(this.props.auth, 'signUp.errors.errors', '');
+
     return (
       <form className='redux-auth email-sign-up-form clearfix'
             onSubmit={this.handleSubmit.bind(this)}>
+
+        <div className="form-group" style={{
+          display: formErrors ? 'block' : 'none'
+        }}>
+          <AuxErrorLabel
+            label="Form:"
+            errors={ formErrors.length ? [ formErrors ] : [] }
+          />
+        </div>
 
         <IndexPanel header="basic">
 
@@ -80,6 +128,28 @@ class EmailSignUpForm extends React.Component {
                  errors={read(this.props.auth, 'signUp.errors.email', [])}
                  onChange={this.handleInput.bind(this, "email")}
           />
+
+          <Input type="password"
+                 className="password-sign-in-email"
+                 label="Password"
+                 placeholder="Password"
+                 name="password"
+                 disabled={disabled}
+                 value={read(this.props.auth, 'signUp.form.password', '')}
+                 errors={read(this.props.auth, 'signUp.errors.password', [])}
+                 onChange={this.handleInput.bind(this, "password")}
+                 />
+
+          <Input type="password"
+                 className="password-sign-in-email"
+                 label="Confirm password"
+                 placeholder="Confirm password"
+                 name="password-confirm"
+                 disabled={disabled}
+                 value={read(this.props.auth, 'signUp.form.passwordConfirm', '')}
+                 errors={read(this.props.auth, 'signUp.errors.passwordConfirm', [])}
+                 onChange={this.handleInput.bind(this, "passwordConfirm")}
+                 />
 
 
         </IndexPanel>

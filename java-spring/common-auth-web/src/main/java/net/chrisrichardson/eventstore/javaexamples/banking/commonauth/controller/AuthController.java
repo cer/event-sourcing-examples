@@ -41,7 +41,7 @@ public class AuthController {
 
   @RequestMapping(value = "/login", method = POST)
   public ResponseEntity<QuerySideCustomer> doAuth(@RequestBody @Valid AuthRequest request) throws IOException {
-    QuerySideCustomer customer = customerAuthService.findByEmail(request.getEmail());
+    QuerySideCustomer customer = customerAuthService.findByEmailAndPassword(request.getEmail(), request.getPassword());
 
     Token token = tokenService.allocateToken(objectMapper.writeValueAsString(new User(request.getEmail())));
     return ResponseEntity.status(HttpStatus.OK).header("access-token", token.getKey())

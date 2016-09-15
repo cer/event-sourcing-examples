@@ -19,9 +19,14 @@ public class CustomerAuthService {
     List<QuerySideCustomer> customers = customerAuthRepository.findByEmail(email);
     if (customers.isEmpty())
       throw new EmptyResultDataAccessException(1);
-      //TODO: add unique email constraint
-/*        else if(customers.size()>1)
-            throw new IncorrectResultSizeDataAccessException(1, customers.size());*/
+    else
+      return customers.get(0);
+  }
+
+  public QuerySideCustomer findByEmailAndPassword(String email, String password) {
+    List<QuerySideCustomer> customers = customerAuthRepository.findByEmailAndPassword(email, password);
+    if (customers.isEmpty())
+      throw new EmptyResultDataAccessException(1);
     else
       return customers.get(0);
   }

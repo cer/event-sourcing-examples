@@ -53,19 +53,14 @@ public class BankingAuthTest {
 
     final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
+    final String password = customerResponse.getCustomerInfo().getPassword();
 
     Assert.assertNotNull(customerId);
     Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    customersTestUtils.assertCustomerResponse(customerId, email, password, customerInfo);
 
-    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
-
-    AuthRequest authRequest = new AuthRequest(email);
+    AuthRequest authRequest = new AuthRequest(email, password);
 
     final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), authRequest, QuerySideCustomer.class).getBody();
 

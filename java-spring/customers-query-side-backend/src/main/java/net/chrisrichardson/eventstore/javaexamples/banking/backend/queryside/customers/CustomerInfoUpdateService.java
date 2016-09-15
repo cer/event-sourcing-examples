@@ -34,6 +34,7 @@ public class CustomerInfoUpdateService {
             querySideCustomerRepository.save(new QuerySideCustomer(id,
                             customerInfo.getName(),
                             customerInfo.getEmail(),
+                            customerInfo.getPassword(),
                             customerInfo.getSsn(),
                             customerInfo.getPhoneNumber(),
                             customerInfo.getAddress(),

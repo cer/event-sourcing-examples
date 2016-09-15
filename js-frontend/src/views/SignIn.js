@@ -4,27 +4,21 @@
 import React from "react";
 import { PageHeader } from "react-bootstrap";
 import { connect } from "react-redux";
-
-//import ButtonLoader from "./ButtonLoader";
 import * as BS from "react-bootstrap";
-//import ButtonLoader from "../controls/bootstrap/ButtonLoader";
-
-
-import {pushState} from "redux-router";
-
-
-//export {bootstrap, materialUi} from "./views";
-
-
-// bootstrap theme
-//import { EmailSignInForm } from "redux-auth/bootstrap-theme";
-import EmailSignInForm from "../controls/bootstrap/EmailSignInForm";
+import { pushState } from "redux-router";
+import { EmailSignInForm } from "../controls/bootstrap/EmailSignInForm";
+import read from '../utils/readProp';
 
 export class SignIn extends React.Component {
 
   checkRedirect(props) {
-    if (props.auth.user.isSignedIn) {
-      props.dispatch(pushState(null, props.location.query.next));
+
+    const isSignedIn = read(props.auth, 'user.isSignedIn');
+    if (isSignedIn) {
+
+      const nextLocation = read(props.location, 'query.next');
+      props.dispatch(pushState(null, nextLocation));
+
       //// redirect to login and add next param so we can redirect again after login
       //const redirectAfterLogin = this.props.location.pathname;
       //this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
@@ -40,16 +34,6 @@ export class SignIn extends React.Component {
   }
 
   render () {
-    const signInProps = {
-      inputProps: {
-        password: {
-          className: 'hide hidden',
-          style: { display: 'none' },
-          value: null,
-          disabled: true
-        }
-      }
-    };
 
     return (
       <BS.Well>

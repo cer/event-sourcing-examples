@@ -1,6 +1,10 @@
 import { TODO_DEFINE, defineActionType } from '../utils/defineActionTypes'
 
 export default defineActionType({
+
+  LOCATION: {
+    ENTER: TODO_DEFINE
+  },
   /*
    * View model
    */
