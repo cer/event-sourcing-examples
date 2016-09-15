@@ -4,15 +4,12 @@
 import React from "react";
 import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 import * as BS from "react-bootstrap";
-import { Link, IndexLink} from "react-router";
 import { connect } from "react-redux";
-//import * as DefaultTheme from "redux-auth";
-import Select from "react-select";
 import AccountInfo from '../components/AccountInfo';
 import * as Modals from './modals';
 import IndexPanel from "./../components/partials/IndexPanel";
-
 import * as A from '../actions/entities';
+import * as AU from '../actions/authenticate';
 import read from '../utils/readProp';
 import { Money } from '../components/Money';
 
@@ -73,15 +70,19 @@ class MyAccounts extends React.Component {
 
   create3rdPartyAccountModalConfirmed(payload) {
     const {
-      id: customerId
+      id: customerId,
+      dispatch
     } = this.props.auth.user.attributes;
 
-    this.props.dispatch(A.accountRefCreate(customerId, payload))
+    dispatch(A.accountRefCreate(customerId, payload))
       .then(() => {
         this.close();
         return new Promise((rs, rj) => {
           setTimeout(() => {
-            this.props.dispatch(A.fetchOwnAccounts(customerId)).then(rs, rj);
+            Promise.all([
+              dispatch(AU.authenticate(true)),
+              dispatch(A.fetchOwnAccounts(customerId))
+            ]).then(rs, rj);
           }, 1500);
         })
       })
@@ -100,13 +101,19 @@ class MyAccounts extends React.Component {
   }
 
   remove3rdPartyAccountModalConfirmed(accountId) {
-    const { customerId } = this.props;
-    this.props.dispatch(A.deleteAccount(customerId, accountId))
+    const { customerId, dispatch } = this.props;
+    dispatch(A.deleteAccount(customerId, accountId))
     .then(() => {
         this.close();
+        setTimeout(() => {
+          return Promise.all([
+            dispatch(AU.authenticate(true)),
+            dispatch(A.fetchOwnAccounts(customerId))
+          ]);
+        }, 1500);
     },
     err => {
-      this.props.dispatch(A.errorMessageTimedOut(err && err.message || err));
+      dispatch(A.errorMessageTimedOut(err && err.message || err));
       this.close();
     });
   }
@@ -190,7 +197,7 @@ class MyAccounts extends React.Component {
           ]: null
         }
         </td>
-        <td key={1}></td>
+        <td key={1} />
         <td key={2}><Button pullRight={true} bsStyle={"link"} onClick={this.remove3rdPartyAccountModal.bind(this, id)}><BS.Glyphicon glyph="remove" /></Button>
         </td>
       </tr>

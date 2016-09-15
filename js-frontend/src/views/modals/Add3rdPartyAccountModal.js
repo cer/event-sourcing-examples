@@ -140,7 +140,7 @@ export class Add3rdPartyAccountModal extends React.Component {
                 options={read(this.props.data, 'accountsLookup.options', [])}
                 onChange={this.handleInput.bind(this, 'account')} />
               <AuxErrorLabel
-                label="Owner:"
+                label="Account:"
                 errors={read(this.props.data, 'errors.account', [])}
               />
             </div>

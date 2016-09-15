@@ -59,10 +59,12 @@ public class AccountInfoUpdateService {
 
 
   public void addTransaction(String accountId, AccountTransactionInfo ti) {
+    System.out.println("Start addTransaction for: "+ti.toString());
     mongoTemplate.upsert(new Query(where("id").is(accountId)),
             new Update().
                     set("transactions." + ti.getTransactionId(), ti),
             AccountInfo.class);
+    System.out.println("End addTransaction for: "+ti.toString());
   }
 
 
@@ -76,9 +78,11 @@ public class AccountInfoUpdateService {
   }
 
   public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
+    System.out.println("Start updateTransactionStatus "+accountId +" "+transactionId+" "+status);
       mongoTemplate.upsert(new Query(where("id").is(accountId)),
               new Update().
-                      set("transferStates." + transactionId, status),
+                      set("transactions." + transactionId + ".status", status),
               AccountInfo.class);
+    System.out.println("End updateTransactionStatus "+accountId +" "+transactionId+" "+status);
   }
 }

@@ -20,7 +20,7 @@ export class TransfersTable extends React.Component {
       }, v) => {
         if (v.entryType == 'account') {
           balance = v.initialBalance;
-        } else if (v.entryType == 'transaction') {
+        } else if (v.entryType == 'transaction' && (v.status !== 'FAILED_DUE_TO_INSUFFICIENT_FUNDS')) {
           const isOriginating = v.fromAccountId == currentAccountId;
           balance += (isOriginating ? -1 : 1) * v.amount;
         }

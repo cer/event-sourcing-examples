@@ -10,47 +10,48 @@ import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
 import AuxErrorLabel from './AuxErrorLabel';
 
-import { emailSignInFormUpdate, emailSignIn } from "../../actions/signIn";
+import * as AS from "../../actions/signIn";
 
-/*
- <Input type="password"
- label="Password"
- className="email-sign-in-password"
- placeholder="Password"
- disabled={disabled}
- value={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form", "password"])}
- errors={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "errors", "password"])}
- onChange={this.handleInput.bind(this, "password")}
- {...this.props.inputProps.password} />
-  */
+const formValidation = (payload) => [
+  'email',
+  'password'
+].reduce((memo, prop) => {
+  let result = [];
+  const value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
 
-class EmailSignInForm extends React.Component {
+  switch (prop) {
+    case 'email':
+    case 'password':
+      if (/^$/.test(value)) {
+        result.push('required');
+      }
+  }
 
-  static propTypes = {
-    endpoint: PropTypes.string,
-    inputProps: PropTypes.shape({
-      email: PropTypes.object,
-      password: PropTypes.object,
-      submit: PropTypes.object
-    })
-  };
+  if (result.length) {
+    memo[prop] = result;
+    memo.hasErrors = true;
+  }
+  return memo;
+}, {});
 
-  static defaultProps = {
-    inputProps: {
-      email: {},
-      password: {},
-      submit: {}
-    }
-  };
+export class EmailSignInForm extends React.Component {
 
   handleInput (key, val) {
-    this.props.dispatch(emailSignInFormUpdate(key, val));
+    this.props.dispatch(AS.emailSignInFormUpdate(key, val));
   }
 
   handleSubmit (event) {
     event.preventDefault();
-    let formData = { ...this.props.auth.signIn.form };
-    this.props.dispatch(emailSignIn(formData));
+
+    const formData = read(this.props.auth, 'signIn.form');
+
+    const validationErrors = formValidation(formData);
+    if (validationErrors.hasErrors) {
+      this.props.dispatch(AS.emailSignInError(validationErrors));
+      return;
+    }
+
+    this.props.dispatch(AS.emailSignIn(formData));
   }
 
   render () {
@@ -62,9 +63,7 @@ class EmailSignInForm extends React.Component {
     );
 
       //const error = read(this.props.auth, 'signIn.errors.email', null);
-      //debugger;
       const formErrors = read(this.props.auth, 'signIn.errors.errors', '');
-
 
       return (
       <form className='redux-auth email-sign-in-form clearfix'
@@ -75,7 +74,7 @@ class EmailSignInForm extends React.Component {
             }}>
           <AuxErrorLabel
             label="Form:"
-            errors={formErrors.length ? [formErrors] : [] }
+            errors={ formErrors.length ? [ formErrors ] : [] }
           />
         </div>
 
@@ -89,6 +88,17 @@ class EmailSignInForm extends React.Component {
                errors={read(this.props.auth, 'signIn.errors.email', [])}
                onChange={this.handleInput.bind(this, "email")}
           {...this.props.inputProps.email} />
+
+        <Input type="password"
+               className="password-sign-in-email"
+               label="Password"
+               placeholder="Password"
+               name="password"
+               disabled={disabled}
+               value={read(this.props.auth, 'signIn.form.password', '')}
+               errors={read(this.props.auth, 'signIn.errors.password', [])}
+               onChange={this.handleInput.bind(this, "password")}
+          {...this.props.inputProps.password} />
 
         <ButtonLoader loading={read(this.props.auth, 'signIn.loading', false)}
                       type="submit"
@@ -108,4 +118,21 @@ class EmailSignInForm extends React.Component {
   }
 }
 
-export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);
+EmailSignInForm.propTypes = {
+  endpoint: PropTypes.string,
+  inputProps: PropTypes.shape({
+    email: PropTypes.object,
+    password: PropTypes.object,
+    submit: PropTypes.object
+  })
+};
+
+EmailSignInForm.defaultProps = {
+  inputProps: {
+    email: {},
+    password: {},
+    submit: {}
+  }
+};
+
+// export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);

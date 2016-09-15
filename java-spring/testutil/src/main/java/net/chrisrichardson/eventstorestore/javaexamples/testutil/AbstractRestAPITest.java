@@ -27,6 +27,13 @@ public abstract class AbstractRestAPITest {
 
   //@Test
   public void shouldCreateAccountsAndTransferMoney() {
+    CustomerInfo customerInfo = generateCustomerInfo();
+
+    final CustomerResponse customerResponse = getRestTemplate().postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
+    final String customerId = customerResponse.getId();
+    final String email = customerResponse.getCustomerInfo().getEmail();
+    final String password = customerResponse.getCustomerInfo().getPassword();
+
     BigDecimal initialFromAccountBalance = new BigDecimal(500);
     BigDecimal initialToAccountBalance = new BigDecimal(100);
     BigDecimal amountToTransfer = new BigDecimal(150);
@@ -35,36 +42,36 @@ public abstract class AbstractRestAPITest {
     BigDecimal finalToAccountBalance = initialToAccountBalance.add(amountToTransfer);
 
     final CreateAccountResponse fromAccount = getAuthenticatedRestTemplate().postForEntity(baseUrl("/accounts"),
-            new CreateAccountRequest("00000000-00000000", "My 1 Account", "", initialFromAccountBalance),
-            CreateAccountResponse.class);
+            new CreateAccountRequest(customerId, "My 1 Account", "", initialFromAccountBalance),
+            CreateAccountResponse.class, email, password);
 
     final String fromAccountId = fromAccount.getAccountId();
 
     CreateAccountResponse toAccount = getAuthenticatedRestTemplate().postForEntity(baseUrl("/accounts"),
-            new CreateAccountRequest("00000000-00000000", "My 2 Account", "", initialToAccountBalance),
-            CreateAccountResponse.class);
+            new CreateAccountRequest(customerId, "My 2 Account", "", initialToAccountBalance),
+            CreateAccountResponse.class, email, password);
 
     String toAccountId = toAccount.getAccountId();
 
     Assert.assertNotNull(fromAccountId);
     Assert.assertNotNull(toAccountId);
 
-    assertAccountBalance(fromAccountId, initialFromAccountBalance);
-    assertAccountBalance(toAccountId, initialToAccountBalance);
+    assertAccountBalance(email, password, fromAccountId, initialFromAccountBalance);
+    assertAccountBalance(email, password, toAccountId, initialToAccountBalance);
 
     final CreateMoneyTransferResponse moneyTransfer = getAuthenticatedRestTemplate().postForEntity(baseUrl("/transfers"),
             new CreateMoneyTransferRequest(fromAccountId, toAccountId, amountToTransfer, ""),
-            CreateMoneyTransferResponse.class);
+            CreateMoneyTransferResponse.class, email, password);
 
-    assertAccountBalance(fromAccountId, finalFromAccountBalance);
-    assertAccountBalance(toAccountId, finalToAccountBalance);
+    assertAccountBalance(email, password, fromAccountId, finalFromAccountBalance);
+    assertAccountBalance(email, password, toAccountId, finalToAccountBalance);
 
     eventually(
             new Producer<AccountHistoryResponse>() {
               @Override
               public CompletableFuture<AccountHistoryResponse> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts/" + fromAccountId + "/history"),
-                        AccountHistoryResponse.class));
+                        AccountHistoryResponse.class, email, password));
               }
             },
             new Verifier<AccountHistoryResponse>() {
@@ -92,28 +99,30 @@ public abstract class AbstractRestAPITest {
 
     final CustomerResponse customerResponse = getRestTemplate().postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
+    final String email = customerResponse.getCustomerInfo().getEmail();
+    final String password = customerResponse.getCustomerInfo().getPassword();
 
     Assert.assertNotNull(customerId);
     assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-    getCustomersTestUtils().assertCustomerResponse(customerId, customerInfo);
+    getCustomersTestUtils().assertCustomerResponse(customerId, email, password, customerInfo);
 
     final CreateAccountResponse account = getAuthenticatedRestTemplate().postForEntity(baseUrl("/accounts"),
             new CreateAccountRequest(customerId, "My 1 Account", "", initialFromAccountBalance),
-            CreateAccountResponse.class);
+            CreateAccountResponse.class, email, password);
 
     final String accountId = account.getAccountId();
 
     Assert.assertNotNull(accountId);
 
-    assertAccountBalance(accountId, initialFromAccountBalance);
+    assertAccountBalance(email, password, accountId, initialFromAccountBalance);
 
     eventually(
             new Producer<GetAccountsResponse>() {
               @Override
               public CompletableFuture<GetAccountsResponse> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customers/"+customerId+"/accounts"),
-                        GetAccountsResponse.class));
+                        GetAccountsResponse.class, email, password));
               }
             },
             new Verifier<GetAccountsResponse>() {
@@ -148,33 +157,35 @@ public abstract class AbstractRestAPITest {
 
     final CustomerResponse customerResponse = getRestTemplate().postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
+    final String email = customerResponse.getCustomerInfo().getEmail();
+    final String password = customerResponse.getCustomerInfo().getPassword();
 
     Assert.assertNotNull(customerId);
     assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-    getCustomersTestUtils().assertCustomerResponse(customerId, customerInfo);
+    getCustomersTestUtils().assertCustomerResponse(customerId, email, password, customerInfo);
 
     ToAccountInfo toAccountInfo = generateToAccountInfo();
 
     getAuthenticatedRestTemplate().postForEntity(baseUrl("/customers/" + customerId + "/toaccounts"),
             toAccountInfo,
-            null);
+            null, email, password);
 
-    assertToAccountsContains(customerId, toAccountInfo);
+    assertToAccountsContains(customerId, email, password, toAccountInfo);
   }
 
   private BigDecimal toCents(BigDecimal dollarAmount) {
     return dollarAmount.multiply(new BigDecimal(100));
   }
 
-  private void assertAccountBalance(final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
+  private void assertAccountBalance(final String email, final String password, final String fromAccountId, final BigDecimal expectedBalanceInDollars) {
     final BigDecimal inCents = toCents(expectedBalanceInDollars);
     eventually(
             new Producer<GetAccountResponse>() {
               @Override
               public CompletableFuture<GetAccountResponse> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/accounts/" + fromAccountId),
-                        GetAccountResponse.class));
+                        GetAccountResponse.class, email, password));
               }
             },
             new Verifier<GetAccountResponse>() {
@@ -186,13 +197,13 @@ public abstract class AbstractRestAPITest {
             });
   }
 
-  private void assertToAccountsContains(final String customerId, final ToAccountInfo toAccountInfo) {
+  private void assertToAccountsContains(final String customerId, final String email, final String password, final ToAccountInfo toAccountInfo) {
     eventually(
             new Producer<QuerySideCustomer>() {
               @Override
               public CompletableFuture<QuerySideCustomer> produce() {
                 return CompletableFuture.completedFuture(getAuthenticatedRestTemplate().getForEntity(baseUrl("/customers/" + customerId),
-                        QuerySideCustomer.class));
+                        QuerySideCustomer.class, email, password));
               }
             },
             new Verifier<QuerySideCustomer>() {

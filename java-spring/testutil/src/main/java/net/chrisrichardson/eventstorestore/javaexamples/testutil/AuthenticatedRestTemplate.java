@@ -11,19 +11,23 @@ public class AuthenticatedRestTemplate {
     this.restTemplate = restTemplate;
   }
 
-  public <T> T getForEntity(String url, Class<T> clazz) {
+  public <T> T getForEntity(String url, Class<T> clazz, String email, String password) {
     return BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
             url,
             HttpMethod.GET,
-            clazz);
+            clazz,
+            email,
+            password);
   }
 
-  public <T> T postForEntity(String url, Object requestObject, Class<T> clazz) {
+  public <T> T postForEntity(String url, Object requestObject, Class<T> clazz, String email, String password) {
     return BasicAuthUtils.doBasicAuthenticatedRequest(restTemplate,
             url,
             HttpMethod.POST,
             clazz,
-            requestObject
+            requestObject,
+            email,
+            password
     );
   }
 

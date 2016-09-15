@@ -31,12 +31,12 @@ export const accountComplete = makeActionCreator(T.ACCOUNT.SINGLE_COMPLETE, 'pay
 export const accountError = makeActionCreator(T.ACCOUNT.SINGLE_ERROR, 'error');
 
 
-export function accountsList(userId) {
+export function accountsList(customerId) {
   return dispatch => {
     dispatch(accountsListRequested());
-    return api.apiRetrieveAccounts(userId)
-      .then(list => {
-        dispatch(accountsListReceived(list));
+    return api.apiRetrieveAccounts(customerId)
+      .then(({ accounts = []}) => {
+        dispatch(accountsListReceived(accounts));
       })
       .catch(err => {
         dispatch(accountsListError(err));
@@ -148,11 +148,10 @@ export const deleteAccountError = makeActionCreator(T.ACCOUNT.DELETE_ERROR);
 export function deleteAccount(customerId, accountId) {
   return dispatch => {
     dispatch(deleteAccountRequested());
-    return api.apiDeleteAccount(accountId)
+    return api.apiDeleteAccount(customerId, accountId)
       .then(data => {
-        //debugger;
-        dispatch(deleteAccountComplete());
-        return Promise.resolve('ok');
+        dispatch(deleteAccountComplete(data));
+        return Promise.resolve(data);
       })
       .catch(err => {
         dispatch(deleteAccountError());
@@ -208,7 +207,7 @@ export const createRefOwnerLookup = lookup => {
 
 export const createRefAccountLookup = customerId => {
   return dispatch => {
-    dispatch(createRefAccountLookupStart());
+    dispatch(createRefAccountLookupStart(customerId));
     return api.apiRetrieveAccounts(customerId)
       .then(({ accounts }) => {
         const arr = accounts.map(({ accountId, title }) => ({
