@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractRestAPITest {
 
-  //@Test
+  @Test
   public void shouldCreateAccountsAndTransferMoney() {
     CustomerInfo customerInfo = generateCustomerInfo();
 
@@ -151,7 +151,7 @@ public abstract class AbstractRestAPITest {
             });
   }
 
-  //@Test
+  @Test
   public void shouldCreateCustomersAndAddToAccount() {
     CustomerInfo customerInfo = generateCustomerInfo();
 
