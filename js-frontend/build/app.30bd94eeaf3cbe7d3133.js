@@ -2495,7 +2495,7 @@ webpackJsonp([0,3],{
 	  return API_ROOT + '/customers';
 	};
 	var customersPath = exports.customersPath = function customersPath() {
-	  return '/customers';
+	  return API_ROOT + '/customers';
 	};
 	var currentUserPath = exports.currentUserPath = function currentUserPath() {
 	  return API_ROOT + '/user';
@@ -2522,7 +2522,7 @@ webpackJsonp([0,3],{
 	  return API_ROOT + '/accounts/' + accountId + '/history';
 	};
 	var transfersUrl = exports.transfersUrl = function transfersUrl() {
-	  return '/transfers';
+	  return API_ROOT + '/transfers';
 	};
 	
 	function makeQuery(params) {
@@ -7125,4 +7125,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.35229828558de671a3b3.js.map
+//# sourceMappingURL=app.30bd94eeaf3cbe7d3133.js.map
