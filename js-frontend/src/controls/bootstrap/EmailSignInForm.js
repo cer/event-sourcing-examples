@@ -2,14 +2,11 @@
  * Created by andrew on 15/02/16.
  */
 import React, {PropTypes} from "react";
-import { connect } from "react-redux";
-import read from '../../utils/readProp';
-
 import * as BS from "react-bootstrap";
+import read from '../../utils/readProp';
 import Input from "./Input";
 import ButtonLoader from "./ButtonLoader";
 import AuxErrorLabel from './AuxErrorLabel';
-
 import * as AS from "../../actions/signIn";
 
 const formValidation = (payload) => [
@@ -134,5 +131,3 @@ EmailSignInForm.defaultProps = {
     submit: {}
   }
 };
-
-// export default connect(({app}) => ({auth: app.auth}))(EmailSignInForm);

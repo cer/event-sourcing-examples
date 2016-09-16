@@ -4,9 +4,7 @@
 import React, { PropTypes } from "react";
 import * as BS from 'react-bootstrap';
 import { PageHeader, OverlayTrigger, Modal, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
-import { Link, IndexLink} from "react-router";
-import { connect } from "react-redux";
-import Select from "react-select";
+import { moneyText } from '../../components/Money';
 
 export class RemoveAccountBookmarkModal extends React.Component {
 
@@ -41,7 +39,7 @@ export class RemoveAccountBookmarkModal extends React.Component {
     const entityId = id || accountId;
 
     const title = titleRaw || '—';
-    const balance = isNaN(balanceRaw) ? '—' : ((balanceRaw > 0 && balanceRaw < 1) ? '$0' : '$') + Number(balanceRaw / 100).toFixed(2);
+    const balance = moneyText(balanceRaw);
     const description = descriptionRaw || '—';
 
     return (<Modal show={this.props.show} onHide={this.props.onHide} key={0}>

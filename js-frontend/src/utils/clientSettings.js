@@ -3,65 +3,28 @@
  */
 
 import * as C from "./constants";
-import root from './root';
-
-import fetch from "./fetch";
-
 import parseEndpointConfig from "./parseEndpointConfig";
 import { setEndpointKeys } from "../actions/configure";
 
 import {
-  getCurrentSettings,
   setCurrentSettings,
   getInitialEndpointKey,
   setDefaultEndpointKey,
   setCurrentEndpoint,
   setCurrentEndpointKey,
   retrieveData,
-  persistData,
   destroySession
 } from "./sessionStorage";
 
 const defaultSettings = {
-  //proxyIf:            function() { return false; },
-  //proxyUrl:           "/proxy",
   forceHardRedirect:  false,
   storage:            "cookies",
   cookieExpiry:       14,
   cookiePath:         "/",
   initialCredentials: null,
 
-  passwordResetSuccessUrl: function() {
-    return root.location.href;
-  },
-
-  confirmationSuccessUrl:  function() {
-    return root.location.href;
-  },
-
   tokenFormat: {
     "access-token": "{{ access-token }}"
-    //"token-type":   "Bearer",
-    //client:         "{{ client }}",
-    //expiry:         "{{ expiry }}",
-    //uid:            "{{ uid }}"
-  },
-
-  parseExpiry: function(headers){
-    // convert from ruby time (seconds) to js time (millis)
-    return (parseInt(headers["expiry"], 10) * 1000) || null;
-  },
-
-  handleLoginResponse: function(resp) {
-    return resp.data;
-  },
-
-  handleAccountUpdateResponse: function(resp) {
-    return resp.data;
-  },
-
-  handleTokenValidationResponse: function(resp) {
-    return resp.data;
   }
 };
 
@@ -113,8 +76,6 @@ export function applyConfig({ dispatch, endpoint={}, settings={}, reset=false } 
     defaultEndpointKey));
 
   setCurrentEndpointKey(currentEndpointKey);
-
-
 
   return Promise.resolve();
 

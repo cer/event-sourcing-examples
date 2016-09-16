@@ -4,7 +4,6 @@
 import T from '../constants/ACTION_TYPES';
 import { makeActionCreator } from '../utils/actions';
 import * as U from '../utils/sessionStorage';
-
 import { apiGetCurrentUser } from '../utils/api';
 import { entityReceived } from './entities';
 

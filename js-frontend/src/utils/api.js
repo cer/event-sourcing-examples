@@ -2,22 +2,9 @@
  * Created by andrew on 12/03/16.
  */
 import authedFetch from './fetch';
-import {
-  getEmailSignInUrl,
-  getEmailSignUpUrl,
-  getCurrentUserUrl,
-  getAccountsUrl,
-  getCustomersUrl,
-  getTransfersUrl
-} from "./sessionStorage";
+import * as ENDPOINTS from './apiEndpoints';
 import root from './root';
 import { parseResponse } from "./handleFetchResponse";
-
-const fetch = (...args) => authedFetch(...args).then(parseResponse);
-
-function makeQuery(params) {
-  return Object.keys(params).map(key => [encodeURIComponent(key), encodeURIComponent(params[key])].join('=')).join('&');
-}
 
 const JSON_HEADERS = {
   headers: {
@@ -41,22 +28,26 @@ const METHODS = {
   }
 };
 
-export const apiSignIn = (body) => fetch(getEmailSignInUrl(), {
+const fetch = (...args) => authedFetch(...args).then(parseResponse);
+
+export const apiSignIn = (body) => fetch(ENDPOINTS.emailSignInPath(), {
   ...METHODS.POST,
   body: root.JSON.stringify(body)
 });
 
-export const apiSignUp = (body) => fetch(getEmailSignUpUrl(), {
+export const apiSignUp = (body) => fetch(ENDPOINTS.emailSignUpUrl(), {
   ...METHODS.POST,
   body: root.JSON.stringify(body)
 });
 
-export const apiGetCurrentUser = () => fetch(getCurrentUserUrl(), { ...METHODS.GET });
+export const apiGetCurrentUser = () => fetch(ENDPOINTS.currentUserPath(), {
+  ...METHODS.GET
+});
 
 export const apiCreateAccount = (customerId, {
   title,
   balance: initialBalance,
-  description }) => fetch(getAccountsUrl(), {
+  description }) => fetch(ENDPOINTS.accountsPath(), {
   ...METHODS.POST,
   body: root.JSON.stringify({
     customerId,
@@ -66,7 +57,7 @@ export const apiCreateAccount = (customerId, {
 });
 
 export const apiCreateRefAccount = (customerId, {
-  owner, account: accountId, title, description }) => fetch(`${getCustomersUrl()}/${customerId}/toaccounts`, {
+  owner, account: accountId, title, description }) => fetch(ENDPOINTS.toAccounts(customerId), {
   ...METHODS.POST,
   body: root.JSON.stringify({
     owner,
@@ -76,32 +67,32 @@ export const apiCreateRefAccount = (customerId, {
 });
 
 export const apiMakeTransfer = (fromAccountId, {
-  account, amount, description }) => fetch(getTransfersUrl(), {
+  account, amount, description }) => fetch(ENDPOINTS.transfersUrl(), {
   ...METHODS.POST,
   body: root.JSON.stringify({
-    "amount": amount,
-    "fromAccountId": fromAccountId,
+    amount,
+    fromAccountId,
     "toAccountId": account,
     description
   })
 });
 
-export const apiRetrieveAccounts = (customerId) => fetch(`${getCustomersUrl()}/${customerId}/accounts`, {
+export const apiRetrieveAccounts = (customerId) => fetch(ENDPOINTS.customersAccounts(customerId), {
   ...METHODS.GET
 });
 
-export const apiRetrieveTransfers = (accountId) => fetch(`${getAccountsUrl()}/${accountId}/history`, {
+export const apiRetrieveTransfers = (accountId) => fetch(ENDPOINTS.history(accountId), {
   ...METHODS.GET
 });
 
-export const apiRetrieveAccount = (accountId) => fetch(`${getAccountsUrl()}/${accountId}`, {
+export const apiRetrieveAccount = (accountId) => fetch(ENDPOINTS.account(accountId), {
   ...METHODS.GET
 });
 
-export const apiDeleteAccount = (customerId, accountId) => fetch(`${getCustomersUrl()}/${customerId}/accounts/${accountId}`, {
+export const apiDeleteAccount = (customerId, accountId) => fetch(ENDPOINTS.customersAccount(customerId, accountId), {
   ...METHODS.DELETE
 });
 
-export const apiRetrieveUsers = (email) => fetch(`${getCustomersUrl()}?${makeQuery({ email })}`, {
+export const apiRetrieveUsers = (email) => fetch(ENDPOINTS.customersLookup({ email }), {
   ...METHODS.GET
 });
