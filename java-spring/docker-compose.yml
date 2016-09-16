@@ -3,7 +3,7 @@ apigateway:
   working_dir: /app
   volumes:
     - ./api-gateway-service/build/libs:/app
-  command: java -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transfers.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
+  command: java ${JAVA_OPTS} -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transfers.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
   ports:
     - "8080:8080"
   links:
@@ -23,7 +23,7 @@ accountscommandside:
   working_dir: /app
   volumes:
     - ./accounts-command-side-service/build/libs:/app
-  command: java -jar /app/accounts-command-side-service.jar
+  command: java ${JAVA_OPTS} -jar /app/accounts-command-side-service.jar
   ports:
     - "8085:8080"
   environment:
@@ -35,7 +35,7 @@ transactionscommandside:
   working_dir: /app
   volumes:
     - ./transactions-command-side-service/build/libs:/app
-  command: java -jar /app/transactions-command-side-service.jar
+  command: java ${JAVA_OPTS} -jar /app/transactions-command-side-service.jar
   ports:
     - "8082:8080"
   environment:
@@ -48,7 +48,7 @@ accountsqueryside:
   working_dir: /app
   volumes:
     - ./accounts-query-side-service/build/libs:/app
-  command: java -jar /app/accounts-query-side-service.jar
+  command: java ${JAVA_OPTS} -jar /app/accounts-query-side-service.jar
   ports:
     - "8081:8080"
   links:
@@ -63,7 +63,7 @@ customerscommandside:
   working_dir: /app
   volumes:
     - ./customers-command-side-service/build/libs:/app
-  command: java -jar /app/customers-command-side-service.jar
+  command: java ${JAVA_OPTS} -jar /app/customers-command-side-service.jar
   ports:
     - "8083:8080"
   environment:
@@ -75,7 +75,7 @@ customersqueryside:
   working_dir: /app
   volumes:
     - ./customers-query-side-service/build/libs:/app
-  command: java -jar /app/customers-query-side-service.jar
+  command: java ${JAVA_OPTS} -jar /app/customers-query-side-service.jar
   ports:
     - "8084:8080"
   links:

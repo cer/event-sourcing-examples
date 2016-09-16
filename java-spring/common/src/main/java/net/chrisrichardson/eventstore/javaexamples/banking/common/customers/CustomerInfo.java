@@ -16,7 +16,6 @@ public class CustomerInfo {
   protected String password;
   @NotNull
   protected String ssn;
-  @NotNull
   protected String phoneNumber;
   protected Address address;
 
