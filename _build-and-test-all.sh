@@ -26,7 +26,7 @@ if [ "$1" = "--no-rm" ] ; then
   shift
 fi
 
-${DOCKER_COMPOSE?} up -d mongodb
+${DOCKER_COMPOSE?} up -d mongodb $EXTRA_INFRASTRUCTURE_SERVICES
 
 if [ -z "$DOCKER_HOST_IP" ] ; then
   if which docker-machine >/dev/null; then
