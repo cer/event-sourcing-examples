@@ -47,7 +47,6 @@ export function accountsList(customerId) {
 
 function readUntilChanged(initialData, customerId) {
   const initialDataFlat = root['JSON'].stringify(initialData);
-  debugger;
   return new Promise((rs, rj) => {
     setTimeout(() => {
       api.apiRetrieveAccounts(customerId)
@@ -145,16 +144,21 @@ export const deleteAccountRequested = makeActionCreator(T.ACCOUNT.DELETE_START);
 export const deleteAccountComplete = makeActionCreator(T.ACCOUNT.DELETE_COMPLETE);
 export const deleteAccountError = makeActionCreator(T.ACCOUNT.DELETE_ERROR);
 
-export function deleteAccount(customerId, accountId) {
+export function deleteAccount(customerId, accountId, isRef) {
   return dispatch => {
     dispatch(deleteAccountRequested());
-    return api.apiDeleteAccount(customerId, accountId)
+
+    const deleteApiAction = (isRef ?
+      api.apiDeleteRefAccount(customerId, accountId) :
+      api.apiDeleteAccount(customerId, accountId));
+
+    return deleteApiAction
       .then(data => {
         dispatch(deleteAccountComplete(data));
         return Promise.resolve(data);
       })
       .catch(err => {
-        dispatch(deleteAccountError());
+        dispatch(deleteAccountError(err));
         return Promise.reject(err);
       })
   };

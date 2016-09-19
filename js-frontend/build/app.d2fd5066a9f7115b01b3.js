@@ -36,6 +36,7 @@ webpackJsonp([0,3],{
 	 * Created by andrew on 12/02/16.
 	 */
 	if (process.env.NODE_ENV !== "production") {
+	  var reactRoot = window.document.getElementById("root");
 	  if (!reactRoot.firstChild || !reactRoot.firstChild.attributes || !reactRoot.firstChild.attributes["data-react-checksum"]) {
 	    console.error("Server-side React render was discarded. Make sure that your initial render does not contain any client-side code.");
 	  }
@@ -2243,7 +2244,7 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.apiRetrieveUsers = exports.apiDeleteAccount = exports.apiRetrieveAccount = exports.apiRetrieveTransfers = exports.apiRetrieveAccounts = exports.apiMakeTransfer = exports.apiCreateRefAccount = exports.apiCreateAccount = exports.apiGetCurrentUser = exports.apiSignUp = exports.apiSignIn = undefined;
+	exports.apiRetrieveUsers = exports.apiDeleteRefAccount = exports.apiDeleteAccount = exports.apiRetrieveAccount = exports.apiRetrieveTransfers = exports.apiRetrieveAccounts = exports.apiMakeTransfer = exports.apiCreateRefAccount = exports.apiCreateAccount = exports.apiGetCurrentUser = exports.apiSignUp = exports.apiSignIn = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
 	                                                                                                                                                                                                                                                                   * Created by andrew on 12/03/16.
@@ -2292,19 +2293,19 @@ webpackJsonp([0,3],{
 	};
 	
 	var apiSignIn = exports.apiSignIn = function apiSignIn(body) {
-	  return fetch(ENDPOINTS.emailSignInPath(), _extends({}, METHODS.POST, {
+	  return fetch(ENDPOINTS.emailSignIn(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify(body)
 	  }));
 	};
 	
 	var apiSignUp = exports.apiSignUp = function apiSignUp(body) {
-	  return fetch(ENDPOINTS.emailSignUpUrl(), _extends({}, METHODS.POST, {
+	  return fetch(ENDPOINTS.emailSignUp(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify(body)
 	  }));
 	};
 	
 	var apiGetCurrentUser = exports.apiGetCurrentUser = function apiGetCurrentUser() {
-	  return fetch(ENDPOINTS.currentUserPath(), _extends({}, METHODS.GET));
+	  return fetch(ENDPOINTS.currentUser(), _extends({}, METHODS.GET));
 	};
 	
 	var apiCreateAccount = exports.apiCreateAccount = function apiCreateAccount(customerId, _ref) {
@@ -2325,7 +2326,7 @@ webpackJsonp([0,3],{
 	  var accountId = _ref2.account;
 	  var title = _ref2.title;
 	  var description = _ref2.description;
-	  return fetch(ENDPOINTS.toAccounts(customerId), _extends({}, METHODS.POST, {
+	  return fetch(ENDPOINTS.refAccounts(customerId), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      owner: owner,
 	      id: accountId,
@@ -2338,7 +2339,7 @@ webpackJsonp([0,3],{
 	  var account = _ref3.account;
 	  var amount = _ref3.amount;
 	  var description = _ref3.description;
-	  return fetch(ENDPOINTS.transfersUrl(), _extends({}, METHODS.POST, {
+	  return fetch(ENDPOINTS.transfers(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      amount: amount,
 	      fromAccountId: fromAccountId,
@@ -2361,7 +2362,11 @@ webpackJsonp([0,3],{
 	};
 	
 	var apiDeleteAccount = exports.apiDeleteAccount = function apiDeleteAccount(customerId, accountId) {
-	  return fetch(ENDPOINTS.customersAccount(customerId, accountId), _extends({}, METHODS.DELETE));
+	  return fetch(ENDPOINTS.account(accountId), _extends({}, METHODS.DELETE));
+	};
+	
+	var apiDeleteRefAccount = exports.apiDeleteRefAccount = function apiDeleteRefAccount(customerId, accountId) {
+	  return fetch(ENDPOINTS.refAccount(customerId, accountId), _extends({}, METHODS.DELETE));
 	};
 	
 	var apiRetrieveUsers = exports.apiRetrieveUsers = function apiRetrieveUsers(email) {
@@ -2488,16 +2493,13 @@ webpackJsonp([0,3],{
 	 */
 	var API_ROOT = '/api';
 	
-	var emailSignInPath = exports.emailSignInPath = function emailSignInPath() {
+	var emailSignIn = exports.emailSignIn = function emailSignIn() {
 	  return API_ROOT + '/login';
 	};
-	var emailSignUpUrl = exports.emailSignUpUrl = function emailSignUpUrl() {
+	var emailSignUp = exports.emailSignUp = function emailSignUp() {
 	  return API_ROOT + '/customers';
 	};
-	var customersPath = exports.customersPath = function customersPath() {
-	  return API_ROOT + '/customers';
-	};
-	var currentUserPath = exports.currentUserPath = function currentUserPath() {
+	var currentUser = exports.currentUser = function currentUser() {
 	  return API_ROOT + '/user';
 	};
 	var accountsPath = exports.accountsPath = function accountsPath() {
@@ -2509,11 +2511,11 @@ webpackJsonp([0,3],{
 	var customersAccounts = exports.customersAccounts = function customersAccounts(customerId) {
 	  return API_ROOT + '/customers/' + customerId + '/accounts';
 	};
-	var customersAccount = exports.customersAccount = function customersAccount(customerId, accountId) {
-	  return API_ROOT + '/customers/' + customerId + '/accounts/' + accountId;
-	};
-	var toAccounts = exports.toAccounts = function toAccounts(customerId) {
+	var refAccounts = exports.refAccounts = function refAccounts(customerId) {
 	  return API_ROOT + '/customers/' + customerId + '/toaccounts';
+	};
+	var refAccount = exports.refAccount = function refAccount(customerId, accountId) {
+	  return API_ROOT + '/customers/' + customerId + '/toaccounts/' + accountId;
 	};
 	var account = exports.account = function account(accountId) {
 	  return API_ROOT + '/accounts/' + accountId;
@@ -2521,7 +2523,7 @@ webpackJsonp([0,3],{
 	var history = exports.history = function history(accountId) {
 	  return API_ROOT + '/accounts/' + accountId + '/history';
 	};
-	var transfersUrl = exports.transfersUrl = function transfersUrl() {
+	var transfers = exports.transfers = function transfers() {
 	  return API_ROOT + '/transfers';
 	};
 	
@@ -2680,7 +2682,6 @@ webpackJsonp([0,3],{
 	  var _this = this;
 	
 	  var initialDataFlat = _root2.default['JSON'].stringify(initialData);
-	  debugger;
 	  return new Promise(function (rs, rj) {
 	    setTimeout(function () {
 	      api.apiRetrieveAccounts(customerId).then(function (data) {
@@ -2766,14 +2767,17 @@ webpackJsonp([0,3],{
 	var deleteAccountComplete = exports.deleteAccountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.DELETE_COMPLETE);
 	var deleteAccountError = exports.deleteAccountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.DELETE_ERROR);
 	
-	function deleteAccount(customerId, accountId) {
+	function deleteAccount(customerId, accountId, isRef) {
 	  return function (dispatch) {
 	    dispatch(deleteAccountRequested());
-	    return api.apiDeleteAccount(customerId, accountId).then(function (data) {
+	
+	    var deleteApiAction = isRef ? api.apiDeleteRefAccount(customerId, accountId) : api.apiDeleteAccount(customerId, accountId);
+	
+	    return deleteApiAction.then(function (data) {
 	      dispatch(deleteAccountComplete(data));
 	      return Promise.resolve(data);
 	    }).catch(function (err) {
-	      dispatch(deleteAccountError());
+	      dispatch(deleteAccountError(err));
 	      return Promise.reject(err);
 	    });
 	  };
@@ -3746,14 +3750,17 @@ webpackJsonp([0,3],{
 	    }
 	  }, {
 	    key: "remove3rdPartyAccountModalConfirmed",
-	    value: function remove3rdPartyAccountModalConfirmed(accountId) {
+	    value: function remove3rdPartyAccountModalConfirmed(account) {
 	      var _this4 = this;
+	
+	      var accountId = account.id || account.accountId;
+	      var isRef = typeof account.balance == 'undefined';
 	
 	      var _props = this.props;
 	      var customerId = _props.customerId;
 	      var dispatch = _props.dispatch;
 	
-	      dispatch(A.deleteAccount(customerId, accountId)).then(function () {
+	      dispatch(A.deleteAccount(customerId, accountId, isRef)).then(function () {
 	        _this4.close();
 	        setTimeout(function () {
 	          return Promise.all([dispatch(AU.authenticate(true)), dispatch(A.fetchOwnAccounts(customerId))]);
@@ -3812,7 +3819,7 @@ webpackJsonp([0,3],{
 	        _react2.default.createElement(
 	          "strong",
 	          null,
-	          error
+	          JSON.stringify(error.errors || error)
 	        )
 	      ) : [];
 	
@@ -5167,17 +5174,12 @@ webpackJsonp([0,3],{
 	    key: "handleAction",
 	    value: function handleAction(evt) {
 	      evt.preventDefault();
-	      var action = this.props.action;
-	      var account = this.props.account;
-	
-	      var _ref = account || {};
-	
-	      var id = _ref.id;
-	      var accountId = _ref.accountId;
-	
+	      var _props = this.props;
+	      var action = _props.action;
+	      var account = _props.account;
 	
 	      if (action) {
-	        action(id || accountId);
+	        action(account);
 	      }
 	    }
 	  }, {
@@ -5185,13 +5187,13 @@ webpackJsonp([0,3],{
 	    value: function render() {
 	      var account = this.props.account;
 	
-	      var _ref2 = account || {};
+	      var _ref = account || {};
 	
-	      var titleRaw = _ref2.title;
-	      var descriptionRaw = _ref2.description;
-	      var balanceRaw = _ref2.balance;
-	      var id = _ref2.id;
-	      var accountId = _ref2.accountId;
+	      var titleRaw = _ref.title;
+	      var descriptionRaw = _ref.description;
+	      var balanceRaw = _ref.balance;
+	      var id = _ref.id;
+	      var accountId = _ref.accountId;
 	
 	
 	      var entityId = id || accountId;
@@ -5577,18 +5579,6 @@ webpackJsonp([0,3],{
 	      this.ensureTransfers(nextProps);
 	    }
 	  }, {
-	    key: "createAccountModal",
-	    value: function createAccountModal() {
-	      this.setState({
-	        showAccountModal: true
-	      });
-	    }
-	  }, {
-	    key: "createAccountModalConfirmed",
-	    value: function createAccountModalConfirmed() {
-	      // debugger;
-	    }
-	  }, {
 	    key: "close",
 	    value: function close() {
 	      this.setState(_extends({}, resetModals));
@@ -5720,7 +5710,7 @@ webpackJsonp([0,3],{
 	              null,
 	              _react2.default.createElement(
 	                _reactBootstrap.Button,
-	                { bsStyle: "link", onClick: this.createAccountModal.bind(this) },
+	                { bsStyle: "link", onClick: null, disabled: true },
 	                "Edit"
 	              )
 	            )
@@ -5878,7 +5868,7 @@ webpackJsonp([0,3],{
 	        ),
 	        _react2.default.createElement(_TransfersTable.TransfersTable, { forAccount: accountId, transfers: this.props.transfers[accountId] }),
 	        _react2.default.createElement(Modals.NewAccountModal, { show: showAccountModal,
-	          action: this.createAccountModalConfirmed.bind(this),
+	          action: null,
 	          account: { loading: true },
 	          onHide: this.close.bind(this),
 	          key: 0 })
@@ -7125,4 +7115,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.30bd94eeaf3cbe7d3133.js.map
+//# sourceMappingURL=app.d2fd5066a9f7115b01b3.js.map

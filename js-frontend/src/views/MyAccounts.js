@@ -101,9 +101,12 @@ class MyAccounts extends React.Component {
     });
   }
 
-  remove3rdPartyAccountModalConfirmed(accountId) {
+  remove3rdPartyAccountModalConfirmed(account) {
+    const accountId = account.id || account.accountId;
+    const isRef = typeof account.balance == 'undefined';
+
     const { customerId, dispatch } = this.props;
-    dispatch(A.deleteAccount(customerId, accountId))
+    dispatch(A.deleteAccount(customerId, accountId, isRef))
     .then(() => {
         this.close();
         setTimeout(() => {
@@ -160,7 +163,7 @@ class MyAccounts extends React.Component {
     const { accountToRemove = null} = this.state;
 
     const { error } = this.props;
-    const errorLine = error ? (<BS.Panel bsStyle="danger"><strong>{ error }</strong></BS.Panel>) : [];
+    const errorLine = error ? (<BS.Panel bsStyle="danger"><strong>{ JSON.stringify(error.errors || error) }</strong></BS.Panel>) : [];
 
     const ownAccountsData = this.props.app.accounts.own || [];
 

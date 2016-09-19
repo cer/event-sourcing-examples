@@ -15,15 +15,9 @@ export class RemoveAccountBookmarkModal extends React.Component {
 
   handleAction(evt) {
     evt.preventDefault();
-    const { action } = this.props;
-    const { account } = this.props;
-    const {
-      id,
-      accountId
-      } = account || {};
-
+    const { action, account } = this.props;
     if (action) {
-      action(id || accountId);
+      action(account);
     }
   }
 
