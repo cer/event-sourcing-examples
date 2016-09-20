@@ -10,9 +10,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by popikyardo on 23.09.15.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails {
 

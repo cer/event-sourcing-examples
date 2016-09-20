@@ -2,7 +2,6 @@ package net.chrisrichardson.eventstore.examples.bank.web;
 
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.AbstractRestAPITest;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.AuthenticatedRestTemplate;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,11 +40,6 @@ public class EndToEndTest extends AbstractRestAPITest {
   @Override
   public CustomersTestUtils getCustomersTestUtils() {
     return customersTestUtils;
-  }
-
-  @Override
-  public AuthenticatedRestTemplate getAuthenticatedRestTemplate() {
-    return new AuthenticatedRestTemplate(restTemplate);
   }
 
   @Override

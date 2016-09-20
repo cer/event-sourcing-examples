@@ -20,9 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.Collections;
 
-/**
- * Created by popikyardo on 15.01.16.
- */
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration

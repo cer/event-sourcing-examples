@@ -2,7 +2,6 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.cu
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 

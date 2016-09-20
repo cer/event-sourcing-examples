@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
 
-/**
- * Created by popikyardo on 21.01.16.
- */
 public class HeadersRequestTransformer extends ProxyRequestTransformer {
 
   @Override

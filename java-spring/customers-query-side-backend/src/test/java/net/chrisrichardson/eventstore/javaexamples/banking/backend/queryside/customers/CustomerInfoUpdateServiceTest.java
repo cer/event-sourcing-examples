@@ -59,7 +59,7 @@ public class CustomerInfoUpdateServiceTest {
 
     assertEquals(customerInfo.getName(), querySideCustomer.getName());
     assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
-    assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
+    assertEquals(customerInfo.getUserCredentials().getEmail(), querySideCustomer.getEmail());
     assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
     assertEquals(customerInfo.getSsn(), querySideCustomer.getSsn());
   }
@@ -82,7 +82,7 @@ public class CustomerInfoUpdateServiceTest {
     assertTrue(querySideCustomer.getToAccounts().containsKey(accountId));
     assertEquals(toAccountInfo, querySideCustomer.getToAccounts().get(accountId));
 
-    customerInfoUpdateService.deleteFromToAccount(accountId);
+    customerInfoUpdateService.deleteToAccountFromAllCustomers(accountId);
     querySideCustomer = customerQueryService.findByCustomerId(customerId).get();
 
     assertFalse(querySideCustomer.getToAccounts().containsKey(accountId));

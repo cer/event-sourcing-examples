@@ -33,9 +33,6 @@ import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-/**
- * Created by popikyardo on 15.01.16.
- */
 @RestController
 public class GatewayController {
 

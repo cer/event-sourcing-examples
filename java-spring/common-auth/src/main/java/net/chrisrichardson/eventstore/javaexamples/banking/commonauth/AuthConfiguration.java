@@ -19,14 +19,10 @@ import org.springframework.security.core.token.KeyBasedPersistenceTokenService;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.security.SecureRandom;
 
-/**
- * Created by popikyardo on 21.09.15.
- */
 @Configuration
 @ComponentScan
 @EnableWebSecurity
@@ -45,7 +41,6 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    //auth.inMemoryAuthentication();
     auth.userDetailsService(userDetailsServiceBean());
   }
 
@@ -53,12 +48,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
   public UserDetailsService userDetailsServiceBean() {
     return email -> {
       QuerySideCustomer customer = customerAuthService.findByEmail(email);
-      if (customer != null) {
-        return new User(email, customer.getPassword(), true, true, true, true,
-                AuthorityUtils.createAuthorityList("USER"));
-      } else {
-        throw new UsernameNotFoundException(String.format("could not find the customer '%s'", email));
-      }
+      return new User(email, customer.getPassword(), true, true, true, true,
+              AuthorityUtils.createAuthorityList("USER"));
     };
   }
 

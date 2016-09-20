@@ -20,7 +20,7 @@ public class Account extends ReflectiveMutableCommandProcessingAggregate<Account
   }
 
   public List<Event> process(DeleteAccountCommand cmd) {
-    return EventUtil.events(new AccountDeletedEvent(new Date()));
+    return EventUtil.events(new AccountDeletedEvent());
   }
 
   public List<Event> process(DebitAccountCommand cmd) {

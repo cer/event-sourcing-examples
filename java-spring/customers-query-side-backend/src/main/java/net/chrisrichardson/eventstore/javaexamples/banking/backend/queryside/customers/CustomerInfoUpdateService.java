@@ -33,8 +33,8 @@ public class CustomerInfoUpdateService {
     try {
       querySideCustomerRepository.save(new QuerySideCustomer(id,
                       customerInfo.getName(),
-                      customerInfo.getEmail(),
-                      customerInfo.getPassword(),
+                      customerInfo.getUserCredentials().getEmail(),
+                      customerInfo.getUserCredentials().getPassword(),
                       customerInfo.getSsn(),
                       customerInfo.getPhoneNumber(),
                       customerInfo.getAddress(),
@@ -44,28 +44,27 @@ public class CustomerInfoUpdateService {
       logger.info("Saved in mongo");
     } catch (DuplicateKeyException t) {
       logger.warn("When saving ", t);
-    } catch (Throwable t) {
-      logger.error("Error during saving: ", t);
-      throw new RuntimeException(t);
     }
   }
 
   public void addToAccount(String id, ToAccountInfo accountInfo) {
-    QuerySideCustomer customer = querySideCustomerRepository.findOne(id);
-    if (customer != null) {
-      customer.getToAccounts().put(accountInfo.getId(), accountInfo);
-      querySideCustomerRepository.save(customer);
-    }
+    mongoTemplate.upsert(new Query(where("id").is(id)),
+            new Update().
+                    set("toAccounts." + accountInfo.getId(), accountInfo),
+            QuerySideCustomer.class);
   }
 
-  public void deleteFromToAccount(String accountId) {
-    mongoTemplate.find(new Query(where("toAccounts." + accountId).exists(true)),
-            QuerySideCustomer.class).stream()
-            .forEach(querySideCustomer ->
-                    mongoTemplate.upsert(new Query(where("id").is(querySideCustomer.getId())),
-                            new Update().
-                                    unset("toAccounts." + accountId),
-                            QuerySideCustomer.class)
-            );
+  public void deleteToAccountFromAllCustomers(String accountId) {
+    mongoTemplate.updateMulti(new Query(where("toAccounts." + accountId).exists(true)),
+            new Update().
+                    unset("toAccounts." + accountId),
+            QuerySideCustomer.class);
+  }
+
+  public void deleteToAccount(String customerId, String accountId) {
+    mongoTemplate.upsert(new Query(where("id").is(customerId)),
+            new Update().
+                    unset("toAccounts." + accountId),
+            QuerySideCustomer.class);
   }
 }

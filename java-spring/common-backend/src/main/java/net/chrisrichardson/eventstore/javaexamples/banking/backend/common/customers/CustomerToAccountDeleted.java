@@ -1,16 +1,13 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers;
 
-/**
- * Created by popikyardo on 9/14/16.
- */
-public class CustomerAccountDeleted extends CustomerEvent {
+public class CustomerToAccountDeleted extends CustomerEvent {
 
   private String accountId;
 
-  public CustomerAccountDeleted() {
+  public CustomerToAccountDeleted() {
   }
 
-  public CustomerAccountDeleted(String accountId) {
+  public CustomerToAccountDeleted(String accountId) {
     this.accountId = accountId;
   }
 

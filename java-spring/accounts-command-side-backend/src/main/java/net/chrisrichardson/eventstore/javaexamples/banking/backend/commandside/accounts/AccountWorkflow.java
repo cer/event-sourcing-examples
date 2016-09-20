@@ -5,7 +5,7 @@ import io.eventuate.EntityWithIdAndVersion;
 import io.eventuate.EventHandlerContext;
 import io.eventuate.EventHandlerMethod;
 import io.eventuate.EventSubscriber;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAccountDeleted;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerToAccountDeleted;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.DebitRecordedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.MoneyTransferCreatedEvent;
 
@@ -37,8 +37,8 @@ public class AccountWorkflow {
   }
 
   @EventHandlerMethod
-  public CompletableFuture<EntityWithIdAndVersion<Account>> deleteAccount(EventHandlerContext<CustomerAccountDeleted> ctx) {
-    CustomerAccountDeleted event = ctx.getEvent();
+  public CompletableFuture<EntityWithIdAndVersion<Account>> deleteAccount(EventHandlerContext<CustomerToAccountDeleted> ctx) {
+    CustomerToAccountDeleted event = ctx.getEvent();
     String accountId = event.getAccountId();
 
     return ctx.update(Account.class, accountId, new DeleteAccountCommand());

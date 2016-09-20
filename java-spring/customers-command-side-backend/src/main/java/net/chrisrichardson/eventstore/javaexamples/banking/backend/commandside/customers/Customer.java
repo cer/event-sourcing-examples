@@ -3,16 +3,13 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.
 import io.eventuate.Event;
 import io.eventuate.EventUtil;
 import io.eventuate.ReflectiveMutableCommandProcessingAggregate;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAccountDeleted;
+import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerToAccountDeleted;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerAddedToAccount;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.customers.CustomerCreatedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 
 import java.util.List;
 
-/**
- * Created by popikyardo on 02.02.16.
- */
 public class Customer extends ReflectiveMutableCommandProcessingAggregate<Customer, CustomerCommand> {
 
   private CustomerInfo customerInfo;
@@ -24,8 +21,8 @@ public class Customer extends ReflectiveMutableCommandProcessingAggregate<Custom
   public List<Event> process(AddToAccountCommand cmd) {
     return EventUtil.events(new CustomerAddedToAccount(cmd.getToAccountInfo()));
   }
-  public List<Event> process(DeleteAccountCommand cmd) {
-    return EventUtil.events(new CustomerAccountDeleted(cmd.getAccountId()));
+  public List<Event> process(DeleteToAccountCommand cmd) {
+    return EventUtil.events(new CustomerToAccountDeleted(cmd.getAccountId()));
   }
 
   public void apply(CustomerCreatedEvent event) {
@@ -34,7 +31,7 @@ public class Customer extends ReflectiveMutableCommandProcessingAggregate<Custom
 
   public void apply(CustomerAddedToAccount event) {
   }
-  public void apply(CustomerAccountDeleted event) {
+  public void apply(CustomerToAccountDeleted event) {
   }
 
   public CustomerInfo getCustomerInfo() {

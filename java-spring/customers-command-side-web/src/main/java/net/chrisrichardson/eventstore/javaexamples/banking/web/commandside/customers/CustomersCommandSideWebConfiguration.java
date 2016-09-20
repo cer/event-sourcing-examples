@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-/**
- * Created by popikyardo on 03.02.16.
- */
 @Configuration
 @Import({CustomerConfiguration.class})
 @ComponentScan

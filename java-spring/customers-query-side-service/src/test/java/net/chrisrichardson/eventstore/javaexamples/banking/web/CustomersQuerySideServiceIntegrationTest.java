@@ -48,10 +48,8 @@ public class CustomersQuerySideServiceIntegrationTest {
 
     final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
-    final String email = customerResponse.getCustomerInfo().getEmail();
-    final String password = customerResponse.getCustomerInfo().getPassword();
 
-    customersTestUtils.assertCustomerResponse(customerId, email, password, customerInfo);
+    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
   }
 
 }

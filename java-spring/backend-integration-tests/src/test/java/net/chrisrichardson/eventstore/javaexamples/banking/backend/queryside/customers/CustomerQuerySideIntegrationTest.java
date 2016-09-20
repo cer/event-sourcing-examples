@@ -61,7 +61,7 @@ public class CustomerQuerySideIntegrationTest {
               public void verify(QuerySideCustomer querySideCustomer) {
                 Assert.assertEquals(customerInfo.getName(), querySideCustomer.getName());
                 Assert.assertEquals(customerInfo.getSsn(), querySideCustomer.getSsn());
-                Assert.assertEquals(customerInfo.getEmail(), querySideCustomer.getEmail());
+                Assert.assertEquals(customerInfo.getUserCredentials().getEmail(), querySideCustomer.getEmail());
                 Assert.assertEquals(customerInfo.getPhoneNumber(), querySideCustomer.getPhoneNumber());
                 Assert.assertEquals(customerInfo.getAddress(), querySideCustomer.getAddress());
 

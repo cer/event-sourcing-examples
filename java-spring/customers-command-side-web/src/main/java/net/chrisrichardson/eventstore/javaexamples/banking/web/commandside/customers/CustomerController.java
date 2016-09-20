@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Created by popikyardo on 03.02.16.
- */
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -39,9 +36,9 @@ public class CustomerController {
             .thenApply(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.getEntityVersion().toString()));
   }
 
-  @RequestMapping(value = "/{customerId}/accounts/{accountId}", method = RequestMethod.DELETE)
-  public CompletableFuture<DeleteAccountResponse> deleteAccount(@PathVariable String customerId, @PathVariable String accountId) {
-    return customerService.deleteAccount(customerId, accountId)
+  @RequestMapping(value = "/{customerId}/toaccounts/{accountId}", method = RequestMethod.DELETE)
+  public CompletableFuture<DeleteAccountResponse> deleteToAccount(@PathVariable String customerId, @PathVariable String accountId) {
+    return customerService.deleteToAccount(customerId, accountId)
             .thenApply(entityAndEventInfo -> new DeleteAccountResponse(accountId));
   }
 

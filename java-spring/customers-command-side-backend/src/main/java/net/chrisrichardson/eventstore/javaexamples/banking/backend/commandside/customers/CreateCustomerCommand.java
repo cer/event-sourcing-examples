@@ -2,9 +2,6 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 
-/**
- * Created by popikyardo on 02.02.16.
- */
 public class CreateCustomerCommand implements CustomerCommand {
   private CustomerInfo customerInfo;
 

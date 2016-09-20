@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.UserCredentials;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.junit.Assert;
@@ -48,27 +49,18 @@ public class BankingAuthTest {
 
   @Test
   public void shouldCreateCustomerAndLogin() {
-    String email = uniqueEmail();
-    CustomerInfo customerInfo = generateCustomerInfo(email);
+    CustomerInfo customerInfo = generateCustomerInfo();
 
     final CustomerResponse customerResponse = restTemplate.postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
-    final String password = customerResponse.getCustomerInfo().getPassword();
 
     Assert.assertNotNull(customerId);
     Assert.assertEquals(customerInfo, customerResponse.getCustomerInfo());
 
-    customersTestUtils.assertCustomerResponse(customerId, email, password, customerInfo);
+    customersTestUtils.assertCustomerResponse(customerId, customerInfo);
 
-    AuthRequest authRequest = new AuthRequest(email, password);
-
-    final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), authRequest, QuerySideCustomer.class).getBody();
+    final QuerySideCustomer loginQuerySideCustomer = restTemplate.postForEntity(baseUrl("/login"), customerInfo.getUserCredentials(), QuerySideCustomer.class).getBody();
 
     customersTestUtils.assertQuerySideCustomerEqualscCustomerInfo(loginQuerySideCustomer, customerResponse.getCustomerInfo());
-  }
-
-
-  private String uniqueEmail() {
-    return System.currentTimeMillis() + "@email.com";
   }
 }

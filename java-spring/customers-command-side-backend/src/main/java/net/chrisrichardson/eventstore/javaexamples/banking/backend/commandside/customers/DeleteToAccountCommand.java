@@ -1,16 +1,13 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers;
 
-/**
- * Created by popikyardo on 9/14/16.
- */
-public class DeleteAccountCommand implements CustomerCommand {
+public class DeleteToAccountCommand implements CustomerCommand {
 
   private String accountId;
 
-  public DeleteAccountCommand() {
+  public DeleteToAccountCommand() {
   }
 
-  public DeleteAccountCommand(String accountId) {
+  public DeleteToAccountCommand(String accountId) {
     this.accountId = accountId;
   }
 
