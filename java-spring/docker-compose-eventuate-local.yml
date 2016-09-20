@@ -1,11 +1,61 @@
+zookeeper:
+  image: eventuateio/eventuateio-local-zookeeper:0.6.0
+  ports:
+    - 2181:2181
+    - 2888:2888
+    - 3888:3888
+
+
+kafka:
+  image: eventuateio/eventuateio-local-kafka:0.6.0
+  ports:
+    - 9092:9092
+  links:
+    - zookeeper
+  environment:
+    - ADVERTISED_HOST_NAME=${DOCKER_HOST_IP}
+    - KAFKA_HEAP_OPTS=-Xmx320m -Xms320m
+    - ZOOKEEPER_SERVERS=zookeeper:2181
+
+mysql:
+  image: eventuateio/eventuateio-local-mysql:0.6.0
+  ports:
+    - 3306:3306
+  environment:
+    - MYSQL_ROOT_PASSWORD=rootpassword
+    - MYSQL_USER=mysqluser
+    - MYSQL_PASSWORD=mysqlpw
+
+
+cdcservice:
+  image: eventuateio/eventuateio-local-cdc-service:0.6.0
+  ports:
+    - "8099:8080"
+  links:
+    - mysql
+    - kafka
+    - zookeeper
+  environment:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+
+mongodb:
+  extends:
+    file: docker-compose-common.yml
+    service: mongodb
+
 apigateway:
-  image: java:openjdk-8u91-jdk
-  working_dir: /app
+  extends:
+    file: docker-compose-common.yml
+    service: apigateway
   volumes:
     - ./api-gateway-service/build/libs:/app
-  command: java -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transfers.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
-  ports:
-    - "8080:8080"
   links:
     - accountscommandside
     - transactionscommandside
@@ -13,117 +63,126 @@ apigateway:
     - customerscommandside
     - customersqueryside
     - mongodb
+    - mysql
+    - kafka
+    - zookeeper
   environment:
-    SPRING_DATASOURCE_URL:
-    SPRING_DATASOURCE_USERNAME:
-    SPRING_DATASOURCE_PASSWORD:
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
-    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
-    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
 
 accountscommandside:
-  image: java:openjdk-8u91-jdk
-  working_dir: /app
+  extends:
+    file: docker-compose-common.yml
+    service: accountscommandside
   volumes:
     - ./accounts-command-side-service/build/libs:/app
-  command: java -jar /app/accounts-command-side-service.jar
-  ports:
-    - "8085:8080"
+  links:
+    - mysql
+    - kafka
+    - zookeeper
   environment:
-    SPRING_DATASOURCE_URL:
-    SPRING_DATASOURCE_USERNAME:
-    SPRING_DATASOURCE_PASSWORD:
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
-    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
-    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+
 
 transactionscommandside:
-  image: java:openjdk-8u91-jdk
-  working_dir: /app
+  extends:
+    file: docker-compose-common.yml
+    service: transactionscommandside
   volumes:
     - ./transactions-command-side-service/build/libs:/app
-  command: java -jar /app/transactions-command-side-service.jar
-  ports:
-    - "8082:8080"
+  links:
+    - mysql
+    - kafka
+    - zookeeper
   environment:
-    SPRING_DATASOURCE_URL:
-    SPRING_DATASOURCE_USERNAME:
-    SPRING_DATASOURCE_PASSWORD:
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
-    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
-    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+
 
 
 accountsqueryside:
-  image: java:openjdk-8u91-jdk
-  working_dir: /app
+  extends:
+    file: docker-compose-common.yml
+    service: accountsqueryside
   volumes:
     - ./accounts-query-side-service/build/libs:/app
-  command: java -jar /app/accounts-query-side-service.jar
-  ports:
-    - "8081:8080"
   links:
     - mongodb
+    - mysql
+    - kafka
+    - zookeeper
   environment:
-    SPRING_DATASOURCE_URL:
-    SPRING_DATASOURCE_USERNAME:
-    SPRING_DATASOURCE_PASSWORD:
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
-    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
-    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
+
 
 customerscommandside:
-  image: java:openjdk-8u91-jdk
-  working_dir: /app
+  extends:
+    file: docker-compose-common.yml
+    service: customerscommandside
   volumes:
     - ./customers-command-side-service/build/libs:/app
-  command: java -jar /app/customers-command-side-service.jar
-  ports:
-    - "8083:8080"
+  links:
+    - mysql
+    - kafka
+    - zookeeper
   environment:
-    SPRING_DATASOURCE_URL:
-    SPRING_DATASOURCE_USERNAME:
-    SPRING_DATASOURCE_PASSWORD:
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
-    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
-    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
 
 customersqueryside:
-  image: java:openjdk-8u91-jdk
-  working_dir: /app
+  extends:
+    file: docker-compose-common.yml
+    service: customersqueryside
   volumes:
     - ./customers-query-side-service/build/libs:/app
-  command: java -jar /app/customers-query-side-service.jar
-  ports:
-    - "8084:8080"
   links:
     - mongodb
+    - mysql
+    - kafka
+    - zookeeper
   environment:
-    SPRING_DATASOURCE_URL:
-    SPRING_DATASOURCE_USERNAME:
-    SPRING_DATASOURCE_PASSWORD:
-    SPRING_DATASOURCE_DRIVER_CLASS_NAME:
-    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS:
-    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_USER_NAME:
-    EVENTUATELOCAL_EMBEDDED_CDC_DB_PASSWORD:
-
-mongodb:
-  image: mongo:3.0.4
-  hostname: mongodb
-  command: mongod --smallfiles
-  ports:
-    - "27017:27017"
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql/eventuate
+    SPRING_DATASOURCE_USERNAME: mysqluser
+    SPRING_DATASOURCE_PASSWORD: mysqlpw
+    SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING: zookeeper:2181
+    EVENTUATELOCAL_CDC_DB_USER_NAME: root
+    EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
