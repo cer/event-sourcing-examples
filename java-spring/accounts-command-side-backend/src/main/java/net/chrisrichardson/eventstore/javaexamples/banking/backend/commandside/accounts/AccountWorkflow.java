@@ -35,12 +35,4 @@ public class AccountWorkflow {
 
     return ctx.update(Account.class, fromAccountId, new CreditAccountCommand(amount, transactionId));
   }
-
-  @EventHandlerMethod
-  public CompletableFuture<EntityWithIdAndVersion<Account>> deleteAccount(EventHandlerContext<CustomerToAccountDeleted> ctx) {
-    CustomerToAccountDeleted event = ctx.getEvent();
-    String accountId = event.getAccountId();
-
-    return ctx.update(Account.class, accountId, new DeleteAccountCommand());
-  }
 }
