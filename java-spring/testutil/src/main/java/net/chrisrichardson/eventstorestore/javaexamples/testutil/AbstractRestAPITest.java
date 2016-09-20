@@ -29,6 +29,8 @@ public abstract class AbstractRestAPITest {
     final CustomerResponse customerResponse = getRestTemplate().postForEntity(baseUrl("/customers"), customerInfo, CustomerResponse.class).getBody();
     final String customerId = customerResponse.getId();
 
+    getCustomersTestUtils().assertCustomerResponse(customerId, customerInfo);
+
     BigDecimal initialFromAccountBalance = new BigDecimal(500);
     BigDecimal initialToAccountBalance = new BigDecimal(100);
     BigDecimal amountToTransfer = new BigDecimal(150);
