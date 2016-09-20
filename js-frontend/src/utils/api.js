@@ -30,17 +30,17 @@ const METHODS = {
 
 const fetch = (...args) => authedFetch(...args).then(parseResponse);
 
-export const apiSignIn = (body) => fetch(ENDPOINTS.emailSignInPath(), {
+export const apiSignIn = (body) => fetch(ENDPOINTS.emailSignIn(), {
   ...METHODS.POST,
   body: root.JSON.stringify(body)
 });
 
-export const apiSignUp = (body) => fetch(ENDPOINTS.emailSignUpUrl(), {
+export const apiSignUp = (body) => fetch(ENDPOINTS.emailSignUp(), {
   ...METHODS.POST,
   body: root.JSON.stringify(body)
 });
 
-export const apiGetCurrentUser = () => fetch(ENDPOINTS.currentUserPath(), {
+export const apiGetCurrentUser = () => fetch(ENDPOINTS.currentUser(), {
   ...METHODS.GET
 });
 
@@ -57,7 +57,7 @@ export const apiCreateAccount = (customerId, {
 });
 
 export const apiCreateRefAccount = (customerId, {
-  owner, account: accountId, title, description }) => fetch(ENDPOINTS.toAccounts(customerId), {
+  owner, account: accountId, title, description }) => fetch(ENDPOINTS.refAccounts(customerId), {
   ...METHODS.POST,
   body: root.JSON.stringify({
     owner,
@@ -67,7 +67,7 @@ export const apiCreateRefAccount = (customerId, {
 });
 
 export const apiMakeTransfer = (fromAccountId, {
-  account, amount, description }) => fetch(ENDPOINTS.transfersUrl(), {
+  account, amount, description }) => fetch(ENDPOINTS.transfers(), {
   ...METHODS.POST,
   body: root.JSON.stringify({
     amount,
@@ -89,7 +89,11 @@ export const apiRetrieveAccount = (accountId) => fetch(ENDPOINTS.account(account
   ...METHODS.GET
 });
 
-export const apiDeleteAccount = (customerId, accountId) => fetch(ENDPOINTS.customersAccount(customerId, accountId), {
+export const apiDeleteAccount = (customerId, accountId) => fetch(ENDPOINTS.account(accountId), {
+  ...METHODS.DELETE
+});
+
+export const apiDeleteRefAccount = (customerId, accountId) => fetch(ENDPOINTS.refAccount(customerId, accountId), {
   ...METHODS.DELETE
 });
 

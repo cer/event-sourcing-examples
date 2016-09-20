@@ -105,16 +105,6 @@ export class Account extends React.Component {
     this.ensureTransfers(nextProps);
   }
 
-  createAccountModal() {
-    this.setState({
-      showAccountModal: true
-    });
-  }
-
-  createAccountModalConfirmed() {
-    // debugger;
-  }
-
 
   close() {
     this.setState({
@@ -201,7 +191,7 @@ export class Account extends React.Component {
           Account
           <Nav pullRight={true}>
             <ButtonGroup>
-              <Button bsStyle={"link"} onClick={this.createAccountModal.bind(this)}>Edit</Button>
+              <Button bsStyle="link" onClick={ null } disabled={true}>Edit</Button>
             </ButtonGroup>
           </Nav>
         </PageHeader>
@@ -288,7 +278,7 @@ export class Account extends React.Component {
         <TransfersTable forAccount={accountId} transfers={ this.props.transfers[accountId] } />
 
         <Modals.NewAccountModal show={showAccountModal}
-                                action={this.createAccountModalConfirmed.bind(this)}
+                                action={ null }
                                 account={{ loading: true }}
                                 onHide={this.close.bind(this)}
                                 key={0} />
