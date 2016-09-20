@@ -31,8 +31,12 @@ export class AccountInfo extends React.Component {
     const account = entities[accountId];
 
     if (!account || !accountId) {
-      return (<div title={ `${accountId}` }>{ accountId } <Spinner loaded={false} /></div>);
-      // {/*return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)*/}
+      return (<div className="text-info" title={ `${accountId}` }>Loading.. <Spinner loaded={false} /></div>);
+    }
+
+    const { errors } = account;
+    if (errors) {
+      return (<div className="text-danger">{ errors }</div>);
     }
 
     const { title, owner } = account;

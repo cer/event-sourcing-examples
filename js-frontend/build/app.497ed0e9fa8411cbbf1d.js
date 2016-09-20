@@ -1462,18 +1462,22 @@ webpackJsonp([0,3],{
 	        return _extends({}, state, hashMap);
 	      }
 	
+	    case _ACTION_TYPES2.default.ACCOUNT.SINGLE_START:
 	    case _ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE:
+	    case _ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR:
 	      {
+	        var _id2 = action.id;
 	        var _action$payload = action.payload;
 	
 	        var _payload = _action$payload === undefined ? {} : _action$payload;
 	
-	        var accountId = _payload.accountId;
+	        var error = action.error;
+	        // const { accountId } = payload;
 	
-	        if (!accountId) {
-	          return state;
-	        }
-	        return _extends({}, state, _defineProperty({}, accountId, _payload));
+	        var isError = action.type == _ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR;
+	        var isStart = action.type == _ACTION_TYPES2.default.ACCOUNT.SINGLE_START;
+	
+	        return _extends({}, state, _defineProperty({}, _id2, isStart ? { isLoading: true, 'title': 'Loading' } : isError ? error : _payload));
 	      }
 	    case _ACTION_TYPES2.default.ENTITIES.RECEIVED_LIST:
 	    default:
@@ -2659,9 +2663,9 @@ webpackJsonp([0,3],{
 	var accountRefCreateError = exports.accountRefCreateError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNTS.CREATE_REF_ERROR, 'error');
 	var accountRefCreateFormUpdate = exports.accountRefCreateFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNTS.CREATE_REF_FORM_UPDATE, 'key', 'value');
 	
-	var accountRequested = exports.accountRequested = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_START);
-	var accountComplete = exports.accountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE, 'payload');
-	var accountError = exports.accountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR, 'error');
+	var accountRequested = exports.accountRequested = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_START, 'id');
+	var accountComplete = exports.accountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE, 'id', 'payload');
+	var accountError = exports.accountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR, 'id', 'error');
 	
 	function accountsList(customerId) {
 	  return function (dispatch) {
@@ -2678,20 +2682,23 @@ webpackJsonp([0,3],{
 	  };
 	}
 	
-	function readUntilChanged(initialData, customerId) {
+	function readUntilChanged(initialData, promisedFn, leftCalls) {
 	  var _this = this;
 	
+	  if (!leftCalls) {
+	    return Promise.reject('Data not changed');
+	  }
 	  var initialDataFlat = _root2.default['JSON'].stringify(initialData);
 	  return new Promise(function (rs, rj) {
 	    setTimeout(function () {
-	      api.apiRetrieveAccounts(customerId).then(function (data) {
+	      promisedFn().then(function (data) {
 	        debugger;
 	        if (initialDataFlat == _root2.default['JSON'].stringify(data)) {
-	          return readUntilChanged.call(_this, data, customerId).then(rs, rj); // Promise
+	          return readUntilChanged.call(_this, data, promisedFn, leftCalls - 1).then(rs, rj); // Promise
 	        }
 	        rs(data);
 	      }).catch(rj);
-	    }, 500);
+	    }, 500 * Math.pow(2, 4 - leftCalls));
 	  });
 	}
 	
@@ -2709,7 +2716,10 @@ webpackJsonp([0,3],{
 	        dispatch((0, _authenticate.authenticate)(true));
 	        return accountId;
 	      } else {
-	        return readUntilChanged(data, customerId).then(function () {
+	        return readUntilChanged(data, function () {
+	          return api.apiRetrieveAccounts(customerId);
+	        }, 4).then(function () {
+	          debugger;
 	          dispatch(accountCreateComplete({
 	            id: ''
 	          }));
@@ -2754,11 +2764,11 @@ webpackJsonp([0,3],{
 	
 	function fetchAccount(accountId) {
 	  return function (dispatch) {
-	    dispatch(accountRequested());
+	    dispatch(accountRequested(accountId));
 	    return api.apiRetrieveAccount(accountId).then(function (data) {
-	      dispatch(accountComplete(data));
+	      dispatch(accountComplete(accountId, data));
 	    }).catch(function (err) {
-	      dispatch(accountError(err));
+	      dispatch(accountError(accountId, err));
 	    });
 	  };
 	}
@@ -4186,12 +4196,20 @@ webpackJsonp([0,3],{
 	      if (!account || !accountId) {
 	        return _react2.default.createElement(
 	          "div",
-	          { title: "" + accountId },
-	          accountId,
-	          " ",
+	          { className: "text-info", title: "" + accountId },
+	          "Loading.. ",
 	          _react2.default.createElement(_reactLoader2.default, { loaded: false })
 	        );
-	        // {/*return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)*/}
+	      }
+	
+	      var errors = account.errors;
+	
+	      if (errors) {
+	        return _react2.default.createElement(
+	          "div",
+	          { className: "text-danger" },
+	          errors
+	        );
 	      }
 	
 	      var title = account.title;
@@ -7115,4 +7133,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.d2fd5066a9f7115b01b3.js.map
+//# sourceMappingURL=app.497ed0e9fa8411cbbf1d.js.map
