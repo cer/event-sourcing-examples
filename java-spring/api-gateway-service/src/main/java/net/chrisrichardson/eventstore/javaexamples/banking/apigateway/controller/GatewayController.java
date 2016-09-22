@@ -64,12 +64,12 @@ public class GatewayController {
     logger.info("request: {}", proxiedRequest);
     HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
     logger.info("Response {}", proxiedResponse.getStatusLine().getStatusCode());
-    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), processHeaders(proxiedResponse.getAllHeaders()), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
+    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), processHeaders(proxiedResponse.getFirstHeader("Content-Type")), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
   }
 
-  private HttpHeaders processHeaders(Header[] headers) {
+  private HttpHeaders processHeaders(Header h) {
     HttpHeaders result = new HttpHeaders();
-    Stream.of(headers).filter(h -> h.getName().equalsIgnoreCase("Content-Type")).forEach( h ->  result.set(h.getName(), h.getValue()));
+    result.set(h.getName(), h.getValue());
     return result;
   }
 
