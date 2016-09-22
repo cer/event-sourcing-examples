@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
@@ -18,9 +19,9 @@ public class AccountInfo {
   private long balance;
   private List<AccountChangeInfo> changes;
   private Map<String, AccountTransactionInfo> transactions;
-  private Map<String, TransferState> transferStates;
   private String version;
-  private Date date;
+  @JsonProperty("date")
+  private Date creationDate;
 
   private AccountInfo() {
   }
@@ -29,7 +30,7 @@ public class AccountInfo {
     this(id, customerId, title, description, balance, changes, transactions, version, new Date());
   }
 
-  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, Map<String, AccountTransactionInfo> transactions, String version, Date date) {
+  public AccountInfo(String id, String customerId, String title, String description, long balance, List<AccountChangeInfo> changes, Map<String, AccountTransactionInfo> transactions, String version, Date creationDate) {
 
     this.id = id;
     this.customerId = customerId;
@@ -39,7 +40,7 @@ public class AccountInfo {
     this.changes = changes;
     this.transactions = transactions;
     this.version = version;
-    this.date = date;
+    this.creationDate = creationDate;
   }
 
   public String getId() {
@@ -74,15 +75,7 @@ public class AccountInfo {
     return version;
   }
 
-  public Date getDate() {
-    return date;
-  }
-
-  public Map<String, TransferState> getTransferStates() {
-    return transferStates;
-  }
-
-  public void setTransferStates(Map<String, TransferState> transferStates) {
-    this.transferStates = transferStates;
+  public Date getCreationDate() {
+    return creationDate;
   }
 }

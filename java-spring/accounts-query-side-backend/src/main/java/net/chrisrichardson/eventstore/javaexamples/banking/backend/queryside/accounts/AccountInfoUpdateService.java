@@ -40,7 +40,7 @@ public class AccountInfoUpdateService {
                       .set("description", description)
                       .set("balance", toIntegerRepr(initialBalance))
                       .push("changes", ci)
-                      .set("date", new Date())
+                      .set("date", getFromEventId(version))
                       .set("version", version),
               AccountInfo.class);
       logger.info("Saved in mongo");
@@ -74,7 +74,15 @@ public class AccountInfoUpdateService {
   public void updateTransactionStatus(String accountId, String transactionId, TransferState status) {
       mongoTemplate.upsert(new Query(where("id").is(accountId)),
               new Update().
-                      set("transferStates." + transactionId, status),
+                      set("transactions." + transactionId + ".status", status),
               AccountInfo.class);
+  }
+
+  private Date getFromEventId(String eventId) {
+    String[] s = eventId.split("-");
+    if (s.length != 2) {
+      return new Date();
+    }
+    return new Date(Long.parseUnsignedLong(s[0], 16));
   }
 }
