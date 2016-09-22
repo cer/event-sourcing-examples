@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import static net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts.MoneyUtil.toIntegerRepr;
 
@@ -40,6 +41,7 @@ public class AccountQueryWorkflow {
     String customerId =  event.getCustomerId();
     String title =  event.getTitle();
     String description =  event.getDescription();
+
     accountInfoUpdateService.create(id, customerId, title, initialBalance, description, eventId);
   }
 
@@ -74,7 +76,6 @@ public class AccountQueryWorkflow {
     String accountId = de.getEntityId();
     String transactionId = de.getEvent().getTransactionId();
 
-    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.DEBITED);
     saveChange(de, -1);
   }
 
@@ -83,16 +84,37 @@ public class AccountQueryWorkflow {
     String accountId = de.getEntityId();
     String transactionId = de.getEvent().getTransactionId();
 
-    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.COMPLETED);
     saveChange(de, +1);
   }
 
   @EventHandlerMethod
-  public void recordFailed(DispatchedEvent<AccountDebitFailedDueToInsufficientFundsEvent> de) {
-    String accountId = de.getEntityId();
-    String transactionId = de.getEvent().getTransactionId();
+  public void updateDebitTransactionState(DispatchedEvent<DebitRecordedEvent> de) {
+    String transactionId = de.getEntityId();
+    String fromAccountId = de.getEvent().getDetails().getFromAccountId();
+    String toAccountId = de.getEvent().getDetails().getToAccountId();
 
-    accountInfoUpdateService.updateTransactionStatus(accountId, transactionId, TransferState.FAILED_DUE_TO_INSUFFICIENT_FUNDS);
+    accountInfoUpdateService.updateTransactionStatus(fromAccountId, transactionId, TransferState.DEBITED);
+    accountInfoUpdateService.updateTransactionStatus(toAccountId, transactionId, TransferState.DEBITED);
+  }
+
+  @EventHandlerMethod
+  public void updateCreditTransactionState(DispatchedEvent<CreditRecordedEvent> de) {
+    String transactionId = de.getEntityId();
+    String fromAccountId = de.getEvent().getDetails().getFromAccountId();
+    String toAccountId = de.getEvent().getDetails().getToAccountId();
+
+    accountInfoUpdateService.updateTransactionStatus(fromAccountId, transactionId, TransferState.COMPLETED);
+    accountInfoUpdateService.updateTransactionStatus(toAccountId, transactionId, TransferState.COMPLETED);
+  }
+
+  @EventHandlerMethod
+  public void recordFailed(DispatchedEvent<FailedDebitRecordedEvent> de) {
+    String transactionId = de.getEntityId();
+    String fromAccountId = de.getEvent().getDetails().getFromAccountId();
+    String toAccountId = de.getEvent().getDetails().getToAccountId();
+
+    accountInfoUpdateService.updateTransactionStatus(fromAccountId, transactionId, TransferState.FAILED_DUE_TO_INSUFFICIENT_FUNDS);
+    accountInfoUpdateService.updateTransactionStatus(toAccountId, transactionId, TransferState.FAILED_DUE_TO_INSUFFICIENT_FUNDS);
   }
 
   public <T extends AccountChangedEvent> void saveChange(DispatchedEvent<T> de, int delta) {
@@ -107,5 +129,4 @@ public class AccountQueryWorkflow {
 
     accountInfoUpdateService.updateBalance(accountId, changeId, balanceDelta, ci);
   }
-
 }
