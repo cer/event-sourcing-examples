@@ -1,10 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import io.eventuate.Event;
-
 import java.math.BigDecimal;
 
-public class AccountChangedEvent implements Event {
+public class AccountChangedEvent extends AccountEvent {
   protected BigDecimal amount;
   protected String transactionId;
 

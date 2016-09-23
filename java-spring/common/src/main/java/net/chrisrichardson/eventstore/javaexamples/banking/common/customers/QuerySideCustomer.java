@@ -1,12 +1,14 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
 
 /**
  * Created by Main on 05.02.2016.
  */
+@Document
 public class QuerySideCustomer {
 
   private String id;

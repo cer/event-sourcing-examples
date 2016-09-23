@@ -29,7 +29,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -59,11 +58,12 @@ public class GatewayController {
     logger.info("request: {}", proxiedRequest);
     HttpResponse proxiedResponse = httpClient.execute(proxiedRequest);
     logger.info("Response {}", proxiedResponse.getStatusLine().getStatusCode());
-    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), processHeaders(proxiedResponse.getFirstHeader("Content-Type")), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
+    return new ResponseEntity<>(read(proxiedResponse.getEntity().getContent()), makeResponseHeaders(proxiedResponse), HttpStatus.valueOf(proxiedResponse.getStatusLine().getStatusCode()));
   }
 
-  private HttpHeaders processHeaders(Header h) {
+  private HttpHeaders makeResponseHeaders(HttpResponse response) {
     HttpHeaders result = new HttpHeaders();
+    Header h = response.getFirstHeader("Content-Type");
     result.set(h.getName(), h.getValue());
     return result;
   }

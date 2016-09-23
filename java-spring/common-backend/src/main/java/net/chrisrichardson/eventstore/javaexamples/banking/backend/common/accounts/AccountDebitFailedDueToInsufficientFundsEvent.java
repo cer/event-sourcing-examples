@@ -1,8 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts;
 
-import io.eventuate.Event;
-
-public class AccountDebitFailedDueToInsufficientFundsEvent implements Event {
+public class AccountDebitFailedDueToInsufficientFundsEvent extends AccountEvent {
   private String transactionId;
 
   private AccountDebitFailedDueToInsufficientFundsEvent() {
