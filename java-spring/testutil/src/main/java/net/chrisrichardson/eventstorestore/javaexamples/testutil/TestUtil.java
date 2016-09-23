@@ -56,7 +56,7 @@ public class TestUtil {
 
   public static <T> void eventually(Producer<T> producer, Verifier<T> predicate) {
     Throwable laste = null;
-    for (int i = 0; i < 30 ; i++) {
+    for (int i = 0; i < 50 ; i++) {
       try {
         T x = producer.produce().get(30, TimeUnit.SECONDS);
         predicate.verify(x);

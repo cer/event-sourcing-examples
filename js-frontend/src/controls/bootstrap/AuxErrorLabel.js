@@ -4,7 +4,6 @@
 import React, { PropTypes } from "react";
 import { Glyphicon } from "react-bootstrap";
 
-
 class AuxErrorLabel extends React.Component {
 
   static propTypes = {
@@ -17,9 +16,6 @@ class AuxErrorLabel extends React.Component {
     errors: []
   };
   
-//        <Input {...this.props}
-//   bsStyle={(this.props.errors.length) ? "error" : null}
-// onChange={this.handleInput.bind(this)} />
   render () {
     const { errors } = this.props;
 

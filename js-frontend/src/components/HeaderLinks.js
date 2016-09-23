@@ -4,13 +4,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { LinkContainer } from "react-router-bootstrap";
-
-import read from '../utils/readProp';
-
-//import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 import * as BS from "react-bootstrap";
-import { Link, IndexLink } from "react-router";
-
+import read from '../utils/readProp';
 import { signOut } from '../actions/signOut';
 
 

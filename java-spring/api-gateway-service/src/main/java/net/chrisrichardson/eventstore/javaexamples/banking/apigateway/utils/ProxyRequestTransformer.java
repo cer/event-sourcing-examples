@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-/**
- * Created by popikyardo on 21.01.16.
- */
 public abstract class ProxyRequestTransformer {
 
   protected ProxyRequestTransformer predecessor;

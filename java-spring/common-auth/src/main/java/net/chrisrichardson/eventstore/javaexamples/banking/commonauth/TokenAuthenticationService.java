@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
- * Created by popikyardo on 23.09.15.
- */
 @Service
 public class TokenAuthenticationService {
 

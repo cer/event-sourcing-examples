@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.filter.StatelessAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,9 +23,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.security.SecureRandom;
 
-/**
- * Created by popikyardo on 21.09.15.
- */
 @Configuration
 @ComponentScan
 @EnableWebSecurity
@@ -43,21 +41,14 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    //auth.inMemoryAuthentication();
     auth.userDetailsService(userDetailsServiceBean());
   }
 
   @Override
   public UserDetailsService userDetailsServiceBean() {
     return email -> {
-/*            QuerySideCustomer customer = customerAuthService.findByEmail(email);
-            if (customer != null) {
-                return new User(email);
-            } else {
-                throw new UsernameNotFoundException(String.format("could not find the customer '%s'", email));
-            }*/
-      //authorize everyone with basic authentication
-      return new User(email, "", true, true, true, true,
+      QuerySideCustomer customer = customerAuthService.findByEmail(email);
+      return new User(email, customer.getPassword(), true, true, true, true,
               AuthorityUtils.createAuthorityList("USER"));
     };
   }

@@ -46,6 +46,12 @@ public class AccountQueryWorkflow {
   }
 
   @EventHandlerMethod
+  public void delete(DispatchedEvent<AccountDeletedEvent> de) {
+    String id = de.getEntityId();
+    accountInfoUpdateService.delete(id);
+  }
+
+  @EventHandlerMethod
   public void recordTransfer(DispatchedEvent<MoneyTransferCreatedEvent> de) {
     String eventId = de.getEventId().asString();
     String moneyTransferId = de.getEntityId();

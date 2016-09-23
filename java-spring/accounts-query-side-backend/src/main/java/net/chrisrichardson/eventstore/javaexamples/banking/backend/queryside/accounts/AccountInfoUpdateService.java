@@ -53,6 +53,10 @@ public class AccountInfoUpdateService {
     }
   }
 
+  public void delete(String accountId) {
+    accountInfoRepository.delete(accountId);
+  }
+
 
   public void addTransaction(String accountId, AccountTransactionInfo ti) {
     mongoTemplate.upsert(new Query(where("id").is(accountId)),

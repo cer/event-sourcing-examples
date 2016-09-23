@@ -4,7 +4,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { pushState } from 'redux-router';
-
 import read from '../utils/readProp';
 
 export function requireAuthentication(Component) {

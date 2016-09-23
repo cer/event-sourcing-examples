@@ -25,17 +25,10 @@ export function setCurrentSettings (s) {
   authState.currentSettings = s;
 }
 
-export function getCurrentSettings () {
-  return authState.currentSettings;
-}
-
 export function setCurrentEndpoint (e) {
   authState.currentEndpoint = e;
 }
 
-export function getCurrentEndpoint () {
-  return authState.currentEndpoint;
-}
 
 /**
  * @deprecated
@@ -43,10 +36,6 @@ export function getCurrentEndpoint () {
  */
 export function setCurrentEndpointKey (k) {
   persistData(C.SAVED_CONFIG_KEY, k || getDefaultEndpointKey());
-}
-
-export function getCurrentEndpointKey () {
-  return getDefaultEndpointKey();
 }
 
 /**
@@ -106,54 +95,6 @@ export function isApiRequest(url) {
   return true;
 }
 
-export function getSessionEndpointKey () {
-  return getCurrentEndpointKey();
-}
-
-export function getSessionEndpoint (k) {
-  return getCurrentEndpoint()[getSessionEndpointKey()];
-}
-
-
-//// only should work for current session
-//export function getSignOutUrl (endpointKey) {
-//  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).signOutPath}`
-//}
-
-export function getEmailSignInUrl () {
-  return `${getSessionEndpoint().emailSignInPath}`
-}
-
-export function getEmailSignUpUrl () {
-  return getCustomersUrl();
-}
-
-export function getCurrentUserUrl () {
-  return `${getSessionEndpoint().currentUserPath}`
-}
-
-export function getAccountsUrl () {
-  return `${getSessionEndpoint().accountsPath}`
-}
-
-export function getCustomersUrl () {
-  return `${getSessionEndpoint().customersPath}`
-}
-
-export function getTransfersUrl () {
-  return `${getSessionEndpoint().transfersPath}`
-}
-
-/**
- * @deprecated
- * @param key
- * @returns {string|string}
- */
-export function getApiUrl(key) {
-  let configKey = getSessionEndpointKey(key);
-  return rauthState.currentEndpoint[configKey].apiUrl;
-}
-
 export function getTokenFormat() {
   return authState.currentSettings.tokenFormat;
 }
@@ -164,7 +105,7 @@ export const persistUserData = (user) => {
 
 export const retrieveUserData = () =>{
   return memoryStorage[C.SAVED_USER_INFO];
-}
+};
 
 export function retrieveHeaders() {
   return retrieveData(C.SAVED_CREDS_KEY) || {};

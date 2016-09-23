@@ -44,11 +44,6 @@ public class BankingWebIntegrationTest extends AbstractRestAPITest {
   RestTemplate restTemplate;
 
   @Override
-  public AuthenticatedRestTemplate getAuthenticatedRestTemplate() {
-    return new AuthenticatedRestTemplate(restTemplate);
-  }
-
-  @Override
   public RestTemplate getRestTemplate() {
     return restTemplate;
   }

@@ -2,9 +2,6 @@ package net.chrisrichardson.eventstore.javaexamples.banking.common.accounts;
 
 import java.util.List;
 
-/**
- * Created by popikyardo on 9/1/16.
- */
 public class AccountHistoryResponse {
   private List<AccountHistoryEntry> transactionsHistory;
 

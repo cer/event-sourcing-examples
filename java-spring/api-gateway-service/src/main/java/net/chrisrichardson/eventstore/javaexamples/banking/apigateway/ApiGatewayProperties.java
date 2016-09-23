@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-/**
- * Created by popikyardo on 15.01.16.
- */
 @ConfigurationProperties(prefix = "api.gateway")
 public class ApiGatewayProperties {
 

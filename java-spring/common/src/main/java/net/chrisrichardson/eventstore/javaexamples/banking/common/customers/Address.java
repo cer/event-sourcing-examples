@@ -5,9 +5,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by popikyardo on 02.02.16.
- */
 public class Address {
   @NotNull
   private String street1;

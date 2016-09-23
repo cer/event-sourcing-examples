@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Date;
 
-/**
- * Created by popikyardo on 9/1/16.
- */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS,
         include = JsonTypeInfo.As.PROPERTY,
         property = "entryType")

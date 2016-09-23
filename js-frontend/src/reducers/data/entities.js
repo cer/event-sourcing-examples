@@ -56,15 +56,18 @@ export const entities = (state = {...initialState}, action) => {
       };
     }
 
-    case T.ACCOUNT.SINGLE_COMPLETE: {
-      const { payload = {} } = action;
-      const { accountId } = payload;
-      if (!accountId) {
-        return state;
-      }
+
+    case T.ACCOUNT.SINGLE_START:
+    case T.ACCOUNT.SINGLE_COMPLETE:
+    case T.ACCOUNT.SINGLE_ERROR: {
+      const { id, payload = {}, error } = action;
+      // const { accountId } = payload;
+      const isError = ((action.type) == T.ACCOUNT.SINGLE_ERROR);
+      const isStart = ((action.type) == T.ACCOUNT.SINGLE_START);
+
       return {
         ...state,
-        [accountId]: payload
+        [id]: isStart ? { isLoading: true, 'title': 'Loading' } : (isError ? error : payload)
       };
     }
     case T.ENTITIES.RECEIVED_LIST:

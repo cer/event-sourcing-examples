@@ -1,29 +1,26 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by popikyardo on 03.02.16.
- */
 public class CustomerInfo {
   private Name name;
-  @NotNull
-  protected String email;
+  @JsonUnwrapped
+  protected UserCredentials userCredentials;
   @NotNull
   protected String ssn;
-  @NotNull
   protected String phoneNumber;
   protected Address address;
 
   public CustomerInfo() {
   }
 
-  public CustomerInfo(Name name, String email, String ssn, String phoneNumber, Address address) {
+  public CustomerInfo(Name name, UserCredentials userCredentials, String ssn, String phoneNumber, Address address) {
     this.name = name;
-    this.email = email;
+    this.userCredentials = userCredentials;
     this.ssn = ssn;
     this.phoneNumber = phoneNumber;
     this.address = address;
@@ -33,8 +30,8 @@ public class CustomerInfo {
     return name;
   }
 
-  public String getEmail() {
-    return email;
+  public UserCredentials getUserCredentials() {
+    return userCredentials;
   }
 
   public String getSsn() {

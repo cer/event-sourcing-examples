@@ -2,9 +2,6 @@ package net.chrisrichardson.eventstore.javaexamples.banking.commonauth;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * Created by popikyardo on 21.09.15.
- */
 @ConfigurationProperties(locations = "classpath:auth.properties", ignoreUnknownFields = false, prefix = "auth")
 public class AuthProperties {
   private String serverSecret;

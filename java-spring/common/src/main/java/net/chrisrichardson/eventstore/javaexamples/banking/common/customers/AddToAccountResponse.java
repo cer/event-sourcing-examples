@@ -1,8 +1,5 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
 
-/**
- * Created by popikyardo on 24.03.16.
- */
 public class AddToAccountResponse {
 
   private String version;

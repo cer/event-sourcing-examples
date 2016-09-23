@@ -6,7 +6,7 @@ import React from 'react';
 export const moneyText = (amount) => {
 
   if (Number.isNaN(Number(amount))) {
-    return '';
+    return '—';
   }
   const absNum = Math.abs(Number(amount) / 100);
   if (absNum < 0) {

@@ -23,4 +23,8 @@ public class CustomerService {
   public CompletableFuture<EntityWithIdAndVersion<Customer>> addToAccount(String customerId, ToAccountInfo toAccountInfo) {
     return accountRepository.update(customerId, new AddToAccountCommand(toAccountInfo));
   }
+
+  public CompletableFuture<EntityWithIdAndVersion<Customer>> deleteToAccount(String customerId, String accountId) {
+    return accountRepository.update(customerId, new DeleteToAccountCommand(accountId));
+  }
 }

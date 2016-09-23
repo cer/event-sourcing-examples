@@ -2,11 +2,20 @@ package net.chrisrichardson.eventstore.examples.bank.web;
 
 
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.AbstractRestAPITest;
-import net.chrisrichardson.eventstorestore.javaexamples.testutil.AuthenticatedRestTemplate;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class EndToEndTest extends AbstractRestAPITest {
+
+  private String indexUrl = "http://" + getenv("SERVICE_HOST", "localhost") + ":" + 8080 + "/index.html";
 
   private String getenv(String name, String defaultValue) {
     String x = System.getenv(name);
@@ -21,14 +30,16 @@ public class EndToEndTest extends AbstractRestAPITest {
     return "http://" + getenv("SERVICE_HOST", "localhost") + ":" + 8080 + "/api" + path;
   }
 
-  @Override
-  public CustomersTestUtils getCustomersTestUtils() {
-    return customersTestUtils;
+  @Test
+  public void shouldLoadStaticPage() throws IOException {
+    Document doc = Jsoup.connect(indexUrl).get();
+    assertNotNull(doc.title());
+    assertEquals("Money Transfer App", doc.title());
   }
 
   @Override
-  public AuthenticatedRestTemplate getAuthenticatedRestTemplate() {
-    return new AuthenticatedRestTemplate(restTemplate);
+  public CustomersTestUtils getCustomersTestUtils() {
+    return customersTestUtils;
   }
 
   @Override

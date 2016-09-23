@@ -19,4 +19,7 @@ public class AccountService  {
     return accountRepository.save(new OpenAccountCommand(customerId, title, initialBalance, description));
   }
 
+  public CompletableFuture<EntityWithIdAndVersion<Account>> deleteAccount(String accountId) {
+    return accountRepository.update(accountId, new DeleteAccountCommand());
+  }
 }

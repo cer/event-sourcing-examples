@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.stream.Collectors;
 
-/**
- * Created by popikyardo on 21.01.16.
- */
 public class ContentRequestTransformer extends ProxyRequestTransformer {
 
   @Override

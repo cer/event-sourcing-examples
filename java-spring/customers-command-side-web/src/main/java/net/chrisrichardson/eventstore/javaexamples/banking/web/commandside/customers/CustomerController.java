@@ -1,6 +1,8 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.commandside.customers;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.CreateAccountResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.DeleteAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.AddToAccountResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
@@ -11,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Created by popikyardo on 03.02.16.
- */
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
@@ -35,6 +34,12 @@ public class CustomerController {
   public CompletableFuture<AddToAccountResponse> addToAccount(@PathVariable String id, @Validated @RequestBody ToAccountInfo request) {
     return customerService.addToAccount(id, request)
             .thenApply(entityAndEventInfo -> new AddToAccountResponse(entityAndEventInfo.getEntityVersion().toString()));
+  }
+
+  @RequestMapping(value = "/{customerId}/toaccounts/{accountId}", method = RequestMethod.DELETE)
+  public CompletableFuture<DeleteAccountResponse> deleteToAccount(@PathVariable String customerId, @PathVariable String accountId) {
+    return customerService.deleteToAccount(customerId, accountId)
+            .thenApply(entityAndEventInfo -> new DeleteAccountResponse(accountId));
   }
 
 }

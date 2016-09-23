@@ -22,20 +22,21 @@ webpackJsonp([0,3],{
 	/**
 	 * Fire-up React Router.
 	 */
-	var reactRoot = window.document.getElementById("root"); /**
-	                                                         * Created by andrew on 12/02/16.
-	                                                         */
-	
 	(0, _app.initialize)().then(function (_ref) {
 	  var provider = _ref.provider;
 	
+	  var reactRoot = window.document.getElementById("root");
 	  _reactDom2.default.render(provider, reactRoot);
 	});
 	
 	/**
 	 * Detect whether the server-side render has been discarded due to an invalid checksum.
 	 */
+	/**
+	 * Created by andrew on 12/02/16.
+	 */
 	if (process.env.NODE_ENV !== "production") {
+	  var reactRoot = window.document.getElementById("root");
 	  if (!reactRoot.firstChild || !reactRoot.firstChild.attributes || !reactRoot.firstChild.attributes["data-react-checksum"]) {
 	    console.error("Server-side React render was discarded. Make sure that your initial render does not contain any client-side code.");
 	  }
@@ -91,25 +92,27 @@ webpackJsonp([0,3],{
 	
 	var _configure = __webpack_require__(314);
 	
-	var _AuthComponent = __webpack_require__(333);
+	var _navigate = __webpack_require__(330);
 	
-	var _Container = __webpack_require__(335);
+	var _AuthComponent = __webpack_require__(331);
+	
+	var _Container = __webpack_require__(333);
 	
 	var _Container2 = _interopRequireDefault(_Container);
 	
-	var _MyAccounts = __webpack_require__(584);
+	var _MyAccounts = __webpack_require__(582);
 	
 	var _MyAccounts2 = _interopRequireDefault(_MyAccounts);
 	
-	var _Account = __webpack_require__(603);
+	var _Account = __webpack_require__(601);
 	
 	var _Account2 = _interopRequireDefault(_Account);
 	
-	var _SignIn = __webpack_require__(607);
+	var _SignIn = __webpack_require__(605);
 	
 	var _SignIn2 = _interopRequireDefault(_SignIn);
 	
-	var _SignUp = __webpack_require__(610);
+	var _SignUp = __webpack_require__(608);
 	
 	var _SignUp2 = _interopRequireDefault(_SignUp);
 	
@@ -160,12 +163,20 @@ webpackJsonp([0,3],{
 	    router: _reduxRouter.routerStateReducer
 	  });
 	
+	  var dispatch = null;
+	
+	  var onEnter = function onEnter(nextState) {
+	    var location = nextState.location;
+	
+	    dispatch && dispatch((0, _navigate.visitLocation)(location));
+	  };
+	
 	  var routes = _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: "/", component: App },
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: (0, _AuthComponent.requireAuthentication)(_MyAccounts2.default) }),
-	    _react2.default.createElement(_reactRouter.Route, { path: "signin", component: _SignIn2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: "register", component: _SignUp2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: "signin", component: _SignIn2.default, onEnter: onEnter }),
+	    _react2.default.createElement(_reactRouter.Route, { path: "register", component: _SignUp2.default, onEnter: onEnter }),
 	    _react2.default.createElement(_reactRouter.Route, { path: "account/:accountId", component: (0, _AuthComponent.requireAuthentication)(_Account2.default) })
 	  );
 	
@@ -178,6 +189,8 @@ webpackJsonp([0,3],{
 	    routes: routes,
 	    createHistory: createHistoryMethod
 	  }))(_redux.createStore)(reducer);
+	
+	  dispatch = store.dispatch;
 	
 	  /**
 	   * The React Router 1.0 routes for both the server and the client.
@@ -201,13 +214,11 @@ webpackJsonp([0,3],{
 	    },
 	    handleLoginResponse: function handleLoginResponse(resp) {
 	      debugger;
-	
 	      return resp.data;
 	    },
 	
 	    handleAccountUpdateResponse: function handleAccountUpdateResponse(resp) {
 	      debugger;
-	
 	      return resp.data;
 	    },
 	
@@ -498,47 +509,6 @@ webpackJsonp([0,3],{
 	  var c = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	  return _extends({}, c);
 	});
-	//
-	// const configInitialState = {
-	//   loading: true,
-	//   errors: null,
-	//   config: null
-	// };
-	//
-	// export const configReducer = (state = {...configInitialState}, action) => {
-	//   switch(action.type) {
-	//     case T.AUTH.CONFIGURE_START:
-	//     {
-	//       return {
-	//         ...state,
-	//         loading: true
-	//       };
-	//     }
-	//
-	//     case T.AUTH.CONFIGURE_COMPLETE: {
-	//       const { config } = action;
-	//       return {
-	//         ...state,
-	//         loading: false,
-	//         errors: null,
-	//         config
-	//       };
-	//     }
-	//
-	//     case T.AUTH.CONFIGURE_ERROR:
-	//     {
-	//       const { errors } = action;
-	//       return {
-	//         ...state,
-	//         loading: false,
-	//         errors
-	//       };
-	//     }
-	//
-	//     default:
-	//       return state;
-	//   }
-	// };
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "configure.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -558,6 +528,10 @@ webpackJsonp([0,3],{
 	var _defineActionTypes = __webpack_require__(296);
 	
 	exports.default = (0, _defineActionTypes.defineActionType)({
+	
+	  LOCATION: {
+	    ENTER: _defineActionTypes.TODO_DEFINE
+	  },
 	  /*
 	   * View model
 	   */
@@ -963,7 +937,30 @@ webpackJsonp([0,3],{
 	/**
 	 * Created by andrew on 25/02/16.
 	 */
-	var signInReducer = exports.signInReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_IN_START, _ACTION_TYPES2.default.AUTH.SIGN_IN_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE]);
+	var internalSignInReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_IN_START, _ACTION_TYPES2.default.AUTH.SIGN_IN_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE]);
+	
+	var signInReducer = exports.signInReducer = function signInReducer(state, action) {
+	  switch (action.type) {
+	    case _ACTION_TYPES2.default.LOCATION.ENTER:
+	      {
+	        var location = action.location;
+	        var pathname = location.pathname;
+	
+	        if (pathname == '/signin') {
+	          return internalSignInReducer(state, {
+	            type: _ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR,
+	            error: null
+	          });
+	        }
+	        return state;
+	      }
+	
+	    default:
+	      {
+	        return internalSignInReducer(state, action);
+	      }
+	  }
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "signin.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -1064,7 +1061,7 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.signUpReducer = undefined;
+	exports.signUpReducer = exports.internalSignUpReducer = undefined;
 	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
@@ -1079,7 +1076,30 @@ webpackJsonp([0,3],{
 	/**
 	 * Created by andrew on 25/02/16.
 	 */
-	var signUpReducer = exports.signUpReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_UP_START, _ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE]);
+	var internalSignUpReducer = exports.internalSignUpReducer = (0, _createFormReducer2.default)([_ACTION_TYPES2.default.AUTH.SIGN_UP_START, _ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, _ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE]);
+	
+	var signUpReducer = exports.signUpReducer = function signUpReducer(state, action) {
+	  switch (action.type) {
+	    case _ACTION_TYPES2.default.LOCATION.ENTER:
+	      {
+	        var location = action.location;
+	        var pathname = location.pathname;
+	
+	        if (pathname == '/register') {
+	          return internalSignUpReducer(state, {
+	            type: _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR,
+	            error: null
+	          });
+	        }
+	        return state;
+	      }
+	
+	    default:
+	      {
+	        return internalSignUpReducer(state, action);
+	      }
+	  }
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "signup.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -1442,18 +1462,22 @@ webpackJsonp([0,3],{
 	        return _extends({}, state, hashMap);
 	      }
 	
+	    case _ACTION_TYPES2.default.ACCOUNT.SINGLE_START:
 	    case _ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE:
+	    case _ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR:
 	      {
+	        var _id2 = action.id;
 	        var _action$payload = action.payload;
 	
 	        var _payload = _action$payload === undefined ? {} : _action$payload;
 	
-	        var accountId = _payload.accountId;
+	        var error = action.error;
+	        // const { accountId } = payload;
 	
-	        if (!accountId) {
-	          return state;
-	        }
-	        return _extends({}, state, _defineProperty({}, accountId, _payload));
+	        var isError = action.type == _ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR;
+	        var isStart = action.type == _ACTION_TYPES2.default.ACCOUNT.SINGLE_START;
+	
+	        return _extends({}, state, _defineProperty({}, _id2, isStart ? { isLoading: true, 'title': 'Loading' } : isError ? error : _payload));
 	      }
 	    case _ACTION_TYPES2.default.ENTITIES.RECEIVED_LIST:
 	    default:
@@ -1821,55 +1845,26 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.STORE_CURRENT_ENDPOINT_KEY = exports.SET_ENDPOINT_KEYS = undefined;
+	exports.SET_ENDPOINT_KEYS = undefined;
 	exports.setEndpointKeys = setEndpointKeys;
-	exports.storeCurrentEndpointKey = storeCurrentEndpointKey;
 	exports.configure = configure;
 	
-	var _constants = __webpack_require__(315);
+	var _authenticate = __webpack_require__(315);
 	
-	var C = _interopRequireWildcard(_constants);
-	
-	var _authenticate = __webpack_require__(316);
-	
-	var _sessionStorage = __webpack_require__(318);
-	
-	var _clientSettings = __webpack_require__(327);
-	
-	var _parseUrl = __webpack_require__(329);
-	
-	var _parseUrl2 = _interopRequireDefault(_parseUrl);
-	
-	var _reduxRouter = __webpack_require__(246);
-	
-	var _root = __webpack_require__(320);
-	
-	var _root2 = _interopRequireDefault(_root);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	var SET_ENDPOINT_KEYS = exports.SET_ENDPOINT_KEYS = "SET_ENDPOINT_KEYS";
-	
-	//import {
-	//  showFirstTimeLoginSuccessModal,
-	//  showFirstTimeLoginErrorModal,
-	//  showPasswordResetSuccessModal,
-	//  showPasswordResetErrorModal
-	//} from "./ui";
+	var _clientSettings = __webpack_require__(328);
 	
 	/**
 	 * Created by andrew on 26/02/16.
 	 */
-	var STORE_CURRENT_ENDPOINT_KEY = exports.STORE_CURRENT_ENDPOINT_KEY = "STORE_CURRENT_ENDPOINT_KEY";
+	var SET_ENDPOINT_KEYS = exports.SET_ENDPOINT_KEYS = "SET_ENDPOINT_KEYS";
 	
 	function setEndpointKeys(endpoints, currentEndpointKey, defaultEndpointKey) {
-	  return { type: SET_ENDPOINT_KEYS, endpoints: endpoints, currentEndpointKey: currentEndpointKey, defaultEndpointKey: defaultEndpointKey };
-	}
-	
-	function storeCurrentEndpointKey(currentEndpointKey) {
-	  return { type: STORE_CURRENT_ENDPOINT_KEY, currentEndpointKey: currentEndpointKey };
+	  return {
+	    type: SET_ENDPOINT_KEYS,
+	    endpoints: endpoints,
+	    currentEndpointKey: currentEndpointKey,
+	    defaultEndpointKey: defaultEndpointKey
+	  };
 	}
 	
 	function configure() {
@@ -1894,29 +1889,6 @@ webpackJsonp([0,3],{
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/**
-	 * Created by andrew on 26/02/16.
-	 */
-	var INITIAL_CONFIG_KEY = exports.INITIAL_CONFIG_KEY = "default";
-	var DEFAULT_CONFIG_KEY = exports.DEFAULT_CONFIG_KEY = "defaultConfigKey";
-	var SAVED_CONFIG_KEY = exports.SAVED_CONFIG_KEY = "currentConfigName";
-	var SAVED_CREDS_KEY = exports.SAVED_CREDS_KEY = "authHeaders";
-	var SAVED_USER_INFO = exports.SAVED_USER_INFO = "user-info";
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "constants.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-
-/***/ },
-
-/***/ 316:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -1929,15 +1901,15 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _actions = __webpack_require__(317);
+	var _actions = __webpack_require__(316);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	var U = _interopRequireWildcard(_sessionStorage);
 	
 	var _api = __webpack_require__(321);
 	
-	var _entities = __webpack_require__(326);
+	var _entities = __webpack_require__(327);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -2000,7 +1972,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 317:
+/***/ 316:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2024,11 +1996,10 @@ webpackJsonp([0,3],{
 	      args[_key2] = arguments[_key2];
 	    }
 	
-	    var action = { type: type };
-	    argNames.forEach(function (arg, index) {
-	      action[argNames[index]] = args[index];
-	    });
-	    return action;
+	    return argNames.reduce(function (action, arg, index) {
+	      action[arg] = args[index];
+	      return action;
+	    }, { type: type });
 	  };
 	}
 	
@@ -2036,7 +2007,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 318:
+/***/ 317:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2048,36 +2019,24 @@ webpackJsonp([0,3],{
 	});
 	exports.retrieveUserData = exports.persistUserData = undefined;
 	exports.setCurrentSettings = setCurrentSettings;
-	exports.getCurrentSettings = getCurrentSettings;
 	exports.setCurrentEndpoint = setCurrentEndpoint;
-	exports.getCurrentEndpoint = getCurrentEndpoint;
 	exports.setCurrentEndpointKey = setCurrentEndpointKey;
-	exports.getCurrentEndpointKey = getCurrentEndpointKey;
 	exports.setDefaultEndpointKey = setDefaultEndpointKey;
 	exports.getDefaultEndpointKey = getDefaultEndpointKey;
 	exports.resetConfig = resetConfig;
 	exports.destroySession = destroySession;
 	exports.getInitialEndpointKey = getInitialEndpointKey;
 	exports.isApiRequest = isApiRequest;
-	exports.getSessionEndpointKey = getSessionEndpointKey;
-	exports.getSessionEndpoint = getSessionEndpoint;
-	exports.getEmailSignInUrl = getEmailSignInUrl;
-	exports.getEmailSignUpUrl = getEmailSignUpUrl;
-	exports.getCurrentUserUrl = getCurrentUserUrl;
-	exports.getAccountsUrl = getAccountsUrl;
-	exports.getCustomersUrl = getCustomersUrl;
-	exports.getTransfersUrl = getTransfersUrl;
-	exports.getApiUrl = getApiUrl;
 	exports.getTokenFormat = getTokenFormat;
 	exports.retrieveHeaders = retrieveHeaders;
 	exports.persistData = persistData;
 	exports.retrieveData = retrieveData;
 	
-	var _jsCookie = __webpack_require__(319);
+	var _jsCookie = __webpack_require__(318);
 	
 	var _jsCookie2 = _interopRequireDefault(_jsCookie);
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
@@ -2112,16 +2071,8 @@ webpackJsonp([0,3],{
 	  authState.currentSettings = s;
 	}
 	
-	function getCurrentSettings() {
-	  return authState.currentSettings;
-	}
-	
 	function setCurrentEndpoint(e) {
 	  authState.currentEndpoint = e;
-	}
-	
-	function getCurrentEndpoint() {
-	  return authState.currentEndpoint;
 	}
 	
 	/**
@@ -2130,10 +2081,6 @@ webpackJsonp([0,3],{
 	 */
 	function setCurrentEndpointKey(k) {
 	  persistData(C.SAVED_CONFIG_KEY, k || getDefaultEndpointKey());
-	}
-	
-	function getCurrentEndpointKey() {
-	  return getDefaultEndpointKey();
 	}
 	
 	/**
@@ -2183,53 +2130,6 @@ webpackJsonp([0,3],{
 	
 	function isApiRequest(url) {
 	  return true;
-	}
-	
-	function getSessionEndpointKey() {
-	  return getCurrentEndpointKey();
-	}
-	
-	function getSessionEndpoint(k) {
-	  return getCurrentEndpoint()[getSessionEndpointKey()];
-	}
-	
-	//// only should work for current session
-	//export function getSignOutUrl (endpointKey) {
-	//  return `${getApiUrl(endpointKey)}${getSessionEndpoint(endpointKey).signOutPath}`
-	//}
-	
-	function getEmailSignInUrl() {
-	  return '' + getSessionEndpoint().emailSignInPath;
-	}
-	
-	function getEmailSignUpUrl() {
-	  return getCustomersUrl();
-	}
-	
-	function getCurrentUserUrl() {
-	  return '' + getSessionEndpoint().currentUserPath;
-	}
-	
-	function getAccountsUrl() {
-	  return '' + getSessionEndpoint().accountsPath;
-	}
-	
-	function getCustomersUrl() {
-	  return '' + getSessionEndpoint().customersPath;
-	}
-	
-	function getTransfersUrl() {
-	  return '' + getSessionEndpoint().transfersPath;
-	}
-	
-	/**
-	 * @deprecated
-	 * @param key
-	 * @returns {string|string}
-	 */
-	function getApiUrl(key) {
-	  var configKey = getSessionEndpointKey(key);
-	  return rauthState.currentEndpoint[configKey].apiUrl;
 	}
 	
 	function getTokenFormat() {
@@ -2294,6 +2194,29 @@ webpackJsonp([0,3],{
 
 /***/ },
 
+/***/ 319:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * Created by andrew on 26/02/16.
+	 */
+	var INITIAL_CONFIG_KEY = exports.INITIAL_CONFIG_KEY = "default";
+	var DEFAULT_CONFIG_KEY = exports.DEFAULT_CONFIG_KEY = "defaultConfigKey";
+	var SAVED_CONFIG_KEY = exports.SAVED_CONFIG_KEY = "currentConfigName";
+	var SAVED_CREDS_KEY = exports.SAVED_CREDS_KEY = "authHeaders";
+	var SAVED_USER_INFO = exports.SAVED_USER_INFO = "user-info";
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "constants.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+
 /***/ 320:
 /***/ function(module, exports, __webpack_require__) {
 
@@ -2325,204 +2248,134 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.apiSignIn = apiSignIn;
-	exports.apiSignUp = apiSignUp;
-	exports.apiGetCurrentUser = apiGetCurrentUser;
-	exports.apiCreateAccount = apiCreateAccount;
-	exports.apiCreateRefAccount = apiCreateRefAccount;
-	exports.apiMakeTransfer = apiMakeTransfer;
-	exports.apiRetrieveAccounts = apiRetrieveAccounts;
-	exports.apiRetrieveTransfers = apiRetrieveTransfers;
-	exports.apiRetrieveAccount = apiRetrieveAccount;
-	exports.apiDeleteAccount = apiDeleteAccount;
-	exports.apiRetrieveUsers = apiRetrieveUsers;
-	exports.apiRetrieveUser = apiRetrieveUser;
+	exports.apiRetrieveUsers = exports.apiDeleteRefAccount = exports.apiDeleteAccount = exports.apiRetrieveAccount = exports.apiRetrieveTransfers = exports.apiRetrieveAccounts = exports.apiMakeTransfer = exports.apiCreateRefAccount = exports.apiCreateAccount = exports.apiGetCurrentUser = exports.apiSignUp = exports.apiSignIn = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+	                                                                                                                                                                                                                                                                   * Created by andrew on 12/03/16.
+	                                                                                                                                                                                                                                                                   */
+	
 	
 	var _fetch = __webpack_require__(322);
 	
 	var _fetch2 = _interopRequireDefault(_fetch);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _apiEndpoints = __webpack_require__(325);
+	
+	var ENDPOINTS = _interopRequireWildcard(_apiEndpoints);
 	
 	var _root = __webpack_require__(320);
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _handleFetchResponse = __webpack_require__(325);
+	var _handleFetchResponse = __webpack_require__(326);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/**
-	 * Created by andrew on 12/03/16.
-	 */
-	function makeQuery(params) {
-	  return Object.keys(params).map(function (key) {
-	    return [encodeURIComponent(key), encodeURIComponent(params[key])].join('=');
-	  }).join('&');
-	}
+	var JSON_HEADERS = {
+	  headers: {
+	    "Accept": "application/json",
+	    "Content-Type": "application/json"
+	  }
+	};
 	
-	function apiSignIn(body) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getEmailSignInUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
-	    body: _root2.default.JSON.stringify(body)
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiSignUp(body) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getEmailSignUpUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
-	    body: _root2.default.JSON.stringify(body)
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiGetCurrentUser() {
-	  return (0, _fetch2.default)((0, _sessionStorage.getCurrentUserUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
+	var METHODS = {
+	  DELETE: _extends({}, JSON_HEADERS, {
+	    method: "delete"
+	  }),
+	  GET: _extends({}, JSON_HEADERS, {
 	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }),
+	  POST: _extends({}, JSON_HEADERS, {
+	    method: "post"
+	  })
+	};
 	
-	function apiCreateAccount(customerId, _ref) {
+	var fetch = function fetch() {
+	  return _fetch2.default.apply(undefined, arguments).then(_handleFetchResponse.parseResponse);
+	};
+	
+	var apiSignIn = exports.apiSignIn = function apiSignIn(body) {
+	  return fetch(ENDPOINTS.emailSignIn(), _extends({}, METHODS.POST, {
+	    body: _root2.default.JSON.stringify(body)
+	  }));
+	};
+	
+	var apiSignUp = exports.apiSignUp = function apiSignUp(body) {
+	  return fetch(ENDPOINTS.emailSignUp(), _extends({}, METHODS.POST, {
+	    body: _root2.default.JSON.stringify(body)
+	  }));
+	};
+	
+	var apiGetCurrentUser = exports.apiGetCurrentUser = function apiGetCurrentUser() {
+	  return fetch(ENDPOINTS.currentUser(), _extends({}, METHODS.GET));
+	};
+	
+	var apiCreateAccount = exports.apiCreateAccount = function apiCreateAccount(customerId, _ref) {
 	  var title = _ref.title;
 	  var initialBalance = _ref.balance;
 	  var description = _ref.description;
-	
-	  //{
-	  //"accountId": "0000015377cf131b-a250093f26850000"
-	  //}
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
+	  return fetch(ENDPOINTS.accountsPath(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      customerId: customerId,
 	      title: title,
 	      initialBalance: initialBalance,
 	      description: description })
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }));
+	};
 	
-	function apiCreateRefAccount(customerId, _ref2) {
+	var apiCreateRefAccount = exports.apiCreateRefAccount = function apiCreateRefAccount(customerId, _ref2) {
 	  var owner = _ref2.owner;
 	  var accountId = _ref2.account;
 	  var title = _ref2.title;
 	  var description = _ref2.description;
-	
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/toaccounts', {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
+	  return fetch(ENDPOINTS.refAccounts(customerId), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
 	      owner: owner,
 	      id: accountId,
 	      title: title,
 	      description: description })
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }));
+	};
 	
-	function apiMakeTransfer(fromAccountId, _ref3) {
+	var apiMakeTransfer = exports.apiMakeTransfer = function apiMakeTransfer(fromAccountId, _ref3) {
 	  var account = _ref3.account;
 	  var amount = _ref3.amount;
 	  var description = _ref3.description;
-	
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getTransfersUrl)(), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "post",
+	  return fetch(ENDPOINTS.transfers(), _extends({}, METHODS.POST, {
 	    body: _root2.default.JSON.stringify({
-	      "amount": amount,
-	      "fromAccountId": fromAccountId,
+	      amount: amount,
+	      fromAccountId: fromAccountId,
 	      "toAccountId": account,
 	      description: description
 	    })
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	  }));
+	};
 	
-	function apiRetrieveAccounts(customerId) {
+	var apiRetrieveAccounts = exports.apiRetrieveAccounts = function apiRetrieveAccounts(customerId) {
+	  return fetch(ENDPOINTS.customersAccounts(customerId), _extends({}, METHODS.GET));
+	};
 	
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId + '/accounts', {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiRetrieveTransfers = exports.apiRetrieveTransfers = function apiRetrieveTransfers(accountId) {
+	  return fetch(ENDPOINTS.history(accountId), _extends({}, METHODS.GET));
+	};
 	
-	function apiRetrieveTransfers(accountId) {
+	var apiRetrieveAccount = exports.apiRetrieveAccount = function apiRetrieveAccount(accountId) {
+	  return fetch(ENDPOINTS.account(accountId), _extends({}, METHODS.GET));
+	};
 	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '/' + accountId + '/history', {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiDeleteAccount = exports.apiDeleteAccount = function apiDeleteAccount(customerId, accountId) {
+	  return fetch(ENDPOINTS.account(accountId), _extends({}, METHODS.DELETE));
+	};
 	
-	function apiRetrieveAccount(accountId) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '/' + accountId, {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiDeleteRefAccount = exports.apiDeleteRefAccount = function apiDeleteRefAccount(customerId, accountId) {
+	  return fetch(ENDPOINTS.refAccount(customerId, accountId), _extends({}, METHODS.DELETE));
+	};
 	
-	function apiDeleteAccount(accountId) {
-	  return Promise.reject({
-	    message: '\'Delete Account\' is not implemented.'
-	  });
-	
-	  return (0, _fetch2.default)((0, _sessionStorage.getAccountsUrl)() + '/' + accountId, {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "delete"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiRetrieveUsers(email) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '?' + makeQuery({ email: email }), {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
-	
-	function apiRetrieveUser(customerId) {
-	  return (0, _fetch2.default)((0, _sessionStorage.getCustomersUrl)() + '/' + customerId, {
-	    headers: {
-	      "Accept": "application/json",
-	      "Content-Type": "application/json"
-	    },
-	    method: "get"
-	  }).then(_handleFetchResponse.parseResponse);
-	}
+	var apiRetrieveUsers = exports.apiRetrieveUsers = function apiRetrieveUsers(email) {
+	  return fetch(ENDPOINTS.customersLookup({ email: email }), _extends({}, METHODS.GET));
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "api.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -2564,11 +2417,11 @@ webpackJsonp([0,3],{
 	
 	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -2601,28 +2454,25 @@ webpackJsonp([0,3],{
 	
 	function updateAuthCredentials(resp) {
 	
-	  // check config apiUrl matches the current response url
-	  if ((0, _sessionStorage.isApiRequest)(resp.url)) {
-	    // set header for each key in `tokenFormat` config
-	    var newHeaders = {};
+	  // set header for each key in `tokenFormat` config
+	  var newHeaders = {};
 	
-	    // set flag to ensure that we don't accidentally nuke the headers
-	    // if the response tokens aren't sent back from the API
-	    var blankHeaders = true;
+	  // set flag to ensure that we don't accidentally nuke the headers
+	  // if the response tokens aren't sent back from the API
+	  var blankHeaders = true;
 	
-	    // set header key + val for each key in `tokenFormat` config
-	    for (var key in (0, _sessionStorage.getTokenFormat)()) {
-	      newHeaders[key] = resp.headers.get(key);
+	  // set header key + val for each key in `tokenFormat` config
+	  for (var key in (0, _sessionStorage.getTokenFormat)()) {
+	    newHeaders[key] = resp.headers.get(key);
 	
-	      if (newHeaders[key]) {
-	        blankHeaders = false;
-	      }
+	    if (newHeaders[key]) {
+	      blankHeaders = false;
 	    }
+	  }
 	
-	    // persist headers for next request
-	    if (!blankHeaders) {
-	      (0, _sessionStorage.persistData)(C.SAVED_CREDS_KEY, newHeaders);
-	    }
+	  // persist headers for next request
+	  if (!blankHeaders) {
+	    (0, _sessionStorage.persistData)(C.SAVED_CREDS_KEY, newHeaders);
 	  }
 	
 	  return resp;
@@ -2633,6 +2483,65 @@ webpackJsonp([0,3],{
 /***/ },
 
 /***/ 325:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 * Created by andrew on 9/16/16.
+	 */
+	var API_ROOT = '/api';
+	
+	var emailSignIn = exports.emailSignIn = function emailSignIn() {
+	  return API_ROOT + '/login';
+	};
+	var emailSignUp = exports.emailSignUp = function emailSignUp() {
+	  return API_ROOT + '/customers';
+	};
+	var currentUser = exports.currentUser = function currentUser() {
+	  return API_ROOT + '/user';
+	};
+	var accountsPath = exports.accountsPath = function accountsPath() {
+	  return API_ROOT + '/accounts';
+	};
+	var customersLookup = exports.customersLookup = function customersLookup(lookup) {
+	  return API_ROOT + '/customers?' + makeQuery(lookup);
+	};
+	var customersAccounts = exports.customersAccounts = function customersAccounts(customerId) {
+	  return API_ROOT + '/customers/' + customerId + '/accounts';
+	};
+	var refAccounts = exports.refAccounts = function refAccounts(customerId) {
+	  return API_ROOT + '/customers/' + customerId + '/toaccounts';
+	};
+	var refAccount = exports.refAccount = function refAccount(customerId, accountId) {
+	  return API_ROOT + '/customers/' + customerId + '/toaccounts/' + accountId;
+	};
+	var account = exports.account = function account(accountId) {
+	  return API_ROOT + '/accounts/' + accountId;
+	};
+	var history = exports.history = function history(accountId) {
+	  return API_ROOT + '/accounts/' + accountId + '/history';
+	};
+	var transfers = exports.transfers = function transfers() {
+	  return API_ROOT + '/transfers';
+	};
+	
+	function makeQuery(params) {
+	  return Object.keys(params).map(function (key) {
+	    return [encodeURIComponent(key), encodeURIComponent(params[key])].join('=');
+	  }).join('&');
+	}
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "apiEndpoints.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+
+/***/ 326:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2690,7 +2599,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 326:
+/***/ 327:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -2719,13 +2628,13 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _actions = __webpack_require__(317);
+	var _actions = __webpack_require__(316);
 	
 	var _api = __webpack_require__(321);
 	
 	var api = _interopRequireWildcard(_api);
 	
-	var _authenticate = __webpack_require__(316);
+	var _authenticate = __webpack_require__(315);
 	
 	var _root = __webpack_require__(320);
 	
@@ -2754,15 +2663,18 @@ webpackJsonp([0,3],{
 	var accountRefCreateError = exports.accountRefCreateError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNTS.CREATE_REF_ERROR, 'error');
 	var accountRefCreateFormUpdate = exports.accountRefCreateFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNTS.CREATE_REF_FORM_UPDATE, 'key', 'value');
 	
-	var accountRequested = exports.accountRequested = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_START);
-	var accountComplete = exports.accountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE, 'payload');
-	var accountError = exports.accountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR, 'error');
+	var accountRequested = exports.accountRequested = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_START, 'id');
+	var accountComplete = exports.accountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_COMPLETE, 'id', 'payload');
+	var accountError = exports.accountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.SINGLE_ERROR, 'id', 'error');
 	
-	function accountsList(userId) {
+	function accountsList(customerId) {
 	  return function (dispatch) {
 	    dispatch(accountsListRequested());
-	    return api.apiRetrieveAccounts(userId).then(function (list) {
-	      dispatch(accountsListReceived(list));
+	    return api.apiRetrieveAccounts(customerId).then(function (_ref) {
+	      var _ref$accounts = _ref.accounts;
+	      var accounts = _ref$accounts === undefined ? [] : _ref$accounts;
+	
+	      dispatch(accountsListReceived(accounts));
 	    }).catch(function (err) {
 	      dispatch(accountsListError(err));
 	      return Promise.resolve({ error: err });
@@ -2770,21 +2682,23 @@ webpackJsonp([0,3],{
 	  };
 	}
 	
-	function readUntilChanged(initialData, customerId) {
+	function readUntilChanged(initialData, promisedFn, leftCalls) {
 	  var _this = this;
 	
+	  if (!leftCalls) {
+	    return Promise.reject('Data not changed');
+	  }
 	  var initialDataFlat = _root2.default['JSON'].stringify(initialData);
-	  debugger;
 	  return new Promise(function (rs, rj) {
 	    setTimeout(function () {
-	      api.apiRetrieveAccounts(customerId).then(function (data) {
+	      promisedFn().then(function (data) {
 	        debugger;
 	        if (initialDataFlat == _root2.default['JSON'].stringify(data)) {
-	          return readUntilChanged.call(_this, data, customerId).then(rs, rj); // Promise
+	          return readUntilChanged.call(_this, data, promisedFn, leftCalls - 1).then(rs, rj); // Promise
 	        }
 	        rs(data);
 	      }).catch(rj);
-	    }, 500);
+	    }, 500 * Math.pow(2, 4 - leftCalls));
 	  });
 	}
 	
@@ -2802,7 +2716,10 @@ webpackJsonp([0,3],{
 	        dispatch((0, _authenticate.authenticate)(true));
 	        return accountId;
 	      } else {
-	        return readUntilChanged(data, customerId).then(function () {
+	        return readUntilChanged(data, function () {
+	          return api.apiRetrieveAccounts(customerId);
+	        }, 4).then(function () {
+	          debugger;
 	          dispatch(accountCreateComplete({
 	            id: ''
 	          }));
@@ -2820,8 +2737,8 @@ webpackJsonp([0,3],{
 	function accountRefCreate(customerId, payload) {
 	  return function (dispatch) {
 	    dispatch(accountRefCreateStart());
-	    return api.apiCreateRefAccount(customerId, payload).then(function (_ref) {
-	      var id = _ref.id;
+	    return api.apiCreateRefAccount(customerId, payload).then(function (_ref2) {
+	      var id = _ref2.id;
 	
 	      dispatch(accountRefCreateComplete(_extends({}, payload, {
 	        id: id
@@ -2847,11 +2764,11 @@ webpackJsonp([0,3],{
 	
 	function fetchAccount(accountId) {
 	  return function (dispatch) {
-	    dispatch(accountRequested());
+	    dispatch(accountRequested(accountId));
 	    return api.apiRetrieveAccount(accountId).then(function (data) {
-	      dispatch(accountComplete(data));
+	      dispatch(accountComplete(accountId, data));
 	    }).catch(function (err) {
-	      dispatch(accountError(err));
+	      dispatch(accountError(accountId, err));
 	    });
 	  };
 	}
@@ -2860,15 +2777,17 @@ webpackJsonp([0,3],{
 	var deleteAccountComplete = exports.deleteAccountComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.DELETE_COMPLETE);
 	var deleteAccountError = exports.deleteAccountError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.ACCOUNT.DELETE_ERROR);
 	
-	function deleteAccount(customerId, accountId) {
+	function deleteAccount(customerId, accountId, isRef) {
 	  return function (dispatch) {
 	    dispatch(deleteAccountRequested());
-	    return api.apiDeleteAccount(accountId).then(function (data) {
-	      //debugger;
-	      dispatch(deleteAccountComplete());
-	      return Promise.resolve('ok');
+	
+	    var deleteApiAction = isRef ? api.apiDeleteRefAccount(customerId, accountId) : api.apiDeleteAccount(customerId, accountId);
+	
+	    return deleteApiAction.then(function (data) {
+	      dispatch(deleteAccountComplete(data));
+	      return Promise.resolve(data);
 	    }).catch(function (err) {
-	      dispatch(deleteAccountError());
+	      dispatch(deleteAccountError(err));
 	      return Promise.reject(err);
 	    });
 	  };
@@ -2896,10 +2815,10 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    dispatch(createRefOwnerLookupStart(lookup));
 	    return api.apiRetrieveUsers(lookup).then(function (data) {
-	      var _ref2 = data || {};
+	      var _ref3 = data || {};
 	
-	      var _ref2$customers = _ref2.customers;
-	      var customers = _ref2$customers === undefined ? [] : _ref2$customers;
+	      var _ref3$customers = _ref3.customers;
+	      var customers = _ref3$customers === undefined ? [] : _ref3$customers;
 	
 	
 	      var arr = customers.map(function (c) {
@@ -2927,13 +2846,13 @@ webpackJsonp([0,3],{
 	
 	var createRefAccountLookup = exports.createRefAccountLookup = function createRefAccountLookup(customerId) {
 	  return function (dispatch) {
-	    dispatch(createRefAccountLookupStart());
-	    return api.apiRetrieveAccounts(customerId).then(function (_ref3) {
-	      var accounts = _ref3.accounts;
+	    dispatch(createRefAccountLookupStart(customerId));
+	    return api.apiRetrieveAccounts(customerId).then(function (_ref4) {
+	      var accounts = _ref4.accounts;
 	
-	      var arr = accounts.map(function (_ref4) {
-	        var accountId = _ref4.accountId;
-	        var title = _ref4.title;
+	      var arr = accounts.map(function (_ref5) {
+	        var accountId = _ref5.accountId;
+	        var title = _ref5.title;
 	        return {
 	          value: accountId,
 	          label: title
@@ -2976,7 +2895,7 @@ webpackJsonp([0,3],{
 	  return function (dispatch) {
 	    dispatch(getTransfersRequested(accountId));
 	    return api.apiRetrieveTransfers(accountId).then(function (data) {
-	      dispatch(getTransfersComplete(accountId, data.transactionsHistory));
+	      dispatch(getTransfersComplete(accountId, data['transactionsHistory']));
 	      return data;
 	    }).catch(function (err) {
 	      dispatch(getTransfersError(accountId, err));
@@ -2989,7 +2908,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 327:
+/***/ 328:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3006,70 +2925,31 @@ webpackJsonp([0,3],{
 	
 	exports.applyConfig = applyConfig;
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
-	var _root = __webpack_require__(320);
-	
-	var _root2 = _interopRequireDefault(_root);
-	
-	var _fetch = __webpack_require__(322);
-	
-	var _fetch2 = _interopRequireDefault(_fetch);
-	
-	var _parseEndpointConfig2 = __webpack_require__(328);
+	var _parseEndpointConfig2 = __webpack_require__(329);
 	
 	var _parseEndpointConfig3 = _interopRequireDefault(_parseEndpointConfig2);
 	
 	var _configure = __webpack_require__(314);
 	
-	var _sessionStorage = __webpack_require__(318);
+	var _sessionStorage = __webpack_require__(317);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var defaultSettings = {
-	  //proxyIf:            function() { return false; },
-	  //proxyUrl:           "/proxy",
 	  forceHardRedirect: false,
 	  storage: "cookies",
 	  cookieExpiry: 14,
 	  cookiePath: "/",
 	  initialCredentials: null,
 	
-	  passwordResetSuccessUrl: function passwordResetSuccessUrl() {
-	    return _root2.default.location.href;
-	  },
-	
-	  confirmationSuccessUrl: function confirmationSuccessUrl() {
-	    return _root2.default.location.href;
-	  },
-	
 	  tokenFormat: {
 	    "access-token": "{{ access-token }}"
-	    //"token-type":   "Bearer",
-	    //client:         "{{ client }}",
-	    //expiry:         "{{ expiry }}",
-	    //uid:            "{{ uid }}"
-	  },
-	
-	  parseExpiry: function parseExpiry(headers) {
-	    // convert from ruby time (seconds) to js time (millis)
-	    return parseInt(headers["expiry"], 10) * 1000 || null;
-	  },
-	
-	  handleLoginResponse: function handleLoginResponse(resp) {
-	    return resp.data;
-	  },
-	
-	  handleAccountUpdateResponse: function handleAccountUpdateResponse(resp) {
-	    return resp.data;
-	  },
-	
-	  handleTokenValidationResponse: function handleTokenValidationResponse(resp) {
-	    return resp.data;
 	  }
 	};
 	
@@ -3136,7 +3016,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 328:
+/***/ 329:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3154,7 +3034,7 @@ webpackJsonp([0,3],{
 	
 	exports.default = parseEndpointConfig;
 	
-	var _constants = __webpack_require__(315);
+	var _constants = __webpack_require__(319);
 	
 	var C = _interopRequireWildcard(_constants);
 	
@@ -3224,171 +3104,36 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 329:
+/***/ 330:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.visitLocation = undefined;
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-	                                                                                                                                                                                                                                                                   * Created by andrew on 26/02/16.
-	                                                                                                                                                                                                                                                                   */
+	var _ACTION_TYPES = __webpack_require__(295);
 	
+	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	exports.normalizeTokenKeys = normalizeTokenKeys;
-	exports.getAllParams = getAllParams;
-	exports.default = getRedirectInfo;
-	
-	var _querystring = __webpack_require__(330);
-	
-	var _querystring2 = _interopRequireDefault(_querystring);
+	var _actions = __webpack_require__(316);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function normalizeTokenKeys(params) {
-	  // normalize keys
-	  if (params.token) {
-	    params["access-token"] = params.token;
-	    delete params.token;
-	  }
-	  if (params.auth_token) {
-	    params["access-token"] = params.auth_token;
-	    delete params.auth_token;
-	  }
-	  if (params.client_id) {
-	    params.client = params.client_id;
-	    delete params.client_id;
-	  }
-	  if (params.config) {
-	    params.endpointKey = params.config;
-	    delete params.config;
-	  }
+	/**
+	 * Created by andrew on 26/02/16.
+	 */
+	var visitLocation = exports.visitLocation = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.LOCATION.ENTER, 'location');
 	
-	  return params;
-	};
-	
-	var getAnchorSearch = function getAnchorSearch(location) {
-	  var rawAnchor = location.hash || "",
-	      arr = rawAnchor.split("?");
-	  return arr.length > 1 ? arr[1] : null;
-	};
-	
-	var getSearchQs = function getSearchQs(location) {
-	  var rawQs = location.search || "",
-	      qs = rawQs.replace("?", ""),
-	      qsObj = qs ? _querystring2.default.parse(qs) : {};
-	
-	  return qsObj;
-	};
-	
-	var getAnchorQs = function getAnchorQs(location) {
-	  var anchorQs = getAnchorSearch(location),
-	      anchorQsObj = anchorQs ? _querystring2.default.parse(anchorQs) : {};
-	
-	  return anchorQsObj;
-	};
-	
-	var stripKeys = function stripKeys(obj, keys) {
-	  for (var q in keys) {
-	    delete obj[keys[q]];
-	  }
-	
-	  return obj;
-	};
-	
-	function getAllParams(location) {
-	  return _extends({}, getAnchorQs(location), getSearchQs(location));
-	};
-	
-	var buildCredentials = function buildCredentials(location, keys) {
-	  var params = getAllParams(location);
-	  var authHeaders = {};
-	
-	  var _iteratorNormalCompletion = true;
-	  var _didIteratorError = false;
-	  var _iteratorError = undefined;
-	
-	  try {
-	    for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	      var key = _step.value;
-	
-	      authHeaders[key] = params[key];
-	    }
-	  } catch (err) {
-	    _didIteratorError = true;
-	    _iteratorError = err;
-	  } finally {
-	    try {
-	      if (!_iteratorNormalCompletion && _iterator.return) {
-	        _iterator.return();
-	      }
-	    } finally {
-	      if (_didIteratorError) {
-	        throw _iteratorError;
-	      }
-	    }
-	  }
-	
-	  return normalizeTokenKeys(authHeaders);
-	};
-	
-	// this method is tricky. we want to reconstruct the current URL with the
-	// following conditions:
-	// 1. search contains none of the supplied keys
-	// 2. anchor search (i.e. `#/?key=val`) contains none of the supplied keys
-	// 3. all of the keys NOT supplied are presevered in their original form
-	// 4. url protocol, host, and path are preserved
-	var getLocationWithoutParams = function getLocationWithoutParams(currentLocation, keys) {
-	  // strip all values from both actual and anchor search params
-	  var newSearch = _querystring2.default.stringify(stripKeys(getSearchQs(currentLocation), keys)),
-	      newAnchorQs = _querystring2.default.stringify(stripKeys(getAnchorQs(currentLocation), keys)),
-	      newAnchor = (currentLocation.hash || "").split("?")[0];
-	
-	  if (newSearch) {
-	    newSearch = "?" + newSearch;
-	  }
-	
-	  if (newAnchorQs) {
-	    newAnchor += "?" + newAnchorQs;
-	  }
-	
-	  if (newAnchor && !newAnchor.match(/^#/)) {
-	    newAnchor = "#/" + newAnchor;
-	  }
-	
-	  // reconstruct location with stripped auth keys
-	  var newLocation = currentLocation.pathname + newSearch + newAnchor;
-	
-	  return newLocation;
-	};
-	
-	function getRedirectInfo(currentLocation) {
-	  if (!currentLocation) {
-	    return {};
-	  } else {
-	    var authKeys = ["access-token", "token", "auth_token", "config", "client", "client_id", "expiry", "uid", "reset_password", "account_confirmation_success"];
-	
-	    var authRedirectHeaders = buildCredentials(currentLocation, authKeys);
-	    var authRedirectPath = getLocationWithoutParams(currentLocation, authKeys);
-	
-	    if (authRedirectPath !== currentLocation) {
-	      return { authRedirectHeaders: authRedirectHeaders, authRedirectPath: authRedirectPath };
-	    } else {
-	      return {};
-	    }
-	  }
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "parseUrl.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "navigate.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
-/***/ 333:
+/***/ 331:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3411,7 +3156,7 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -3495,7 +3240,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 334:
+/***/ 332:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3544,7 +3289,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 335:
+/***/ 333:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3554,6 +3299,7 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Container = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -3561,11 +3307,11 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
-	var _reactRouterBootstrap = __webpack_require__(579);
+	var _reactRouterBootstrap = __webpack_require__(577);
 	
-	var _HeaderLinks = __webpack_require__(582);
+	var _HeaderLinks = __webpack_require__(580);
 	
 	var _HeaderLinks2 = _interopRequireDefault(_HeaderLinks);
 	
@@ -3580,11 +3326,7 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
 	
-	//import { SignOutButton } from "redux-auth/bootstrap-theme";
-	
-	//const SignOutButton = () => (<div>SignOutButton!</div>);
-	
-	var Container = function (_React$Component) {
+	var Container = exports.Container = function (_React$Component) {
 	  _inherits(Container, _React$Component);
 	
 	  function Container() {
@@ -3677,14 +3419,6 @@ webpackJsonp([0,3],{
 	
 	  return Container;
 	}(_react2.default.Component);
-	/*<a href="https://github.com/lynndylanhurley/redux-auth">
-	 <img
-	 style={{position: "absolute", top: 0, right: 0, border: 0}}
-	 src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
-	 alt="Fork me on GitHub"
-	 data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" />
-	 </a>*/
-	
 	
 	Container.propTypes = {
 	  children: _react.PropTypes.node
@@ -3695,7 +3429,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 582:
+/***/ 580:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3715,19 +3449,17 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactRouterBootstrap = __webpack_require__(579);
+	var _reactRouterBootstrap = __webpack_require__(577);
 	
-	var _readProp = __webpack_require__(334);
-	
-	var _readProp2 = _interopRequireDefault(_readProp);
-	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactRouter = __webpack_require__(183);
+	var _readProp = __webpack_require__(332);
 	
-	var _signOut2 = __webpack_require__(583);
+	var _readProp2 = _interopRequireDefault(_readProp);
+	
+	var _signOut2 = __webpack_require__(581);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -3740,9 +3472,6 @@ webpackJsonp([0,3],{
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 11/03/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	
-	//import { PageHeader, OverlayTrigger, Tooltip, Grid, Col, Row, Nav, NavItem, ButtonGroup, Button, Table } from "react-bootstrap";
 	
 	
 	var HeaderLinks = exports.HeaderLinks = function (_React$Component) {
@@ -3829,69 +3558,48 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 583:
+/***/ 581:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.signOutStart = signOutStart;
-	exports.signOutComplete = signOutComplete;
-	exports.signOut = signOut;
-	
-	var _sessionStorage = __webpack_require__(318);
-	
-	var _entities = __webpack_require__(326);
-	
-	var _configure = __webpack_require__(314);
-	
-	var _handleFetchResponse = __webpack_require__(325);
-	
-	var _fetch = __webpack_require__(322);
-	
-	var _fetch2 = _interopRequireDefault(_fetch);
+	exports.signOut = exports.signOutComplete = exports.signOutStart = undefined;
 	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
-	var _root = __webpack_require__(320);
+	var _actions = __webpack_require__(316);
 	
-	var _root2 = _interopRequireDefault(_root);
+	var _sessionStorage = __webpack_require__(317);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/**
-	 * Created by andrew on 11/03/16.
-	 */
-	function signOutStart() {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_OUT_START };
-	}
+	var signOutStart = exports.signOutStart = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_OUT_START); /**
+	                                                                                                                        * Created by andrew on 11/03/16.
+	                                                                                                                        */
+	var signOutComplete = exports.signOutComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_OUT_COMPLETE);
 	
-	function signOutComplete() {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_OUT_COMPLETE };
-	}
-	
-	function signOut() {
+	var signOut = exports.signOut = function signOut() {
 	  return function (dispatch) {
-	
 	    dispatch(signOutStart());
 	
 	    (0, _sessionStorage.destroySession)();
 	
 	    dispatch(signOutComplete());
 	  };
-	}
+	};
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "signOut.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
-/***/ 584:
+/***/ 582:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -3910,39 +3618,37 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactRouter = __webpack_require__(183);
-	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(585);
-	
-	var _reactSelect2 = _interopRequireDefault(_reactSelect);
-	
-	var _AccountInfo = __webpack_require__(591);
+	var _AccountInfo = __webpack_require__(583);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
-	var _modals = __webpack_require__(594);
+	var _modals = __webpack_require__(586);
 	
-	var Modals = _interopRequireWildcard(_modals);
+	var M = _interopRequireWildcard(_modals);
 	
-	var _IndexPanel = __webpack_require__(601);
+	var _IndexPanel = __webpack_require__(600);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _entities = __webpack_require__(326);
+	var _entities = __webpack_require__(327);
 	
 	var A = _interopRequireWildcard(_entities);
 	
-	var _readProp = __webpack_require__(334);
+	var _authenticate = __webpack_require__(315);
+	
+	var AU = _interopRequireWildcard(_authenticate);
+	
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _Money = __webpack_require__(602);
+	var _Money = __webpack_require__(599);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -3955,8 +3661,6 @@ webpackJsonp([0,3],{
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 17/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	//import * as DefaultTheme from "redux-auth";
 	
 	
 	var resetModals = {
@@ -4030,13 +3734,14 @@ webpackJsonp([0,3],{
 	      var _this3 = this;
 	
 	      var customerId = this.props.auth.user.attributes.id;
+	      var dispatch = this.props.dispatch;
 	
 	
-	      this.props.dispatch(A.accountRefCreate(customerId, payload)).then(function () {
+	      dispatch(A.accountRefCreate(customerId, payload)).then(function () {
 	        _this3.close();
 	        return new Promise(function (rs, rj) {
 	          setTimeout(function () {
-	            _this3.props.dispatch(A.fetchOwnAccounts(customerId)).then(rs, rj);
+	            Promise.all([dispatch(AU.authenticate(true)), dispatch(A.fetchOwnAccounts(customerId))]).then(rs, rj);
 	          }, 1500);
 	        });
 	      }).catch(function (err) {
@@ -4055,15 +3760,23 @@ webpackJsonp([0,3],{
 	    }
 	  }, {
 	    key: "remove3rdPartyAccountModalConfirmed",
-	    value: function remove3rdPartyAccountModalConfirmed(accountId) {
+	    value: function remove3rdPartyAccountModalConfirmed(account) {
 	      var _this4 = this;
 	
-	      var customerId = this.props.customerId;
+	      var accountId = account.id || account.accountId;
+	      var isRef = typeof account.balance == 'undefined';
 	
-	      this.props.dispatch(A.deleteAccount(customerId, accountId)).then(function () {
+	      var _props = this.props;
+	      var customerId = _props.customerId;
+	      var dispatch = _props.dispatch;
+	
+	      dispatch(A.deleteAccount(customerId, accountId, isRef)).then(function () {
 	        _this4.close();
+	        setTimeout(function () {
+	          return Promise.all([dispatch(AU.authenticate(true)), dispatch(A.fetchOwnAccounts(customerId))]);
+	        }, 1500);
 	      }, function (err) {
-	        _this4.props.dispatch(A.errorMessageTimedOut(err && err.message || err));
+	        dispatch(A.errorMessageTimedOut(err && err.message || err));
 	        _this4.close();
 	      });
 	    }
@@ -4116,7 +3829,7 @@ webpackJsonp([0,3],{
 	        _react2.default.createElement(
 	          "strong",
 	          null,
-	          error
+	          JSON.stringify(error.errors || error)
 	        )
 	      ) : [];
 	
@@ -4351,16 +4064,16 @@ webpackJsonp([0,3],{
 	            accounts
 	          )
 	        ),
-	        _react2.default.createElement(Modals.NewAccountModal, { show: showAccountModal,
+	        _react2.default.createElement(M.NewAccountModal, { show: showAccountModal,
 	          action: this.createAccountModalConfirmed.bind(this),
 	          account: this.props.app.accounts.create,
 	          onHide: this.close.bind(this),
 	          key: 0 }),
-	        _react2.default.createElement(Modals.Add3rdPartyAccountModal, { show: show3rdPartyAccountModal,
+	        _react2.default.createElement(M.Add3rdPartyAccountModal, { show: show3rdPartyAccountModal,
 	          action: this.create3rdPartyAccountModalConfirmed.bind(this),
 	          onHide: this.close.bind(this),
 	          key: 1 }),
-	        _react2.default.createElement(Modals.RemoveAccountBookmarkModal, { show: showDeleteAccountModal,
+	        _react2.default.createElement(M.RemoveAccountBookmarkModal, { show: showDeleteAccountModal,
 	          account: accountToRemove,
 	          action: this.remove3rdPartyAccountModalConfirmed.bind(this),
 	          onHide: this.close.bind(this),
@@ -4387,7 +4100,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 591:
+/***/ 583:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4407,19 +4120,19 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactLoader = __webpack_require__(592);
+	var _reactLoader = __webpack_require__(584);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _entities = __webpack_require__(326);
+	var _entities = __webpack_require__(327);
 	
 	var A = _interopRequireWildcard(_entities);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -4483,12 +4196,20 @@ webpackJsonp([0,3],{
 	      if (!account || !accountId) {
 	        return _react2.default.createElement(
 	          "div",
-	          { title: "" + accountId },
-	          accountId,
-	          " ",
+	          { className: "text-info", title: "" + accountId },
+	          "Loading.. ",
 	          _react2.default.createElement(_reactLoader2.default, { loaded: false })
 	        );
-	        // {/*return (<Link to={ `/account/${accountId}` }>{ accountId } <Spinner loaded={false} /></Link>)*/}
+	      }
+	
+	      var errors = account.errors;
+	
+	      if (errors) {
+	        return _react2.default.createElement(
+	          "div",
+	          { className: "text-danger" },
+	          errors
+	        );
 	      }
 	
 	      var title = account.title;
@@ -4526,7 +4247,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 594:
+/***/ 586:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4537,7 +4258,7 @@ webpackJsonp([0,3],{
 	  value: true
 	});
 	
-	var _Add3rdPartyAccountModal = __webpack_require__(595);
+	var _Add3rdPartyAccountModal = __webpack_require__(587);
 	
 	Object.defineProperty(exports, 'Add3rdPartyAccountModal', {
 	  enumerable: true,
@@ -4546,7 +4267,7 @@ webpackJsonp([0,3],{
 	  }
 	});
 	
-	var _NewAccountModal = __webpack_require__(599);
+	var _NewAccountModal = __webpack_require__(597);
 	
 	Object.defineProperty(exports, 'NewAccountModal', {
 	  enumerable: true,
@@ -4555,7 +4276,7 @@ webpackJsonp([0,3],{
 	  }
 	});
 	
-	var _RemoveAccountModal = __webpack_require__(600);
+	var _RemoveAccountModal = __webpack_require__(598);
 	
 	Object.defineProperty(exports, 'RemoveAccountBookmarkModal', {
 	  enumerable: true,
@@ -4570,7 +4291,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 595:
+/***/ 587:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4590,23 +4311,23 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(588);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(589);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _AuxErrorLabel = __webpack_require__(598);
+	var _AuxErrorLabel = __webpack_require__(590);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
@@ -4614,11 +4335,11 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactSelect = __webpack_require__(585);
+	var _reactSelect = __webpack_require__(591);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _entities = __webpack_require__(326);
+	var _entities = __webpack_require__(327);
 	
 	var A = _interopRequireWildcard(_entities);
 	
@@ -4800,7 +4521,7 @@ webpackJsonp([0,3],{
 	                options: (0, _readProp2.default)(this.props.data, 'accountsLookup.options', []),
 	                onChange: this.handleInput.bind(this, 'account') }),
 	              _react2.default.createElement(_AuxErrorLabel2.default, {
-	                label: "Owner:",
+	                label: "Account:",
 	                errors: (0, _readProp2.default)(this.props.data, 'errors.account', [])
 	              })
 	            ),
@@ -4864,7 +4585,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 596:
+/***/ 588:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -4883,9 +4604,9 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
-	var _reactLoader = __webpack_require__(592);
+	var _reactLoader = __webpack_require__(584);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
@@ -4992,7 +4713,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 597:
+/***/ 589:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5011,7 +4732,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5104,7 +4825,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 598:
+/***/ 590:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5121,7 +4842,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5145,11 +4866,6 @@ webpackJsonp([0,3],{
 	
 	  _createClass(AuxErrorLabel, [{
 	    key: "render",
-	
-	
-	    //        <Input {...this.props}
-	    //   bsStyle={(this.props.errors.length) ? "error" : null}
-	    // onChange={this.handleInput.bind(this)} />
 	    value: function render() {
 	      var _this2 = this;
 	
@@ -5203,7 +4919,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 599:
+/***/ 597:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5225,25 +4941,25 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(589);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(588);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _entities = __webpack_require__(326);
+	var _entities = __webpack_require__(327);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5426,7 +5142,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 600:
+/***/ 598:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5444,17 +5160,11 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactRouter = __webpack_require__(183);
-	
-	var _reactRedux = __webpack_require__(170);
-	
-	var _reactSelect = __webpack_require__(585);
-	
-	var _reactSelect2 = _interopRequireDefault(_reactSelect);
+	var _Money = __webpack_require__(599);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5482,17 +5192,12 @@ webpackJsonp([0,3],{
 	    key: "handleAction",
 	    value: function handleAction(evt) {
 	      evt.preventDefault();
-	      var action = this.props.action;
-	      var account = this.props.account;
-	
-	      var _ref = account || {};
-	
-	      var id = _ref.id;
-	      var accountId = _ref.accountId;
-	
+	      var _props = this.props;
+	      var action = _props.action;
+	      var account = _props.account;
 	
 	      if (action) {
-	        action(id || accountId);
+	        action(account);
 	      }
 	    }
 	  }, {
@@ -5500,20 +5205,20 @@ webpackJsonp([0,3],{
 	    value: function render() {
 	      var account = this.props.account;
 	
-	      var _ref2 = account || {};
+	      var _ref = account || {};
 	
-	      var titleRaw = _ref2.title;
-	      var descriptionRaw = _ref2.description;
-	      var balanceRaw = _ref2.balance;
-	      var id = _ref2.id;
-	      var accountId = _ref2.accountId;
+	      var titleRaw = _ref.title;
+	      var descriptionRaw = _ref.description;
+	      var balanceRaw = _ref.balance;
+	      var id = _ref.id;
+	      var accountId = _ref.accountId;
 	
 	
 	      var entityId = id || accountId;
 	
-	      var title = titleRaw || '[No title]';
-	      var balance = (balanceRaw > 0 && balanceRaw < 1 ? '$0' : '$') + Number(balanceRaw).toFixed(2);
-	      var description = descriptionRaw || '[No description]';
+	      var title = titleRaw || '—';
+	      var balance = (0, _Money.moneyText)(balanceRaw);
+	      var description = descriptionRaw || '—';
 	
 	      return _react2.default.createElement(
 	        _reactBootstrap.Modal,
@@ -5581,75 +5286,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 601:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactBootstrap = __webpack_require__(336);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 17/02/16.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	
-	var IndexPanel = function (_React$Component) {
-	  _inherits(IndexPanel, _React$Component);
-	
-	  function IndexPanel() {
-	    _classCallCheck(this, IndexPanel);
-	
-	    return _possibleConstructorReturn(this, (IndexPanel.__proto__ || Object.getPrototypeOf(IndexPanel)).apply(this, arguments));
-	  }
-	
-	  _createClass(IndexPanel, [{
-	    key: "render",
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _reactBootstrap.Col,
-	        { sm: 6 },
-	        _react2.default.createElement(_reactBootstrap.Panel, this.props)
-	      );
-	    }
-	  }]);
-	
-	  return IndexPanel;
-	}(_react2.default.Component);
-	
-	IndexPanel.propTypes = {
-	  bsStyle: _react.PropTypes.string,
-	  header: _react.PropTypes.string,
-	  children: _react.PropTypes.node
-	};
-	IndexPanel.defaultProps = {
-	  bsStyle: "info",
-	  children: _react2.default.createElement("span", null)
-	};
-	exports.default = IndexPanel;
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "IndexPanel.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-
-/***/ },
-
-/***/ 602:
+/***/ 599:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5670,7 +5307,7 @@ webpackJsonp([0,3],{
 	var moneyText = exports.moneyText = function moneyText(amount) {
 	
 	  if (Number.isNaN(Number(amount))) {
-	    return '';
+	    return '—';
 	  }
 	  var absNum = Math.abs(Number(amount) / 100);
 	  if (absNum < 0) {
@@ -5709,7 +5346,76 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 603:
+/***/ 600:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+	
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.IndexPanel = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactBootstrap = __webpack_require__(334);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 17/02/16.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	
+	var IndexPanel = exports.IndexPanel = function (_React$Component) {
+	  _inherits(IndexPanel, _React$Component);
+	
+	  function IndexPanel() {
+	    _classCallCheck(this, IndexPanel);
+	
+	    return _possibleConstructorReturn(this, (IndexPanel.__proto__ || Object.getPrototypeOf(IndexPanel)).apply(this, arguments));
+	  }
+	
+	  _createClass(IndexPanel, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _reactBootstrap.Col,
+	        { sm: 6 },
+	        _react2.default.createElement(_reactBootstrap.Panel, this.props)
+	      );
+	    }
+	  }]);
+	
+	  return IndexPanel;
+	}(_react2.default.Component);
+	
+	IndexPanel.propTypes = {
+	  bsStyle: _react.PropTypes.string,
+	  header: _react.PropTypes.string,
+	  children: _react.PropTypes.node
+	};
+	IndexPanel.defaultProps = {
+	  bsStyle: "info",
+	  children: _react2.default.createElement("span", null)
+	};
+	exports.default = IndexPanel;
+	
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "IndexPanel.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+
+/***/ 601:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -5731,45 +5437,41 @@ webpackJsonp([0,3],{
 	
 	var _reactRedux = __webpack_require__(170);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactLoader = __webpack_require__(592);
-	
-	var _reactLoader2 = _interopRequireDefault(_reactLoader);
-	
-	var _reactSelect = __webpack_require__(585);
+	var _reactSelect = __webpack_require__(591);
 	
 	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 	
-	var _Input = __webpack_require__(597);
+	var _Input = __webpack_require__(589);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _Money = __webpack_require__(602);
+	var _Money = __webpack_require__(599);
 	
-	var _TransfersTable = __webpack_require__(604);
+	var _TransfersTable = __webpack_require__(602);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _IndexPanel = __webpack_require__(601);
+	var _IndexPanel = __webpack_require__(600);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _modals = __webpack_require__(594);
+	var _modals = __webpack_require__(586);
 	
 	var Modals = _interopRequireWildcard(_modals);
 	
-	var _entities = __webpack_require__(326);
+	var _entities = __webpack_require__(327);
 	
 	var A = _interopRequireWildcard(_entities);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _blockedExecution = __webpack_require__(606);
+	var _blockedExecution = __webpack_require__(604);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -5783,7 +5485,7 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 12/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
-	//import { PageHeader } from "react-bootstrap";
+	// import Spinner from "react-loader";
 	
 	
 	var resetModals = {
@@ -5895,18 +5597,6 @@ webpackJsonp([0,3],{
 	      this.ensureTransfers(nextProps);
 	    }
 	  }, {
-	    key: "createAccountModal",
-	    value: function createAccountModal() {
-	      this.setState({
-	        showAccountModal: true
-	      });
-	    }
-	  }, {
-	    key: "createAccountModalConfirmed",
-	    value: function createAccountModalConfirmed() {
-	      // debugger;
-	    }
-	  }, {
 	    key: "close",
 	    value: function close() {
 	      this.setState(_extends({}, resetModals));
@@ -5966,9 +5656,24 @@ webpackJsonp([0,3],{
 	      if (!account) {
 	        if (errors.length) {
 	          return _react2.default.createElement(
-	            "h2",
+	            "div",
 	            null,
-	            "Error loading specified account"
+	            _react2.default.createElement(
+	              "h2",
+	              null,
+	              "Error loading specified account"
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              null,
+	              "Return ",
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: "/" },
+	                "Home"
+	              ),
+	              " to pick another"
+	            )
 	          );
 	        } else {
 	          return spinnerResult;
@@ -6023,7 +5728,7 @@ webpackJsonp([0,3],{
 	              null,
 	              _react2.default.createElement(
 	                _reactBootstrap.Button,
-	                { bsStyle: "link", onClick: this.createAccountModal.bind(this) },
+	                { bsStyle: "link", onClick: null, disabled: true },
 	                "Edit"
 	              )
 	            )
@@ -6181,7 +5886,7 @@ webpackJsonp([0,3],{
 	        ),
 	        _react2.default.createElement(_TransfersTable.TransfersTable, { forAccount: accountId, transfers: this.props.transfers[accountId] }),
 	        _react2.default.createElement(Modals.NewAccountModal, { show: showAccountModal,
-	          action: this.createAccountModalConfirmed.bind(this),
+	          action: null,
 	          account: { loading: true },
 	          onHide: this.close.bind(this),
 	          key: 0 })
@@ -6210,7 +5915,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 604:
+/***/ 602:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6228,21 +5933,21 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactLoader = __webpack_require__(592);
+	var _reactLoader = __webpack_require__(584);
 	
 	var _reactLoader2 = _interopRequireDefault(_reactLoader);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _reactTimeago = __webpack_require__(605);
+	var _reactTimeago = __webpack_require__(603);
 	
 	var _reactTimeago2 = _interopRequireDefault(_reactTimeago);
 	
-	var _Money = __webpack_require__(602);
+	var _Money = __webpack_require__(599);
 	
-	var _AccountInfo = __webpack_require__(591);
+	var _AccountInfo = __webpack_require__(583);
 	
 	var _AccountInfo2 = _interopRequireDefault(_AccountInfo);
 	
@@ -6284,7 +5989,7 @@ webpackJsonp([0,3],{
 	
 	        if (v.entryType == 'account') {
 	          balance = v.initialBalance;
-	        } else if (v.entryType == 'transaction') {
+	        } else if (v.entryType == 'transaction' && v.status !== 'FAILED_DUE_TO_INSUFFICIENT_FUNDS') {
 	          var isOriginating = v.fromAccountId == currentAccountId;
 	          balance += (isOriginating ? -1 : 1) * v.amount;
 	        }
@@ -6498,7 +6203,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 606:
+/***/ 604:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6542,7 +6247,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 607:
+/***/ 605:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6560,7 +6265,7 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
@@ -6568,9 +6273,11 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _EmailSignInForm = __webpack_require__(608);
+	var _EmailSignInForm = __webpack_require__(606);
 	
-	var _EmailSignInForm2 = _interopRequireDefault(_EmailSignInForm);
+	var _readProp = __webpack_require__(332);
+	
+	var _readProp2 = _interopRequireDefault(_readProp);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -6585,18 +6292,6 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
 	
-	//import ButtonLoader from "./ButtonLoader";
-	
-	//import ButtonLoader from "../controls/bootstrap/ButtonLoader";
-	
-	
-	//export {bootstrap, materialUi} from "./views";
-	
-	
-	// bootstrap theme
-	//import { EmailSignInForm } from "redux-auth/bootstrap-theme";
-	
-	
 	var SignIn = exports.SignIn = function (_React$Component) {
 	  _inherits(SignIn, _React$Component);
 	
@@ -6609,8 +6304,13 @@ webpackJsonp([0,3],{
 	  _createClass(SignIn, [{
 	    key: "checkRedirect",
 	    value: function checkRedirect(props) {
-	      if (props.auth.user.isSignedIn) {
-	        props.dispatch((0, _reduxRouter.pushState)(null, props.location.query.next));
+	
+	      var isSignedIn = (0, _readProp2.default)(props.auth, 'user.isSignedIn');
+	      if (isSignedIn) {
+	
+	        var nextLocation = (0, _readProp2.default)(props.location, 'query.next');
+	        props.dispatch((0, _reduxRouter.pushState)(null, nextLocation));
+	
 	        //// redirect to login and add next param so we can redirect again after login
 	        //const redirectAfterLogin = this.props.location.pathname;
 	        //this.props.dispatch(pushState(null, `/signin?next=${redirectAfterLogin}`));
@@ -6629,16 +6329,6 @@ webpackJsonp([0,3],{
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var signInProps = {
-	        inputProps: {
-	          password: {
-	            className: 'hide hidden',
-	            style: { display: 'none' },
-	            value: null,
-	            disabled: true
-	          }
-	        }
-	      };
 	
 	      return _react2.default.createElement(
 	        BS.Well,
@@ -6648,7 +6338,7 @@ webpackJsonp([0,3],{
 	          null,
 	          "Sign In"
 	        ),
-	        _react2.default.createElement(_EmailSignInForm2.default, this.props)
+	        _react2.default.createElement(_EmailSignInForm.EmailSignInForm, this.props)
 	      );
 	    }
 	  }]);
@@ -6670,7 +6360,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 608:
+/***/ 606:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6680,6 +6370,7 @@ webpackJsonp([0,3],{
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.EmailSignInForm = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
@@ -6689,29 +6380,29 @@ webpackJsonp([0,3],{
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(170);
-	
-	var _readProp = __webpack_require__(334);
-	
-	var _readProp2 = _interopRequireDefault(_readProp);
-	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
-	var _Input = __webpack_require__(597);
+	var _readProp = __webpack_require__(332);
+	
+	var _readProp2 = _interopRequireDefault(_readProp);
+	
+	var _Input = __webpack_require__(589);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(588);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _AuxErrorLabel = __webpack_require__(598);
+	var _AuxErrorLabel = __webpack_require__(590);
 	
 	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
 	
-	var _signIn = __webpack_require__(609);
+	var _signIn = __webpack_require__(607);
+	
+	var AS = _interopRequireWildcard(_signIn);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -6726,19 +6417,28 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
 	
-	/*
-	 <Input type="password"
-	 label="Password"
-	 className="email-sign-in-password"
-	 placeholder="Password"
-	 disabled={disabled}
-	 value={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "form", "password"])}
-	 errors={this.props.auth.getIn(["emailSignIn", this.getEndpoint(), "errors", "password"])}
-	 onChange={this.handleInput.bind(this, "password")}
-	 {...this.props.inputProps.password} />
-	  */
+	var formValidation = function formValidation(payload) {
+	  return ['email', 'password'].reduce(function (memo, prop) {
+	    var result = [];
+	    var value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
 	
-	var EmailSignInForm = function (_React$Component) {
+	    switch (prop) {
+	      case 'email':
+	      case 'password':
+	        if (/^$/.test(value)) {
+	          result.push('required');
+	        }
+	    }
+	
+	    if (result.length) {
+	      memo[prop] = result;
+	      memo.hasErrors = true;
+	    }
+	    return memo;
+	  }, {});
+	};
+	
+	var EmailSignInForm = exports.EmailSignInForm = function (_React$Component) {
 	  _inherits(EmailSignInForm, _React$Component);
 	
 	  function EmailSignInForm() {
@@ -6750,14 +6450,22 @@ webpackJsonp([0,3],{
 	  _createClass(EmailSignInForm, [{
 	    key: "handleInput",
 	    value: function handleInput(key, val) {
-	      this.props.dispatch((0, _signIn.emailSignInFormUpdate)(key, val));
+	      this.props.dispatch(AS.emailSignInFormUpdate(key, val));
 	    }
 	  }, {
 	    key: "handleSubmit",
 	    value: function handleSubmit(event) {
 	      event.preventDefault();
-	      var formData = _extends({}, this.props.auth.signIn.form);
-	      this.props.dispatch((0, _signIn.emailSignIn)(formData));
+	
+	      var formData = (0, _readProp2.default)(this.props.auth, 'signIn.form');
+	
+	      var validationErrors = formValidation(formData);
+	      if (validationErrors.hasErrors) {
+	        this.props.dispatch(AS.emailSignInError(validationErrors));
+	        return;
+	      }
+	
+	      this.props.dispatch(AS.emailSignIn(formData));
 	    }
 	  }, {
 	    key: "render",
@@ -6767,7 +6475,6 @@ webpackJsonp([0,3],{
 	        var disabled = this.props.auth.user.isSignedIn || this.props.auth.signIn.loading;
 	
 	        //const error = read(this.props.auth, 'signIn.errors.email', null);
-	        //debugger;
 	        var formErrors = (0, _readProp2.default)(this.props.auth, 'signIn.errors.errors', '');
 	
 	        return _react2.default.createElement(
@@ -6794,6 +6501,16 @@ webpackJsonp([0,3],{
 	            errors: (0, _readProp2.default)(this.props.auth, 'signIn.errors.email', []),
 	            onChange: this.handleInput.bind(this, "email")
 	          }, this.props.inputProps.email)),
+	          _react2.default.createElement(_Input2.default, _extends({ type: "password",
+	            className: "password-sign-in-email",
+	            label: "Password",
+	            placeholder: "Password",
+	            name: "password",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signIn.form.password', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signIn.errors.password', []),
+	            onChange: this.handleInput.bind(this, "password")
+	          }, this.props.inputProps.password)),
 	          _react2.default.createElement(
 	            _ButtonLoader2.default,
 	            _extends({ loading: (0, _readProp2.default)(this.props.auth, 'signIn.loading', false),
@@ -6824,6 +6541,7 @@ webpackJsonp([0,3],{
 	    submit: _react.PropTypes.object
 	  })
 	};
+	
 	EmailSignInForm.defaultProps = {
 	  inputProps: {
 	    email: {},
@@ -6831,21 +6549,17 @@ webpackJsonp([0,3],{
 	    submit: {}
 	  }
 	};
-	exports.default = (0, _reactRedux.connect)(function (_ref) {
-	  var app = _ref.app;
-	  return { auth: app.auth };
-	})(EmailSignInForm);
 	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "EmailSignInForm.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 
-/***/ 609:
+/***/ 607:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -6853,31 +6567,23 @@ webpackJsonp([0,3],{
 	exports.emailSignInError = exports.emailSignInComplete = exports.emailSignInStart = exports.emailSignInFormUpdate = undefined;
 	exports.emailSignIn = emailSignIn;
 	
-	var _sessionStorage = __webpack_require__(318);
-	
-	var _entities = __webpack_require__(326);
-	
-	var _configure = __webpack_require__(314);
-	
-	var _api = __webpack_require__(321);
-	
-	var _actions = __webpack_require__(317);
-	
 	var _ACTION_TYPES = __webpack_require__(295);
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
+	var _actions = __webpack_require__(316);
+	
+	var _sessionStorage = __webpack_require__(317);
+	
+	var _entities = __webpack_require__(327);
+	
+	var _api = __webpack_require__(321);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import root from '../utils/root';
-	
-	/**
-	 * Created by andrew on 26/02/16.
-	 */
-	var emailSignInFormUpdate = exports.emailSignInFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE, 'key', 'value');
-	//import { parseResponse } from "../utils/handleFetchResponse";
-	//import fetch from "../utils/fetch";
-	
+	var emailSignInFormUpdate = exports.emailSignInFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_FORM_UPDATE, 'key', 'value'); /**
+	                                                                                                                                                               * Created by andrew on 26/02/16.
+	                                                                                                                                                               */
 	var emailSignInStart = exports.emailSignInStart = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_START);
 	var emailSignInComplete = exports.emailSignInComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_COMPLETE, 'user');
 	var emailSignInError = exports.emailSignInError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_IN_ERROR, 'error');
@@ -6911,7 +6617,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 610:
+/***/ 608:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -6933,17 +6639,17 @@ webpackJsonp([0,3],{
 	
 	var _reduxRouter = __webpack_require__(246);
 	
-	var _readProp = __webpack_require__(334);
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _reactBootstrap = __webpack_require__(334);
 	
 	var BS = _interopRequireWildcard(_reactBootstrap);
 	
 	var _reactRouter = __webpack_require__(183);
 	
-	var _EmailSignUpForm = __webpack_require__(611);
+	var _EmailSignUpForm = __webpack_require__(609);
 	
 	var _EmailSignUpForm2 = _interopRequireDefault(_EmailSignUpForm);
 	
@@ -6997,18 +6703,14 @@ webpackJsonp([0,3],{
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
+	        BS.Well,
 	        null,
 	        _react2.default.createElement(
-	          _reactBootstrap.PageHeader,
+	          BS.PageHeader,
 	          null,
 	          "Register"
 	        ),
-	        _react2.default.createElement(
-	          BS.Well,
-	          null,
-	          _react2.default.createElement(_EmailSignUpForm2.default, null)
-	        )
+	        _react2.default.createElement(_EmailSignUpForm2.default, null)
 	      );
 	    }
 	  }]);
@@ -7028,7 +6730,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 611:
+/***/ 609:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -7039,37 +6741,43 @@ webpackJsonp([0,3],{
 	  value: true
 	});
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(2);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Input = __webpack_require__(597);
+	var _reactRedux = __webpack_require__(170);
+	
+	var _reactBootstrap = __webpack_require__(334);
+	
+	var _Input = __webpack_require__(589);
 	
 	var _Input2 = _interopRequireDefault(_Input);
 	
-	var _ButtonLoader = __webpack_require__(596);
+	var _ButtonLoader = __webpack_require__(588);
 	
 	var _ButtonLoader2 = _interopRequireDefault(_ButtonLoader);
 	
-	var _IndexPanel = __webpack_require__(601);
+	var _IndexPanel = __webpack_require__(600);
 	
 	var _IndexPanel2 = _interopRequireDefault(_IndexPanel);
 	
-	var _formToPayloadMappers = __webpack_require__(612);
+	var _AuxErrorLabel = __webpack_require__(590);
 	
-	var _readProp = __webpack_require__(334);
+	var _AuxErrorLabel2 = _interopRequireDefault(_AuxErrorLabel);
+	
+	var _formToPayloadMappers = __webpack_require__(610);
+	
+	var _readProp = __webpack_require__(332);
 	
 	var _readProp2 = _interopRequireDefault(_readProp);
 	
-	var _reactBootstrap = __webpack_require__(336);
+	var _signUp = __webpack_require__(611);
 	
-	var _reactRedux = __webpack_require__(170);
+	var AS = _interopRequireWildcard(_signUp);
 	
-	var _signUp = __webpack_require__(613);
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -7081,10 +6789,38 @@ webpackJsonp([0,3],{
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by andrew on 15/02/16.
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 	
-	//import auth from "redux-auth";
 	
-	//import { emailSignUpFormUpdate, emailSignUp } from "redux-auth";
+	var formValidation = function formValidation(payload) {
+	  return ['fname', 'lname', 'email', 'password', 'passwordConfirm', 'ssn', 'phoneNumber', 'address1', 'address2', 'city', 'state', 'zip'].reduce(function (memo, prop) {
+	    var result = [];
+	    var value = (payload[prop] || '').replace(/(^\s+)|(\s+$)/g, '');
 	
+	    switch (prop) {
+	      case 'fname':
+	      case 'lname':
+	      case 'email':
+	      case 'ssn':
+	      case 'password':
+	      case 'passwordConfirm':
+	        if (/^$/.test(value)) {
+	          result.push('required');
+	        }
+	    }
+	
+	    switch (prop) {
+	      case 'passwordConfirm':
+	        if (value != payload['password']) {
+	          result.push('need to be equal to password');
+	        }
+	    }
+	
+	    if (result.length) {
+	      memo[prop] = result;
+	      memo.hasErrors = true;
+	    }
+	    return memo;
+	  }, {});
+	};
 	
 	var EmailSignUpForm = function (_React$Component) {
 	  _inherits(EmailSignUpForm, _React$Component);
@@ -7096,22 +6832,23 @@ webpackJsonp([0,3],{
 	  }
 	
 	  _createClass(EmailSignUpForm, [{
-	    key: "getEndpoint",
-	    value: function getEndpoint() {
-	      return this.props.endpoint || this.props.auth.getIn(["configure", "currentEndpointKey"]) || this.props.auth.getIn(["configure", "defaultEndpointKey"]);
-	    }
-	  }, {
 	    key: "handleInput",
 	    value: function handleInput(key, val) {
-	      this.props.dispatch((0, _signUp.emailSignUpFormUpdate)(key, val));
+	      this.props.dispatch(AS.emailSignUpFormUpdate(key, val));
 	    }
 	  }, {
 	    key: "handleSubmit",
 	    value: function handleSubmit(event) {
 	      event.preventDefault();
 	
-	      var formData = _extends({}, this.props.auth.signUp.form);
-	      this.props.dispatch((0, _signUp.emailSignUp)((0, _formToPayloadMappers.customerInfoMap)(formData)));
+	      var formData = (0, _readProp2.default)(this.props.auth, 'signUp.form');
+	      var validationErrors = formValidation(formData);
+	      if (validationErrors.hasErrors) {
+	        this.props.dispatch(AS.emailSignUpError(validationErrors));
+	        return;
+	      }
+	
+	      this.props.dispatch(AS.emailSignUp((0, _formToPayloadMappers.customerInfoMap)(formData)));
 	    }
 	  }, {
 	    key: "render",
@@ -7119,10 +6856,22 @@ webpackJsonp([0,3],{
 	
 	      var disabled = this.props.auth.user.isSignedIn || this.props.auth.signUp.loading;
 	
+	      var formErrors = (0, _readProp2.default)(this.props.auth, 'signUp.errors.errors', '');
+	
 	      return _react2.default.createElement(
 	        "form",
 	        { className: "redux-auth email-sign-up-form clearfix",
 	          onSubmit: this.handleSubmit.bind(this) },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "form-group", style: {
+	              display: formErrors ? 'block' : 'none'
+	            } },
+	          _react2.default.createElement(_AuxErrorLabel2.default, {
+	            label: "Form:",
+	            errors: formErrors.length ? [formErrors] : []
+	          })
+	        ),
 	        _react2.default.createElement(
 	          _IndexPanel2.default,
 	          { header: "basic" },
@@ -7152,6 +6901,26 @@ webpackJsonp([0,3],{
 	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.email', ''),
 	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.email', []),
 	            onChange: this.handleInput.bind(this, "email")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "password",
+	            className: "password-sign-in-email",
+	            label: "Password",
+	            placeholder: "Password",
+	            name: "password",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.password', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.password', []),
+	            onChange: this.handleInput.bind(this, "password")
+	          }),
+	          _react2.default.createElement(_Input2.default, { type: "password",
+	            className: "password-sign-in-email",
+	            label: "Confirm password",
+	            placeholder: "Confirm password",
+	            name: "password-confirm",
+	            disabled: disabled,
+	            value: (0, _readProp2.default)(this.props.auth, 'signUp.form.passwordConfirm', ''),
+	            errors: (0, _readProp2.default)(this.props.auth, 'signUp.errors.passwordConfirm', []),
+	            onChange: this.handleInput.bind(this, "passwordConfirm")
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -7255,7 +7024,7 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 612:
+/***/ 610:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -7270,6 +7039,7 @@ webpackJsonp([0,3],{
 	 */
 	var customerInfoMap = exports.customerInfoMap = function customerInfoMap(_ref) {
 	  var ssn = _ref.ssn;
+	  var password = _ref.password;
 	  var address1 = _ref.address1;
 	  var address2 = _ref.address2;
 	  var city = _ref.city;
@@ -7284,6 +7054,7 @@ webpackJsonp([0,3],{
 	      "firstName": fname,
 	      "lastName": lname
 	    },
+	    password: password,
 	    email: email,
 	    ssn: ssn,
 	    "phoneNumber": phoneNumber,
@@ -7301,31 +7072,18 @@ webpackJsonp([0,3],{
 
 /***/ },
 
-/***/ 613:
+/***/ 611:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 	
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.emailSignUpFormUpdate = emailSignUpFormUpdate;
-	exports.emailSignUpStart = emailSignUpStart;
-	exports.emailSignUpComplete = emailSignUpComplete;
-	exports.emailSignUpError = emailSignUpError;
+	exports.emailSignUpError = exports.emailSignUpComplete = exports.emailSignUpStart = exports.emailSignUpFormUpdate = undefined;
 	exports.emailSignUp = emailSignUp;
-	
-	var _sessionStorage = __webpack_require__(318);
-	
-	var _entities = __webpack_require__(326);
-	
-	var _configure = __webpack_require__(314);
-	
-	var _api = __webpack_require__(321);
-	
-	var _signIn = __webpack_require__(609);
 	
 	var _reduxRouter = __webpack_require__(246);
 	
@@ -7333,25 +7091,20 @@ webpackJsonp([0,3],{
 	
 	var _ACTION_TYPES2 = _interopRequireDefault(_ACTION_TYPES);
 	
+	var _actions = __webpack_require__(316);
+	
+	var _api = __webpack_require__(321);
+	
+	var _signIn = __webpack_require__(607);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//import { parseResponse } from "../utils/handleFetchResponse";
-	function emailSignUpFormUpdate(key, value) {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE, key: key, value: value };
-	} /**
-	   * Created by andrew on 11/03/16.
-	   */
-	function emailSignUpStart() {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_START };
-	}
-	
-	function emailSignUpComplete(user) {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, user: user };
-	}
-	
-	function emailSignUpError(errors) {
-	  return { type: _ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, errors: errors };
-	}
+	var emailSignUpFormUpdate = exports.emailSignUpFormUpdate = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_FORM_UPDATE, 'key', 'value'); /**
+	                                                                                                                                                               * Created by andrew on 11/03/16.
+	                                                                                                                                                               */
+	var emailSignUpStart = exports.emailSignUpStart = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_START);
+	var emailSignUpComplete = exports.emailSignUpComplete = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_COMPLETE, 'user');
+	var emailSignUpError = exports.emailSignUpError = (0, _actions.makeActionCreator)(_ACTION_TYPES2.default.AUTH.SIGN_UP_ERROR, 'error');
 	
 	function emailSignUp(body) {
 	  return function (dispatch) {
@@ -7367,7 +7120,10 @@ webpackJsonp([0,3],{
 	      dispatch((0, _reduxRouter.push)('/signin'));
 	    }).catch(function (_ref2) {
 	      var errors = _ref2.errors;
-	      return dispatch(emailSignUpError(errors));
+	
+	      dispatch(emailSignUpError({
+	        errors: errors
+	      }));
 	    });
 	  };
 	}
@@ -7377,4 +7133,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.fcbedf54f0345474ccc1.js.map
+//# sourceMappingURL=app.497ed0e9fa8411cbbf1d.js.map

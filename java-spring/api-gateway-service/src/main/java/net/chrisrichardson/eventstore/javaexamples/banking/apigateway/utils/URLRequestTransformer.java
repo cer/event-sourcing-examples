@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * Created by popikyardo on 21.01.16.
- */
 public class URLRequestTransformer extends ProxyRequestTransformer {
 
   private ApiGatewayProperties apiGatewayProperties;
