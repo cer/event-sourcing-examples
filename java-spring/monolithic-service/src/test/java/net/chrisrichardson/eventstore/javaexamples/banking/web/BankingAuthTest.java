@@ -2,9 +2,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.web;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerResponse;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.UserCredentials;
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils;
 import org.junit.Assert;
 import org.junit.Test;

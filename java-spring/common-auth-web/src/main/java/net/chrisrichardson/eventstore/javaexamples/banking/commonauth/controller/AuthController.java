@@ -1,10 +1,9 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.UserCredentials;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.CustomerAuthService;
-import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.AuthRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.ErrorResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;

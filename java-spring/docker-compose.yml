@@ -11,9 +11,6 @@ apigateway:
     - customerscommandside
     - customersqueryside
     - mongodb
-  environment:
-    EVENTUATE_API_KEY_ID: ${EVENTUATE_API_KEY_ID}
-    EVENTUATE_API_KEY_SECRET: ${EVENTUATE_API_KEY_SECRET}
 
 accountscommandside:
   extends:

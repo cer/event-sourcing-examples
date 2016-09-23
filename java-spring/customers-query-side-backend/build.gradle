@@ -2,6 +2,7 @@ apply plugin: 'java'
 
 dependencies {
     compile project(":common-backend")
+    compile project(":customers-query-side-common")
 
     compile "io.eventuate.client.java:eventuate-client-java-spring:$eventuateClientVersion"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"

@@ -1,6 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth;
 
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

@@ -73,17 +73,11 @@ public class AccountQueryWorkflow {
 
   @EventHandlerMethod
   public void recordDebit(DispatchedEvent<AccountDebitedEvent> de) {
-    String accountId = de.getEntityId();
-    String transactionId = de.getEvent().getTransactionId();
-
     saveChange(de, -1);
   }
 
   @EventHandlerMethod
   public void recordCredit(DispatchedEvent<AccountCreditedEvent> de) {
-    String accountId = de.getEntityId();
-    String transactionId = de.getEvent().getTransactionId();
-
     saveChange(de, +1);
   }
 

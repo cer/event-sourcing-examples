@@ -2,8 +2,8 @@ apply plugin: 'java'
 
 dependencies {
     compile "commons-lang:commons-lang:2.6"
-    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.6.6"
+    compile "org.springframework.boot:spring-boot-starter-validation:$springBootVersion"
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

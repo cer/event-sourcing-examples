@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Date;
 
-public class AccountTransactionInfo extends AccountHistoryEntry{
+public class AccountTransactionInfo extends AccountHistoryEntry {
 
   private String transactionId;
   private String fromAccountId;
