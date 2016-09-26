@@ -1,11 +1,14 @@
 const loginCommands = {
-  login(email, pass) {
-    return this
+  login({email, pass}) {
+    this
       .waitForElementVisible('@emailInput')
       .setValue('@emailInput', email)
-      .setValue('@passInput', pass)
-      .waitForElementVisible('@loginButton')
-      .click('@loginButton')
+      .setValue('@passInput', pass);
+
+    this.api.pause(500);
+    return this.waitForElementVisible('@loginButton')
+      .submitForm('@loginButton');
+
   }
 };
 
@@ -15,6 +18,9 @@ export default {
   elements: {
     emailInput: {
       selector: 'input[type=text]'
+    },
+    emailLoginPageInput: {
+      selector: 'input.email-sign-in-email.form-control'
     },
     passInput: {
       selector: 'input[name=password]'

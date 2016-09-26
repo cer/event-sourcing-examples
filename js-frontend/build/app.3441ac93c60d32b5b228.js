@@ -2568,7 +2568,12 @@ webpackJsonp([0,3],{
 	 * Created by andrew on 26/02/16.
 	 */
 	function parseResponse(response) {
-	  var json = response.json();
+	  var json = response.json().catch(function (err) {
+	    if (err.toString().indexOf('SyntaxError: Unexpected end of JSON input') >= 0) {
+	      return Promise.resolve({});
+	    }
+	    throw err;
+	  });
 	  if (response.status >= 200 && response.status < 300) {
 	    return json;
 	  } else {
@@ -7149,4 +7154,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.49212d324ec7c7726785.js.map
+//# sourceMappingURL=app.3441ac93c60d32b5b228.js.map

@@ -1,13 +1,17 @@
 export default {
+  '@tags': ['login', 'sanity'],
   'User Logs in': (client) => {
     const loginPage = client.page.loginPage();
     const instancesPage = client.page.instancesPage();
 
+    const [email, pass] = 'ar@gm.com|12345'.split('|');
+
+
     loginPage
       .navigate()
-      .login(process.env.EMAIL, process.env.PASSWORD);
+      .login({email, pass});
 
-    instancesPage.expect.element('@instancesListDescription').text.to.contain('Your first instance.');
+    instancesPage.expect.element('@instancesListDescription').to.be.visible;
 
     client.end();
   }
