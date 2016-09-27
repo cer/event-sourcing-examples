@@ -1,12 +1,13 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.commonauth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.UserCredentials;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.CustomerAuthService;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.ErrorResponse;
 import net.chrisrichardson.eventstore.javaexamples.banking.commonauth.model.User;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +47,7 @@ public class AuthController {
   }
 
   @ResponseStatus(value = HttpStatus.NOT_FOUND)
-  @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
+  @ExceptionHandler({EmptyResultDataAccessException.class, IncorrectResultSizeDataAccessException.class})
   public ErrorResponse customersNotFound() {
     return new ErrorResponse("Customer not found");
   }
