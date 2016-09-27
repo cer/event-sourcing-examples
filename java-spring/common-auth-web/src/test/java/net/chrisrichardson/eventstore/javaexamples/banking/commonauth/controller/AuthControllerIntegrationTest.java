@@ -58,7 +58,7 @@ public class AuthControllerIntegrationTest {
     when(customerAuthService.findByEmailAndPassword("my@email.com", "my_password")).thenReturn(new QuerySideCustomer("id", new Name("test", "test"), "my@email.com", "my_password", "ssn", "", new Address(), null));
     when(customerAuthService.findByEmailAndPassword("not_my@email.com", "not_my_password")).thenThrow(new EmptyResultDataAccessException(1));
 
-    when(tokenService.allocateToken(om.writeValueAsString(new User("my@email.com\"}")))).thenReturn(new DefaultToken("key", System.currentTimeMillis(), ""));
+    when(tokenService.allocateToken(om.writeValueAsString(new User("my@email.com")))).thenReturn(new DefaultToken("key", System.currentTimeMillis(), ""));
 
     mockMvc.perform(post("/api/login")
             .contentType(MediaType.APPLICATION_JSON)
