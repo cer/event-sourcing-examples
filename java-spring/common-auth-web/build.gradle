@@ -8,4 +8,5 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
 
     testCompile "junit:junit:4.11"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
