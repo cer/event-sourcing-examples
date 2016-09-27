@@ -4,10 +4,9 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.CreateMoneyTransferRequest;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.CreateMoneyTransferResponse;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;

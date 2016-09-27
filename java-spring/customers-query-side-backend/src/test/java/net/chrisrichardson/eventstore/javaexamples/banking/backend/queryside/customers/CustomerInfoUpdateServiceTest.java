@@ -3,13 +3,9 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.cu
 import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import io.eventuate.javaclient.spring.jdbc.IdGenerator;
 import io.eventuate.javaclient.spring.jdbc.IdGeneratorImpl;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.AccountCreditedEvent;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import static net.chrisrichardson.eventstorestore.javaexamples.testutil.CustomersTestUtils.generateCustomerInfo;

@@ -8,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by Main on 18.02.2016.
  */
@@ -41,7 +43,8 @@ public class BasicAuthUtils {
             httpMethod,
             httpEntity,
             responseType);
-    Assert.isTrue(HttpStatus.OK == responseEntity.getStatusCode(), "Bad response: " + responseEntity.getStatusCode());
+
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     return responseEntity.getBody();
   }
 }

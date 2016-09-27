@@ -2,6 +2,7 @@ apply plugin: 'java'
 
 dependencies {
     compile project(":common")
+    compile project(":customers-query-side-common")
 
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"

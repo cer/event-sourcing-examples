@@ -21,6 +21,7 @@ include 'customers-command-side-backend'
 include 'customers-command-side-web'
 include 'customers-command-side-service'
 
+include 'customers-query-side-common'
 include 'customers-query-side-backend'
 include 'customers-query-side-web'
 include 'customers-query-side-service'

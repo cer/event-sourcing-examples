@@ -5,7 +5,7 @@ import io.eventuate.EventuateAggregateStore;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.Customer;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.customers.CustomerService;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.CustomerInfo;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Producer;
 import net.chrisrichardson.eventstorestore.javaexamples.testutil.Verifier;

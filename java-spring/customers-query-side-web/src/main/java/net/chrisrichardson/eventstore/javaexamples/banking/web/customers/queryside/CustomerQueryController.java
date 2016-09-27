@@ -1,7 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.customers.CustomerQueryService;
-import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.QuerySideCustomer;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;

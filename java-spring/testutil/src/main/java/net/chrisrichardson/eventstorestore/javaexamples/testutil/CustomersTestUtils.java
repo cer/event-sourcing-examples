@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstorestore.javaexamples.testutil;
 
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.*;
+import net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common.QuerySideCustomer;
 import org.junit.Assert;
 import org.springframework.web.client.RestTemplate;
 

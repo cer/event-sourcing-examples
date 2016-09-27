@@ -1,5 +1,8 @@
-package net.chrisrichardson.eventstore.javaexamples.banking.common.customers;
+package net.chrisrichardson.eventstore.javaexamples.banking.web.customers.queryside.common;
 
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Address;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
+import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 

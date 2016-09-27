@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(":common")
+
+    compile "commons-lang:commons-lang:2.6"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
