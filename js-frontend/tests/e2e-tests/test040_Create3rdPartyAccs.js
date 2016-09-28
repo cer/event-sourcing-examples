@@ -27,6 +27,11 @@ export default {
       .navigate()
       .login(globals.otherUserData);
 
+    client.end();
+    return;
+
+    //todo: solve select changing
+
     const [ userQuery, accountQuery, title, description ] = '|||'.split('|');
 
     instancesPage
