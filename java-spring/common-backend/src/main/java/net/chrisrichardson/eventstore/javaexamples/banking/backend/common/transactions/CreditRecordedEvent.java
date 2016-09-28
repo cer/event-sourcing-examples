@@ -1,8 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions;
 
-import io.eventuate.Event;
 
-public class CreditRecordedEvent implements Event {
+public class CreditRecordedEvent extends MoneyTransferEvent {
   private TransferDetails details;
 
   private CreditRecordedEvent() {

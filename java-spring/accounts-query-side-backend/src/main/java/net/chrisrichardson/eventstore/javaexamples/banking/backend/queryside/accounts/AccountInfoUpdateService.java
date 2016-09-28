@@ -40,7 +40,7 @@ public class AccountInfoUpdateService {
                       .set("description", description)
                       .set("balance", toIntegerRepr(initialBalance))
                       .push("changes", ci)
-                      .set("date", getFromEventId(version))
+                      .set("creationDate", getFromEventId(version))
                       .set("version", version),
               AccountInfo.class);
       logger.info("Saved in mongo");

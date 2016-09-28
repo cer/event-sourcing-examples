@@ -4,12 +4,14 @@ import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Addr
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.Name;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.customers.ToAccountInfo;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
 
 /**
  * Created by Main on 05.02.2016.
  */
+@Document
 public class QuerySideCustomer {
 
   private String id;
