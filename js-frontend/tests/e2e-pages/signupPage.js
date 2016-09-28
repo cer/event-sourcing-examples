@@ -1,5 +1,5 @@
 const signupCommands = {
-  signup({fName, lName, email, pass, passConf, ssn}) {
+  signup({fName, lName, email, pass, passConf, ssn}, waitForNext) {
     this
       .waitForElementVisible('@fNameInput')
       .setValue('@fNameInput', fName)
@@ -9,12 +9,15 @@ const signupCommands = {
       .setValue('@passConfirmInput', passConf)
       .setValue('@ssnInput', ssn);
 
-    this.api.pause(500);
     this.waitForElementVisible('@signupButton')
       .submitForm('@signupButton');
-    this.api.pause(500);
 
-    return this.waitForElementNotPresent('@fNameInput');
+    if (waitForNext) {
+      return this.waitForElementNotPresent('@signupButton');
+    }
+
+    return this;
+
   }
 };
 
@@ -43,6 +46,9 @@ export default {
     signupButton: {
       // selector: 'button[type=submit]'
       selector: 'button[type=submit].email-sign-up-submit.btn.btn-default'
+    },
+    formError: {
+      selector: '.control-label.inline-error-item'
     }
   }
 };

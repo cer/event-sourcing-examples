@@ -1,12 +1,21 @@
 const loginCommands = {
-  login({email, pass}) {
+  login({ email, pass }) {
+
     this
-      .waitForElementVisible('@emailInput')
+      .waitForElementVisible('@emailInput', 500);
+
+    this
+      .clearValue('@emailInput')
       .setValue('@emailInput', email)
+      .clearValue('@passInput')
       .setValue('@passInput', pass);
 
-    this.api.pause(500);
+    this.getValue('@emailInput', (result) => {
+      this.assert.equal(result.value, email);
+    });
+
     return this.waitForElementVisible('@loginButton')
+      .click('@loginButton')
       .submitForm('@loginButton');
 
   }
@@ -27,6 +36,9 @@ export default {
     },
     loginButton: {
       selector: 'button[type=submit]'
+    },
+    formError: {
+      selector: '.control-label.inline-error-item'
     }
   }
 };

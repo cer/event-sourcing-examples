@@ -89,7 +89,7 @@ export class NewAccountModal extends React.Component {
         <BS.Modal.Title>New Account</BS.Modal.Title>
       </BS.Modal.Header>
       <BS.Modal.Body>
-        <form className='account-create-form clearfix'
+        <form className="account-create-form clearfix"
               onSubmit={this.handleSubmit.bind(this)}>
 
           <Input type="text"

@@ -140,7 +140,7 @@ class MyAccounts extends React.Component {
       ssn = '',
       name = {},
       phoneNumber = '',
-      address,
+      address = {},
       toAccounts
       } = user;
 

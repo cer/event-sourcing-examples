@@ -102,7 +102,7 @@ export class Add3rdPartyAccountModal extends React.Component {
           <BS.Modal.Title>Add 3rd Party Account</BS.Modal.Title>
         </BS.Modal.Header>
         <BS.Modal.Body>
-          <form>
+          <form  className="account-create-ref clearfix">
             <div className="form-group" style={{
             display: formErrors ? 'block' : 'none'
             }}>

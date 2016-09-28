@@ -2568,12 +2568,14 @@ webpackJsonp([0,3],{
 	 * Created by andrew on 26/02/16.
 	 */
 	function parseResponse(response) {
-	  var json = response.json().catch(function (err) {
-	    if (err.toString().indexOf('SyntaxError: Unexpected end of JSON input') >= 0) {
-	      return Promise.resolve({});
-	    }
-	    throw err;
-	  });
+	  var json = response.json();
+	  // .catch(err => {
+	  //     if (err.toString().indexOf('SyntaxError: Unexpected end of JSON input') >= 0) {
+	  //       return Promise.resolve({});
+	  //     }
+	  //     throw err;
+	  //   });
+	
 	  if (response.status >= 200 && response.status < 300) {
 	    return json;
 	  } else {
@@ -3819,7 +3821,8 @@ webpackJsonp([0,3],{
 	      var name = _user$name === undefined ? {} : _user$name;
 	      var _user$phoneNumber = user.phoneNumber;
 	      var phoneNumber = _user$phoneNumber === undefined ? '' : _user$phoneNumber;
-	      var address = user.address;
+	      var _user$address = user.address;
+	      var address = _user$address === undefined ? {} : _user$address;
 	      var toAccounts = user.toAccounts;
 	
 	
@@ -4488,7 +4491,7 @@ webpackJsonp([0,3],{
 	          null,
 	          _react2.default.createElement(
 	            "form",
-	            null,
+	            { className: "account-create-ref clearfix" },
 	            _react2.default.createElement(
 	              "div",
 	              { className: "form-group", style: {
@@ -7154,4 +7157,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.3441ac93c60d32b5b228.js.map
+//# sourceMappingURL=app.30980d75b78111237ddf.js.map
