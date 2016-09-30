@@ -432,7 +432,8 @@ webpackJsonp([0,3],{
 	});
 	
 	exports.default = mainReducer;
-	
+	module.exports = exports['default'];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -473,7 +474,8 @@ webpackJsonp([0,3],{
 	     * Created by andrew on 25/02/16.
 	     */
 	exports.default = authStateReducer;
-	
+	module.exports = exports['default'];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -610,7 +612,8 @@ webpackJsonp([0,3],{
 	  }
 	
 	});
-	
+	module.exports = exports['default'];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ACTION_TYPES.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -1046,7 +1049,8 @@ webpackJsonp([0,3],{
 	};
 	
 	exports.default = createFormReducer;
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "createFormReducer.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -1241,7 +1245,8 @@ webpackJsonp([0,3],{
 	     * Created by andrew on 15/03/16.
 	     */
 	exports.default = dataReducer;
-	
+	module.exports = exports['default'];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -1661,7 +1666,8 @@ webpackJsonp([0,3],{
 	 * Created by andrew on 25/02/16.
 	 */
 	exports.default = uiReducer;
-	
+	module.exports = exports['default'];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -2233,7 +2239,8 @@ webpackJsonp([0,3],{
 	// even though this code shouldn't be used server-side, node will throw
 	// errors if "window" is used
 	exports.default = Function("return this")() || (42, eval)("this");
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "root.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -2478,6 +2485,8 @@ webpackJsonp([0,3],{
 	  return resp;
 	}
 	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "fetch.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -2560,6 +2569,13 @@ webpackJsonp([0,3],{
 	 */
 	function parseResponse(response) {
 	  var json = response.json();
+	  // .catch(err => {
+	  //     if (err.toString().indexOf('SyntaxError: Unexpected end of JSON input') >= 0) {
+	  //       return Promise.resolve({});
+	  //     }
+	  //     throw err;
+	  //   });
+	
 	  if (response.status >= 200 && response.status < 300) {
 	    return json;
 	  } else {
@@ -3099,7 +3115,8 @@ webpackJsonp([0,3],{
 	
 	  return { defaultEndpointKey: defaultEndpointKey, currentEndpoint: currentEndpoint };
 	}
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "parseEndpointConfig.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -3284,7 +3301,8 @@ webpackJsonp([0,3],{
 	  }
 	  return read(src[pathItem], rest.join('.'), defaultVal);
 	}
-	
+	module.exports = exports['default'];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "readProp.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -3803,7 +3821,8 @@ webpackJsonp([0,3],{
 	      var name = _user$name === undefined ? {} : _user$name;
 	      var _user$phoneNumber = user.phoneNumber;
 	      var phoneNumber = _user$phoneNumber === undefined ? '' : _user$phoneNumber;
-	      var address = user.address;
+	      var _user$address = user.address;
+	      var address = _user$address === undefined ? {} : _user$address;
 	      var toAccounts = user.toAccounts;
 	
 	
@@ -4095,7 +4114,8 @@ webpackJsonp([0,3],{
 	    error: app.ui.error
 	  };
 	})(MyAccounts);
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "MyAccounts.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -4471,7 +4491,7 @@ webpackJsonp([0,3],{
 	          null,
 	          _react2.default.createElement(
 	            "form",
-	            null,
+	            { className: "account-create-ref clearfix" },
 	            _react2.default.createElement(
 	              "div",
 	              { className: "form-group", style: {
@@ -4708,7 +4728,8 @@ webpackJsonp([0,3],{
 	  style: {}
 	};
 	exports.default = ButtonLoader;
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ButtonLoader.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -4820,7 +4841,8 @@ webpackJsonp([0,3],{
 	  errors: []
 	};
 	exports.default = AuthInput;
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Input.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -4914,7 +4936,8 @@ webpackJsonp([0,3],{
 	  errors: []
 	};
 	exports.default = AuxErrorLabel;
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AuxErrorLabel.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -7019,7 +7042,8 @@ webpackJsonp([0,3],{
 	  var app = _ref.app;
 	  return { auth: app.auth };
 	})(EmailSignUpForm);
-	
+	module.exports = exports["default"];
+
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/andrew/dev/clients/ES/code/event-sourcing-examples/js-frontend/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "EmailSignUpForm.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
@@ -7133,4 +7157,4 @@ webpackJsonp([0,3],{
 /***/ }
 
 });
-//# sourceMappingURL=app.497ed0e9fa8411cbbf1d.js.map
+//# sourceMappingURL=app.30980d75b78111237ddf.js.map

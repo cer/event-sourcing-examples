@@ -2,7 +2,14 @@
  * Created by andrew on 26/02/16.
  */
 export function parseResponse (response) {
-  let json = response.json();
+  const json = response.json();
+// .catch(err => {
+//     if (err.toString().indexOf('SyntaxError: Unexpected end of JSON input') >= 0) {
+//       return Promise.resolve({});
+//     }
+//     throw err;
+//   });
+
   if (response.status >= 200 && response.status < 300) {
     return json;
   } else {
