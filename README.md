@@ -98,7 +98,7 @@ cd java-spring
 Next, you can launch the services using [Docker Compose](https://docs.docker.com/compose/):
 
 ```
-docker-compose -f docker-compose-eventuate-local.yml up -d
+docker-compose up -d
 ```
 
 Finally, you can open the home page, which is served up by the API Gateway: `http://$DOCKER_HOST_IP:8080`
@@ -114,11 +114,11 @@ cd java-spring
 ./gradlew assemble -P eventuateDriver=local
 ```
 
-Next, you can launch the services using [Docker Compose](https://docs.docker.com/compose/):
+Next, launch the services using [Docker Compose](https://docs.docker.com/compose/):
 
 ```
 export DOCKER_HOST_IP=...
-docker-compose up -d
+docker-compose -f docker-compose-eventuate-local.yml up -d
 ```
 
 Note: You need to set `DOCKER_HOST_IP` before running Docker Compose.
