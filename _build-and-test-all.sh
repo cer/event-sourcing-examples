@@ -46,7 +46,7 @@ export SERVICE_HOST=$DOCKER_HOST_IP
 
 ./gradlew $* build -x :e2e-test:test
 
-if [ -z "$EVENTUATE_API_KEY_ID" -o -z "$EVENTUATE_API_KEY_SECRET" ] ; then
+if [ -z "$EVENTUATE_LOCAL" ] && [ -z "$EVENTUATE_API_KEY_ID" -o -z "$EVENTUATE_API_KEY_SECRET" ] ; then
   echo You must set EVENTUATE_API_KEY_ID and  EVENTUATE_API_KEY_SECRET
   exit -1
 fi
