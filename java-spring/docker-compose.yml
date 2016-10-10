@@ -36,7 +36,6 @@ accountsqueryside:
   environment:
     EVENTUATE_API_KEY_ID: ${EVENTUATE_API_KEY_ID}
     EVENTUATE_API_KEY_SECRET: ${EVENTUATE_API_KEY_SECRET}
-    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
 
 customerscommandside:
   extends:
@@ -55,7 +54,6 @@ customersqueryside:
   environment:
     EVENTUATE_API_KEY_ID: ${EVENTUATE_API_KEY_ID}
     EVENTUATE_API_KEY_SECRET: ${EVENTUATE_API_KEY_SECRET}
-    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
 
 mongodb:
   extends:
