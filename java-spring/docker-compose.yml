@@ -49,7 +49,6 @@ customersqueryside:
   extends:
     file: docker-compose-common.yml
     service: customersqueryside
-  image: java:openjdk-8u91-jdk
   links:
     - mongodb
   environment:
