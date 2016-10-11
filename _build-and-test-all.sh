@@ -51,6 +51,7 @@ if [ -z "$EVENTUATE_LOCAL" ] && [ -z "$EVENTUATE_API_KEY_ID" -o -z "$EVENTUATE_A
   exit -1
 fi
 
+${DOCKER_COMPOSE?} build
 
 ${DOCKER_COMPOSE?} up -d
 
