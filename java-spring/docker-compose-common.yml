@@ -1,9 +1,15 @@
 apigateway:
   build: ./api-gateway-service/
-  environment:
-    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
   ports:
     - "8080:8080"
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    ACCOUNTS_COMMANDSIDE_SERVICE_HOST: accountscommandside
+    TRANSFERS_COMMANDSIDE_SERVICE_HOST: transactionscommandside
+    ACCOUNTS_QUERYSIDE_SERVICE_HOST: accountsqueryside
+    CUSTOMERS_COMMANDSIDE_SERVICE_HOST: customerscommandside
+    CUSTOMERS_QUERYSIDE_SERVICE_HOST: customersqueryside
+
 
 accountscommandside:
   build: ./accounts-command-side-service/

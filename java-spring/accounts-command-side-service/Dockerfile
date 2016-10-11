@@ -1,5 +1,4 @@
 FROM java:openjdk-8u91-jdk
-RUN mkdir /app
-WORKDIR /app
-COPY ./build/libs  /app
-CMD java ${JAVA_OPTS} -jar /app/accounts-command-side-service.jar
+CMD java ${JAVA_OPTS} -jar accounts-command-side-service.jar
+EXPOSE 8080
+COPY build/libs/accounts-command-side-service.jar .
