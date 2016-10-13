@@ -2,6 +2,17 @@
 
 set -e
 
+if [ -z "$DOCKER_HOST_IP" ] ; then
+  if [ -z "$DOCKER_HOST" ] ; then
+    export DOCKER_HOST_IP=`hostname`
+  else
+    echo using ${DOCKER_HOST?}
+    XX=${DOCKER_HOST%\:*}
+    export DOCKER_HOST_IP=${XX#tcp\:\/\/}
+  fi
+  echo set DOCKER_HOST_IP $DOCKER_HOST_IP
+fi
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 DOCKER_COMPOSE="docker-compose -p event-sourcing-examples"
@@ -28,14 +39,6 @@ fi
 
 ${DOCKER_COMPOSE?} up -d mongodb $EXTRA_INFRASTRUCTURE_SERVICES
 
-if [ -z "$DOCKER_HOST_IP" ] ; then
-  if which docker-machine >/dev/null; then
-    export DOCKER_HOST_IP=$(docker-machine ip default)
-  else
-    export DOCKER_HOST_IP=localhost
- fi
- echo set DOCKER_HOST_IP $DOCKER_HOST_IP
-fi
 
 if [ -z "$SPRING_DATA_MONGODB_URI" ] ; then
   export SPRING_DATA_MONGODB_URI=mongodb://${DOCKER_HOST_IP?}/mydb
