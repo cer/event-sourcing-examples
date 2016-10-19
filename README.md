@@ -1,4 +1,4 @@
-#Event-Sourcing+CQRS example application
+# Event-Sourcing+CQRS example application
 
 This example application is the money transfer application described in my talk [Building and deploying microservices with event sourcing, CQRS and Docker](http://plainoldobjects.com/presentations/building-and-deploying-microservices-with-event-sourcing-cqrs-and-docker/).
 This talk describes a way of architecting highly scalable and available applications that is based on microservices, polyglot persistence,
@@ -35,111 +35,99 @@ The following diagram shows the architecture:
 
 ![Money transfer architecture](https://github.com/cer/event-sourcing-examples/wiki/i/applicationarchitecture.png)
 
-There are four logical services:
+There are the following logical services:
 
+* Customers (command-side) - REST API for creating customers
 * Accounts (command-side) - REST API for creating accounts
 * Money transfers (command-side) - REST API for transferring money
-* Account view updater (query-side) - subscribes to events and updates a MongoDB View
-* Account view reader (query-side) - REST API for retrieving accounts
+* Customers (query-side) - subscribes to events and updates a MongoDB View, and provides an API for retrieving customers
+* Accounts (query-side) - subscribes to events and updates a MongoDB View, and provides an API for retrieving accounts
+
+There is also an [API gateway](http://microservices.io/patterns/apigateway.html) service that acts as a Facade in front of the services.
 
 One of the neat things about the modular architecture is that there are two ways to deploy these four services:
 
 * monolithic-service - all services are packaged as a single Spring Boot executable JAR
 * Microservices - three separate Spring Boot executable JARs
+ * customer-command-side-service - command-side customers
  * accounts-command-side-service - command-side accounts
  * transactions-command-side-service - command-side money transfers
- * accounts-query-side-service - Account View Updater and Account View Reader
+ * customers-query-side-service - query-side customers
+ * accounts-query-side-service - query-side accounts
+ * api-gateway-service - API gateway service
 
 # About the examples
 
 There are currently the following versions of the example application:
 
   * java-spring - a Java and Spring Boot example
-  * scala-spring - a Scala and Spring Boot example
+  * scala-spring - a Scala and Spring Boot example (NOTE: this version is lagging the Java Spring and hasn't been updated in a longtime.)
 
 Other examples will be added shortly including a Scala/Play example.
 
 For more information, please see the [wiki](../../wiki)
 
-# About the Event Store
+# About the Eventuate Platform
 
-The application uses one of two event stores:
+The application is built using [Eventuate](http://eventuate.io/), which is an application platform for writing transactional microservices.
+It provides a simple yet powerful event-driven programming model that is based on event sourcing and Command Query Responsibility Segregation (CQRS).
+Eventuate solves the distributed data management problems inherent in a microservice architecture.
+It consists of a scalable, distributed event store and client libraries for various languages and frameworks including Java, Scala, and the Spring framework.
 
-* Embedded SQL-based event store, which is great for integration tests.
-It is also used when running the monolithic version of the application.
-* Event Store server - this is a full featured event store.
-See this [wiki page](../../wiki/AboutTheEventStoreServer) for more details.
+There are two versions of Eventuate:
 
-# Building the application (and running the tests)
+* [Eventuate SaaS server](http://eventuate.io/usingeventuate.html) - this is a full featured event store that is hosted on AWS
+* [Eventuate Local](http://eventuate.io/usingeventuate.html) - an open-source event store that is built using MySQL and Kafka
 
-Both versions of the application use Gradle.
-To build an application, execute this command  in the application's top-level directory:
+There is also an embedded test event store, which is great for integration tests.
 
-```
-./gradlew assemble
-```
+# Building and running the microservices
 
-Note: you do not need to install Gradle.
-It will be automatically downloaded by `./gradlew`.
+This is a Gradle project.
+However, you do not need to install Gradle since it will be downloaded automatically.
+You just need to have Java 8 installed.
 
-This will build a Spring Boot jar in each of the `*-service` directories.
+The details of how to build and run the services depend slightly on whether you are using Eventuate SaaS or Eventuate Local.
 
-You can also run the tests using `gradle build`.
-However, you must set some environment variables.
+## Building and running using Eventuate SaaS
 
-First, you need to tell the query side code how to connect to MongoDB:
+First, must [sign up to get your credentials](https://signup.eventuate.io/) in order to get free access to the SaaS version.
 
-```
-  export SPRING_DATA_MONGODB_URI=mongodb://192.168.59.103/yourdb
-```
-
-[Docker Compose](https://docs.docker.com/compose/) is a great way to run MongoDB.
-You can run the `docker-compose up -d mongodb` to run MongoDB and then set `SPRING_DATA_MONGODB_URI` as follows:
-```
-  export SPRING_DATA_MONGODB_URI=mongodb://$(docker-machine ip default)/yourdb
-```
-
-Second, some of the tests in accounts-command-side-service, transactions-command-side-service, accounts-query-side-service and e2e-test require you to set some environment variables that tell them how to connect to the Event Store server.
-But don't worry.
-The build is configured to ignore failures for those projects.
-
-# Running the application
-
-To run the application, you must to set the SPRING_DATA_MONGODB_URI environment variable, which tells the query services how to connect to MongoDB.
-
-There are a couple of different ways of running the application.
-
-## Running the monolithic application
-
-One option is to run the self-contained monolithic application.
-It uses the embedded event store.
-
-Simply use this command:
+Next, build the application
 
 ```
-java -jar monolithic-service/build/libs/monolithic-service.jar
+cd java-spring
+./gradlew assemble -P eventuateLocal=true
 ```
 
-This will start the service running on port 8080 (you can change using the --server.port=9999 option).
+Next, you can launch the services using [Docker Compose](https://docs.docker.com/compose/):
 
-Once the service has started you can open the Swagger UI: http://localhost:8080/swagger-ui.html.
-You can then:
+```
+docker-compose up -d
+```
 
-1. Create two accounts (save the account ids)
-2. Create a money transfer
-3. View the updated account balances
+Finally, you can open the home page, which is served up by the API Gateway: `http://$DOCKER_HOST_IP:8080`
 
-## Running the microservices
+Note: `DOCKER_HOST_IP` is the IP address of the machine where Docker is running, e.g. the IP address of the VirtualBox VM.
 
-The other option is to run the services separately.
-However, in order to do this you need to [get credentials for the Event Store](../../wiki/AboutTheEventStoreServer).
+## Building and running using Eventuate Local
 
-One way to run the services is to use the scripts `run-all-services.sh`, which runs the services, and `kill-all-services.sh`, which kills the processes.
+First, build the application
 
-A much better way, however, is to use Docker Compose.
-Simply run the command `docker-compose up` to launch the services.
-This will create containers for MongoDB and each of the services.
+```
+cd java-spring
+./gradlew assemble -P eventuateDriver=local
+```
 
-You can now, for example, use the curl commands in `handy-curl-commands.sh` to interact with the server.
+Next, launch the services using [Docker Compose](https://docs.docker.com/compose/):
 
-You can also use the Swagger UI exposed by each service `http://host:port/swagger-ui.html`.
+```
+export DOCKER_HOST_IP=...
+docker-compose -f docker-compose-eventuate-local.yml up -d
+```
+
+Note: You need to set `DOCKER_HOST_IP` before running Docker Compose.
+This must be an IP address or resolvable hostname.
+It cannot be `localhost`.
+
+Finally, you can open the home page, which is served up by the API Gateway: `http://$DOCKER_HOST_IP:8080`
