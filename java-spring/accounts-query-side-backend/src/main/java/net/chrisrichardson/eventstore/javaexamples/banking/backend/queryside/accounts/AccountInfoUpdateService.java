@@ -42,7 +42,7 @@ public class AccountInfoUpdateService {
                       .set("balance", toIntegerRepr(initialBalance))
                       .push("changes", ci)
                       .set("creationDate", new Date(version.getHi()))
-                      .set("version", version),
+                      .set("version", version.asString()),
               AccountInfo.class);
       logger.info("Saved in mongo");
 
