@@ -1,6 +1,7 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
 import com.mongodb.WriteResult;
+import io.eventuate.Int128;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountChangeInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.accounts.AccountTransactionInfo;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
@@ -29,7 +30,7 @@ public class AccountInfoUpdateService {
   }
 
 
-  public void create(String accountId, String customerId, String title, BigDecimal initialBalance, String description, String version) {
+  public void create(String accountId, String customerId, String title, BigDecimal initialBalance, String description, Int128 version) {
     try {
       AccountChangeInfo ci = new AccountChangeInfo();
       ci.setAmount(toIntegerRepr(initialBalance));
@@ -40,7 +41,7 @@ public class AccountInfoUpdateService {
                       .set("description", description)
                       .set("balance", toIntegerRepr(initialBalance))
                       .push("changes", ci)
-                      .set("creationDate", getFromEventId(version))
+                      .set("creationDate", new Date(version.getHi()))
                       .set("version", version),
               AccountInfo.class);
       logger.info("Saved in mongo");
@@ -80,13 +81,5 @@ public class AccountInfoUpdateService {
               new Update().
                       set("transactions." + transactionId + ".status", status),
               AccountInfo.class);
-  }
-
-  private Date getFromEventId(String eventId) {
-    String[] s = eventId.split("-");
-    if (s.length != 2) {
-      return new Date();
-    }
-    return new Date(Long.parseUnsignedLong(s[0], 16));
   }
 }
