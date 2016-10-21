@@ -1,5 +1,6 @@
 package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.accounts;
 
+import io.eventuate.Int128;
 import io.eventuate.javaclient.spring.jdbc.EventuateJdbcEventStoreConfiguration;
 import io.eventuate.javaclient.spring.jdbc.IdGenerator;
 import io.eventuate.javaclient.spring.jdbc.IdGeneratorImpl;
@@ -46,7 +47,7 @@ public class AccountInfoUpdateServiceTest {
     IdGenerator x = new IdGeneratorImpl();
     String accountId = x.genId().asString();
     String customerId = x.genId().asString();
-    String version = x.genId().asString();
+    Int128 version = x.genId();
 
     String title = "Checking account";
     BigDecimal initialBalance = new BigDecimal("1345");
@@ -99,7 +100,7 @@ public class AccountInfoUpdateServiceTest {
     IdGenerator x = new IdGeneratorImpl();
     String accountId = x.genId().asString();
     String customerId = x.genId().asString();
-    String version = x.genId().asString();
+    Int128 version = x.genId();
 
     String title = "Checking account";
     BigDecimal initialBalance = new BigDecimal("1345");
@@ -114,7 +115,7 @@ public class AccountInfoUpdateServiceTest {
     IdGenerator x = new IdGeneratorImpl();
     String accountId = x.genId().asString();
     String customerId = x.genId().asString();
-    String version = x.genId().asString();
+    Int128 version = x.genId();
 
     String title = "Checking account";
     BigDecimal initialBalance = new BigDecimal("1345");
