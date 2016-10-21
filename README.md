@@ -97,7 +97,7 @@ Next, build the application
 
 ```
 cd java-spring
-./gradlew assemble -P eventuateLocal=true
+./gradlew assemble
 ```
 
 Next, you can launch the services using [Docker Compose](https://docs.docker.com/compose/):
