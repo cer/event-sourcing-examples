@@ -64,7 +64,7 @@ public class AccountInfoUpdateServiceTest {
     assertEquals(initialBalance.longValue() * 100, accountInfo.getBalance());
     assertEquals(1, accountInfo.getChanges().size());
     assertTrue(accountInfo.getTransactions().isEmpty());
-    assertEquals(version, accountInfo.getVersion());
+    assertEquals(version.asString(), accountInfo.getVersion());
 
 
     String changeId = x.genId().asString();
