@@ -1,40 +1,40 @@
 apigateway:
-  image: java:openjdk-8u91-jdk
-  command: java ${JAVA_OPTS} -jar /app/api-gateway-service.jar --accounts.commandside.service.host=accountscommandside --transfers.commandside.service.host=transactionscommandside --accounts.queryside.service.host=accountsqueryside --customers.commandside.service.host=customerscommandside  --customers.queryside.service.host=customersqueryside
-  environment:
-    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+  build: ./api-gateway-service/
   ports:
     - "8080:8080"
+  environment:
+    SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
+    ACCOUNTS_COMMANDSIDE_SERVICE_HOST: accountscommandside
+    TRANSFERS_COMMANDSIDE_SERVICE_HOST: transactionscommandside
+    ACCOUNTS_QUERYSIDE_SERVICE_HOST: accountsqueryside
+    CUSTOMERS_COMMANDSIDE_SERVICE_HOST: customerscommandside
+    CUSTOMERS_QUERYSIDE_SERVICE_HOST: customersqueryside
+
 
 accountscommandside:
-  image: java:openjdk-8u91-jdk
-  command: java ${JAVA_OPTS} -jar /app/accounts-command-side-service.jar
+  build: ./accounts-command-side-service/
   ports:
     - "8085:8080"
 
 transactionscommandside:
-  image: java:openjdk-8u91-jdk
-  command: java ${JAVA_OPTS} -jar /app/transactions-command-side-service.jar
+  build: ./transactions-command-side-service/
   ports:
     - "8082:8080"
 
 accountsqueryside:
-  image: java:openjdk-8u91-jdk
-  command: java ${JAVA_OPTS} -jar /app/accounts-query-side-service.jar
+  build: ./accounts-query-side-service/
   environment:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
   ports:
     - "8081:8080"
 
 customerscommandside:
-  image: java:openjdk-8u91-jdk
-  command: java ${JAVA_OPTS} -jar /app/customers-command-side-service.jar
+  build: ./customers-command-side-service/
   ports:
     - "8083:8080"
 
 customersqueryside:
-  image: java:openjdk-8u91-jdk
-  command: java ${JAVA_OPTS} -jar /app/customers-query-side-service.jar
+  build: ./customers-query-side-service/
   ports:
     - "8084:8080"
   environment:
