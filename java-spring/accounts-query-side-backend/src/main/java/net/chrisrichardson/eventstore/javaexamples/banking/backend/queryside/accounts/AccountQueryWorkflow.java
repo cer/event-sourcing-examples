@@ -3,6 +3,7 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.queryside.ac
 import io.eventuate.DispatchedEvent;
 import io.eventuate.EventHandlerMethod;
 import io.eventuate.EventSubscriber;
+import io.eventuate.Int128;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accounts.*;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.CreditRecordedEvent;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.DebitRecordedEvent;
@@ -34,7 +35,7 @@ public class AccountQueryWorkflow {
   public void create(DispatchedEvent<AccountOpenedEvent> de) {
     AccountOpenedEvent event = de.getEvent();
     String id = de.getEntityId();
-    String eventId = de.getEventId().asString();
+    Int128 eventId = de.getEventId();
     logger.info("**************** account version=" + id + ", " + eventId);
     BigDecimal initialBalance = event.getInitialBalance();
 
@@ -57,8 +58,8 @@ public class AccountQueryWorkflow {
     String moneyTransferId = de.getEntityId();
     String fromAccountId = de.getEvent().getDetails().getFromAccountId();
     String toAccountId = de.getEvent().getDetails().getToAccountId();
-    logger.info("**************** account version=" + fromAccountId + ", " + de.getEventId().asString());
-    logger.info("**************** account version=" + toAccountId + ", " + de.getEventId().asString());
+    logger.info("**************** account version=" + fromAccountId + ", " + eventId);
+    logger.info("**************** account version=" + toAccountId + ", " + eventId);
 
     AccountTransactionInfo ti = new AccountTransactionInfo(moneyTransferId,
             fromAccountId,
