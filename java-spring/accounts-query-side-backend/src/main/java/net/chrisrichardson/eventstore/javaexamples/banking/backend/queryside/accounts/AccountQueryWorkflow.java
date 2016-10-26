@@ -36,7 +36,7 @@ public class AccountQueryWorkflow {
     AccountOpenedEvent event = de.getEvent();
     String id = de.getEntityId();
     Int128 eventId = de.getEventId();
-    logger.info("**************** account version=" + id + ", " + eventId);
+    logger.info("**************** account version={}, {}", id, eventId);
     BigDecimal initialBalance = event.getInitialBalance();
 
     String customerId =  event.getCustomerId();
@@ -58,8 +58,8 @@ public class AccountQueryWorkflow {
     String moneyTransferId = de.getEntityId();
     String fromAccountId = de.getEvent().getDetails().getFromAccountId();
     String toAccountId = de.getEvent().getDetails().getToAccountId();
-    logger.info("**************** account version=" + fromAccountId + ", " + eventId);
-    logger.info("**************** account version=" + toAccountId + ", " + eventId);
+    logger.info("**************** account version={}, {}", fromAccountId, eventId);
+    logger.info("**************** account version={}, {}", toAccountId, eventId);
 
     AccountTransactionInfo ti = new AccountTransactionInfo(moneyTransferId,
             fromAccountId,
@@ -120,7 +120,7 @@ public class AccountQueryWorkflow {
     long balanceDelta = amount * delta;
     AccountChangeInfo ci = new AccountChangeInfo(changeId, transactionId, de.getEvent().getClass().getSimpleName(), amount, balanceDelta);
     String accountId = de.getEntityId();
-    logger.info("**************** account version=" + accountId + ", " + de.getEventId().asString());
+    logger.info("**************** account version={}, {}", accountId, de.getEventId().asString());
 
     accountInfoUpdateService.updateBalance(accountId, changeId, balanceDelta, ci);
   }
