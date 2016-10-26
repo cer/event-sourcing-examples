@@ -2,8 +2,6 @@ apigateway:
   extends:
     file: docker-compose-common.yml
     service: apigateway
-  volumes:
-    - ./api-gateway-service/build/libs:/app
   links:
     - accountscommandside
     - transactionscommandside
@@ -16,8 +14,6 @@ accountscommandside:
   extends:
     file: docker-compose-common.yml
     service: accountscommandside
-  volumes:
-    - ./accounts-command-side-service/build/libs:/app
   environment:
     EVENTUATE_API_KEY_ID: ${EVENTUATE_API_KEY_ID}
     EVENTUATE_API_KEY_SECRET: ${EVENTUATE_API_KEY_SECRET}
@@ -26,8 +22,6 @@ transactionscommandside:
   extends:
     file: docker-compose-common.yml
     service: transactionscommandside
-  volumes:
-    - ./transactions-command-side-service/build/libs:/app
   environment:
     EVENTUATE_API_KEY_ID: ${EVENTUATE_API_KEY_ID}
     EVENTUATE_API_KEY_SECRET: ${EVENTUATE_API_KEY_SECRET}
@@ -37,8 +31,6 @@ accountsqueryside:
   extends:
     file: docker-compose-common.yml
     service: accountsqueryside
-  volumes:
-    - ./accounts-query-side-service/build/libs:/app
   links:
     - mongodb
   environment:
@@ -49,8 +41,6 @@ customerscommandside:
   extends:
     file: docker-compose-common.yml
     service: customerscommandside
-  volumes:
-    - ./customers-command-side-service/build/libs:/app
   environment:
     EVENTUATE_API_KEY_ID: ${EVENTUATE_API_KEY_ID}
     EVENTUATE_API_KEY_SECRET: ${EVENTUATE_API_KEY_SECRET}
@@ -59,9 +49,6 @@ customersqueryside:
   extends:
     file: docker-compose-common.yml
     service: customersqueryside
-  image: java:openjdk-8u91-jdk
-  volumes:
-    - ./customers-query-side-service/build/libs:/app
   links:
     - mongodb
   environment:

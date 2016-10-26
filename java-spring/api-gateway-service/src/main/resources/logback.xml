@@ -18,7 +18,7 @@
     <logger name="net.chrisrichardson.eventstore.javaexamples.banking" level='info'>
     </logger>
 
-    <logger name="io.eventuate" level='debug'>
+    <logger name="io.eventuate.activity" level='debug'>
     </logger>
 
 </configuration>
