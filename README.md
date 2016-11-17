@@ -129,5 +129,6 @@ docker-compose -f docker-compose-eventuate-local.yml up -d
 Note: You need to set `DOCKER_HOST_IP` before running Docker Compose.
 This must be an IP address or resolvable hostname.
 It cannot be `localhost`.
+See this [guide to setting `DOCKER_HOST_IP`](http://eventuate.io/docs/usingdocker.html) for more information.
 
 Finally, you can open the home page, which is served up by the API Gateway: `http://$DOCKER_HOST_IP:8080`
