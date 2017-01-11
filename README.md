@@ -35,26 +35,15 @@ The following diagram shows the architecture:
 
 ![Money transfer architecture](https://github.com/cer/event-sourcing-examples/wiki/i/applicationarchitecture.png)
 
-There are the following logical services:
+There are the following  services:
 
-* Customers (command-side) - REST API for creating customers
-* Accounts (command-side) - REST API for creating accounts
-* Money transfers (command-side) - REST API for transferring money
-* Customers (query-side) - subscribes to events and updates a MongoDB View, and provides an API for retrieving customers
-* Accounts (query-side) - subscribes to events and updates a MongoDB View, and provides an API for retrieving accounts
+* Customers Service - REST API for creating customers
+* Accounts Service - REST API for creating accounts
+* Transactions Service - REST API for transferring money
+* Customers View Service  - subscribes to events and updates a MongoDB View, and provides an API for retrieving customers
+* Accounts View Service - subscribes to events and updates a MongoDB View, and provides an API for retrieving accounts
 
 There is also an [API gateway](http://microservices.io/patterns/apigateway.html) service that acts as a Facade in front of the services.
-
-One of the neat things about the modular architecture is that there are two ways to deploy these four services:
-
-* monolithic-service - all services are packaged as a single Spring Boot executable JAR
-* Microservices - three separate Spring Boot executable JARs
- * customer-command-side-service - command-side customers
- * accounts-command-side-service - command-side accounts
- * transactions-command-side-service - command-side money transfers
- * customers-query-side-service - query-side customers
- * accounts-query-side-service - query-side accounts
- * api-gateway-service - API gateway service
 
 # About the examples
 
