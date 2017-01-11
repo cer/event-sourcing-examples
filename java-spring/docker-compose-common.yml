@@ -4,37 +4,37 @@ apigateway:
     - "8080:8080"
   environment:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
-    ACCOUNTS_COMMANDSIDE_SERVICE_HOST: accountscommandside
-    TRANSFERS_COMMANDSIDE_SERVICE_HOST: transactionscommandside
-    ACCOUNTS_QUERYSIDE_SERVICE_HOST: accountsqueryside
-    CUSTOMERS_COMMANDSIDE_SERVICE_HOST: customerscommandside
-    CUSTOMERS_QUERYSIDE_SERVICE_HOST: customersqueryside
+    ACCOUNTS_COMMANDSIDE_SERVICE_HOST: accountsservice
+    TRANSFERS_COMMANDSIDE_SERVICE_HOST: transactionsservice
+    ACCOUNTS_QUERYSIDE_SERVICE_HOST: accountsviewservice
+    CUSTOMERS_COMMANDSIDE_SERVICE_HOST: customersservice
+    CUSTOMERS_QUERYSIDE_SERVICE_HOST: customersviewservice
 
 
-accountscommandside:
-  build: ./accounts-command-side-service/
+accountsservice:
+  build: ./accounts-service/
   ports:
     - "8085:8080"
 
-transactionscommandside:
-  build: ./transactions-command-side-service/
+transactionsservice:
+  build: ./transactions-service/
   ports:
     - "8082:8080"
 
-accountsqueryside:
-  build: ./accounts-query-side-service/
+accountsviewservice:
+  build: ./accounts-view-service/
   environment:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
   ports:
     - "8081:8080"
 
-customerscommandside:
-  build: ./customers-command-side-service/
+customersservice:
+  build: ./customers-service/
   ports:
     - "8083:8080"
 
-customersqueryside:
-  build: ./customers-query-side-service/
+customersviewservice:
+  build: ./customers-view-service/
   ports:
     - "8084:8080"
   environment:

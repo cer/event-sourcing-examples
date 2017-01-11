@@ -1,0 +1,19 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+apply plugin: VerifyEventStoreEnvironmentPlugin
+
+apply plugin: 'spring-boot'
+apply plugin: EventuateDependencyPlugin
+
+dependencies {
+    compile project(":common")
+    compile project(":common-backend")
+    compile project(":common-swagger")
+
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+
+    testCompile project(":testutil")
+    testCompile "junit:junit:4.11"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile "io.eventuate.client.java:eventuate-client-java-jdbc:$eventuateClientVersion"
+}

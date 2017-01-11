@@ -66,13 +66,16 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-            .httpBasic().and()
+    http
+            .csrf()
+              .disable()
+            .httpBasic()
+              .and()
             .authorizeRequests()
-            .antMatchers("/index.html", "/", "/**.js", "/**.css").permitAll()
-            .antMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/customers", "/api/login").permitAll()
-            .anyRequest().authenticated().and()
+              .antMatchers(HttpMethod.POST, "/api/customers", "/api/login").permitAll()
+              .antMatchers("/api/**").permitAll()
+              .anyRequest().permitAll()
+              .and()
             .addFilterAfter(new StatelessAuthenticationFilter(tokenAuthenticationService), BasicAuthenticationFilter.class);
   }
 

@@ -1,0 +1,24 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+apply plugin: VerifyEventStoreEnvironmentPlugin
+apply plugin: EventuateDependencyPlugin
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(":common-swagger")
+    compile project(":common-backend")
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "io.eventuate.client.java:eventuate-client-java-spring:$eventuateClientVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+
+    testCompile project(":testutil")
+    testCompile "junit:junit:4.11"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile "io.eventuate.client.java:eventuate-client-java-jdbc:$eventuateClientVersion"
+}
+
+test {
+    ignoreFailures System.getenv("EVENTUATE_API_KEY_ID") == null
+}
