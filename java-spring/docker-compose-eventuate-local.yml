@@ -55,17 +55,17 @@ apigateway:
     file: docker-compose-common.yml
     service: apigateway
   links:
-    - accountscommandside
-    - transactionscommandside
-    - accountsqueryside
-    - customerscommandside
-    - customersqueryside
+    - accountsservice
+    - transactionsservice
+    - accountsviewservice
+    - customersservice
+    - customersviewservice
     - mongodb
 
-accountscommandside:
+accountsservice:
   extends:
     file: docker-compose-common.yml
-    service: accountscommandside
+    service: accountsservice
   links:
     - mysql
     - kafka
@@ -81,10 +81,10 @@ accountscommandside:
     EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
 
 
-transactionscommandside:
+transactionsservice:
   extends:
     file: docker-compose-common.yml
-    service: transactionscommandside
+    service: transactionsservice
   links:
     - mysql
     - kafka
@@ -99,10 +99,10 @@ transactionscommandside:
     EVENTUATELOCAL_CDC_DB_USER_NAME: root
     EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
 
-accountsqueryside:
+accountsviewservice:
   extends:
     file: docker-compose-common.yml
-    service: accountsqueryside
+    service: accountsviewservice
   links:
     - mongodb
     - mysql
@@ -120,10 +120,10 @@ accountsqueryside:
     EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
 
 
-customerscommandside:
+customersservice:
   extends:
     file: docker-compose-common.yml
-    service: customerscommandside
+    service: customersservice
   links:
     - mysql
     - kafka
@@ -138,10 +138,10 @@ customerscommandside:
     EVENTUATELOCAL_CDC_DB_USER_NAME: root
     EVENTUATELOCAL_CDC_DB_PASSWORD: rootpassword
 
-customersqueryside:
+customersviewservice:
   extends:
     file: docker-compose-common.yml
-    service: customersqueryside
+    service: customersviewservice
   links:
     - mongodb
     - mysql

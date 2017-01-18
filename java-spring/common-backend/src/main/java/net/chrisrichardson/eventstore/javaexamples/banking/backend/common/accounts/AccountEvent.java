@@ -3,6 +3,6 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend.common.accou
 import io.eventuate.Event;
 import io.eventuate.EventEntity;
 
-@EventEntity(entity="net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.Account")
+@EventEntity(entity="net.chrisrichardson.eventstore.javaexamples.banking.accountsservice.backend.Account")
 public abstract class AccountEvent implements Event{
 }

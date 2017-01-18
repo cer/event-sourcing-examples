@@ -1,0 +1,14 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+
+dependencies {
+    testCompile project(":common-auth-web")
+    testCompile project(":transactions-service")
+    testCompile project(":accounts-service")
+    testCompile project(":accounts-view-service")
+    testCompile project(":customers-service")
+    testCompile project(":customers-view-service")
+    testCompile project(":testutil")
+    testCompile "junit:junit:4.11"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testCompile "io.eventuate.client.java:eventuate-client-java-jdbc:$eventuateClientVersion"
+}

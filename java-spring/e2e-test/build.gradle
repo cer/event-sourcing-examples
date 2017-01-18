@@ -1,10 +1,6 @@
 apply plugin: VerifyMongoDBConfigurationPlugin
 
 dependencies {
-    testCompile project(":accounts-command-side-web")
-    testCompile project(":transactions-command-side-web")
-    testCompile project(":accounts-query-side-web")
-
     testCompile project(":testutil")
     testCompile project(":common-auth")
     testCompile "junit:junit:4.11"

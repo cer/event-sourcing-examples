@@ -1,8 +1,0 @@
-apply plugin: 'java'
-
-dependencies {
-    compile project(":customers-query-side-backend")
-
-    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
-}

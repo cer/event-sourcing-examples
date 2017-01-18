@@ -2,12 +2,12 @@ package net.chrisrichardson.eventstore.javaexamples.banking.backend;
 
 import io.eventuate.EntityWithIdAndVersion;
 import io.eventuate.EventuateAggregateStore;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.Account;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.accounts.AccountService;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransfer;
-import net.chrisrichardson.eventstore.javaexamples.banking.backend.commandside.transactions.MoneyTransferService;
+import net.chrisrichardson.eventstore.javaexamples.banking.accountsservice.backend.Account;
+import net.chrisrichardson.eventstore.javaexamples.banking.accountsservice.backend.AccountService;
 import net.chrisrichardson.eventstore.javaexamples.banking.common.transactions.TransferState;
 import net.chrisrichardson.eventstore.javaexamples.banking.backend.common.transactions.TransferDetails;
+import net.chrisrichardson.eventstore.javaexamples.banking.transactionsservice.backend.MoneyTransfer;
+import net.chrisrichardson.eventstore.javaexamples.banking.transactionsservice.backend.MoneyTransferService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

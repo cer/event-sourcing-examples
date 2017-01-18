@@ -1,0 +1,30 @@
+apply plugin: VerifyMongoDBConfigurationPlugin
+apply plugin: VerifyEventStoreEnvironmentPlugin
+apply plugin: EventuateDependencyPlugin
+
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(":common-backend")
+    compile project(":customers-query-side-common")
+    compile project(":common-swagger")
+
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb:$springBootVersion"
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.4.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
+    compile 'com.fasterxml.jackson.module:jackson-module-scala_2.10:2.4.3'
+
+    testCompile project(":testutil")
+    testCompile project(":customers-service")
+    testCompile "junit:junit:4.11"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "io.eventuate.client.java:eventuate-client-java-jdbc:$eventuateClientVersion"
+}
+
+test {
+    ignoreFailures System.getenv("EVENTUATE_API_KEY_ID") == null
+}
+
