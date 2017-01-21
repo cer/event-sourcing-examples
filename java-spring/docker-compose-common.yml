@@ -1,5 +1,6 @@
 apigateway:
   build: ./api-gateway-service/
+  restart: unless-stopped
   ports:
     - "8080:8080"
   environment:
@@ -13,16 +14,19 @@ apigateway:
 
 accountsservice:
   build: ./accounts-service/
+  restart: unless-stopped
   ports:
     - "8085:8080"
 
 transactionsservice:
   build: ./transactions-service/
+  restart: unless-stopped
   ports:
     - "8082:8080"
 
 accountsviewservice:
   build: ./accounts-view-service/
+  restart: unless-stopped
   environment:
     SPRING_DATA_MONGODB_URI: mongodb://mongodb/mydb
   ports:
@@ -30,11 +34,13 @@ accountsviewservice:
 
 customersservice:
   build: ./customers-service/
+  restart: unless-stopped
   ports:
     - "8083:8080"
 
 customersviewservice:
   build: ./customers-view-service/
+  restart: unless-stopped
   ports:
     - "8084:8080"
   environment:
